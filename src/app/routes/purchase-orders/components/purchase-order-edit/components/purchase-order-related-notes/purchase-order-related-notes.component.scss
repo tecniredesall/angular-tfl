@@ -1,0 +1,478 @@
+:host {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    p {
+        margin: 0;
+    }
+    .contract-header {
+        display: flex;
+        padding: 12px;
+        flex-direction: column;
+        background-color: var(--tr-background-color);
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+        &__info {
+            display: flex;
+            i {
+                font-size: 20px;
+                color: var(--tr-panel-header-toggle-icon-color);
+                margin-right: 8px;
+            }
+            .info-title {
+                font-size: 16px;
+                h3 {
+                    color: var(--tr-panel-body-color);
+                    margin: 0;
+                }
+                p {
+                    margin-top: 4px;
+                }
+            }
+        }
+        &__weight {
+            display: flex;
+            flex-direction: column;
+            margin-left: 28px;
+            margin-top: 8px;
+            font-size: 16px;
+            color: var(--tr-panel-body-color);
+            width: 200px;
+            p {
+                margin: 0;
+                font-weight: 600;
+            }
+        }
+    }
+    .contract-search {
+        display: flex;
+        flex-direction: column;
+        .scan-input {
+            min-width: 40%;
+            &__label {
+                &--errors {
+                    color: var(--tr-base-color-red);
+                }
+            }
+            &--errors {
+                color: var(--tr-base-color-red);
+                margin-top: 3px;
+            }
+            .input-container {
+                display: flex;
+                align-items: center;
+                border: 0.5px solid var(--form-input-background-color-disabled);
+                padding: 4px 12px;
+                border-radius: 5px;
+                font-size: 20px;
+                &--disabled{
+                    background-color: var(--form-input-background-color-disabled);
+                }
+                &--errors{
+                    border-color: var(--tr-base-color-red);
+                }
+            }
+            .sil-form__input {
+                border: none;
+                box-shadow: none;
+            }
+        }
+        .note-actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            .counter {
+                padding: 8px;
+                background: var(--tr-button-disabled-background-color);
+                border-radius: 16px;
+                font-weight: 600;
+            }
+        }
+    }
+    .weight-notes{
+        &__amount{
+            gap: 4px;
+            color: var(--tr-labe-columns-list-color);
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 16px;
+            .adm-icon {
+                color: var(--tr-base-color-white);/*  */
+                width: 20px;
+                height: 20px;
+                text-align: center;
+                border-radius: 50%;
+                background-color: var(--tr-base-color-yellow);
+            }
+            span{
+                color: var(--tr-panel-body-color);
+                font-weight: bold;
+            }
+        }
+    }
+    .sil-table {
+        margin-top: 16px;
+        .sil-table__header-row {
+            display: none;
+            .sil-table__header-cell {
+                font-size: 12px;
+                &.header__creation {
+                    display: none;
+                }
+            }
+        }
+        .sil-table__row {
+            grid-template-columns: 1fr 1fr 1.2fr 0.2fr;
+            grid-template-areas:
+                "id sacks type delete"
+                "weight currency unit-price ."
+                "total . . .";
+            row-gap: 4px;
+            column-gap: 4px;
+            background-color: var(--tr-panel-background-color);
+            padding: 8px 4px;
+            .sil-table__cell {
+                font-size: 14px;
+                &.cell__creation {
+                    grid-area: creation;
+                    display: none;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-content: center;
+                    .date__wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        &-date {
+                            font-weight: 400;
+                        }
+                    }
+                }
+                &.cell__id {
+                    i {
+                        display: none;
+                    }
+                    grid-area: id;
+                    word-break: break-word;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                }
+                &.cell__sacks {
+                    grid-area: sacks;
+                }
+                &.cell__type {
+                    grid-area: type;
+                }
+                &.cell__delete {
+                    grid-area: delete;
+                    justify-content: flex-start;
+                    .btn-transparent-delete {
+                        padding: 0;
+                        margin-top: 8px;
+                        i {
+                            font-size: 20px;
+                            color: var(--tr-base-color-red);
+                        }
+                    }
+                }
+                &.cell__net-weight {
+                    grid-area: weight;
+                }
+                &.cell__currency {
+                    grid-area: currency;
+                }
+                &.cell__unit-price {
+                    grid-area: unit-price;
+                    flex-direction: column;
+                    .sil-form__section {
+                        flex-direction: row;
+                        .sil-form__input {
+                            display: inline-flex;
+                            max-width: 80%;
+                        }
+                        max-height: 34px;
+                    }
+                    .error-msg-form {
+                        align-self: start;
+                        line-height: 1;
+                    }
+                }
+                &.cell__total {
+                    grid-area: total;
+                }
+                &.cell__sacks,
+                &.cell__type,
+                &.cell__net-weight,
+                &.cell__currency,
+                &.cell__total {
+                    justify-content: flex-start;
+                }
+            }
+        }
+    }
+    .liquidate {
+        display: flex;
+        flex-direction: column;
+        margin-top: 16px;
+        &__totals {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .btn-success {
+                margin-top: 16px;
+                &:disabled{
+                    color: var(--tr-button-disabled-color);
+                    background-color: var(--tr-button-disabled-background-color);
+                    border-color: var(--tr-button-disabled-background-color);
+                }
+            }
+            &-labels {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 40%;
+                margin-top: 8px;
+                border: 0.5px solid var(--form-input-border-color);
+                border-radius: 4px;
+                padding: 8px;
+                width: 100%;
+                .totals__label {
+                    margin-right: auto;
+                }
+                .total-qq,
+                .average-price {
+                    font-size: 14px;
+                    font-weight: 600;
+                    width: 100%;
+                    display: flex;
+                }
+                .total-to-pay {
+                    font-size: 16px;
+                    font-weight: 600;
+                    width: 100%;
+                    display: flex;
+                    .total__payment {
+                        color: var(--tr-primary-color);
+                    }
+                }
+                &--errors{
+                    border-color: var(--tr-base-color-red);
+                    .total-to-pay {
+                        .total__payment {
+                            color: var(--tr-base-color-red);
+                        }
+                    }
+                }
+            }
+        }
+        &__notes {
+            .counter {
+                width: fit-content;
+                margin: 4px 0 0 auto;
+            }
+        }
+        &__contract-card {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 20px 1fr;
+            width: fit-content;
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: 600;
+            i {
+                align-self: center;
+                font-size: 14px;
+                transform: rotateX(180deg)
+            }
+            .icon-alert_icon{
+                width: 14px;
+            }
+        }
+        &__info {
+            background-color: #c9e3fe;
+            color: #0068d1;
+            font-size: 12px;
+            max-width: 275px;
+        }
+        &__danger {
+            background-color: #f7d7db;
+            color: #d63649;
+            font-size: 14px;
+            max-width: 460px;
+        }
+    }
+    .order_empty {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 20px;
+        padding: 40px;
+        p {
+            text-align: center;
+            max-width: 100%;
+            margin-top: 16px;
+            span {
+                font-weight: 600;
+                color: var(--tr-primary-color);
+                margin-left: 2px;
+                cursor: pointer;
+                i {
+                    font-size: 12px;
+                    margin-right: 4px;
+                    font-weight: 600;
+                }
+            }
+        }
+        &--error {
+            @extend .order_empty;
+            color: var(--tr-base-color-red);
+            .icon-notas-r {
+                font-size: 120px;
+                padding: 20px;
+                background-color: #ffc2c2;
+                border-radius: 50%;
+            }
+            p {
+                text-align: center;
+                font-size: 18px;
+                font-weight: 600;
+                span {
+                    font-size: 14px;
+                    display: block;
+                    font-weight: 400;
+                    color: var(--tr-base-color-red);
+                    cursor: none;
+                }
+            }
+        }
+    }
+}
+
+/* Responsive*/
+@media (min-width: 768px) {
+    :host {
+        .contract-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            &__weight {
+                margin: 0;
+                .tr__progress-bar {
+                    height: 6px;
+                    border-radius: 5px;
+                }
+            }
+        }
+        .contract-search {
+            flex-direction: row;
+            justify-content: space-between;
+            .note-actions {
+                .counter {
+                    margin-right: 16px;
+                }
+            }
+        }
+        .sil-table {
+            .sil-table__header-row {
+                display: grid;
+                column-gap: 4px;
+                grid-template-columns: 1fr 0.5fr 1fr 1fr 0.5fr 1.5fr 1fr 0.2fr;
+            }
+            .sil-table__row {
+                grid-template-columns: 1fr 0.5fr 1fr 1fr 0.5fr 1.5fr 1fr 0.2fr;
+                grid-template-areas: "id sacks type weight currency unit-price total delete";
+                column-gap: 4px;
+                padding: 12px 8px;
+                .sil-table__cell {
+                    font-size: 14px;
+                    &.cell__id {
+                        i {
+                            display: inline-flex;
+                            margin-right: 2px;
+                        }
+                        flex-direction: row;
+                        align-items: center;
+                    }
+                    &.cell__sacks {
+                        justify-content: flex-start;
+                    }
+                    &.cell__delete {
+                        justify-content: flex-end;
+                        .btn-transparent-delete {
+                            margin-top: 0px;
+                        }
+                    }
+                    &.cell__net-weight {
+                        justify-content: flex-start;
+                    }
+                    &.cell__currency {
+                        justify-content: flex-start;
+                    }
+                    &.cell__total {
+                        grid-area: total;
+                    }
+                }
+            }
+        }
+        .liquidate {
+            flex-direction: row;
+            justify-content: space-between;
+            &__notes {
+                width: 55%;
+            }
+            &__contract-card {
+                grid-template-columns: 20px 1fr;
+            }
+            &__totals {
+                width: 40%;
+                &-labels {
+                    justify-content: space-between;
+                }
+                .btn-success {
+                    margin-top: 24px;
+                    margin-left: auto;
+                }
+            }
+        }
+        .order_empty {
+
+            p {
+                width: 33%;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    :host {
+        .sil-table {
+            .sil-table__header-row {
+                display: grid;
+                column-gap: 4px;
+                grid-template-columns: 1.5fr 0.5fr 0.5fr 1fr 1fr 0.5fr 1fr 1fr 0.2fr;
+                .sil-table__header-cell {
+                    &.header__creation {
+                        display: inline-flex;
+                    }
+                }
+            }
+            .sil-table__row {
+                grid-template-columns: 1.5fr 0.5fr 0.5fr 1fr 1fr 0.5fr 1fr 1fr 0.2fr;
+                grid-template-areas: "creation id sacks type weight currency unit-price total delete";
+                .sil-table__cell {
+                    &.cell__creation {
+                        display: flex;
+                    }
+                    &.cell__unit-price {
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+}

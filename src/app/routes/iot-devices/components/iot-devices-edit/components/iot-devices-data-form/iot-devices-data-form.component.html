@@ -1,0 +1,227 @@
+<form *ngIf="form" class="sil-form" [formGroup]="form">
+    <section class="sil-form__section type">
+        <label
+            >{{ "device-type" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <ng-select
+            formControlName="type"
+            [placeholder]="'select-device-type' | i18n"
+            appearance="outline"
+            [searchable]="false"
+            [clearable]="false"
+            class="sil-form__select"
+            bindLabel="name"
+            bindValue="id"
+            [items]="deviceTypeList"
+            [notFoundText]="'not-items-found' | i18n"
+            [virtualScroll]="true"
+        >
+            <ng-template ng-label-tmp let-item="item">
+                {{ item.name | i18n }}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-index="index">
+                {{ item.name | i18n }}
+            </ng-template>
+        </ng-select>
+        <ng-container
+            *ngIf="form.get('type').dirty || form.get('type').touched"
+        >
+            <span
+                *ngIf="form.get('type').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}</span
+            >
+        </ng-container>
+    </section>
+    <section class="sil-form__section brand">
+        <label
+            >{{ "brand" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <ng-select
+            formControlName="brand"
+            [placeholder]="'select-device-brand' | i18n"
+            appearance="outline"
+            [searchable]="true"
+            [clearable]="false"
+            class="sil-form__select"
+            bindLabel="brand"
+            bindValue="id"
+            [items]="deviceBrands"
+            [loading]="loadingBrands"
+            loadingText="{{ 'loading' | i18n }}"
+            [notFoundText]="'not-items-found' | i18n"
+            [virtualScroll]="true"
+        >
+            <ng-template ng-label-tmp let-item="item">
+                {{ item.brand | i18n }}
+            </ng-template>
+        </ng-select>
+        <span *ngIf="form.get('brand').dirty || form.get('brand').touched">
+            <span
+                *ngIf="form.get('brand').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+        </span>
+    </section>
+    <section class="sil-form__section model">
+        <label
+            >{{ "scales-model" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <ng-select
+            formControlName="model"
+            [placeholder]="'select-device-model' | i18n"
+            appearance="outline"
+            [searchable]="true"
+            [clearable]="false"
+            class="sil-form__select"
+            bindLabel="model"
+            bindValue="id"
+            [items]="deviceModels"
+            [notFoundText]="'not-items-found' | i18n"
+            [virtualScroll]="true"
+        >
+            <ng-template ng-label-tmp let-item="item">
+                {{ item.model | i18n }}
+            </ng-template>
+        </ng-select>
+        <span *ngIf="form.get('model').dirty || form.get('model').touched">
+            <span
+                *ngIf="form.get('model').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+        </span>
+    </section>
+    <section class="sil-form__section port">
+        <label
+            >{{ "port" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <input
+            type="text"
+            [placeholder]="'insert-port' | i18n"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="port"
+            onlyNumber
+        />
+        <span *ngIf="form.get('port').dirty || form.get('port').touched">
+            <span
+                *ngIf="form.get('port').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+            <span
+                *ngIf="
+                    form.get('port').hasError('min') ||
+                    form.get('port').hasError('max')
+                "
+                class="sil-form__section__error-message"
+            >
+                {{ "invalid-port-value" | i18n }}
+            </span>
+        </span>
+    </section>
+    <section class="sil-form__section ip">
+        <label
+            >{{ "scales-ip-address" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <input
+            type="text"
+            [placeholder]="'scales-insert-ip-address' | i18n"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="ip"
+        />
+        <span *ngIf="form.get('ip').dirty || form.get('ip').touched">
+            <span
+                *ngIf="form.get('ip').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+            <span
+                *ngIf="form.get('ip').hasError('pattern')"
+                class="sil-form__section__error-message"
+            >
+                {{ "scales-ip-invalid-pattern" | i18n }}
+            </span>
+        </span>
+    </section>
+    <section class="sil-form__section location">
+        <label
+            >{{ "location" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <input
+            type="text"
+            [placeholder]="'scales-insert-location' | i18n"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="location"
+            maxlength="100"
+        />
+        <span
+            *ngIf="form.get('location').dirty || form.get('location').touched"
+        >
+            <span
+                *ngIf="form.get('location').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+        </span>
+    </section>
+    <section class="sil-form__section description">
+        <label>{{ "description" | i18n }}</label>
+        <input
+            type="text"
+            [placeholder]="'scales-insert-description' | i18n"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="description"
+            maxlength="30"
+        />
+        <p class="counter">{{ form.get("description").value ? form.get("description").value.length : 0 }}/30</p>
+    </section>
+    <section class="sil-form__section status">
+        <label>{{ "status" | i18n }}</label>
+        <div class="status_toggle">
+            <span>{{
+                form.get("status").value
+                    ? ("scales-status-active" | i18n)
+                    : ("scales-status-inactive" | i18n)
+            }}</span>
+            <mat-slide-toggle
+                class="toggle"
+                formControlName="status"
+            ></mat-slide-toggle>
+        </div>
+    </section>
+    <section class="sil-form__section verify">
+        <button
+            class="btn btn-default-blue"
+            (click)="onTestConnection()"
+            [disabled]="
+                testingConnection || form.get('ip').hasError('required')
+            "
+        >
+            <ng-container *ngIf="!testingConnection; else elseTemplate">
+                {{ "scales-verify-connection" | i18n }}
+            </ng-container>
+            <ng-template #elseTemplate>
+                <i class="icon-loading"></i>
+                {{ "scales-verifying-connection" | i18n }}
+            </ng-template>
+        </button>
+    </section>
+</form>

@@ -1,0 +1,159 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 18px;
+    &.is-for-fed-item {
+        padding: 0;
+    }
+    .sil-form__header {
+        padding-bottom: 0;
+    }
+
+    .sil-form {
+        margin-top: 0;
+        grid-template-columns: 1fr;
+        padding: 10px 20px;
+        min-height: 450px;
+        .producer__name {
+            p {
+                display: block;
+            }
+        }
+        .sil-form__section__header {
+            p {
+                margin: 0;
+            }
+        }
+        .form-actions {
+            .delete-block,
+            .btn-back {
+                margin-right: auto;
+                font-size: 14px;
+            }
+        }
+
+        .form_container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "name"
+                "farm"
+                "header_location"
+                "location"
+                "latitude"
+                "longitude"
+                "header_dimensions"
+                "height"
+                "extension"
+                "header_characs"
+                "shade"
+                "soil"
+                "coffee"
+                "delete";
+            &-bordered {
+                padding: 16px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px 0 var(--tr-panel-shadown-color);
+                border: solid 1px;
+                border-color: var(--form-input-border-color);
+            }
+            + .form_container {
+                margin-top: 16px;
+            }
+            .block__name {
+                grid-area: name;
+            }
+            .block__farm {
+                grid-area: farm;
+            }
+            .header__location {
+                grid-area: header_location;
+            }
+            .location {
+                grid-area: location;
+            }
+            .block__latitude {
+                grid-area: latitude;
+            }
+            .block__longitude {
+                grid-area: longitude;
+            }
+            .header__dimensions {
+                grid-area: header_dimensions;
+            }
+            .block__height {
+                grid-area: height;
+                .height__unit {
+                    margin: 0 4px 0 80%;
+                }
+            }
+
+            .block__extension {
+                grid-area: extension;
+                .measurement-unit-select {
+                    min-width: 80px;
+                    height: 34px;
+                    margin-left: -7px;
+                    ::ng-deep.ng-select-container {
+                        min-height: 34px !important;
+                    }
+                }
+            }
+
+            .header__characs {
+                grid-area: header_characs;
+            }
+            .block__shade-variety {
+                grid-area: shade;
+            }
+            .block-soil-type {
+                grid-area: soil;
+            }
+            .block-coffee-variety {
+                grid-area: coffee;
+            }
+            .delete-block {
+                grid-area: delete;
+            }
+        }
+        &__header {
+            padding: 20px 0 0px 20px;
+            i {
+                margin-left: 10px;
+            }
+        }
+    }
+    .sil-main-container {
+        min-height: 450px;
+    }
+    @media (min-width: 768px) {
+        .sil-form {
+            .form_container {
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "name farm"
+                    "header_location header_location"
+                    "location location"
+                    "latitude longitude"
+                    "header_dimensions header_dimensions"
+                    "height extension"
+                    "header_characs header_characs"
+                    "shade soil"
+                    "coffee ."
+                    "delete .";
+                column-gap: 4px;
+                row-gap: 4px;
+            }
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .sil-form {
+            .form_container {
+                column-gap: 8px;
+                row-gap: 4px;
+            }
+        }
+    }
+}

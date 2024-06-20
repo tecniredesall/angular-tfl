@@ -1,0 +1,237 @@
+:host {
+
+    ::ng-deep .mat-accordion .mat-expansion-panel {
+        max-width: calc(100vw - 50px);
+    }
+
+    width: 100%;
+
+    .sil-form__header {
+        padding: 0;
+    }
+
+    .sil-form__label {
+        font-size: 16px;
+    }
+
+    .lot-detail {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "id-date"
+            "quantity"
+            "process"
+            "commodity"
+            "warehouse"
+            "producers"
+            "weight-notes"
+            "processing-order"
+            "tasting"
+            "btn";
+        row-gap: 8px;
+
+        &__id-date {
+            grid-area: id-date;
+            font-weight: 600px;
+
+            h3 {
+                font-size: 26px;
+            }
+
+            p {
+                font-size: 14px;
+                color: var(--form-title-annotation);
+
+                i {
+                    margin-right: 4px;
+                }
+            }
+        }
+
+        &__quantity {
+            grid-area: quantity;
+
+            &__title-weight {
+                margin: auto 0;
+                width: 100%;
+
+                &__net-weight {
+                    color: var(--form-title-color);
+                    font-size: 20px;
+                    margin-left: 10px;
+                }
+
+                &__featured-weight {
+                    color: var(--tr-base-color-green);
+                    font-size: 20px;
+                    margin-left: 10px;
+                }
+
+            }
+             p {
+                 display: flex;
+                 align-items: center;
+                 font-weight: 600;
+                 font-size: 16px;
+                 justify-content: space-between;
+                 white-space: nowrap;
+             }
+
+            &__lots-total-weights{
+                padding: 16px;
+                border-radius: 5px;
+                box-shadow: 0 0 7px 0 #e0e8f6;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: self-start;
+                min-width: 350px;
+                max-width:calc(100vh - 28px);
+                gap: 8px;
+            }
+        }
+
+        &__process {
+            grid-area: process;
+
+            .sil-form__process-selector {
+                max-width: fit-content;
+                min-width: 160px;
+            }
+        }
+
+        &__process__label {
+            text-align: center;
+            min-width: 112px;
+            color: #fff;
+            height: 35px;
+            border-radius: 5px;
+            max-width: max-content;
+            padding: 7px 20px 0px 21px;
+        }
+
+        &__commodity {
+            grid-area: commodity;
+            font-weight: 600;
+
+            p {
+                font-size: 14px;
+                color: var(--form-title-annotation);
+            }
+        }
+
+        &__warehouse {
+            grid-area: warehouse;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+
+            i {
+                font-size: 20px;
+                color: var(--base-teal);
+                margin-right: 8px;
+            }
+        }
+
+        &__producers {
+            grid-area: producers;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+
+            i {
+                width: 32px;
+                height: 32px;
+                color: white;
+                border-radius: 50%;
+                background-color: var(--base-teal);
+                padding: 2px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                margin-right: 8px;
+            }
+        }
+
+        &__weight-notes {
+            grid-area: weight-notes;
+            width: 100%;
+
+            app-lot-weight-notes {
+                margin-top: 16px;
+            }
+        }
+
+        &__tasting {
+            grid-area: tasting;
+            width: 100%;
+
+            silosys-lot-tasting {
+                margin-top: 16px;
+            }
+        }
+
+        &__proceseeing-order {
+            grid-area: processing-order;
+            width: 100%;
+
+            app-lot-processing-order {
+                margin-top: 16px;
+            }
+        }
+
+        &__btn {
+            grid-area: btn;
+            width: 100%;
+            margin-top: 12px;
+
+            button {
+                width: 153px;
+                height: 40px;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    :host {
+        .lot-detail {
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+                "id-date quantity"
+                "process warehouse"
+                "commodity producers"
+                "weight-notes weight-notes"
+                "processing-order processing-order"
+                "tasting tasting"
+                "btn btn";
+            row-gap: 12px;
+            column-gap: 8px;
+
+            &__quantity {
+                display: flex;
+                align-items: flex-end;
+                flex-direction: column;
+
+
+            &__lots-total-weights{
+                max-width:100%;
+            }
+            }
+
+            &__warehouse {
+                justify-content: flex-end;
+                align-self: end;
+            }
+
+            &__producers {
+                justify-content: flex-end;
+                align-self: baseline;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {}

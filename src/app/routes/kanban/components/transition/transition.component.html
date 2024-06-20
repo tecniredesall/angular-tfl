@@ -1,0 +1,417 @@
+<div class="kanban__transition">
+    <div class="kanban__transition__container"
+        *blockUI="'kanban-transition-layout'; template: templateBlockModalUiComponent">
+        <div class="kanban__transition__wrapper">
+            <div class="kanban__transition__back" (click)="cancel()">
+                <i class="icon-arrow_icon"></i>
+                <p class="font-sssb font-ss16">{{ isFromDetail ? ('back-to-detail' |i18n) : ('back-to-dashboard'
+                    |i18n)}}</p>
+            </div>
+            <div class="kanban__transition__content">
+                <div class="kanban__transition__header">
+                    <div>
+                        <h1 class="tr__title-main">
+                            {{ isEdit ? ('edit-lot-transition' | i18n) : ('lot-transition' | i18n)}}
+                            {{'lots-list-id' | i18n}}
+                            L{{lot?.folio}}</h1>
+                        <mat-divider></mat-divider>
+                    </div>
+                    <div class="kanban__transition__totals  "
+                        [ngClass]="{'kanban__transition__totals__first':(isFirstTransitionOfSplitLot)}">
+                        <div class="flex space-between kanban__transition__totals__initial">
+                            <p class="font-sssb">
+                                {{'weight-featured-initial' |i18n}}:
+                            </p>
+                            <p class="font-ssb kanban__transition__totals__initial__weight--featured--initial">
+                                {{ isPendingProcess ? lot.grossWeightQQ : lot.initialTareWeight| number : "1." +
+                                DECIMAL_DIGITS + "-" +
+                                DECIMAL_DIGITS : "en"}}
+                                {{configuration.conversionMeasurementUnitAbbreviation}}</p>
+                        </div>
+                        <div class="flex space-between kanban__transition__totals__initial"
+                            *ngIf="!isFirstTransitionOfSplitLot">
+                            <p class="font-sssb">
+                                {{'projected-weight' |i18n}}:
+                            </p>
+                            <p class="font-ssb kanban__transition__totals__initial__weight--projected">
+                                {{ isPendingProcess ? lot.weightQQ : lot.projectedWeight | number : "1." +
+                                DECIMAL_DIGITS + "-" +
+                                DECIMAL_DIGITS : "en"}}
+                                {{configuration.conversionMeasurementUnitAbbreviation}}</p>
+                        </div>
+                    </div>
+                </div>
+                <form class="kanban__transition__body" [formGroup]="transitionForm">
+                    <app-lot-info [lot]="lot" [configuration]="configuration" [isFromTransition]="true"
+                        [canEdit]="false"></app-lot-info>
+                    <div formGroupName="current">
+                        <ng-container *ngIf="!isEdit; else editCurrentTransitionTemplate">
+                            <!-- DATES -->
+                            <div class="row">
+                                <!-- DATE AND TIME OPENED-->
+                                <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12 kanban__transition__input--left">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "transition-lot-current-transition-date" | i18n }} *</span>
+                                    </div>
+                                    <div class="kanban__transition__input__container--date" [ngClass]="{
+                                        'kanban__transition__input__container--date--disabled': transitionForm.get('current').get('transitionAt').disabled
+                                    }">
+                                        <input class="kanban__transition__input-date"
+                                            [ngxMatDatetimePicker]="pickerTransitionAt"
+                                            placeholder="{{'transition-lot-current-transition-date' |i18n}}"
+                                            formControlName="transitionAt" readonly="true">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerTransitionAt">
+                                        </mat-datepicker-toggle>
+                                        <ngx-mat-datetime-picker #pickerTransitionAt [showSpinners]="false"
+                                            [showSeconds]="false" [stepHour]="1" [stepMinute]="1" [touchUi]="true"
+                                            [color]="'primary'" [enableMeridian]="false"
+                                            panelClass="tr__date-picker-hours">
+                                        </ngx-mat-datetime-picker>
+                                    </div>
+                                </div>
+                                <!-- DATE AND TIME CLOSED-->
+                                <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12 kanban__transition__input--left">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "transition-lot-current-close-date" | i18n }} *</span>
+                                    </div>
+                                    <div class="kanban__transition__input__container--date">
+                                        <input class="kanban__transition__input-date" [ngxMatDatetimePicker]="picker"
+                                            placeholder="{{'transition-lot-current-close-date' |i18n}}"
+                                            formControlName="closedAt" readonly="true"
+                                            [min]="lot.currentTransition?.transitionAt ? lot.currentTransition?.transitionAt : lot.createdDate"
+                                            [max]="this.maxDate" (dateInput)="setTargetTransitionAt()">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false"
+                                            [stepHour]="1" [stepMinute]="1" [touchUi]="true" [color]="'primary'"
+                                            [enableMeridian]="false" panelClass="tr__date-picker-hours">
+                                        </ngx-mat-datetime-picker>
+                                    </div>
+                                </div>
+                                <!-- HOURS -->
+                                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12 ">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "total-hours" | i18n }}</span>
+                                    </div>
+                                    <div>
+                                        <input type="text" class="kanban__transition__input" formControlName="hours"
+                                            placeholder="{{'total-hours' | i18n}}" autocomplete="off" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- SORT MACHINE -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p0 mrg-top-15">
+                                <app-sort-machine [isEdit]="isEdit" [lotId]="lot.id" [configuration]="configuration"
+                                    [currentProcess]="nextProcess" (changeTotals)="changeTotals($event)">
+                                </app-sort-machine>
+                            </div>
+                            <div class="row">
+                                <!-- weighing table component -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top-15 pad-0">
+                                    <app-weighing-table *ngIf="!isLoadConfiguration" [configuration]="configuration"
+                                        [isContainer]="true" [weights]="weights" [readOnly]="this.isEdit"
+                                        [placeholderContainerColumn]="'container' | i18n"
+                                        [tableBodySubtitle]="'weighings-information' | i18n"
+                                        [component]="PARAM_WEIGHING_TABLE.KANBAN"
+                                        (formWeightCaptureReady)="formWeightCaptureReady($event)"> </app-weighing-table>
+                                </div>
+                                <!-- Penalties table component -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top-15 pad-0">
+                                    <app-penalties-table [penalties]="penalties" [configuration]="configuration"
+                                        [commodityId]="lot.commodityId" [totalNetWeight]="totalNet"
+                                        [readOnly]="this.isEdit"
+                                        (setPenaltiesFormArray)="onSetPenaltiesFormArray($event)"
+                                        [characteristicsAreMandatory]="false"></app-penalties-table>
+                                </div>
+                                <!-- NOTE -->
+                                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 mrg-top-15 pad-0">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "note" | i18n }}</span>
+                                    </div>
+                                    <div class="kanban__transition__form__note">
+                                        <textarea formControlName="note" class="kanban__transition__input"
+                                            [placeholder]="'write-note' | i18n"></textarea>
+                                        <span class="kanban__transition__form__note_length pull-right"
+                                            [ngClass]="{ 'kanban__transition__form__note_length-max': transitionForm.get('current.note').hasError('maxlength')}">
+                                            {{ transitionForm.get('current.note').value?.length }} /
+                                            {{ CONSTANTS.MAX_LENGTH_TEXT_NOTE }}
+                                        </span>
+                                    </div>
+                                    <label class="error-msg-form"
+                                        *ngIf="transitionForm.get('current.note').dirty && transitionForm.get('current.note').hasError('maxlength')">
+                                        {{'input-max-length-value' | i18n | stringReplace : '[value]' :
+                                        CONSTANTS.MAX_LENGTH_TEXT_NOTE}}
+                                    </label>
+                                </div>
+                                <!-- TOTALS uncomment to work history SIL-8815-->
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mrg-top-15">
+                                    <div class="kanban__transition__other-section__totals  mrg-top-25">
+                                        <div class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__label
+                                             ">
+                                            {{ "total-gross" | i18n }} ({{
+                                            configuration.measurementUnitAbbreviation
+                                            }}):
+                                        </div>
+                                        <div class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__value
+                                        kanban__transition__other-section__totals__value__totals-gross
+                                        ">
+                                            {{ this.totalGross| number : "1." +DECIMAL_DIGITS +"-" +DECIMAL_DIGITS :
+                                            "en" }}
+                                            {{configuration.measurementUnitAbbreviation}}
+                                        </div>
+                                        <div
+                                            class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__label">
+                                            {{ "total-tares" | i18n }} ({{configuration.measurementUnitAbbreviation
+                                            }}):
+                                        </div>
+                                        <div class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__value"
+                                            appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                                            [value]="(this.totalTare)"
+                                            [measurementUnit]="configuration.measurementUnitAbbreviation"></div>
+                                        <div
+                                            class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__label">
+                                            {{ "featured-weight" | i18n }} ({{
+                                            configuration.measurementUnitAbbreviation }}):
+                                        </div>
+                                        <div class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__value
+                                            kanban__transition__other-section__totals__value__totals-featured">
+                                            {{this.totalNet | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS :
+                                            "en" }}
+                                            {{configuration.measurementUnitAbbreviation}}
+                                        </div>
+                                        <div
+                                            class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__label kanban__transition__other-section__totals__label__discount">
+                                            {{ "discountM" | i18n }} ({{
+                                            configuration.measurementUnitAbbreviation
+                                            }}):
+                                        </div>
+                                        <div class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__value"
+                                            appSignedValue [measurementUnit]="configuration.measurementUnitAbbreviation"
+                                            [value]="this.totalCharacteristics"
+                                            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"></div>
+                                        <div
+                                            class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__label kanban__transition__other-section__totals__net-dry">
+                                            {{ "final-weight" | i18n }} ({{
+                                            configuration.conversionMeasurementUnitAbbreviation
+                                            }}):
+                                        </div>
+                                        <div
+                                            class="kanban__transition__other-section__totals__item kanban__transition__other-section__totals__value__net-weigth kanban__transition__other-section__totals__value kanban__transition__other-section__totals__net-dry">
+                                            {{
+                                            this.totalFinalWeightQQ| number : "1." + DECIMAL_DIGITS + "-" +
+                                            DECIMAL_DIGITS :
+                                            "en"
+                                            }}
+                                            {{configuration.conversionMeasurementUnitAbbreviation}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Commodity TYPES -->
+                            <div class="row mrg-top-15">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-0" *ngIf="!nextProcess">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "kanban-commodity-type-out" | i18n }} *</span>
+                                    </div>
+                                    <div>
+                                        <ng-select formControlName="commodityTransformationId" class="custom-ng-select"
+                                            [items]="commodityTransformations" [multiple]="false" [closeOnSelect]="true"
+                                            [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                                            [loading]="isLoadingCommodityTransformations"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="{{'select-commodity-type' | i18n}}"
+                                            loadingText="{{ 'loading' | i18n }}">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #editCurrentTransitionTemplate>
+                            <div class="kanban__transition__form row">
+                                <div class="row">
+                                    <!-- Commodity TYPES -->
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top-15">
+                                        <div class="kanban__transition__label">
+                                            <span>{{ "commodity-type" | i18n }} *</span>
+                                        </div>
+                                        <div>
+                                            <ng-select formControlName="commodityTransformationId" class="custom-ng-select"
+                                                [items]="commodityTransformations" [multiple]="false" [closeOnSelect]="true"
+                                                [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                                                [loading]="isLoadingCommodityTransformations"
+                                                bindLabel="name"
+                                                bindValue="id"
+                                                placeholder="{{'select-commodity-type' | i18n}}"
+                                                loadingText="{{ 'loading' | i18n }}" (change)="setTransformationType($event)">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <!-- WAREHOUSES -->
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top-15">
+                                        <div class="kanban__transition__label">
+                                            <span>{{ "destination-warehouse" | i18n }} *</span>
+                                        </div>
+                                        <div>
+                                            <ng-select formControlName="warehouseId" class="custom-ng-select"
+                                                [items]="warehouses" [multiple]="false" [closeOnSelect]="true"
+                                                [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                                                [loading]="isLoadingWarehouses" bindLabel="name" bindValue="id"
+                                                groupBy="tankName" placeholder="{{ 'select-warehouse' | i18n }}"
+                                                loadingText="{{ 'loading' | i18n }}">
+                                                <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                                    <div class="kanban__transition__select-warehouses">
+                                                        {{ item.tankName }}
+                                                    </div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- DATE AND TIME  CREATE-->
+                                    <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12 mrg-top-15">
+                                        <div class="kanban__transition__label">
+                                            <span>{{ "transition-lot-target-transition-date" | i18n }} *</span>
+                                        </div>
+                                        <div class="kanban__transition__input__container--date">
+                                            <input class="kanban__transition__input-date"
+                                                [ngxMatDatetimePicker]="pickerCreate"
+                                                placeholder="{{'transition-lot-target-transition-date' |i18n}}"
+                                                formControlName="transitionAt" readonly="true"
+                                                [min]="transitionForm.get('current').get('closedAt').value"
+                                                [max]="this.maxDate">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerCreate">
+                                            </mat-datepicker-toggle>
+                                            <ngx-mat-datetime-picker #pickerCreate [showSpinners]="false"
+                                                [showSeconds]="false" [stepHour]="1" [stepMinute]="1" [touchUi]="true"
+                                                [color]="'primary'" [enableMeridian]="false"
+                                                panelClass="tr__date-picker-hours">
+                                            </ngx-mat-datetime-picker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- NOTE -->
+                                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 mrg-top-15">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "note" | i18n }}</span>
+                                    </div>
+                                    <div class="kanban__transition__form__note">
+                                        <textarea formControlName="note" class="kanban__transition__input"
+                                            [placeholder]="'write-note' | i18n"></textarea>
+                                        <span class="kanban__transition__form__note_length pull-right"
+                                            [ngClass]="{ 'kanban__transition__form__note_length-max': transitionForm.get('current.note').hasError('maxlength')}">
+                                            {{ transitionForm.get('current.note').value?.length }} /
+                                            {{ CONSTANTS.MAX_LENGTH_TEXT_NOTE }}
+                                        </span>
+                                    </div>
+                                    <label class="error-msg-form"
+                                        *ngIf="transitionForm.get('current.note').dirty && transitionForm.get('current.note').hasError('maxlength')">
+                                        {{'input-max-length-value' | i18n | stringReplace : '[value]' :
+                                        CONSTANTS.MAX_LENGTH_TEXT_NOTE}}
+                                    </label>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <mat-divider *ngIf="!isEdit && nextProcess"></mat-divider>
+                    <!--  DATA FOR TARGET TRANSITION -->
+                    <div formGroupName="target" *ngIf="!isEdit && nextProcess">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top-15 pad-0">
+                                <p class="font-sssb font-ss16">{{'destination-process' | i18n}}</p>
+                                <ng-select class="kanban__transition__input-process sil-form__process-selector"
+                                    [searchable]="false" [clearable]="false" bindLabel="name" bindValue="id"
+                                    formControlName="processId" [items]="processList"
+                                    [ngStyle]="{ 'background-color': nextProcess?.color }"
+                                    (change)="setProcess($event)">
+                                    <ng-template let-item="item">{{ item.name }}</ng-template>
+                                </ng-select>
+                            </div>
+                            <!-- TRANSFORMATION TYPES -->
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top-15">
+                                <div class="kanban__transition__label">
+                                    <span>{{ "commodity-type" | i18n }} *</span>
+                                </div>
+                                <div>
+                                    <ng-select formControlName="commodityTransformationId" class="custom-ng-select"
+                                        [items]="commodityTransformations" [multiple]="false" [closeOnSelect]="true"
+                                        [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                                        [loading]="isLoadingCommodityTransformations"
+                                        bindLabel="name"
+                                        bindValue="id"
+                                        placeholder="{{'select-commodity-type' | i18n}}"
+                                        loadingText="{{ 'loading' | i18n }}" (change)="setTransformationType($event.id)">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kanban__transition__form row">
+                            <div class="row">
+                                <!-- WAREHOUSES -->
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top-15">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "destination-warehouse" | i18n }} *</span>
+                                    </div>
+                                    <div>
+                                        <ng-select formControlName="warehouseId" class="custom-ng-select"
+                                            [items]="warehouses" [multiple]="false" [closeOnSelect]="true"
+                                            [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                                            [loading]="isLoadingWarehouses" bindLabel="name" bindValue="id"
+                                            groupBy="tankName" placeholder="{{ 'select-warehouse' | i18n }}"
+                                            loadingText="{{ 'loading' | i18n }}">
+                                            <ng-template ng-optgroup-tmp let-item="item" let-index="index">
+                                                <div class="kanban__transition__select-warehouses">
+                                                    {{ item.tankName }}
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <!-- DATE AND TIME  CREATE-->
+                                <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12 mrg-top-15">
+                                    <div class="kanban__transition__label">
+                                        <span>{{ "transition-lot-target-transition-date" | i18n }} *</span>
+                                    </div>
+                                    <div class="kanban__transition__input__container--date">
+                                        <input class="kanban__transition__input-date"
+                                            [ngxMatDatetimePicker]="pickerCreate"
+                                            placeholder="{{'transition-lot-target-transition-date' |i18n}}"
+                                            formControlName="transitionAt" readonly="true"
+                                            [min]="transitionForm.get('current').get('closedAt').value"
+                                            [max]="this.maxDate">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerCreate"></mat-datepicker-toggle>
+                                        <ngx-mat-datetime-picker #pickerCreate [showSpinners]="false"
+                                            [showSeconds]="false" [stepHour]="1" [stepMinute]="1" [touchUi]="true"
+                                            [color]="'primary'" [enableMeridian]="false"
+                                            panelClass="tr__date-picker-hours">
+                                        </ngx-mat-datetime-picker>
+                                    </div>
+                                    <span
+                                        *ngIf="transitionForm.get('target').get('transitionAt').dirty && transitionForm.get('target').get('transitionAt').invalid"
+                                        class="kanban__transition__input__errors">
+                                        {{'transition-target-transition-at-invalid' | i18n }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FOOTER -->
+                    <div class="mrg-top-15 kanban__transition__footer row">
+                        <button type="button"
+                            class="btn btn-default col-lg-2 col-md-3 col-sm-3 col-xs-12 kanban__transition__button-submit float-right"
+                            (click)="submit()"
+                            [disabled]="(isEdit ? !dataWasEdited : (transitionForm.invalid || formWeighinTable.invalid || formPenaltiesTable.invalid))">
+                            {{isEdit ? ('save' | i18n) : (nextProcess ? ('transfer' | i18n) : ('finish' | i18n) )}}
+                        </button>
+                        <button type="button"
+                            class="btn btn-default col-lg-2 col-md-3 col-sm-3 col-xs-12 kanban__transition__button-default float-right"
+                            (click)="cancel()">
+                            {{ 'cancel' | i18n }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

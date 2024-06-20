@@ -1,0 +1,33 @@
+<div class="modal-notes-associated">
+    <p class="modal-notes-associated__title">{{'sorry' |i18n}}</p>
+    <p class="modal-notes-associated__description">
+        {{'associated-weight-notes' |i18n}}
+        <br/>
+        {{'associated-weight-notes-edit' |i18n}}
+    </p>
+    <div class="modal-notes-associated__table">
+        <div class="modal-notes-associated__table__header">
+            <p class="modal-notes-associated__table--weight-note">{{'weight-note-id' | i18n}}</p>
+            <p class="modal-notes-associated__table--purchase-order">{{'purchase-order-id' |i18n}}</p>
+        </div>
+        <div class="modal-notes-associated__table__body">
+            <div [ngSwitch]="data.modalAssociatedNoteType">
+                <ng-container *ngSwitchCase="MODAL_ASSOCIATED_NOTE_TYPE.RECEPTION_NOTE">
+                    <ng-container *ngFor="let associated of data.note.associated">
+                        <div class="modal-notes-associated__table__body__row" *ngFor="let weightNote of associated.weightNotes">
+                            <span class="modal-notes-associated__table--weight-note">{{weightNote.folio}}</span>
+                            <span class="modal-notes-associated__table--purchase-order">{{associated.folio}}</span>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    <div class="modal-notes-associated__table__body__row">
+                        <span class="modal-notes-associated__table--weight-note">{{data.weightNote.transactionInId}}</span>
+                        <span class="modal-notes-associated__table--purchase-order">{{associated.folio}}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <button class="modal-notes-associated__button" (click)="close()">{{'accept' |i18n}}</button>
+</div>

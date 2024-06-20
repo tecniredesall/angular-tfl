@@ -1,0 +1,14 @@
+:root {
+    --table-action-buttons-dropdown-container-background: var(--base-white);
+    --table-action-buttons-dropdown-container-color: var(--colors-neutral-2);
+    --table-action-buttons-icon-color: var(--base-black-3);
+    --table-action-buttons-dropdown-color: var(--dark-blue);
+    .dark {
+        --table-action-buttons-dropdown-container-background: var(
+            --medium-dark
+        );
+        --table-action-buttons-dropdown-container-color: var(--base-white);
+        --table-action-buttons-icon-color: var(--base-white);
+        --table-action-buttons-dropdown-color: var(--base-teal);
+    }
+}

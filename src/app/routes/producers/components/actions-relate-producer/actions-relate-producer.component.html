@@ -1,0 +1,105 @@
+<div class="relative" style="overflow-y: hidden;" *blockUI="'producers-relate-modal'; template: blockTemplateModal">
+
+  <div class="seals-dialog-container">
+    <div class="row title-container">
+      <span class="title-seals-modal">
+        {{ 'providers-list' | i18n }}
+      </span>
+    </div>
+
+    <div class="seal-search-control" [ngClass]="{'input-search-control-focus': searchControl.isFocus}">
+      <table class="input-search-control">
+        <tr>
+          <td *ngIf="0 === searchControl.value.length" class="container-icon-search-input"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}">
+            <img class="center-flex"
+              [src]="isDarkTheme ? 'assets/img/svg/search-dark.svg' : 'assets/img/svg/search.svg'" alt="">
+          </td>
+          <td *ngIf="searchControl.value.length>0" class="padding-left-input-search-notempty"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}">
+          </td>
+          <td class="container-input-search">
+            <input type="text" class="elipsis" name="searchProvider" [(ngModel)]="searchControl.value"
+              [placeholder]="'placeholder-search-provider' | i18n" autocomplete="off" #searchProvider="ngModel"
+              [disabled]="searchControl.isDisabled" (focus)="searchControl.isFocus=true;"
+              (blur)="searchControl.isFocus=false;" (keydown.enter)="onSearch()" (input)="onChangeSearchInput()">
+          </td>
+          <td *ngIf="searchControl.value.length>0" class="separator-input-search"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}"></td>
+          <td *ngIf="searchControl.value.length>0" class="container-button-clear-input"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled, 'button-clear-input-enabled': !searchControl.isDisabled}"
+            (click)="onCleanSearch()">
+            <img [src]="isDarkTheme ? 'assets/img/svg/erase-dark.svg' : 'assets/img/svg/erase.svg'" alt="" />
+          </td>
+          <td class="separator-input-search" [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}"></td>
+        </tr>
+      </table>
+      <div class="button-search-container">
+        <button class="btn button-search" matRipple [matRippleCentered]="true"
+        [matRippleDisabled]="searchControl.isDisabled" [disabled]="searchControl.isDisabled" (click)="onSearch()">
+        {{ 'search' | i18n }}
+      </button>
+      </div>
+    </div>
+
+    <div class="body-container-seals-modal" *blockUI="'producers-relate-list'; template: blockTemplateModal">
+      <div *ngIf="producers.length > 0" class="select-all-sellers-container">
+        <div class="selector-container pointer">
+          <div (click)="onSelectAll()">
+            <img *ngIf="!isSelectedAll && countSelectedItems == 0"
+              [src]="'assets/img/svg/' + (isDarkTheme ? 'check-dark' : 'check') + '.svg'">
+            <img *ngIf="(isSelectedAll && unselectedProducers.length > 0) || (!isSelectedAll && countSelectedItems > 0)"
+              [src]="'assets/img/svg/check-partial-select.svg'">
+            <img *ngIf="(isSelectedAll && unselectedProducers.length == 0) || (countSelectedItems === producers.length && !isSearch)"
+              [src]="'assets/img/svg/check-active.svg'">
+          </div>
+        </div>
+        <div class="no-select select-all-sellers-label">
+          {{ 'producer' | i18n | titlecase }}
+        </div>
+      </div>
+      <div class="collapse show container-producers-data scroll-view-app" id="collapsable" (scroll)="onScroll($event)">
+        <div *ngIf="0 == producers.length && searchControl.isSubmit && !searchControl.isLoading">
+          <app-not-results-found></app-not-results-found>
+        </div>
+        <div *ngFor="let producer of producers">
+          <div class="sellers-grid">
+            <div class="selector-container pointer">
+              <div (click)="onSelect(producer)">
+                <img class="no-select" 
+                [src]="!producer.isSelected ? 
+                'assets/img/svg/check' + (isDarkTheme ? '-dark' : '') + '.svg'
+                : 'assets/img/svg/check-active.svg'">
+              </div>
+            </div>
+            <p class="modal-default-paragraph seller-grid-name no-select pointer" (click)="onSelect(producer)">
+              <span class="seller-grid-image-name">
+                <img class="no-select" src="assets/img/svg/seller.svg" width="20px" height="20px" />
+              </span>
+              <span>
+                <span>{{producer.name}}</span>
+                <span [hidden]="!producer.paternalLast"> {{producer.paternalLast}}</span>
+                <span [hidden]="!producer.maternalLast"> {{producer.maternalLast}}</span>  
+              </span>
+            </p>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="row wrapper-footer-btns">
+      <div class="farms-selected-counter float-left">
+        <span>{{ 0 == countSelectedItems ? (countSelectedItems | number:'2.0') : countSelectedItems}} {{ 'selecteds' | i18n }}</span>
+      </div>
+      <div class="footer-separator"></div>
+      <button type="submit" [disabled]="countSelectedItems == 0" (click)="submitData()"
+        class="btn blue-btn create-btn button-lg float-right btn-footer">{{ 'relate' | i18n}}</button>
+      <button type="button" class="btn btn-theme no-border btn-cancel btn-footer float-right" (click)="cancel()">
+        {{ 'cancel' | i18n }} </button>
+    </div>
+
+  </div>
+
+</div>

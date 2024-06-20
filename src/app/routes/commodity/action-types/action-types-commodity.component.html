@@ -1,0 +1,130 @@
+<div class="action-types-commodity-container {{responsiveClass}}" (resized)="onEventContainerResized($event)">
+  <!-- header -->
+  <div class="action-types-commodity__header">
+    <div class="action-types-commodity__header-content">
+      <div class="action-types-commodity__header-title">
+        <span>
+          {{ isEdit ? ('edit' | i18n) : ('new' | i18n) }} {{'type-of' | i18n}}
+        </span>
+        <br>
+        <span>
+          {{commodityType.commodityName}}
+        </span>
+      </div>
+      <div *ngIf="!isEdit" class="action-types-commodity__header-button-container">
+        <div class="dropdown pull-right action-types-commodity__header-button-dropdown">
+          <button type="button" tabindex="-1"
+            class="btn green-btn dropdown-toggle pull-right action-types-commodity__header-button"
+            data-toggle="dropdown">
+            <img src="assets/img/svg/logo-xls.svg" alt="">
+            {{'upload-csv' | i18n}}
+          </button>
+          <input type="file" #csvReader name="Upload CSV" (change)="uploadFile($event)" accept=".csv" hidden />
+          <ul class="dropdown-menu">
+            <li class="pointer" (click)="openFileExplorer()">
+              <a> {{'upload-csv' | i18n}}</a>
+            </li>
+            <li class="pointer" (click)="downloadLayout()">
+              <a> {{'dowload-layout' | i18n}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="action-types-commodity__header-line"></div>
+  </div>
+
+  <!-- body -->
+  <form class="action-types-commodity__form" [formGroup]="commodityTypeForm" novalidate>
+
+    <div class="row action-types-commodity__item"
+      *ngFor="let item of commodityTypeForm.controls; let indexItem = index;"
+      [ngClass]="{'row action-types-commodity__item--multiple': commodityTypeForm.length>1}">
+
+      <div class="row" [formGroup]="item">
+        <!-- Name -->
+        <div class="action-types-commodity__input-container-name col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <label class="action-types-commodity__label-input">
+            {{ 'comm-type-name' | i18n }}*
+          </label>
+          <input formControlName="name" type="text" class="action-types-commodity__control create-input"
+            [placeholder]="'comm-type-name-placeholder' | i18n" autocomplete="off">
+          <label *ngIf="item.get('name').dirty" class="error-msg-form">
+            <label *ngIf="item.get('name').hasError('required')">
+              {{'is-required-msg' | i18n}}
+            </label>
+            <label *ngIf="item.get('name').hasError('pattern')">
+              {{'alphanumeric-pattern' | i18n}}
+            </label>
+            <label *ngIf="item.get('name').hasError('maxlength')">
+              {{'input-max-length-value' | i18n | stringReplace : '[value]' : CONSTANTS.MAX_LENGTH_COMMODITY_TYPE_NAME}}
+            </label>
+          </label>
+        </div>
+        <!-- Transformation -->
+        <div class="action-types-commodity__input-container-transformation col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <label class="action-types-commodity__label-input">
+            {{ 'transformation-type' | i18n }}*
+          </label>
+          <ng-select 
+            formControlName="transformationType" 
+            class="action-types-commodity__control custom-ng-select" 
+            [items]="transformations" 
+            [multiple]="false" 
+            [closeOnSelect]="true"
+            [clearable]="true" 
+            [notFoundText]="'not-items-found' | i18n" 
+            [loading]="isLoadingTransformations" 
+            [searchFn]="searchTransformation" 
+            bindLabel="name"
+            placeholder="{{'select-transformation-type' | i18n}}" 
+            loadingText="{{'loading' | i18n}}"
+            (change)="setTransformation(indexItem)" ></ng-select>
+          <label *ngIf="item.get('transformationType').dirty" class="error-msg-form">
+            <label *ngIf="item.get('transformationType').hasError('required') && 0==item.get('transformationTypeNameCSV').value.length">
+              {{'is-required-msg' | i18n}}
+            </label>
+            <label *ngIf="item.get('transformationType').hasError('required') && item.get('transformationTypeNameCSV').value.length>0" class="action-types-commodity__continuos-spaces">
+              {{'the-pronoun-transformation-type' | i18n }} {{'transformation-type' | i18n | lowercase }}
+              '{{item.get('transformationTypeNameCSV').value}}' {{'not-registered-transformation-type' | i18n}}
+            </label>
+          </label>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row action-types-commodity__duplicate-name-message" *ngIf="item.get('name').hasError('duplicate')">
+          <label class="error-msg-form">
+            {{'commodity-type-name-duplicate' | i18n}}
+          </label>
+        </div>
+      </div>
+
+      <!-- Button remove item -->
+      <div *ngIf="!isEdit && commodityTypeForm.length>1" class="row">
+        <button type="button" class="btn btn-default action-types-commodity__button-remove-item"
+          (click)="removeItem(indexItem)">
+          <img src="assets/img/svg/trash-red.svg" alt="">
+          <span>
+            &nbsp;
+            {{'delete' | i18n}}
+          </span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Button add item -->
+    <div *ngIf="!isEdit" class="row">
+      <button type="button" class="btn btn-default action-types-commodity__button-add-item" (click)="addItem()">
+        <img [src]="'assets/img/svg/'+(isDarkTheme ? 'add-dark' : 'add')+'.svg'" alt="">
+        {{'add' | i18n}} {{'type-of' |i18n}} {{commodityType.commodityName}}
+      </button>
+    </div>
+
+  </form>
+
+  <!-- Footer -->
+  <app-action-footer [isEdit]="isEdit"
+    [isButtonSubmitDisabled]="commodityTypeForm.invalid || commodityTypeForm.pending || (isEdit && !dataWasMadeModified)"
+    (onActionSelected)="onActionFooterSelected($event)"></app-action-footer>
+
+</div>

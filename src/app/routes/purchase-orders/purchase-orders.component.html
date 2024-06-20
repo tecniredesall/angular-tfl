@@ -1,0 +1,84 @@
+<div class="purchase-orders" *blockUI="'purchase-orders-layout'; template: templateBlockModalUiComponent">
+    <div class="purchase-orders__wrapper">
+        <div class="purchase-orders__wrapper__container scroll-view-app">
+            <!-- Header -->
+            <div class="purchase-orders__header">
+                {{ "purchase-orders" | i18n }}
+            </div>
+            <!-- Tab group -->
+            <mat-tab-group class="sil-tab-group" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex"
+                (selectedTabChange)="onTabClick($event)">
+                <mat-tab label="{{ 'purchase-orders' | i18n }}">
+                    <ng-container   *ngIf="currentStatus === PURCHASE_STATUS.CREATED"
+                                    [ngTemplateOutlet]="listTemplate"
+                                    [ngTemplateOutletContext]="{
+                                                                status: PURCHASE_STATUS.CREATED,
+                                                                orders: createdOrders,
+                                                                filter: createdFilterData,
+                                                                paginator: paginator
+                                                            }">
+                    </ng-container>
+                </mat-tab>
+                <mat-tab label="{{ 'liquidated' | i18n }}">
+                    <ng-container   *ngIf="currentStatus === PURCHASE_STATUS.LIQUIDATE"
+                                    [ngTemplateOutlet]="listTemplate"
+                                    [ngTemplateOutletContext]="{
+                                                                status: PURCHASE_STATUS.LIQUIDATE,
+                                                                orders: liquidatedOrders,
+                                                                filter: liquidatedFilterData,
+                                                                paginator: paginator
+                                                                }">
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
+<ng-template #listTemplate let-status="status" let-orders="orders" let-filter="filter">
+    <div class="purchase-order-container" *blockUI="'purchase-list'; template: templateBlockModalUiComponent">
+        <div class="purchase-order-container__actions-headers">
+            <div class="purchase-order-container__actions-headers__filter-button">
+                <button class="
+                        tr__button__filter
+                        kanban-dashboard__filters__action__button
+                    " [ngClass]="{ 'tr__button__filter--active': hasFilter }" matRipple (click)="openFilter()">
+                    <i class="icon-filter-icon no-select"></i>
+                    &nbsp; &nbsp;
+                    <span>{{ "filter" | i18n }}</span>
+                    &nbsp; &nbsp;
+                    <div *ngIf="hasFilter" class="tr__button__filter__count">
+                        <span>{{ countFilter }}</span>
+                    </div>
+                </button>
+            </div>
+            <div class="purchase-order-container__actions-headers__search-button">
+                <silosys-main-header
+                                    [showSearchInput]="true"
+                                    [searchValue]="searchText"
+                                    [showNewButton]="currentStatus === PURCHASE_STATUS.CREATED"
+                                    [searchInputPlaceholder]="'placeholder-search-purchase-order'"
+                                    [showExportCSVButton]="true"
+                                    [isDisabledSearchInput]="isFocusOnInputSearch"
+                                    [permissionTag]="permissionTag"
+                                    [permissionType]="permissionType"
+                                    (eventNew)="onActionClicked({ action: ACTIONS.CREATE })"
+                                    (eventExportCSV)="onDownloadCsv()"
+                                    (eventSearchInput)="onEventSearch($event)"
+                                    (loadComponentComplete)="onComponentComplete($event)">
+                </silosys-main-header>
+            </div>
+        </div>
+        <app-purchase-orders-list  [orders]="orders"
+                                    [paginator]="paginator"
+                                    [ordersStatus]="currentStatus"
+                                    [queryText]="searchText"
+                                    [filterData]="filter"
+                                    [config]="config"
+                                    [companyInfo]="companyInfo"
+                                    (actionClicked)="onActionClicked($event)"
+                                    (paginatorEvent)="onNewRequestEvent($event)"
+                                    (sortingEvent)="onNewRequestEvent($event)"
+                                    (newRequest)="onNewRequestEvent($event)">
+        </app-purchase-orders-list>
+    </div>
+</ng-template>

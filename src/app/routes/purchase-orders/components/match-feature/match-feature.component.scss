@@ -1,0 +1,100 @@
+@import "src/scss/breakpoints.scss";
+
+.feature-container {
+    position: relative;
+    top: 20px;
+    display: grid;
+    background-color: var(--container-background);
+    padding-bottom: 100px;
+    &__instructions {
+        display: grid;
+        grid-template-columns: 0.1fr 0.9fr;
+        .icon-div {
+            background-color: var(--tr-base-color-yellow);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+        }
+        .text-label {
+            font-size: 16px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.38;
+            color: var(--tr-data-grid-color);
+        }
+    }
+
+    &__related-container {
+        margin-top: 35px;
+        display: grid;
+        grid-template-columns: 1fr;
+        &__title-row {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--tr-data-grid-color);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 0px 60px;
+            height: 70px;
+            align-items: center;
+        }
+        &__match-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            font-size: 16px;
+            font-weight: 600;
+            border: solid 1px var(--tr-background-color);
+            &__description {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                height: 70px;
+                align-items: center;
+                padding: 0px 60px;
+                .feature-select {
+                    font-weight: normal;
+                }
+            }
+            div:nth-of-type(even) {
+                background-color: var(--tr-panel-background-color);
+            }
+        }
+        &__action-footer {
+            margin-top: 50px;
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .feature-container {
+        &__instructions {
+            .icon-div {
+                border-radius: 50%;
+                width: 25px;
+            }
+        }
+
+        &__related-container {
+            &__title-row {
+                grid-template-columns: 1fr 1fr;
+                padding: 0px 60px;
+            }
+            &__match-row {
+
+                &__description {
+                    grid-template-columns: 1fr 1fr;
+                    padding: 0px 60px;
+
+                }
+
+            }
+
+        }
+    }
+
+}
+
+

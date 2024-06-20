@@ -1,0 +1,32 @@
+<div class="shipping-ticket-warehouse">
+    <div class="shipping-ticket-warehouse__capacity">
+        <span>{{'shipping-ticket-warehouse-available' | i18n}}:</span>
+        <div class="shipping-ticket-warehouse__capacity__flex">
+            <i class="icon-almacen-blue"></i>
+            <div class="shipping-ticket-warehouse__capacity__flex__label">
+                <span>{{warehouse.stockLb | number:'1.2-2':'en'}} {{configuration.measurementUnitAbbreviation}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="shipping-ticket-warehouse__progress">
+        <div class="shipping-ticket-warehouse__progress__circle progress-circle" #progressBar>
+            <div class="shipping-ticket-warehouse__progress__circle__text">
+                <span class="shipping-ticket-warehouse__progress__circle__text__percentage">
+                  {{warehouse.percentageStock | number:'1.2-2':'en'}} %
+                </span>
+                <div class="shipping-ticket-warehouse__progress__circle__text__label">
+                  <span class="shipping-ticket-warehouse__progress__circle__text__label__dot"
+                    [style.backgroundColor]="colorLevel"></span>
+                  <span class="shipping-ticket-warehouse__progress__circle__text__label__level">
+                    {{ level | i18n }}
+                  </span>
+                </div>
+            </div>
+            <mat-progress-spinner
+                [ngClass]="progressBarClass"
+                mode="determinate"
+                [value]="warehouse.percentageStock">
+            </mat-progress-spinner>
+        </div>
+    </div>
+</div>

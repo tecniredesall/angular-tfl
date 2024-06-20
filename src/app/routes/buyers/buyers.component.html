@@ -1,0 +1,98 @@
+
+
+            <!-- Title -->
+            <div class="sil-container">
+                <silosys-main-header
+                [title]="'t-buyers'"
+                [showSearchInput]="true"
+                [searchValue]="buyerToSearch"
+                [searchInputPlaceholder]="'t-buyers-placeholder-search'"
+
+                [showExportCSVButton]="true"
+                [permissionTag]="PERMISSIONS.BUYERS"
+                [permissionType]="PERMISSION_TYPES.CREATE"
+                (eventNew)="onActionClicked(ACTIONS.CREATE)"
+                (eventSearchInput)="searchBuyer($event)"
+                (eventExportCSV)="onDownloadCsv()">
+                </silosys-main-header>
+                <!-- Content -->
+                <section class="sil-table">
+                    <header class="sil-table__header-row">
+                        <span class="sil-table__header-cell header__name">
+                            {{ "t-buyers-name" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('company_name')"
+                                [ngClass]="{ 'sort-icon-invert': columnAscState.company_name }"></i>
+                        </span>
+                        <span class="sil-table__header-cell header__rtn">
+                            {{ "t-buyers-rtn" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('company_rtn')" [ngClass]="{ 'sort-icon-invert': columnAscState.company_rtn
+                                }"></i>
+                        </span>
+                        <span class="sil-table__header-cell header__legal__name">
+                            {{ "t-buyers-legal-representative" | i18n | uppercase }}
+                            <i class="icon-arrow_down" (click)="sortData('legal_fullname')" [ngClass]="{ 'sort-icon-invert': columnAscState.legal_fullname
+                                }"></i>
+                        </span>
+                        <span class="sil-table__header-cell header__actions">
+                            {{ "ACTIONS" | i18n }}
+                        </span>
+                    </header>
+
+                     <div class="" *blockUI="'data-grid-container'; template: templateBlockModalUiDataGrid">
+                        <article class="sil-table__row" *ngFor="let buyer of listBuyers">
+
+                            <span class="sil-table__cell cell__icon" (click)="onRowSelected(buyer)">
+                                <span> <i class="icon-buyer-outline"></i> </span>
+                            </span>
+
+                            <span class="sil-table__cell cell__name" (click)="onRowSelected(buyer)">
+                                <p class="sil-table__cell-label">{{ "t-buyers-name" | i18n }}</p>
+                                <div>
+                                    <span class=""> {{ buyer.companyName }}
+                                    </span>
+                                </div>
+                            </span>
+                            <span class="sil-table__cell cell__rtn" (click)="onRowSelected(buyer)">
+                                <p class="sil-table__cell-label">{{ "t-buyers-rtn" | i18n }}</p>
+                                <span [matTooltip]="buyer.farmsName" matTooltipPosition="below"
+                                    matTooltipClass="sil-table__tooltip">
+                                    {{ buyer.companyRtn }}
+                                </span>
+                            </span>
+                            <span class="sil-table__cell cell__legal__name" (click)="onRowSelected(buyer)">
+                                <p class="sil-table__cell-label">{{ "t-buyers-legal-representative" | i18n }}</p>
+                                <span [matTooltip]="buyer.blocksName" matTooltipPosition="below"
+                                    matTooltipClass="sil-table__tooltip">
+                                    {{ buyer.fullLegalName }}
+                                </span>
+                            </span>
+                            <span class="cell__actions">
+                                <app-table-action-button-group [disableDelete]="false" [permissionTag]="PERMISSIONS.BUYERS"
+                                    (actionClicked)="onActionClicked($event, buyer.id)"></app-table-action-button-group>
+                            </span>
+                        </article>
+
+
+                    <ng-container *ngIf="listBuyers.length === 0">
+                        <app-not-results-found *ngIf="buyerToSearch != ''; else emptyProducers">
+                        </app-not-results-found>
+                        <ng-template #emptyProducers>
+                            <div class="buyers__empty">
+                                <img src="/assets/img/empty/empty_buyers.webp">
+                                <p>
+                                    {{'t-buyers-empty-text' | i18n}}
+                                    <span (click)="onActionClicked(ACTIONS.CREATE)">{{'new' | i18n}} </span>.
+                                </p>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+
+                    <div class="sil-table__footer">
+                        <mat-paginator class="sil-table__paginator" [length]="pagination.totalItems"
+                            [pageIndex]="pagination?.currentPage - 1" [pageSize]="pagination?.itemsPerPage"
+                            (page)="eventPaginator($event)" showFirstLastButtons *ngIf="listBuyers.length > 0">
+                        </mat-paginator>
+                    </div>
+                </div>
+                </section>
+            </div>

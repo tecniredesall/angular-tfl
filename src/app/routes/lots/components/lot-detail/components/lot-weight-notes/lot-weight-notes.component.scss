@@ -1,0 +1,253 @@
+:host {
+    width: 100%;
+    display: block;
+    .panel__header {
+        gap: 8px;
+        display: flex;
+        align-items: center;
+        padding: 16px 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        &__notes {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            i {
+                font-size: 12px;
+                color: var(--form-title-color);
+                padding: 4px;
+                transition: transform 200ms ease-in;
+                &.rotate {
+                    transform: rotate(90deg);
+                }
+            }
+            h3 {
+                font-size: 16px;
+                margin: 0 24px 0 8px;
+                font-weight: 400;
+            }
+            span {
+                color: white;
+                background-color: var(--form-title-annotation);
+                border-radius: 12px;
+                min-width: 40px;
+                text-align: center;
+                font-size: 14px;
+            }
+        }
+        &__container{
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            &__net {
+                gap: 4px;
+                display: flex;
+                background-color: white;
+                padding: 4px 8px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                align-self: flex-start;
+                margin-left: 24px;
+                span {
+                    color: var(--tr-base-color-blue);
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    .tr-push-auto {
+        margin-left: auto;
+    }
+    .tr__button__primary {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px !important;
+        height: 31px;
+        width: 138px;
+    }
+    .sil-table {
+        .sil-table__header-row {
+            display: none;
+            margin: 8px 0;
+            .sil-table__header-cell {
+                font-size: 12px;
+            }
+        }
+        .sil-table__row {
+            padding: 8px;
+            grid-template-columns: 0.2fr 1fr 1fr;
+            grid-template-areas:
+                "icon id producer"
+                "icon weight seals";
+            row-gap: 4px;
+            column-gap: 8px;
+            background-color: var(--tr-background-color) !important;
+            .sil-table__cell {
+                color: var(--form-input-color);
+                font-size: 14px;
+                font-weight: 400;
+                &.cell__icon {
+                    grid-area: icon;
+                    i {
+                        font-size: 21px;
+                    }
+                }
+                &.cell__creation {
+                    display: none;
+                    grid-area: creation;
+                }
+                &.cell__id {
+                    grid-area: id;
+                }
+                &.cell__producer {
+                    grid-area: producer;
+                    word-break: break-word;
+                }
+                &.cell__weight {
+                    grid-area: weight;
+                }
+                &.cell__seals {
+                    grid-area: seals;
+                    div {
+                        display: flex;
+                        flex-wrap: wrap;
+                        margin-left: 18px;
+                        span {
+                            z-index: 5;
+                            margin-left: -18px;
+                            img {
+                                width: 24px;
+                                top: 3px;
+                                position: initial;
+                                height: 24px;
+                                border-radius: 50%;
+                                border: 0.5px solid lightgray;
+                                background-color: white;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.lot-detail__notes-panel ::ng-deep {
+    .mat-expansion-panel {
+        box-shadow: none;
+        background: none;
+        .mat-expansion-panel-header {
+            background-color: var(--tr-background-color) !important;
+            padding: 0 16px;
+        }
+        .mat-expansion-panel-content {
+            background-color: var(--container-background) !important;
+            border-radius: 4px;
+            .mat-expansion-panel-body {
+                padding: 0;
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    :host {
+        .panel__header {
+            padding: 24px 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            &__notes {
+                width: 70%;
+                i {
+                    font-size: 14px;
+                }
+                h3 {
+                    font-size: 18px;
+                    margin: 0 24px 0 8px;
+                }
+            }
+            &__container{
+                width: 30%;
+                &__net{
+                align-self: flex-end;
+                }
+            }
+        }
+        .sil-table {
+            .sil-table__header-row {
+                display: grid;
+                column-gap: 12px;
+                padding: 0 8px;
+                grid-template-columns: 2fr 0.8fr 1.5fr 1fr 1fr;
+                .header__process {
+                    justify-content: flex-end;
+                }
+            }
+            .sil-table__header-cell {
+                i {
+                    margin-left: 4px;
+                }
+            }
+            .sil-table__row {
+                padding: 8px;
+                grid-template-columns: 0.2fr 1.5fr 0.8fr 1.5fr 1fr 1fr;
+                grid-template-areas: "icon creation id producer weight seals";
+                .sil-table__cell {
+                    &.cell__creation {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: flex-start;
+                        p {
+                            margin: 0;
+                        }
+                        &-name {
+                            font-size: 11px;
+                        }
+                    }
+                    &.cell__id {
+                        padding-left: 4px;
+                    }
+                    &.cell__weight {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    &.cell__seals {
+                        padding-left: 4px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    :host {
+        .sil-table {
+            .sil-table__header-row {
+                grid-template-columns: 2fr 0.8fr 1.5fr 1fr 1fr;
+                .header__id {
+                    margin-left: 0;
+                }
+                .header__process {
+                    justify-content: flex-start;
+                }
+            }
+            .sil-table__row {
+                padding: 8px;
+                grid-template-columns: 0.5fr 1.4fr 0.8fr 1.5fr 1fr 1fr;
+                .sil-table__cell {
+                    &.cell__weight {
+                        display: flex;
+                        justify-content: flex-start;
+                    }
+                }
+            }
+        }
+    }
+}

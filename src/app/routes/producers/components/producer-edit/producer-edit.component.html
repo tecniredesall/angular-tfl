@@ -1,0 +1,402 @@
+<button class="sil-form__header-button btn btn-transparent-blue" *ngIf="originalFormAction === ACTIONS.READ"
+    id="backToList" (click)="onBackToList()">
+    <i class="icon-arrow_icon"></i>
+    {{ "back-to-list" | i18n }}
+</button>
+<div [ngClass]="{
+        edit: action === ACTIONS.UPDATE || action === ACTIONS.READ,
+        'sil-container': !isFromNewProducer,
+        'sil-container--filled': !isFromNewProducer,
+        'sil-container--in-modal': externalUse
+    }">
+    <header class="sil-form__header" *ngIf="!isFromNewProducer">
+        <div class="sil-form__header__section">
+            <h1 class="sil-form__title" *ngIf="action === ACTIONS.READ">
+                {{ "t-producers-profile-title" | i18n }}
+                <i class="icon-logo-grain" *ngIf="producerPaylod?.federated"></i>
+            </h1>
+            <h1 class="sil-form__title" *ngIf="action !== ACTIONS.READ">
+                {{ action === ACTIONS.UPDATE ? ("edit" | i18n) : ("new" | i18n) }}
+                {{ "producer" | i18n | lowercase }}
+                <i class="icon-logo-grain" *ngIf="producerPaylod?.federated"></i>
+            </h1>
+            <p>{{'producer-id' |i18n}} {{ producerPaylod?.id ? producerPaylod.id : '----'}}</p>
+        </div>
+        <ng-container *ngIf="action === ACTIONS.READ">
+            <button class="sil-form__header-button btn btn-transparent-blue" (click)="onEditButtonClick()" *permission="{
+                    tag: PERMISSIONS.PRODUCERS,
+                    type: PERMISSION_TYPES.UPDATE
+                }">
+                <i class="icon-edit"></i>
+                {{ "edit" | i18n }}
+            </button>
+        </ng-container>
+    </header>
+    <form class="sil-form" [formGroup]="form" *ngIf="form" [ngClass]="{ profile: action === ACTIONS.READ }">
+        <div>
+            <div class="producer-edit__section__subtitle" *ngIf="isFromNewProducer">
+                {{'producer-data' |i18n}}
+            </div>
+            <div class="producer-edit__section__header" *ngIf="!isFromNewProducer">
+                {{'producer-reference-data' |i18n}}
+            </div>
+            <div class="sil-form__content__reference" [ngClass]="{'columns--two': action === ACTIONS.CREATE}">
+                <!-- IDENTITY -->
+                <section class="sil-form__section producer-edit-form__identity">
+                    <label>
+                        {{ "producer-identity" | i18n }}
+                        <span class="sil-form__label-star">*</span>
+                    </label>
+                    <input type="text" autocomplete="off" formControlName="identity" class="sil-form__input"
+                        [placeholder]="'producer-identity-placeholder' | i18n" [textMask]="{
+                            mask: CONSTANTS.IDENTITY_MASK,
+                            guide: false
+                        }" />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("identity").value }}
+                    </p>
+                    <span *ngIf="
+                            form.get('identity').dirty ||
+                            form.get('identity').touched
+                        ">
+                        <span *ngIf="form.get('identity').hasError('required')"
+                            class="sil-form__section__error-message">
+                            {{ "is-required-msg" | i18n }}
+                        </span>
+                        <span *ngIf="form.get('identity').hasError('minlength')"
+                            class="sil-form__section__error-message">
+                            {{
+                            "min-length-value-error"
+                            | i18n
+                            | stringReplace
+                            : "[value]"
+                            : CONSTANTS.MIN_LENGTH_PRODUCER_IDENTITY
+                            }}
+                        </span>
+                    </span>
+                </section>
+                <!-- EMAIL -->
+                <section class="sil-form__section producer-edit-form__email">
+                    <label>{{ "email-address" | i18n }}</label>
+                    <input type="text" autocomplete="off" formControlName="email" class="sil-form__input"
+                        [value]="form.get('email').value | lowercase"
+                        [placeholder]="'t-producers-placeholder-email' | i18n" />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("email").value }}
+                    </p>
+                    <span class="sil-form__section__error-message" *ngIf="(form.get('email').dirty ||
+                                form.get('email').touched)">
+                        <span *ngIf="form.get('email').hasError('maxlength')" class="sil-form__section__error-message">
+                            {{ "max-length-value-error" | i18n | stringReplace : "[value]" : CONSTANTS.MAX_LENGTH_EMAIL
+                            }}
+                        </span>
+                        <span *ngIf="form.get('email').hasError('duplicate')" class="sil-form__section__error-message">
+                            {{ ("value-duplicated" | i18n : form.get("email").value) }}
+                        </span>
+                        <span *ngIf="form.get('email').invalid" class="sil-form__section__error-message">
+                            {{ "email-error" | i18n }}
+                        </span>
+                    </span>
+                </section>
+                <!-- PHONE -->
+                <section class="sil-form__section producer-edit-form__phone">
+                    <label>{{ "phone" | i18n }}</label>
+                    <div class="sil-form__input-group sil-form__phone-input">
+                        <app-phone-code-dropdown (countryChange)="onCountryChanged($event)" [readOnly]="
+                                ((federatedId || action === ACTIONS.UPDATE) && isDisabledPhone)
+                                ||
+                                action === ACTIONS.READ " [country]="
+                                form.get('phoneCountry').value
+                            " class="sil-form__input--inline"></app-phone-code-dropdown>
+                        <input type="text" [textMask]="{
+                                mask:
+                                    CONSTANTS.INTERNATIONAL_PHONES[
+                                        form.get('phoneCountry')
+                                            .value
+                                    ].MASK,
+                                guide: false,
+                                showMask: true
+                            }" [placeholder]="'t-producers-placeholder-phone' | i18n"
+                            class="sil-form__input sil-form__input--inline sil-form__input--phone"
+                            formControlName="phone" autocomplete="off" />
+                        <p class="sil-form__profile-text">
+                            {{ form.get("phone").value }}
+                        </p>
+                    </div>
+                    <span *ngIf="
+                            form.get('phone').dirty ||
+                            form.get('phone').touched
+                        ">
+                        <span *ngIf="form.get('phone').hasError('pattern')" class="sil-form__section__error-message">
+                            {{
+                            "t-alphanumeric-pattern-producer-phone"
+                            | i18n
+                            : form.get("phone").value
+                            | stringReplace
+                            : "[length]"
+                            : CONSTANTS.INTERNATIONAL_PHONES[
+                            form.get("phoneCountry").value
+                            ].LENGTH
+                            }}
+                        </span>
+                    </span>
+                </section>
+            </div>
+            <div class="producer-edit__section__header" *ngIf="!isFromNewProducer">
+                {{'producer-general-data' |i18n}}
+            </div>
+            <div class="producer-edit__section__subtitle">
+                {{'producer-personal-data' |i18n}}
+            </div>
+            <div class="sil-form__content__personal" [ngClass]="{'columns--two': action === ACTIONS.CREATE}">
+                <!-- NAME -->
+                <section class="sil-form__section producer-edit-form__name">
+
+                    <label>{{ "name" | i18n }}
+                        <span class="sil-form__label-star">*</span></label>
+                    <input type="text" autocomplete="off" formControlName="name" class="sil-form__input"
+                        [value]="form.get('name').value | titlecase"
+                        [placeholder]="'t-producers-placeholder-name' | i18n" />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("name").value }}
+                    </p>
+                    <span *ngIf="
+                            form.get('name').dirty ||
+                            form.get('name').touched
+                        ">
+                        <span *ngIf="
+                                form.get('name')
+                                    .hasError('required')
+                            " class="sil-form__section__error-message">
+                            {{ "is-required-msg" | i18n }}
+                        </span>
+                        <span *ngIf="
+                                form.get('name')
+                                    .hasError('pattern')
+                            " class="sil-form__section__error-message">
+                            {{ "alphabet-pattern-error" | i18n }}
+                        </span>
+                        <span *ngIf="
+                                form.get('name')
+                                    .hasError('maxlength')
+                            " class="sil-form__section__error-message">
+                            {{
+                            "max-length-value-error"
+                            | i18n
+                            | stringReplace
+                            : "[value]"
+                            : CONSTANTS.MAX_LENGTH_PRODUCER_NAME
+                            }}
+                        </span>
+                    </span>
+                </section>
+                <!-- LAST NAME -->
+                <section class="sil-form__section producer-edit-form__lastnames">
+                    <label>
+                        {{ "last-names" | i18n }}
+                        <span class="sil-form__label-star">*</span>
+                    </label>
+                    <input type="text" autocomplete="off" class="sil-form__input" formControlName="paternalLast"
+                        [placeholder]="'t-producers-placeholder-last-names' | i18n"
+                        [value]="form.get('paternalLast').value | titlecase" />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("paternalLast").value }}
+                    </p>
+                    <span *ngIf="
+                            form.get('paternalLast').dirty ||
+                            form.get('paternalLast').touched
+                        ">
+                        <span *ngIf="
+                                form.get('paternalLast')
+                                    .hasError('required')
+                            " class="sil-form__section__error-message">
+                            {{ "is-required-msg" | i18n }}
+                        </span>
+                        <span *ngIf="
+                                form.get('paternalLast')
+                                    .hasError('pattern')
+                            " class="sil-form__section__error-message">
+                            {{ "alphabet-pattern-error" | i18n }}
+                        </span>
+                        <span *ngIf="
+                                form.get('paternalLast')
+                                    .hasError('maxlength')
+                            " class="sil-form__section__error-message">
+                            {{
+                            "max-length-value-error"
+                            | i18n
+                            | stringReplace
+                            : "[value]"
+                            : CONSTANTS.MAX_LENGTH_PRODUCER_FATHER_LAST_NAME
+                            }}
+                        </span>
+                    </span>
+                </section>
+                <!-- BIRTH DATE -->
+                <section class="sil-form__section producer-edit-form__birthdate">
+                    <label>{{ "producer-birthdate" | i18n }}
+                        <span class="sil-form__label-star">*</span>
+                    </label>
+                    <app-custom-date-picker formControlName="birthdate" [dateFormat]="dateFormatInput"
+                        [placeholder]="'placeholder-date'" [maxDate]="maxBirthdate" class="sil-form__input sil-form__input--date"
+                        [hasInputClass]="false">
+                    </app-custom-date-picker>
+                    <p class="sil-form__profile-text">
+                        {{ form.get("birthdate").value | date: dateFormatLabel }}
+                    </p>
+                </section>
+                <!-- ASSOCIATION DATE -->
+                <section class="sil-form__section producer-edit-form__association">
+                    <label>{{ "producer-association-date" | i18n }}
+                        <span class="sil-form__label-star">*</span>
+                    </label>
+                    <app-custom-date-picker formControlName="associationDate" [dateFormat]="dateFormatInput"
+                        [placeholder]="'placeholder-date'" [maxDate]="maxDate" class="sil-form__input sil-form__input--date"
+                        [hasInputClass]="false">
+                    </app-custom-date-picker>
+                    <p class="sil-form__profile-text">
+                        {{ form.get("associationDate").value | date: dateFormatLabel }}
+                    </p>
+                </section>
+                <!-- RTN -->
+                <section class="sil-form__section producer-edit-form__identifier">
+                    <label>{{ "producer-rtn" | i18n }}</label>
+                    <input type="text" [placeholder]="'producer-rtn-placeholder' | i18n" class="sil-form__input"
+                        formControlName="rtn" [textMask]="{
+                            mask: numberMaskRTN,
+                            guide: false
+                        }" autocomplete="off" />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("rtn").value }}
+                    </p>
+                    <span class="sil-form__section__error-message" *ngIf="
+                            (form.get('rtn').dirty ||
+                                form.get('rtn')
+                                    .touched) &&
+                            form.get('rtn').invalid
+                    ">
+                        {{
+                        form.get("rtn").hasError("duplicate")
+                        ? ("value-duplicated"
+                        | i18n
+                        : form.get("rtn").value)
+                        :
+                        "min-length-value-error"
+                        | i18n
+                        | stringReplace
+                        : "[value]"
+                        : ID_NUMBERS.RTN.MIN_LENGTH
+                        }}
+                    </span>
+                </section>
+                <!-- PRODUCER TYPE -->
+                <section class="sil-form__section producer-edit-form__type">
+                    <label>{{ "t-producer-type" | i18n }}
+                        <span class="sil-form__label-star">*</span>
+                    </label>
+                    <ng-select formControlName="type" [placeholder]="'t-producers-placeholder-type' | i18n"
+                        appearance="outline" [searchable]="false" [clearable]="true" class="sil-form__select"
+                        bindLabel="name" bindValue="value" [items]="producerTypeList">
+                        <ng-template let-item="item">{{ item.name }}</ng-template>
+                    </ng-select>
+                    <p class="sil-form__profile-text">
+                        {{
+                        form.get("productorTypeName").value
+                        | i18n
+                        }}
+                    </p>
+                </section>
+                <!-- PRODUCER NUMBER -->
+                <section class="sil-form__section producer-edit-form__number">
+                    <label>{{ "t-producer-number" | i18n }}</label>
+                    <input type="text" [placeholder]="'t-producers-placeholder-number' | i18n" class="sil-form__input"
+                        formControlName="externalId" autocomplete="off" [textMask]="{
+                            mask: numberMaskProducerNumber,
+                            guide: false,
+                            showMask: false
+                        }"
+                        />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("externalId").value }}
+                    </p>
+                </section>
+
+                <!-- IHCAFE -->
+                <section class="sil-form__section producer-edit-form__ihcafe">
+                    <label>{{ "t-producer-ihcafe" | i18n }}</label>
+                    <input type="text" appOnlyUppercase [placeholder]="'t-producers-placeholder-ihcafe' | i18n"
+                        class="sil-form__input" formControlName="ihcafeCarnet" autocomplete="off" />
+                    <p class="sil-form__profile-text">
+                        {{ form.get("ihcafeCarnet").value }}
+                    </p>
+                    <span *ngIf="
+                            form.get('ihcafeCarnet').dirty ||
+                            form.get('ihcafeCarnet').touched
+                        ">
+                        <span *ngIf="
+                                form.get('ihcafeCarnet')
+                                    .hasError('pattern')
+                            " class="sil-form__section__error-message">
+                            {{
+                            "t-alphanumeric-pattern-ihcafe_carnet"
+                            | i18n
+                            : form.get("ihcafeCarnet").value
+                            }}
+                        </span>
+                        <span *ngIf="
+                                form.get('ihcafeCarnet')
+                                    .hasError('maxlength')
+                            " class="sil-form__section__error-message">
+                            {{
+                            "max-length-value-error"
+                            | i18n
+                            | stringReplace
+                            : "[value]"
+                            : CONSTANTS.MAX_LENGTH_PRODUCER_CARNET_IHCAFE
+                            }}
+                        </span>
+                    </span>
+                </section>
+            </div>
+            <div *ngIf="action !== ACTIONS.READ || (action === ACTIONS.READ && viewMore)">
+                <mat-divider></mat-divider>
+                <div class="producer-edit__section__subtitle">
+                    {{'producer-additional-data' |i18n}}
+                </div>
+                <app-producer-edit-additional [producer]="form.value" [action]="action"
+                    (formReady)="onAdittionalFormReady($event)" class="producer-edit-form__additional">
+                </app-producer-edit-additional>
+                <mat-divider></mat-divider>
+                <div class="producer-edit__section__subtitle">
+                    {{'domicile' |i18n}}
+                </div>
+                <app-address-component [item]="form.value" [action]="action" [reloadComponent]="realoadAddress"
+                    (formReady)="onAdressFormReady($event)" class="producer-edit-form__address">
+                </app-address-component>
+            </div>
+            <p class="producer-edit__view" *ngIf="action === ACTIONS.READ" (click)="viewMore = !viewMore">
+                {{ (viewMore ? 'view-less' : 'view-more') | i18n}}
+                <i [class]=" viewMore ? 'icon-caret-up' : 'icon-caret-down'"></i>
+            </p>
+        </div>
+        <section class="sil-form__section-form-action-buttons" *ngIf="action !== ACTIONS.READ && !isFromNewProducer">
+            <button class="btn btn-resize gray-btn button-lg" (click)="onActionSelected(ACTIONS.CANCEL)">
+                {{ "cancel" | i18n }}
+            </button>
+            <button class="btn btn-resize blue-btn button-lg"
+                [disabled]="form?.invalid || (action === ACTIONS.UPDATE && !formHasChanges)"
+                (click)="onActionSelected(action)">
+                <ng-container *ngIf="action === ACTIONS.UPDATE; else create">
+                    {{ "save" | i18n }}
+                </ng-container>
+                <ng-template #create>
+                    {{ "create" | i18n }}
+                </ng-template>
+            </button>
+        </section>
+    </form>
+</div>
+
+<app-producer-profile-related-data *ngIf="form && (action === ACTIONS.UPDATE || action === ACTIONS.READ)"
+    class="producer-form__related-data" [producerId]="form.get('id').value" [isEditMode]="true" [action]="action">
+</app-producer-profile-related-data>

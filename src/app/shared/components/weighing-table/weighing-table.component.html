@@ -1,0 +1,411 @@
+<div class="weight-table__weights-section__container" *ngIf="weighingTableConfiguration"
+    [ngClass]="{'view-mode': viewMode}">
+    <div class="weight-table__body__subtitle">
+        {{this.tableBodySubtitle}}
+
+    </div>
+
+    <div class="row weight-table__weights-section"
+        *blockUI="'weighing-table-layout'; template: templateBlockModalUiComponent">
+
+        <div class="weight-table__weights-section__top-space">
+        </div>
+
+        <!-- Weights header -->
+        <div class="weight-table__weights-section__header"
+            [ngClass]="{'weight-table__weights-section__header--is-container': isContainer}">
+            <div class="weight-table__weights-section__label
+                weight-table__weights-section__label__number" [ngClass]="{'id-lot':isLotId}">
+                <label *ngIf="isLotId"> {{"id-lot" | i18n}}</label>
+                <label *ngIf="!isLotId"> #</label>
+            </div>
+
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__weight">
+                {{ "gross-weight" | i18n }}
+                ({{ configuration.measurementUnitAbbreviation}})
+            </div>
+
+            <div class="weight-table__weights-section__label
+                weight-table__weights-section__label__sacks">
+                {{ placeholderContainerColumn | i18n }}
+            </div>
+
+            <div class="weight-table__weights-section__label
+                weight-table__weights-section__label__tare">
+                <span *ngIf="!isContainer">{{ "tare" | i18n }} ({{configuration.measurementUnitAbbreviation}})</span>
+                <span *ngIf="isContainer">{{"tara-container" | i18n}}
+                    ({{configuration.measurementUnitAbbreviation}})</span>
+
+            </div>
+
+            <div class="weight-table__weights-section__label
+                weight-table__weights-section__label__tare--aditional">
+                {{ "transport-tare" | i18n}}
+                ({{ configuration.measurementUnitAbbreviation}})
+            </div>
+
+            <div class="weight-table__weights-section__label
+                weight-table__weights-section__label__netlb">
+                {{ "featured-weight" | i18n }}
+                ({{ configuration.measurementUnitAbbreviation }})
+            </div>
+
+            <div *ngIf="this.withNetWeight" class="weight-table__weights-section__label
+                weight-table__weights-section__label__net-conversion">
+                {{ "featured-weight" | i18n }}
+                ({{ configuration.conversionMeasurementUnitAbbreviation }})
+            </div>
+
+            <div class="weight-table__weights-section__label
+                weight-table__weights-section__label__fold" *ngIf="!viewMode">
+            </div>
+        </div>
+
+        <!-- Weights values -->
+        <div [formGroup]="weight" class="weight-table__weights-section__value" *ngFor="
+                let weight of weighingTableWeightsForm.controls;
+                let wIndex = index;
+                let lastWIndex = last
+            " [ngStyle]="{  borderWidth: lastWIndex ? '0' : '0 0 1px 0'}" [ngClass]="{
+                'weight-table__weights-section__value--disabled': readOnly,
+                'weight-table__weights-section__value--is-container': isContainer
+            }">
+            <!-- Headers small -->
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__number__data">
+                #
+            </div>
+
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__weight__data" (click)="grossWeightInput.focus()">
+                {{ "gross-weight" | i18n }}
+                ({{ configuration?.measurementUnitAbbreviation }})
+            </div>
+
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__sacks__data" (click)="sacksNumberInput.focus()">
+                <div class="weight-table__weights-section__label__sacks__data__text">
+                    {{ "sacks" | i18n }}
+                </div>
+                <div *ngIf="weighingTableForm.get('weights').controls.length > 1"
+                    class="weight-table__weights-section__label__sacks__data__actions">
+                    <ng-container [ngTemplateOutlet]="
+                        actionOptionsWeightsSection
+                    " [ngTemplateOutletContext]="{
+                        wIndex: wIndex
+                    }">
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__tare__data" (click)="tareInput.focus()">
+                <div class="weight-table__weights-section__label__tare__data__text">
+                    {{ "tare" | i18n }}
+                    ({{ configuration?.measurementUnitAbbreviation }})
+                </div>
+                <div *ngIf="weighingTableForm.get('weights').controls.length > 1"
+                    class="weight-table__weights-section__label__tare__data__actions">
+                    <ng-container [ngTemplateOutlet]="actionOptionsWeightsSection"
+                        [ngTemplateOutletContext]="{ wIndex: wIndex }">
+                    </ng-container>
+                </div>
+            </div>
+            <!-- HEADER tare additional value -->
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__tare--aditional__data" (click)="tareInputAditional.focus()">
+                <div class="weight-table__weights-section__label__tare--aditional__data__text">
+                    {{ "transport-tare" | i18n}}
+                    ({{ configuration?.measurementUnitAbbreviation }})
+                </div>
+                <div *ngIf="weighingTableForm.get('weights').controls.length > 1"
+                    class="weight-table__weights-section__label__tare--aditional__data__actions">
+                    <ng-container [ngTemplateOutlet]="actionOptionsWeightsSection"
+                        [ngTemplateOutletContext]="{ wIndex: wIndex }">
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="weight-table__weights-section__label
+            weight-table__weights-section__label__netlb__data">
+                {{ "featured-weight" | i18n }}
+                ({{ configuration?.measurementUnitAbbreviation}})
+            </div>
+
+            <div *ngIf="this.withNetWeight" class="weight-table__weights-section__label
+            weight-table__weights-section__label__net-conversion__data">
+                <div class="weight-table__weights-section__label__net-conversion__data__text">
+                    {{ "featured-weight" | i18n }}
+                    ({{ configuration?.conversionMeasurementUnitAbbreviation }})
+                </div>
+                <div *ngIf="weighingTableForm.get('weights').controls.length > 1"
+                    class="weight-table__weights-section__label__net-conversion__data__actions">
+                    <ng-container [ngTemplateOutlet]="actionOptionsWeightsSection"
+                        [ngTemplateOutletContext]="{wIndex: wIndex}">
+                    </ng-container>
+                </div>
+            </div>
+
+            <!-- index value -->
+            <div class="weight-table__weights-section__value__item
+            weight-table__weights-section__value__item__number" [ngClass]="{'id-lot':isLotId}">
+                <div *ngIf="isLotId; else elseIdLotActive">
+                    <ng-select class="custom-ng-select" formControlName="lotId" [items]="lotsFinalized"
+                        bindLabel="prefix_folio" bindValue="id" [notFoundText]="'not-items-found' | i18n"
+                        [multiple]="false" [closeOnSelect]="true" [clearable]="false" placeholder="{{'id-lot' | i18n}}">
+                    </ng-select>
+                </div>
+                <ng-template #elseIdLotActive>
+                    {{ wIndex + 1 }}
+                </ng-template>
+            </div>
+
+            <!-- sacks value -->
+            <div class="weight-table__weights-section__value__item weight-table__weights-section__value__item__sacks"
+                (click)="sacksNumberInput.focus()">
+                <input formControlName="sacksNumber" type="text" [tabIndex]="wIndex" class="weight-table__input-without-border" (input)="
+                    onChangeInputSacksNumber(wIndex)
+                " [placeholder]="'placeholder-reception-note-weight-input' | i18n" [textMask]="{
+                    mask: positiveNumberMask,
+                    guide: false,
+                    showMask: false
+                }" autocomplete="off" #sacksNumberInput />
+                <label class="weight-table__weights-section__input__error-message">
+                    <label class="error-msg-form" *ngIf="
+                        weight.get('sacksNumber').dirty &&
+                        weight.get('sacksNumber').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </label>
+                    <label class="error-msg-form" *ngIf="
+                        weight.get('sacksNumber').dirty &&
+                        !weight.get('sacksNumber').hasError('required') &&
+                        weight.get('sacksNumber').hasError('zero')">
+                        {{ "non-zero-value" | i18n }}
+                    </label>
+                    <label class="warning-number-sacks-msg"
+                        *ngIf="!weight.get('sacksNumber').hasError('zero') && weight.get('isWarningSacks').value">
+                        {{ "reception-note-sacks-number-warning" | i18n }}
+                    </label>
+                </label>
+            </div>
+
+            <!-- gross weight value -->
+            <div class="weight-table__weights-section__value__item weight-table__weights-section__value__item__weight"
+                (click)="grossWeightInput.focus()">
+                <input formControlName="grossWeight" type="text" [tabIndex]="wIndex"
+                    class="weight-table__weights-section__value__item__weight__input weight-table__input-without-border"
+                    (input)="calculateNetWeight(wIndex)"
+                    [placeholder]="'placeholder-reception-note-weight-input' | i18n" [textMask]="{
+                                mask: positiveDecimalNumberMask,
+                                guide: false,
+                                showMask: false
+                            }" autocomplete="off" #grossWeightInput />
+                <label class="weight-table__weights-section__value__item__weight__message
+                        weight-table__weights-section__input__error-message">
+                    <label class="error-msg-form"
+                        *ngIf="weight.get('grossWeight').dirty && weight.get('grossWeight').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </label>
+                    <label class="error-msg-form"
+                        *ngIf="!weight.get('grossWeight').hasError('required') && weight.get('grossWeight').hasError('zero')">
+                        {{ "non-zero-value" | i18n }}
+                    </label>
+                </label>
+                <div *featureFlags="'scales'" class="weight-table__weights-section__value__item__weight__scale">
+                    <div [matTooltipDisabled]="readOnly  || userHasScalesLinked"
+                        matTooltipClass="tr__scale__button-tooltip" [matTooltip]="('not-linked-scales' | i18n)"
+                        matTooltipPosition="below">
+                        <button (click)="openScaleDialog(wIndex, $event)" [tabIndex]="-1"
+                            class="btn btn-success weight-table__weights-section__value__item__weight__scale__button"
+                            [disabled]="readOnly ||  !userHasScalesLinked" [hidden]="viewMode">
+                            <span class="weight-table__weights-section__value__item__weight__scale__button__text">
+                                {{'scale' | i18n}}
+                            </span>
+                            <img class="weight-table__weights-section__value__item__weight__scale__button__icon"
+                                src="assets/img/svg/scale_icon.svg" alt="" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- tare value -->
+            <div class="weight-table__weights-section__value__item weight-table__weights-section__value__item__tare"
+                (click)="tareInput.focus()">
+                <input formControlName="tare" type="text" class="weight-table__input-without-border" [tabIndex]="wIndex"
+                    (input)="calculateNetWeight(wIndex)" [placeholder]="
+                    'placeholder-reception-note-weight-input'
+                        | i18n
+                " [textMask]="{
+                    mask: positiveDecimalNumberMask,
+                    guide: false,
+                    showMask: false
+                }" autocomplete="off" #tareInput />
+                <label class="weight-table__weights-section__input__error-message" *ngIf="weight.get('tare').dirty">
+                    <label class="error-msg-form" *ngIf="weight.get('tare').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </label>
+                    <label class="error-msg-form" *ngIf="!weight.get('tare').hasError('required') &&
+                        weight.get('tare').hasError('zero')">
+                        {{ "non-zero-value" | i18n }}
+                    </label>
+                </label>
+            </div>
+
+            <!-- tare additional value -->
+            <div class="weight-table__weights-section__value__item weight-table__weights-section__value__item__tare--aditional"
+                (click)="tareInputAditional.focus()">
+                <input formControlName="tareAditional" type="text" class="weight-table__input-without-border" [tabIndex]="wIndex"
+                    (input)="calculateNetWeight(wIndex)" [placeholder]="
+                            'placeholder-reception-note-weight-input'
+                                | i18n
+                        " [textMask]="{
+                            mask: positiveDecimalNumberMask,
+                            guide: false,
+                            showMask: false
+                        }" autocomplete="off" #tareInputAditional />
+                <label class="weight-table__weights-section__input__error-message"
+                    *ngIf="weight.get('tareAditional').dirty">
+                    <label class="error-msg-form" *ngIf="weight.get('tareAditional').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </label>
+                    <label class="error-msg-form" *ngIf="!weight.get('tareAditional').hasError('required') &&
+                                weight.get('tareAditional').hasError('zero')">
+                        {{ "non-zero-value" | i18n }}
+                    </label>
+                </label>
+            </div>
+
+            <!-- featured weight value -->
+            <div class="weight-table__weights-section__value__item weight-table__weights-section__value__item__netlb">
+                {{
+                (weight.get("featuredWeight").value
+                ? weight.get("featuredWeight").value
+                : 0
+                ) | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"
+                }}
+            </div>
+
+            <!-- featured weight QQ value -->
+            <div *ngIf="this.withNetWeight"
+                class="weight-table__weights-section__value__item weight-table__weights-section__value__item__net-conversion">
+                {{
+                (weight.get("netWeightQQ").value
+                ? weight.get("netWeightQQ").value
+                : 0
+                )| number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"
+                }}
+            </div>
+
+            <!-- action value -->
+            <div class="weight-table__weights-section__value__item weight-table__weights-section__value__item__actions"
+                *ngIf="!viewMode">
+                <ng-container *ngIf="weighingTableForm.get('weights').controls.length > 1"
+                    [ngTemplateOutlet]="actionOptionsWeightsSection" [ngTemplateOutletContext]="{ wIndex: wIndex }">
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Totals row -->
+        <div class="weight-table__weights-section__totals" [ngClass]="{'id-lot':isLotId}">
+            <div class="weight-table__weights-section__totals__row"
+                [ngClass]="{'weight-table__weights-section__totals__row--is-container': isContainer}">
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__label
+                    weight-table__weights-section__totals__row__items__label-sacks">
+                    {{ "sacks" | i18n }}
+                </div>
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__label
+                    weight-table__weights-section__totals__row__items__label-gross-weight">
+                    {{ "gross-weight" | i18n }}
+                    ({{ configuration?.measurementUnitAbbreviation }})
+                </div>
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__label
+                    weight-table__weights-section__totals__row__items__label-tare">
+                    {{ "tare" | i18n }}
+                    ({{ configuration?.measurementUnitAbbreviation }})
+                </div>
+                <!-- LABEL TARE ADITIONAL -->
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__label
+                    weight-table__weights-section__totals__row__items__label-tare--aditional">
+                    {{ "transport-tare" | i18n}}
+                    ({{ configuration?.measurementUnitAbbreviation }})
+                </div>
+
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__label
+                    weight-table__weights-section__totals__row__items__label-feature-weight">
+                    {{ "featured-weight" | i18n }}
+                    ({{ configuration?.measurementUnitAbbreviation }})
+                </div>
+
+                <div *ngIf="this.withNetWeight" class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__label
+                    weight-table__weights-section__totals__row__items__label-net-conversion">
+                    {{ "featured-weight" | i18n }}
+                    ({{ configuration?.conversionMeasurementUnitAbbreviation }})
+                </div>
+
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__value
+                    weight-table__weights-section__totals__row__items__value-sacks">
+                    {{
+                    weighingTableForm.get("totalSacks").value | number: "1.0":"en"
+                    }}
+                </div>
+
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__value
+                    weight-table__weights-section__totals__row__items__value-gross-weight">
+                    {{
+                    weighingTableForm.get("totalGross").value | number: "1." + DECIMAL_DIGITS + "-" +
+                    DECIMAL_DIGITS : "en"
+                    }}
+                </div>
+
+                <!-- VALUE TARE ADITIONAL -->
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__value
+                    weight-table__weights-section__totals__row__items__value-tare" appSignedValue
+                    [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                    [value]="weighingTableForm.get('totalTare').value || 0"></div>
+
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__value
+                    weight-table__weights-section__totals__row__items__value-tare--aditional" appSignedValue
+                    [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                    [value]="weighingTableForm.get('totalTareAditional').value || 0"></div>
+
+                <div class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__value
+                    weight-table__weights-section__totals__row__items__value-feature-weight" appSignedValue
+                    [value]="weighingTableForm.get('totalNet').value"></div>
+
+                <div *ngIf="this.withNetWeight" class="weight-table__weights-section__totals__row__items
+                    weight-table__weights-section__totals__row__items__value
+                    weight-table__weights-section__totals__row__items__value-net-conversion" appSignedValue
+                    [value]="weighingTableForm.get('totalNetQQ').value"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Add weight record -->
+    <div class="row weight-table__weights-section__add-item" [hidden]="viewMode">
+        <button [disabled]="readOnly" class="weight-table__weights-section__add-item__button btn btn-transparent-blue"
+            (click)="addNewWeigth()">
+            <i class="icon-plus"></i>
+            {{ "add-weight" | i18n }}
+        </button>
+    </div>
+</div>
+
+<ng-template #actionOptionsWeightsSection let-wIndex="wIndex">
+    <button [hidden]="viewMode" [disabled]="readOnly"
+        class="weight-table__weights-section__actions-options btn btn-default" (click)="deleteWeight(wIndex, $event)">
+        <i class="icon-erase"></i>
+    </button>
+</ng-template>

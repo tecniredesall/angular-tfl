@@ -1,0 +1,97 @@
+<div class="create-model">
+  <div class="create-model__wrapper">
+    <div class="create-model__container" *blockUI="'create-workflow'; template: templateBlockModalUiComponent">
+      <mat-card class="create-model__card" *ngIf="selectedCommodity">
+        <form [formGroup]="formWorkflow">
+          <p class="font-28-500-normal font-blue"> {{ (isEdit ? 'edit' : 'new') + '-production-flow' | i18n }} </p>
+          <hr class="hr">
+          
+          <div class="create-model-form-container">
+            <div class="grid">
+              <div class="group">
+                <p class="font-14-normal-normal font-secondary-color"> {{ 'commodity' | i18n | titlecase }} </p>
+                <input class="create-input name-input w-100" disabled [value]="selectedCommodity.name" />
+              </div>
+              <div class="group">
+                <div class="font-14-normal-normal font-secondary-color">
+                  <span>{{'commodity-type' | i18n}} *</span>
+                </div>
+                <div class="mrg-btm-15">
+                  <ng-select 
+                    formControlName="originCommodityTypeId" 
+                    class="custom-ng-select" 
+                    [items]="commodityTypes" 
+                    [multiple]="false"
+                    [closeOnSelect]="true" 
+                    [clearable]="false" 
+                    loadingText="{{'loading' | i18n}}" 
+                    [notFoundText]="'not-items-found' | i18n"
+                    bindLabel="name"
+                    bindValue="id"
+                    placeholder="{{'commodity-type-selection' | i18n}}">
+                  </ng-select>
+                </div>
+                <label *ngIf="formWorkflow.get('originCommodityTypeId').dirty && formWorkflow.get('originCommodityTypeId').hasError('required')" class="error-msg-form">
+                  {{'is-required-msg' | i18n}}
+                </label>
+              </div>
+            </div>
+            <div class="grid">
+              <div class="group">
+                <p class="font-14-normal-normal font-secondary-color"> {{ 'name' | i18n | titlecase }} * </p>
+                <input class="create-input name-input w-100" formControlName="name" placeholder="{{ 'placeholder-name-production-flow' | i18n }}"/>
+                <label *ngIf="formWorkflow.get('name').dirty && formWorkflow.get('name').hasError('required')" class="error-msg-form">
+                  {{'is-required-msg' | i18n}}
+                </label>
+              </div>
+              <div class="group">
+                <div class="font-14-normal-normal font-secondary-color">
+                  <span>{{'production-type' | i18n}} *</span>
+                </div>
+                <div>
+                  <ng-select 
+                    formControlName="productionTypeId" 
+                    class="custom-ng-select" 
+                    [items]="productionTypes" 
+                    [multiple]="false"
+                    [closeOnSelect]="true" 
+                    [clearable]="false" 
+                    loadingText="{{'loading' | i18n}}" 
+                    [notFoundText]="'not-items-found' | i18n"
+                    bindLabel="name"
+                    bindValue="id"
+                    placeholder="{{'production-type-selection' | i18n}}">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="group description_group">
+                <p class="font-14-normal-normal font-secondary-color"> {{ 'description' | i18n | titlecase }} </p>
+                <textarea
+                  class="create-input name-input w-100 description__textarea"
+                  formControlName="description"
+                  placeholder="{{ 'placeholder-description-production-flow' | i18n }}"
+                  rows="10" cols="60">
+                </textarea>
+                <label
+                  *ngIf="formWorkflow.get('description').hasError('maxlength')"
+                  class="error-msg-form">
+                  {{'workflow-maxlength-description' | i18n | stringReplace : '[length]' : CONSTANTS.MAX_LENGTH_DESCRIPTION_WORKFLOW}}
+                </label>
+              </div>
+            </div>
+          </div>
+    
+          <!-- FOOTER -->
+          <app-action-footer
+            [isEdit]="isEdit"
+            [isButtonSubmitDisabled]="formWorkflow.invalid || formWorkflow.pending || (isEdit && !dataWasMadeModified)"
+            (onActionSelected)="onActionFooterSelected($event)">
+          </app-action-footer>
+        </form>
+    
+      </mat-card>
+    </div>
+  </div>
+</div>

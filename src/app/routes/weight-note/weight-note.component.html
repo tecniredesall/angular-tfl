@@ -1,0 +1,22 @@
+<div class="weight-note-lots" *blockUI="'weight-note-lots-layout'; template: templateBlockModalUiComponent">
+  <div class="weight-note-lots__wrapper">
+    <div class="weight-note-lots__wrapper__container scroll-view-app">
+      <!-- Header -->
+      <div class="weight-note-lots__header">
+        {{'weight-note' | i18n }} / {{'lots' | i18n}}
+      </div>
+      <!-- Tab group -->
+      <mat-tab-group class="sil-tab-group" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex"
+        (selectedTabChange)="onTabClick($event)">
+        <mat-tab label="{{'receiving-note' | i18n}}">
+          <!-- Receiving note list-->
+          <app-receiving-note *ngIf="0==selectedTabIndex"></app-receiving-note>
+        </mat-tab>
+        <mat-tab *featureFlags="'lots'" label="{{'lots' | i18n}}">
+          <!-- Lots list -->
+          <tr-lot-list *ngIf="1==selectedTabIndex"></tr-lot-list>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

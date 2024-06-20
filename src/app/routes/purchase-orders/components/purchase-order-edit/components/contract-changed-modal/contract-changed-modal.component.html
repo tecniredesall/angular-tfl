@@ -1,0 +1,23 @@
+<h3 class="title-base--black">
+    {{ "contract-changing-messaging" | i18n }} [{{ contract.id }}]?
+</h3>
+<section class="price__note">
+    <p class="note">{{ "Nota" | i18n}}:</p>
+    <p class="message">
+        {{ "contract-price-messaging" | i18n}}
+    </p>
+</section>
+<section class="buttons">
+    <button
+        class="btn btn-resize gray-btn button-lg"
+        (click)="onCancelClicked()"
+    >
+        {{ "cancel" | i18n }}
+    </button>
+    <button
+        class="btn btn-resize blue-btn button-lg"
+        (click)="onAcceptClicked()"
+    >
+        {{ "accept" | i18n }}
+    </button>
+</section>

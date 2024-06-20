@@ -1,0 +1,128 @@
+<!-- No collapsable panel header -->
+<ng-container [ngTemplateOutlet]="fullPanel" *ngIf="standAlone; else detailPanel">
+</ng-container>
+<!-- Adds a collapsable panel header -->
+<ng-template #fullPanel>
+    <mat-accordion multi class="lot-detail__notes-panel">
+        <mat-expansion-panel hideToggle (opened)="onPanelOpened()" (closed)="onPanelOpened()">
+            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                <section class="panel__header">
+                    <div class="panel__header__notes">
+                        <i class="icon-arrow_right" [ngClass]="{ rotate: panelOpened }"></i>
+                        <h3 class="title-base--black">
+                            {{ "weight-notes" | i18n }}
+                        </h3>
+                        <span>{{ weightNotes.length | number: "2.0" }}</span>
+                    </div>
+                    <div class="panel__header__container">
+                        <div class="panel__header__container__net" *ngIf="isFromTransition">
+                            {{'net-weight' | i18n}}:
+                            <span>
+                                {{ lot.weightQQ | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en" }}
+                                {{ configuration.conversionMeasurementUnitAbbreviation }}
+                            </span>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="isAllowLotActions && !isFromTransition" >
+
+                        <div class="tr-push-auto" *permission="{tag: PERMISSIONS.LOTS, type: PERMISSION_TYPES.UPDATE}">
+                            <button class="tr__button__primary tr-push-auto" (click)="onSplitOpenDialog($event)">
+                                <i class="icon-divide"></i> {{'split-lot' |i18n}}
+                            </button>
+                        </div>
+
+                        <div class="tr-push-auto" *permission="{tag: PERMISSIONS.LOTS, type: PERMISSION_TYPES.UPDATE}">
+                            <button class="tr__button__primary"
+                                [routerLink]="['/routes/weight-note/lots/merge-lot', lot.id]" [queryParams]="{isFromKanban: isFromKanban}">
+                                <i class="icon-merge"></i> {{'merge-lot-title' | i18n}}
+                            </button>
+                        </div>
+                    </ng-container>
+                </section>
+            </mat-expansion-panel-header>
+            <ng-container [ngTemplateOutlet]="detailPanel"> </ng-container>
+        </mat-expansion-panel>
+    </mat-accordion>
+</ng-template>
+<!-- Detail grid template -->
+<ng-template #detailPanel>
+    <section class="sil-table">
+        <header class="sil-table__header-row">
+            <span class="sil-table__header-cell header__creation">
+                {{ "creation" | i18n | uppercase }}
+                <i class="icon-arrow_down" (click)="sortData('creation')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.creation
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__id">
+                {{ "id" | i18n | uppercase }}
+                <i class="icon-arrow_down show-on-mobile" (click)="sortData('id')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.id
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__blocks">
+                {{ "producer" | i18n | uppercase }}
+                <i class="icon-arrow_down" (click)="sortData('producer')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.producer
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__process">
+                {{ "net-weight" | i18n | uppercase }}
+                <i class="icon-arrow_down" (click)="sortData('weight')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.weight
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__seals">
+                {{ "seals" | i18n | uppercase }}
+            </span>
+        </header>
+        <article class="sil-table__row" *ngFor="let note of weightNotes">
+            <span class="sil-table__cell cell__creation">
+                <p class="cell__creation-date">
+                    {{ note.storageDate | formatMoment: "MMM DD, YYYY HH:mm" : true }}
+                </p>
+                <p class="cell__creation-name">
+                    {{ note.creatorUser }}
+                </p>
+            </span>
+            <span class="sil-table__cell cell__icon">
+                <i class="icon-notas"></i>
+            </span>
+            <span class="sil-table__cell cell__id">
+                <p class="sil-table__cell-label">
+                    {{ "id" | uppercase }}
+                </p>
+                {{ note.transactionInId }}
+            </span>
+            <span class="sil-table__cell cell__producer">
+                <p class="sil-table__cell-label">
+                    {{ "producer" | i18n }}
+                </p>
+                {{ note.sellerName }}
+            </span>
+            <span class="sil-table__cell cell__weight">
+                <p class="sil-table__cell-label">
+                    {{ "net-weight" | i18n }}
+                </p>
+                {{
+                note.netWeightQQ
+                | number
+                : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                : "en"
+                }}
+                {{ configuration.conversionMeasurementUnitAbbreviation }}
+            </span>
+            <span class="sil-table__cell cell__seals">
+                <p class="sil-table__cell-label">{{ "seals" | i18n }}</p>
+                <div>
+                    <ng-container *ngFor="let seal of note.seals">
+                        <span [matTooltip]="seal.name" matTooltipPosition="below" matTooltipClass="sil-table__tooltip">
+                            <img [src]="seal.image" />
+                        </span>
+                    </ng-container>
+                </div>
+            </span>
+        </article>
+        <app-not-results-found *ngIf="weightNotes.length === 0"></app-not-results-found>
+    </section>
+</ng-template>

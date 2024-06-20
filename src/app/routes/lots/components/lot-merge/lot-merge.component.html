@@ -1,0 +1,74 @@
+<div class="lot-merge__container scroll-view-app">
+    <button class="sil-form__header-button btn btn-transparent-blue"
+            [routerLink]="['/routes/weight-note/lots/lot/', currentLot.id]"
+            [queryParams]="{ isFromKanban : isFromKanban }">
+        <i class="icon-arrow_icon"></i>
+        {{ "back" | i18n }}
+    </button>
+    <div class="sil-container sil-container--filled"
+        *blockUI="'lot-merge';template: templateBlockModalUiComponent">
+        <header class="sil-form__header">
+            <h1 class="sil-form__title">
+                {{ (isCompletedLotsSelection ? 'lot-summary' : 'merge-lot-title') | i18n }} {{!isCompletedLotsSelection ? currentLot.folio: ''}}
+            </h1>
+        </header>
+        <ng-container *ngIf="!isCompletedLotsSelection; else showSumary">
+            <div class="lot-merge__container-title">
+                <section class="lot-merge__container-title__instruction">
+                    <i class="icon-alert_icon"></i>
+                    {{'merge-lot-description-instruction' | i18n}}
+                </section>
+                <section class="lot-merge__container-title__selected">
+                    <span>{{selectedLots.length}} {{'selected-lots' | i18n}}</span>
+                </section>
+            </div>
+            <div class="lot-merge__container-data scroll-view-app">
+                <app-lot-list-result *ngIf="lots.length > 0; else notResult" 
+                                     [lots]="lots"
+                                     [configuration]="configuration" 
+                                     (selectLots)="onSetLotsSelected($event)">
+                </app-lot-list-result>
+                <ng-template #notResult>
+                    <app-not-results-found>
+                    </app-not-results-found>
+                </ng-template>
+            </div>
+            <div class="lot-merge__container__actions">
+                <section class="lot-merge__container__actions__info">
+                    <span class="lot-merge__container__actions__info--label">
+                        {{'lot-quantity' | i18n}}:
+                    </span>
+                    <span class="lot-merge__container__actions__info--total tr--font-blue">
+                        {{currentLot.weightQQ| number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"}}
+                        {{this.configuration.conversionMeasurementUnitAbbreviation}}
+                    </span>
+                    <span class="lot-merge__container__actions__info--label">
+                        {{'added-quantity' | i18n}}:
+                    </span>
+                    <span class="lot-merge__container__actions__info--total tr--font-blue">
+                        {{addedQuantity | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"}}
+                        {{this.configuration.conversionMeasurementUnitAbbreviation}}
+                    </span>
+                    <span class="lot-merge__container__actions__info--label">
+                        {{'total-quantity' | i18n}}:
+                    </span>
+                    <span class="lot-merge__container__actions__info--total tr--font-green">
+                        {{totalQuantity | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"}}
+                        {{this.configuration.conversionMeasurementUnitAbbreviation}}
+                    </span>
+                </section>
+                <app-action-footer [isButtonSubmitDisabled]="selectedLots.length == 0" 
+                                   [isNextMode]="true"
+                                   (onActionSelected)="onActionSelected($event)">
+                </app-action-footer>
+            </div>
+        </ng-container>
+        <ng-template #showSumary>
+            <app-lot-summary [lotsForMerge]="selectedLots" 
+                             [currentLot]="currentLot" 
+                             [configuration]="configuration" 
+                             (backToList)="setCompletedSelectionstatus()">
+            </app-lot-summary>
+        </ng-template>
+    </div>
+</div>

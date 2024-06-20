@@ -1,0 +1,57 @@
+<div
+    class="main-header {{responsiveClass}}"
+    [ngClass]="{'main-header--with-export': showExportCSVButton, 'main-header--with-search': showSearchInput}"
+    (resized)="onMainHeaderResized($event)"
+    #mainHeaderContainer
+>
+    <div class="main-header__title">
+        {{ title | i18n }}
+    </div>
+
+    <div 
+        *ngIf="showSearchInput"
+        class="main-header__search-input">
+        <app-search-input
+            [isDisabledSearchInput]="isDisabledSearchInput"
+            [searchValue]="searchValue"
+            [isFocused]="isInputSearchFocused"
+            (clearEvent)="clearSearchInput()"
+        >
+            <input
+                searchInput
+                type="text"
+                class="elipsis main-header__input"
+                (input)="eventSearchInputContentChanged()"
+                [placeholder]="searchInputPlaceholder | i18n"
+                [(ngModel)]="searchValue"
+                [disabled]="isDisabledSearchInput"
+                (focus)="isInputSearchFocused = true"
+                (blur)="isInputSearchFocused = false"
+                autocomplete="not"
+            />
+        </app-search-input>
+    </div>    
+
+    <div 
+    *ngIf="showExportCSVButton"
+    class="main-header__export-container">
+        <button
+            class="btn main-header__button main-header__button-export"
+            [disabled]="isDisableExportCSVButton"
+            (click)="exportCSV()"
+        >
+            {{ "export-csv" | i18n }}
+        </button>
+    </div>
+
+    <div
+    *ngIf="showNewButton"
+    class="main-header__new-container">
+        <button
+            *permission="{tag: permissionTag, type: permissionType}" 
+            class="btn main-header__button main-header__button-new" 
+            (click)="createNew()">
+            {{ "new" | i18n }}
+        </button>
+    </div>
+</div>

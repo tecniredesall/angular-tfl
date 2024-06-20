@@ -1,0 +1,61 @@
+:host {
+    display: block;
+    .title-counter {
+        padding: 8px 12px;
+        background-color: var(--tr-panel-background-color);
+        border-radius: 12px;
+        color: var(--tr-primary-color);
+    }
+    .sil-table {
+        margin-top: 32px;
+        &__header-row {
+            display: grid;
+            column-gap: 4px;
+            grid-template-columns: 50px 0.2fr 0.2fr 1fr;
+            grid-template-areas: "icon brand model ip";
+            .sil-table__header-cell {
+                font-size: 12px;
+                .header__brand {
+                    grid-area: brand;
+                }
+                .header__model {
+                    grid-area: model;
+                }
+                .header__ip {
+                    grid-area: ip;
+                }
+                .header__icon {
+                    grid-area: icon;
+                }
+            }
+        }
+        &__row {
+           padding: 8px;
+           cursor: pointer;
+           grid-template-columns: 50px 0.2fr 0.2fr 1fr;
+           grid-template-areas: "icon brand model ip";
+           row-gap: 4px;
+           column-gap: 4px;
+        }
+        &__cell {
+            &.cell__icon {
+                grid-area: icon;
+                i {
+                    color: var(--tr-primary-color);
+                }
+            }
+            &.cell__brand {
+                grid-area: brand;
+            }
+            &.cell__model {
+                grid-area: model;
+            }
+            &.cell_ip {
+                grid-area: ip;
+            }
+        }
+    }
+    .btn-new-device {
+        margin-top: 24px;
+    }
+}

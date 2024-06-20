@@ -1,0 +1,19 @@
+<img src="assets/img/empty/{{ imgName }}.png" alt="" />
+<h3>
+    {{ "result-not-found" | i18n }}
+</h3>
+<h4 *ngIf="showSubtitle && !customMessage">
+    {{ "not-found-msg" | i18n }}
+</h4>
+
+<h4 *ngIf="customMessage">
+    {{ customMessage | i18n }}
+</h4>
+
+<button
+    *ngIf="buttonLink"
+    class="tr__button__new-item warehouse-transfer-list__header__new__button"
+    [routerLink]="[buttonLink.link]"
+>
+    <span>{{ buttonLink.symbol }} {{ buttonLink.label | i18n }}</span>
+</button>

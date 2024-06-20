@@ -1,0 +1,39 @@
+.waiting-icon img {
+	margin-top: 8px;
+	width: 30px;
+}
+
+.cud-icon img {
+	width: 19px;
+	margin: 13px 0px 0px 8px;
+}
+
+.row-info {
+	min-height: 45px;
+	background-color: #dcdcdc;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+.req-body-h {
+	max-height: 250px;
+	padding-right: 20px;
+}
+
+.row-detail {
+	cursor: pointer;
+	padding: 5px 0 0px 0px;
+}
+
+.entity-icon {
+	width: 35px;
+	margin-top: 0px;
+}
+
+.panel-body-req {
+	padding: 0px 0px 0px 20px;
+}
+.tooltip-example {
+	text-align: center;
+	padding: 0 50px;
+}
+

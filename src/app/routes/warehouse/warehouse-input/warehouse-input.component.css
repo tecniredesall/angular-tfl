@@ -1,0 +1,122 @@
+
+@media (min-width: 800px) {
+
+  :host {
+    border: 1px solid #e1e7f5;
+    border-radius: 5px;
+    height: 32px;
+    padding: 2px 12px 6px 10px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    box-sizing: border-box;
+  }
+
+  .dark :host {
+    background-color: #20293c;
+  }
+
+  ::ng-deep input {
+    border: none;
+    outline: none;
+    height: 100%;
+    width: auto;
+  }
+
+  ::ng-deep .dark input {
+    background-color: #20293c;
+  }
+
+  .tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-align: right;
+    color: #0068d1;
+  }
+
+}
+
+:host {
+  border: 1px solid #e1e7f5;
+  border-radius: 5px;
+  height: 32px;
+  padding: 2px 12px 6px 10px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  box-sizing: border-box;
+}
+
+:host(.invalid),
+.dark :host(.invalid) {
+  border: 1px solid red;
+  -webkit-animation: pulsate-fwd 0.8s both;
+  animation: pulsate-fwd 0.8s both;
+}
+
+@-webkit-keyframes pulsate-fwd {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(1.01);
+    transform: scale(1.01);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes pulsate-fwd {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(1.01);
+    transform: scale(1.01);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+
+.dark :host {
+  border: 1px solid #1f8efa;
+  background-color: #20293c;
+}
+
+::ng-deep input {
+  border: none;
+  outline: none;
+  height: 100%;
+  width: auto;
+}
+
+::ng-deep .dark input {
+  background-color: #20293c;
+}
+
+.tag {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-align: right;
+  color: #0068d1;
+}

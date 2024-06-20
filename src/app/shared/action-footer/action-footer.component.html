@@ -1,0 +1,44 @@
+<div class="row action-footer" [ngClass]="responsiveClass" (resized)="handleResponsive($event)">
+
+    <div *ngIf="isEdit && isVisibleDeleteButton"
+        class="action-footer-container-button float-left action-footer-container-btn-delete">
+        <button type="button" class="btn btn-default action-footer-btn-delete float-left"
+            [ngClass]="{'action-footer-btn-delete-mobile': !isVisibletextButtonDelete}" (click)="delete()">
+            <img src="assets/img/svg/trash-red.svg" alt="">
+            <span *ngIf="isVisibletextButtonDelete">
+                &nbsp;
+                {{'delete' | i18n}}
+            </span>
+        </button>
+    </div>
+
+    <div class="action-footer-container-button float-right action-footer-container-btn-submit">
+        <button type="button" class="btn btn-default action-footer-btn-submit float-right"
+            [disabled]="isButtonSubmitDisabled" (click)="submit()">
+            <span *ngIf="isNextMode">
+                <ng-container *ngIf="buttonSubmitText !== null; else notNextText">
+                    {{buttonSubmitText | i18n}}
+                </ng-container>
+                <ng-template #notNextText>
+                    {{'next' | i18n}}
+                </ng-template>
+            </span>
+            <span *ngIf="!isNextMode">
+                <ng-container *ngIf="buttonSubmitText !== null; else notSubmitText">
+                    {{buttonSubmitText | i18n}}
+                </ng-container>
+                <ng-template #notSubmitText>
+                    {{isEdit ? ('save' | i18n) : ('create' | i18n)}}
+                </ng-template>
+            </span>
+        </button>
+    </div>
+
+    <div class="action-footer-container-button float-right action-footer-container-btn-cancel">
+        <button [disabled]="isButtonCancelDisabled" type="button"
+            class="btn btn-default action-footer-btn-cancel float-right" (click)="cancel()">
+            {{ 'cancel' | i18n }}
+        </button>
+    </div>
+
+</div>

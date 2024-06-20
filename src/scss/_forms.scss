@@ -1,0 +1,341 @@
+:root {
+    --form-title-color: var(--dark-blue);
+    --form-input-color: var(--color-neutral-1);
+    --form-input-border-color: #e1e7f5;
+    --form-input-background-color: var(--base-white);
+    --form-input-background-color-disabled: #f1f1f1;
+    --form-header-border-color: var(--base-gray-6);
+    --form-excedent-label: var(--base-blue);
+    --form-title-annotation: var(--base-black-3);
+    --form-label-color: var(--darkest);
+    --form-select-label-color: #757575;
+    --form-select-label-background-color: #f0f2f5;
+    .dark {
+        --form-title-color: var(--base-white);
+        --form-input-border-color: var(--base-blu-dark);
+        --form-input-color: var(--base-white);
+        --form-input-background-color: var(--colors-dark);
+        --form-input-background-color-disabled: #3e4e6c;
+        --form-header-border-color: var(--base-gray-7);
+        --form-excedent-label: var(--base-blue-dark);
+        --form-title-annotation: var(--base-teal);
+        --form-label-color: var(--base-white);
+        --form-select-label-color: var(--form-label-color);
+        --form-select-label-background-color: var(--tr-panel-background-color);
+    }
+}
+.sil-form {
+    display: grid;
+    width: 100%;
+    margin: 30px 0;
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        // border-bottom: solid 1px var(--form-header-border-color);
+        &-button {
+            font-size: 16px !important;
+        }
+    }
+    &__title {
+        color: var(--form-title-color);
+        padding: 0;
+        margin-top: 0;
+        font-size: 28px;
+        font-weight: 600;
+        &::after {
+            content: '';
+            display: block;
+            height: 1px;
+            width: 120%;
+            background-color: var(--form-header-border-color);
+            margin-top: 8px;
+        }
+    }
+    &__profile-text {
+        font-weight: 600;
+        font-size: 16px;
+        color: var(--form-input-color);
+        text-align: left;
+        margin: 0;
+        display: none;
+        &-bold {
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+    &__section {
+        label {
+            font-weight: lighter;
+            font-size: 12px;
+            color: var(--form-label-color);
+            .sil-form__label-star {
+                display: inline-flex;
+            }
+        }
+        &.invalid {
+            border: solid 1px var(--tr-base-color-red);
+            border-radius: 4px;
+        }
+        + .sil-form__section {
+            margin-top: 10px;
+        }
+        &__error-message {
+            font-size: 11px;
+            color: var(--tr-base-color-red);
+            display: inline-flex;
+        }
+        &__discount-label {
+            color: var(--tr-base-color-red) !important;
+            font-weight: 600;
+        }
+        &__excedent-label {
+            color: var(--form-excedent-label) !important;
+            font-weight: 600;
+        }
+        &__header {
+            padding: 1px 8px;
+            border-left: 4px solid var(--tr-base-color-blue);
+            margin: 16px 0 8px 0;
+            background-color: var(--tr-panel-background-color);
+            color: var(--form-label-color);
+            p {
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+        &-select-labels {
+            background-color: var(--form-select-label-background-color);
+            font-weight: 600;
+            color: var(--form-select-label-color);
+            padding: 2px;
+            border-radius: 5px;
+            + .sil-form__section-select-labels {
+                margin-left: 4px;
+            }
+        }
+    }
+    &__input {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: var(--form-input-color);
+        border: 1px solid var(--form-input-border-color);
+        background-color: var(--form-input-background-color);
+        border-radius: 5px;
+        outline: none;
+        &:disabled,
+        &.disabled {
+            background-color: var(--form-input-background-color-disabled);
+        }
+        &.ng-invalid.ng-touched {
+            border-color: var(--tr-base-color-red);
+        }
+        &-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .ng-select-container {
+                height: 34px !important;
+            }
+        }
+        &--inline {
+            display: inline-flex;
+        }
+    }
+    &__phone-input {
+        color: var(--form-input-color);
+        border: 1px solid var(--form-input-border-color);
+        border-radius: 5px;
+        .sil-form__input {
+            border: none;
+        }
+    }
+    &__select {
+        display: block;
+        .ng-select-container {
+            border: 1px solid var(--form-input-border-color);
+            background-color: var(--form-input-background-color);
+            border-radius: 5px;
+            border: solid 1px #e1e7f5;
+        }
+        &.ng-invalid.ng-touched,
+        &.ng-invalid.ng-dirty {
+            .ng-select-container {
+                border-color: var(--tr-base-color-red) !important;
+            }
+        }
+    }
+    &__process-selector {
+        border-radius: 5px;
+        font-weight: 600;
+        .ng-select-container,
+        &.ng-select-opened .ng-select-container {
+            color: white !important;
+            background-color: inherit !important;
+            border-radius: inherit !important;
+        }
+        .ng-arrow {
+            border-color: white transparent transparent !important;
+            border-width: 5px 5px 2.5px;
+        }
+        &.ng-select-opened .ng-arrow {
+            border-color: transparent transparent white !important;
+            border-width: 0 5px 5px;
+        }
+        &.empty {
+            .ng-select-container,
+            &.ng-select-opened .ng-select-container {
+                color: var(--form-input-color) !important;
+                background-color: inherit !important;
+                border-radius: inherit !important;
+            }
+            .ng-arrow {
+                border-color: var(--form-input-border-color) transparent
+                    transparent !important;
+                border-width: 5px 5px 2.5px;
+            }
+            &.ng-select-opened .ng-arrow {
+                border-color: transparent transparent
+                    var(--form-input-border-color) !important;
+                border-width: 0 5px 5px;
+            }
+        }
+    }
+    &__date-input {
+        .mat-form-field-outline {
+            height: 32px !important;
+        }
+        .mat-form-field-infix {
+            padding: 0 !important;
+        }
+        &.mat-form-field-disabled {
+            .mat-form-field-outline {
+                background-color: var(
+                    --form-input-background-color-disabled
+                ) !important;
+            }
+            .mat-input-element {
+                color: var(--form-input-color) !important;
+            }
+        }
+    }
+    // Use this class for buttons inside form arrays
+    &__action-button {
+        margin-top: 10px;
+        font-size: 12px;
+        max-width: fit-content;
+        i {
+            margin-right: 10px;
+        }
+    } // Use this class for placing submit, cancel, etc buttons
+    &__section-form-action-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 24px 0 10px 0;
+        flex-direction: column;
+        button {
+            min-width: 148px;
+            width: 100%;
+            + button {
+                margin-top: 20px;
+            }
+        }
+    }
+    &.profile {
+        .sil-form__section {
+            label {
+                font-size: 12px;
+                font-weight: 600;
+                .sil-form__label-star {
+                    display: none;
+                }
+            }
+            .sil-form__input {
+                display: none;
+            }
+            .sil-form__profile-text {
+                display: block;
+            }
+        }
+        .sil-form__select, .sil-form__radio {
+            display: none !important;
+        }
+        .sil-form__phone-input {
+            justify-content: flex-start;
+            align-items: center;
+            border: none;
+        }
+    }
+}
+
+/* Responsive*/
+@media (min-width: 768px) {
+    .sil-form {
+        column-gap: 10px;
+        margin: 20px 0 10px;
+        &__header {
+            padding: 20px 0;
+        }
+        &__porfile-text {
+            padding: 8px 0 16px;
+        }
+        &__section {
+            label {
+                font-size: 14px;
+                &.hide-on-single-column {
+                    display: none;
+                }
+            }
+            + .sil-form__section {
+                margin-top: 0;
+            }
+        }
+        &__action-button {
+            font-size: 14px;
+        }
+        &__section-form-action-buttons {
+            justify-content: flex-end;
+            margin: 20px 0 0;
+            flex-direction: row;
+            button {
+                min-width: 148px;
+                width: max-content;
+                &.btn-transparent-blue,
+                &.btn-transparent-delete {
+                    min-width: 0;
+                }
+            }
+            button + button {
+                margin-top: 0px;
+            }
+        }
+        &__title {
+            color: var(--form-title-color);
+            padding: 0;
+            margin-top: 0;
+            font-size: 28px;
+        }
+        &.profile {
+            .sil-form__phone-input {
+                align-items: center;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .sil-form {
+        &.profile {
+            .sil-form__phone-input {
+                align-items: center;
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+<div class="principal-panel panel-warehouse-transfer">
+    <div class="warehouse-transfer-list">
+        <!-- Header -->
+        <div class="warehouse-transfer-list__header">
+            <div class="warehouse-transfer-list__header__filter">
+                <button class="tr__button__filter warehouse-transfer-list__header__filter__button"
+                    [ngClass]="{ 'tr__button__filter--active': (countFilter>0) }" matRipple (click)="onOpenFilter()">
+                    <i class="icon-filter-icon no-select"></i>
+                    &nbsp; &nbsp;
+                    <span>{{ "filter" | i18n }}</span>
+                    &nbsp; &nbsp;
+                    <div *ngIf="countFilter >0" class="tr__button__filter__count">
+                        <span>{{ countFilter }}</span>
+                    </div>
+                </button>
+            </div>
+           
+            <div class="warehouse-transfer-list__header__search">
+                <input type="text"
+                    class="form-control search-tck search-loca-input warehouse-transfer-list__header__input__serach"
+                    [placeholder]="'placeholder-search-warehouse-transfer-list' | i18n" [(ngModel)]="searchText" />
+            </div>
+
+            <div class="warehouse-transfer-list__header__new">
+                <button class="tr__button__new-item warehouse-transfer-list__header__new__button" matRipple
+                    [routerLink]="[urlCreation]"
+                    *permission="{
+                        tag: PERMISSIONS.WAREHOUSE_TRANSFER,
+                        type: PERMISSION_TYPES.CREATE
+                     }">
+                    <span>+ {{ "new" | i18n }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <app-warehouse-transfer-list *ngIf="!isListIn" [isListIn]="isListIn" [isOpenFilter]="isOpenFilter" [searchProductionNoteText]="this.searchText"
+        (closeFilter)="onCloseFilter($event)" (countSelectedFilters)="onCountSelectedFilters($event)">
+    </app-warehouse-transfer-list>
+
+    <app-warehouse-transfer-list *ngIf="isListIn" [isListIn]="isListIn" [isOpenFilter]="isOpenFilter" [searchProductionNoteText]="this.searchText"
+        (closeFilter)="onCloseFilter($event)" (countSelectedFilters)="onCountSelectedFilters($event)">
+    </app-warehouse-transfer-list>
+</div>

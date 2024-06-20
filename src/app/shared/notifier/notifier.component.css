@@ -1,0 +1,9 @@
+.notifier-body {
+  position: fixed;
+  top: 20%;
+  right: 5%;
+  color: #ffffff;
+  z-index: 1000;
+  padding: 10px 20px;
+  border-radius: 10px;
+}

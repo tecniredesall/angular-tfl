@@ -1,0 +1,96 @@
+<div class="f-federate-list">
+    <section class="f-federate-list__instructions">
+        <div class="f-federate-list__instructions-found">
+            <i class="icon-alert_icon"></i>
+            <p>
+                {{'federate-farm-founded' | i18n}}
+            </p>
+        </div>
+        <button class="btn btn-success" (click)="onCreateFarmFromForm()">
+            + {{'new-c' | i18n}}
+        </button>
+    </section>
+    <section class="f-federate-list__search">
+        <div class="f-federate-list__search-inst">
+            {{'federate-farm-search-instruction' | i18n}} :
+        </div>
+        <div class="f-federate-list__search-input">
+            <div class="seal-search-control" [ngClass]="{'input-search-control-focus': searchControl.isFocus}">
+                <table class="input-search-control">
+                    <tr>
+                        <td *ngIf="0 === searchControl.value.length" class="container-icon-search-input"
+                            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}">
+                            <img class="center-flex"
+                                [src]="isDarkTheme ? 'assets/img/svg/search-dark.svg' : 'assets/img/svg/search.svg'"
+                                alt="">
+                        </td>
+                        <td *ngIf="searchControl.value.length>0" class="padding-left-input-search-notempty"
+                            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}">
+                        </td>
+                        <td class="container-input-search">
+                            <input type="text" class="elipsis" name="searchProvider" [(ngModel)]="searchControl.value"
+                                [placeholder]="'placeholder-search-provider' | i18n" autocomplete="off"
+                                #searchProvider="ngModel" [disabled]="searchControl.isDisabled"
+                                (focus)="searchControl.isFocus=true;" (blur)="searchControl.isFocus=false;">
+                        </td>
+                        <td *ngIf="searchControl.value.length>0" class="separator-input-search"
+                            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}"></td>
+                        <td *ngIf="searchControl.value.length>0" class="container-button-clear-input"
+                            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled, 'button-clear-input-enabled': !searchControl.isDisabled}"
+                            (click)="onClearSearchInput()">
+                            <img [src]="isDarkTheme ? 'assets/img/svg/erase-dark.svg' : 'assets/img/svg/erase.svg'"
+                                alt="" />
+                        </td>
+                        <td class="separator-input-search"
+                            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}"></td>
+                    </tr>
+                </table>
+                <div class="button-search-container">
+                    <button class="btn button-search" matRipple [matRippleCentered]="true"
+                        [matRippleDisabled]="searchControl.isDisabled" [disabled]="searchControl.isDisabled"
+                        (click)="searchFilter()">
+                        {{ 'search' | i18n }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="f-federate-list__content">
+        <div class="f-federate-list__content__header">
+            <span class="f-federate-list__content__header__cell header__name">
+                {{ "name" | i18n | uppercase }}
+                <i
+                    class="icon-arrow_down show-on-mobile"
+                    (click)="sortFarm('name')"
+                    [ngClass]="{ 'sort-icon-invert': !orderStatusAsc.name }"
+                ></i>
+            </span>
+            <span class="f-federate-list__content__header__cell header__platform">
+                {{ "platform" | i18n | uppercase }}
+            </span>
+        </div>
+        <div class="f-federate-list__content-item" *ngFor="let farm of federatedFarms">
+            <div class="checkbox-item">
+                <mat-checkbox color="primary" class="weight-note__checkbox" [checked]="farm.selected"
+                (change)="onChangeStatusFarm(farm)">
+                </mat-checkbox>
+            </div>
+            <div class="description">
+                <i class="icon-silo"></i>
+                <span>
+                    {{farm.farm.name}}
+                </span>
+                <span class="f-federate-list__content-item__platform">
+                    <img [src]="'assets/img/svg/' + farm.farm.code + '-icon.svg'" >
+                    <p>{{farm.farm.code | i18n}}</p>
+                </span>
+            </div>
+        </div>
+
+    </section>
+    <section class="f-federate-list__footer">
+        <span>{{federatedFarmsSelected.length}} {{'selected' | i18n}} </span>
+        <app-action-footer [isButtonSubmitDisabled]="federatedFarmsSelected.length === 0" (onActionSelected)="onActionFooterSelected($event)" [buttonSubmitText]="'add'">
+        </app-action-footer>
+    </section>
+</div>

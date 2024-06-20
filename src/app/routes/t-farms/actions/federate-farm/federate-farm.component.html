@@ -1,0 +1,18 @@
+<div class="federate-farm">
+    <section class="federate-farm__producer">
+        <label class="font-ss12">{{'producer' | i18n}}</label>
+        <label class="font-ss16">{{seller.fullName}}</label>
+    </section>
+    <app-federate-farm-list *ngIf="!showDetails" [seller]="seller"
+        [federatedFarms]="federatedFarms" (cancelEmiter)="onCancelEvent()"
+        (addFederatedEmiter)="onShowFederatedFarmSelected($event)"
+        (createFarmEventEmmiter)="createFarmEvent()">
+    </app-federate-farm-list>
+    <app-federate-farm-selected *ngIf="showDetails"
+        [farms]="federatedFarmsSelected"
+        [seller]="seller"
+        (backEmiter)="onBackEmiterEvent($event)"
+        (cancelEmiter)="onCancelEvent()"
+        (updateEmiter)="updateFarmsAdded()">
+    </app-federate-farm-selected>
+</div>

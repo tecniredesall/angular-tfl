@@ -1,0 +1,46 @@
+<div class="confirmation-dialog">
+    <div class="confirmation-dialog__question no-select">
+        {{settings.title}}
+    </div>
+    <ng-container *ngIf="settings.message">
+    <div class="confirmation-dialog__note__title no-select">
+        {{'lot-dialog-delete-note' | i18n}}
+      </div>
+      <div class="confirmation-dialog__note__info no-select">
+        {{settings.message}}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="settings.onlyMessage">
+          <div class="confirmation-dialog__note__info no-select confirmation-dialog__note__info--bold">
+            {{settings.onlyMessage | i18n}}
+          </div>
+        </ng-container>
+    <ng-container  *ngIf="settings.withReason">
+        <div class="confirmation-dialog__reason">
+            <p>{{'void-warehouse-transfer-reason' | i18n}}</p>
+            <textarea
+                rows="4"
+                [(ngModel)]="reason"
+                [placeholder]="'write-comment' | i18n"
+            ></textarea>
+        </div>
+    </ng-container>
+    <div class="confirmation-dialog__buttons">
+        <div class="confirmation-dialog__buttons__wrapper">
+            <button class="tr__button__second confirmation-dialog__buttons__wrapper__cancel" matRipple
+                (click)="onActionFooterSelected(ACTIONS.CANCEL)">
+                <span>{{'cancel' | i18n }}</span>
+            </button>
+        </div>
+        <div class="confirmation-dialog__buttons__wrapper">
+            <button class="tr__button__primary  confirmation-dialog__buttons__wrapper__primary" matRipple
+                (click)="onActionFooterSelected(ACTIONS.ACCEPT)"
+                [ngClass]="settings.okButton?.class"
+                [disabled]="settings.withReason && reason.length == 0"
+                >
+                <span *ngIf="settings.okButton">{{settings.okButton.label | i18n }}</span>
+                <span *ngIf="!settings.okButton">{{'accept' | i18n }}</span>
+            </button>
+        </div>
+    </div>
+</div>

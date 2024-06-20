@@ -1,0 +1,89 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.title-base {
+    color: black;
+    margin-bottom: 12px;
+}
+
+.read-label-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sil-form.profile .sil-form__section label {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 0px 8px;
+    margin-bottom: -2px;
+}
+
+.sil-form {
+    margin: 0;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "country"
+        "state"
+        "city"
+        "town"
+        "address";
+
+    .producer-edit-form__country {
+        grid-area: country;
+    }
+
+    .producer-edit-form__state {
+        grid-area: state;
+    }
+
+    .producer-edit-form__city {
+        grid-area: city;
+    }
+
+    .producer-edit-form__town {
+        grid-area: town;
+    }
+
+    .producer-edit-form__address {
+        grid-area: address;
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .sil-form {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+            "country state"
+            "city town"
+            "address address";
+        column-gap: 10px;
+        row-gap: 8px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .sil-form {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas:
+            "country state city"
+            "town address address";
+        row-gap: 16px;
+
+        &.columns--two {
+            row-gap: 24px;
+            column-gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas:
+                "country state"
+                "city town"
+                "address address";
+        }
+
+        &.profile {
+            row-gap: 8px;
+        }
+    }
+}

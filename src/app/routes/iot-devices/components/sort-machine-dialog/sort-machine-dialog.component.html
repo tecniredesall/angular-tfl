@@ -1,0 +1,92 @@
+<div class="sort-machine-dialog" *blockUI="'block-sort-machine-dialog';template: templateBlockModalUi">
+
+    <!-- Header -->
+    <div class="sort-machine-dialog__header">
+        <div class="sort-machine-dialog__header__title">
+            {{'sort-machine-title' |i18n}}
+        </div>
+        <div class="sort-machine-dialog__header__line"></div>
+    </div>
+
+    <div class="sort-machine-dialog__body">
+
+        <!-- Select sort-machine -->
+        <div class="sort-machine-dialog__body__label">
+            {{'sort-machine-title' |i18n}}*
+        </div>
+        <ng-select class="sort-machine-dialog__body__select tr__ng-select__custom-scroll" [(ngModel)]="selectedSortMachine"
+            [items]="sortMachines" [multiple]="false" [closeOnSelect]="true" [clearable]="false" [loading]="isLoadingSortMachines"
+            loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n"
+            placeholder="{{'sort-machine-select' | i18n}}" [searchable]="true"
+            [searchFn]="customSortMachineSearchFn">
+            <ng-template ng-label-tmp let-item="item">
+                <ng-container [ngTemplateOutlet]="sortMachineInformation" [ngTemplateOutletContext]="{item: item}">
+                </ng-container>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                <ng-container [ngTemplateOutlet]="sortMachineInformation" [ngTemplateOutletContext]="{item: item}">
+                </ng-container>
+            </ng-template>
+        </ng-select>
+
+        <!-- Slide toggle default sort-machine -->
+        <section *ngIf="null != selectedSortMachine" class="sort-machine-dialog__body__toggle">
+            <label class="sort-machine-dialog__body__toggle__label sort-machine-dialog__body__label">
+                {{'scale-default' |i18n}}
+            </label>
+            <div class="sort-machine-dialog__body__toggle__slide">
+                <mat-slide-toggle [checked]="selectedSortMachine?.isDefault" (change)="changeDefaultSortMachine($event)">
+                </mat-slide-toggle>
+            </div>
+        </section>
+
+        <!-- Main icon -->
+        <div class="sort-machine-dialog__body__main-icon">
+            <i class="icon-selection-machine no-select"></i>
+        </div>
+
+        <!-- sort-machine listener -->
+        <tr-sort-machine-listener
+            [lotId]="data.lotId"
+            [configuration]="data.configuration"
+            [sortMachine]="selectedSortMachine"
+            [changeReset]="changeReset"
+            (status)="eventSortMachineListenerStatus($event)"></tr-sort-machine-listener>
+    </div>
+
+    <!-- footer -->
+    <div class="sort-machine-dialog__footer">
+        <button type="button" class="tr__button__second" (click)="cancel()" matRipple>
+            {{'cancel' | i18n}}
+        </button>
+        <button *ngIf="!isReset" type="button" class="tr__button__primary" [disabled]="isSubmitButtonDisabled" (click)="sumbit()"
+            matRipple>
+            {{'accept' | i18n}}
+        </button>
+        <button *ngIf="isReset" type="button" class="tr__button__accent" matRipple (click)="onChangeActionReset(false)">
+            {{'reset' | i18n}}
+        </button>
+        <button *ngIf="isReset" type="button" class="tr__button__primary" (click)="onChangeActionReset(true)" matRipple>
+            {{'continue' | i18n}}
+        </button>
+    </div>
+
+</div>
+
+<ng-template #sortMachineInformation let-item="item">
+    <div [ngClass]="{'sort-machine-dialog__text-opacity':!item.isActive}" class="sort-machine-dialog__text-overflow">
+        <span class="sort-machine-dialog__model-label">
+            {{item.model}}
+        </span>
+        <span *ngIf="item.isDefault" class="sort-machine-dialog__default-label">
+            ({{'scale-default' | i18n}})
+        </span>
+        <span class="sort-machine-dialog__connection-label" [ngClass]="{'sort-machine-dialog__connection-label--connected': item.isConnected}">
+            {{ (item.isConnected ? 'iot-device-online' : 'iot-device-offline') | i18n }}
+        </span>
+    </div>
+    <div [ngClass]="{'sort-machine-dialog__text-opacity':!item.isActive}"
+        class="sort-machine-dialog__description-label sort-machine-dialog__text-overflow">
+        {{'brand' | i18n}} <span class="sort-machine-dialog__text-value"> {{item.brand}}</span>, {{'location' | i18n}} <span class="sort-machine-dialog__text-value"> {{item.location}}</span>
+    </div>
+</ng-template>

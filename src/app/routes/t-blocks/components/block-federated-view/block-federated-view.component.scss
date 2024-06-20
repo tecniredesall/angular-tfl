@@ -1,0 +1,89 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    .farm__detail {
+        width: 95%;
+        margin: 4px auto;
+        .sil-expansion-panel {
+            border-radius: 5px !important;
+            color: var(--tr-panel-body-color);
+            background-color: transparent;
+            margin-top: 5px;
+            mat-expansion-panel-header {
+                height: 40px !important;
+                background-color: transparent;
+            }
+            .mat-expansion-selected {
+                background-color: var(--tr-background-color) !important;
+            }
+        }
+    }
+    .farm__accordion-header {
+        padding: 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 80px;
+        width: 100%;
+        .sil-table__cell {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .cell__name {
+            i {
+                display: inline-block;
+                margin-right: 8px;
+                color: var(--base-blue);
+                &.sort-icon-invert {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+    }
+    .detail-panel {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        mat-divider {
+            margin: 8px 0;
+        }
+        &__title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+        &__item {
+            display: grid;
+            grid-template-columns: 0.4fr 1fr;
+            font-size: 14px;
+            + .detail-panel__item {
+                margin-top: 4px;
+            }
+        }
+        &__label {
+            color: var(--tr-panel-body-color);
+            font-weight: normal;
+        }
+        &__values {
+            font-weight: 600;
+        }
+        &.item__seals {
+            padding: 0px;
+            .seals-container {
+                display: flex;
+                flex-wrap: wrap;
+                margin-left: 18px;
+                span {
+                    z-index: 5;
+                    margin-left: -18px;
+                    img {
+                        width: 35px;
+                        top: 3px;
+                        position: initial;
+                        height: 35px;
+                        border-radius: 50%;
+                        border: 0.5px solid lightgray;
+                    }
+                }
+            }
+        }
+    }
+}

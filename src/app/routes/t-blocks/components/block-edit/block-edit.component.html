@@ -1,0 +1,196 @@
+<div class="sil-main-container" *blockUI="
+'modal-container';
+template: templateBlockModalUiComponent">
+
+    <header class="sil-form__header" *ngIf="!isForFederatedItem">
+        <h1 class="sil-form__title" *ngIf="action !== ACTIONS.READ">
+            {{ action === ACTIONS.UPDATE ? ("edit" | i18n) : ("new-c" | i18n) }}
+            {{ "block" | i18n | lowercase }}
+            <i class="icon-logo-grain sil-table__federated-icon" *ngIf="block.federated"></i>
+        </h1>
+    </header>
+    <form [formGroup]="form" class="sil-form" *ngIf="form">
+        <section class="sil-form__section producer__name" *ngIf="producer && !isForFederatedItem">
+            <label>{{ "producer" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{ producer.fullName }}
+            </p>
+        </section>
+        <div formArrayName="items" *ngFor="let item of form.get('items').controls; let i = index" class="form_container"
+            [ngClass]="{
+            'form_container-bordered': form.get('items').controls.length > 1
+        }">
+            <section class="sil-form__section block__name" [formGroupName]="i">
+                <label>{{ "name" | i18n }}
+                    <span class="sil-form__label-star">*</span></label>
+                <input type="text" autocomplete="off" formControlName="name" class="sil-form__input"
+                    [placeholder]="'t-block-name-placeholder' | i18n" />
+                <ng-container *ngIf="
+                    form.get('items').at(i).get('name').dirty ||
+                    form.get('items').at(i).get('name').touched
+                ">
+                    <span class="sil-form__section__error-message" *ngIf="
+                        form.get('items').at(i).get('name').hasError('required')
+                    ">
+                        {{ "is-required-msg" | i18n }}
+                    </span>
+                    <span class="sil-form__section__error-message" *ngIf="
+                        form.get('items').at(i).get('name').hasError('pattern')
+                    ">
+                        {{ "name-pattern-error" | i18n }}
+                    </span>
+                    <span class="sil-form__section__error-message" *ngIf="
+                        form
+                            .get('items')
+                            .at(i)
+                            .get('name')
+                            .hasError('maxlength')
+                    ">
+                        {{
+                        "max-length-value-error"
+                        | i18n
+                        | stringReplace: "[value]":MAX_LENGTH_BLOCK_NAME
+                        }}
+                    </span>
+                    <span class="sil-form__section__error-message" *ngIf="
+                        form
+                            .get('items')
+                            .at(i)
+                            .get('name')
+                            .hasError('duplicate')
+                    ">
+                        {{ form.get("items").at(i).get("name").value }}
+                        {{ "is-duplicated-name" | i18n }}
+                    </span>
+                </ng-container>
+            </section>
+            <section class="sil-form__section block__farm" [formGroupName]="i">
+                <label>{{ "farm" | i18n }}</label>
+                <ng-select formControlName="farm" [placeholder]="'t-block-farm-placeholder' | i18n" appearance="outline"
+                    [clearable]="!isForFederatedItem" class="sil-form__select" bindLabel="name" bindValue="id" [items]="farms"
+                    [loading]="loadingState.farms" loadingText="{{ 'loading' | i18n }}"
+                    [notFoundText]="'not-items-found' | i18n">
+                    <ng-template let-item="item">{{ item.name }}</ng-template>
+                </ng-select>
+            </section>
+            <div class="sil-form__section__header header__location">
+                <p>
+                    {{ "location" | i18n }}
+                </p>
+            </div>
+            <app-address-component class="location" [item]="address" [action]="action"
+                (formReady)="onAdressFormReady($event, i)">
+            </app-address-component>
+            <section class="sil-form__section block__latitude" [formGroupName]="i">
+                <label>{{ "latitude" | i18n }}</label>
+                <input type="text" autocomplete="off" formControlName="latitude" class="sil-form__input"
+                    [placeholder]="'latitude' | i18n" />
+            </section>
+            <section class="sil-form__section block__longitude" [formGroupName]="i">
+                <label>{{ "longitude" | i18n }}</label>
+                <input type="text" autocomplete="off" formControlName="longitude" class="sil-form__input"
+                    [placeholder]="'longitude' | i18n" />
+            </section>
+            <div class="sil-form__section__header header__dimensions">
+                <p>
+                    {{ "dimensions" | i18n }}
+                </p>
+            </div>
+            <section class="sil-form__section block__height">
+                <label>{{ "height" | i18n }}</label>
+                <div class="sil-form__input disabled">
+                    <p>
+                        {{ form.get("items").at(i).get("height").value
+                        }}<span class="height__unit">MSNM</span>
+                    </p>
+                </div>
+            </section>
+            <section class="sil-form__section block__extension" [formGroupName]="i">
+                <label>{{ "extension" | i18n }}</label>
+                <div class="sil-form__input-group">
+                    <input placeholder="0.0" [textMask]="{
+                        mask: extensionNumberMask,
+                        guide: false,
+                        showMask: false
+                    }" class="sil-form__input" type="text" autocomplete="off" formControlName="extension" />
+                    <ng-select class="measurement-unit-select" [clearable]="false" [multiple]="false" [placeholder]="''"
+                        [items]="measurenmentUnits" bindLabel="abbreviation" bindValue="measurement_unit_id"
+                        loadingText="{{ 'loading' | i18n }}" formControlName="extensionUnit"
+                        [loading]="loadingState.units">
+                    </ng-select>
+                </div>
+            </section>
+            <div class="sil-form__section__header header__characs">
+                <p>
+                    {{ "characteristics" | i18n }}
+                </p>
+            </div>
+            <section class="sil-form__section block__shade-variety" [formGroupName]="i">
+                <label>{{ "shade-variety" | i18n }}</label>
+                <ng-select class="tr__ng-select__custom-scroll" [items]="shadeVarieties" [multiple]="true"
+                    [closeOnSelect]="false" [clearable]="false" [loading]="loadingState.shadeVariety"
+                    loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n" bindLabel="name"
+                    bindValue="id" placeholder="{{ 'select-shade-type' | i18n }}" [searchable]="true"
+                    (search)="onDropdownSearch($event, 'shadeVariety')" formControlName="shadeVariety">
+                </ng-select>
+            </section>
+            <section class="sil-form__section block-soil-type" [formGroupName]="i">
+                <label>{{ "soil-type" | i18n }}</label>
+                <ng-select class="tr__ng-select__custom-scroll" [items]="soilTypes" [multiple]="true"
+                    [closeOnSelect]="false" [clearable]="false" [loading]="loadingState.soilTypes"
+                    loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n" bindLabel="name"
+                    bindValue="id" placeholder="{{ 'select-soil-type' | i18n }}" [searchable]="true"
+                    (search)="onDropdownSearch($event, 'soilType')" formControlName="soilType">
+                </ng-select>
+            </section>
+            <section class="sil-form__section block-coffee-variety" [formGroupName]="i">
+                <label>{{ "coffee-variety" | i18n }}</label>
+                <ng-select class="tr__ng-select__custom-scroll" [items]="coffeeVarieties" [multiple]="true"
+                    [closeOnSelect]="false" [clearable]="false" [loading]="loadingState.coffeeVariety"
+                    loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n" bindLabel="name"
+                    bindValue="id" placeholder="{{ 'select-coffee-variety' | i18n }}" [searchable]="true"
+                    (search)="onDropdownSearch($event, 'coffeeVariety')" formControlName="coffeeType">
+                </ng-select>
+            </section>
+            <button class="
+                btn btn-transparent-delete
+                sil-form__action-button
+                delete-block
+            " (click)="onActionSelected(ACTIONS.DELETE, i)" *ngIf="
+                form.get('items').controls.length > 1 &&
+                action === ACTIONS.CREATE
+            ">
+                <i class="icon-trash-gray"></i>
+                {{ "delete" | i18n }}
+            </button>
+        </div>
+        <button class="btn btn-transparent-blue sil-form__action-button add-new" (click)="onAddNewBlockForm()"
+            *ngIf="action === ACTIONS.CREATE">
+            <i class="icon-plus"></i>
+            {{ "t-add-block" | i18n }}
+        </button>
+        <section class="sil-form__section-form-action-buttons form-actions">
+            <button class="
+                btn btn-transparent-delete
+                sil-form__action-button
+                delete-block
+            " (click)="onActionSelected(ACTIONS.DELETE, i)" *ngIf="action === ACTIONS.UPDATE">
+                <i class="icon-trash-gray"></i>
+                {{ "delete" | i18n }}
+            </button>
+            <button class="btn btn-resize gray-btn button-lg" (click)="onCancelClick()">
+                {{ "cancel" | i18n }}
+            </button>
+            <button class="btn btn-resize blue-btn button-lg" [disabled]="
+                form?.invalid || form?.pristine || (isEdit && !originalValueChanged)
+            " (click)="onActionSelected(action)">
+                <ng-container *ngIf="action === ACTIONS.UPDATE; else create">
+                    {{ "save" | i18n }}
+                </ng-container>
+                <ng-template #create>
+                    {{ "create" | i18n }}
+                </ng-template>
+            </button>
+        </section>
+    </form>
+</div>

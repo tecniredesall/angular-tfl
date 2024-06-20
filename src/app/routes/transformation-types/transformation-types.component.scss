@@ -1,0 +1,29 @@
+/* Mobile first */
+.sil-table {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    .sil-table__header-row {
+        grid-template-columns: 70% 30%;
+    }
+    .sil-table__row {
+        grid-template-columns: 70% 30%;
+    }
+}
+
+/* Responsive*/
+/* tablet */
+@media (min-width: 768px) {
+    .sil-table {
+        .sil-table__row {
+            grid-template-columns: 80% 20%;
+        }
+        .sil-table__header-row {
+            grid-template-columns: 80% 20%;
+        }
+    }
+}
+
+/*desktop*/
+@media (min-width: 1200px) {
+    // Add desktop query styles
+}

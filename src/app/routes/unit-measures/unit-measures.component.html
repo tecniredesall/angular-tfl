@@ -1,0 +1,69 @@
+<!-- Loader -->
+
+<!-- Title -->
+<div class="sil-container">
+    <silosys-main-header [title]="'unit-measures'" [showSearchInput]="false" [showExportCSVButton]="false"
+        [permissionTag]="PERMISSIONS.MEASUREMENT_UNITS" [permissionType]="PERMISSION_TYPES.CREATE"
+        (eventNew)="onActionClicked(ACTIONS.CREATE)">
+    </silosys-main-header>
+    <!-- Content -->
+    <section class="sil-table">
+        <header class="sil-table__header-row">
+            <span class="sil-table__header-cell">
+                {{ "NAME" | i18n }}
+                <i class="icon-arrow_down" (click)="sortData('name')"
+                    [ngClass]="{ 'sort-icon-invert': columnSortState.name }"></i>
+            </span>
+            <span class="sil-table__header-cell">
+                {{ "ABBREVIATION" | i18n }}
+                <i class="icon-arrow_down" (click)="sortData('abbreviation')" [ngClass]="{
+                        'sort-icon-invert': columnSortState.abbreviation
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell">
+                {{ "NO-CONVERSIONS" | i18n }}
+                <i class="icon-arrow_down" (click)="sortData('convertions')" [ngClass]="{
+                        'sort-icon-invert': columnSortState.convertions
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell sil-table__action-header-cell">
+                {{ "ACTIONS" | i18n }}
+            </span>
+        </header>
+        <article class="sil-table__row" *ngFor="let unit of units">
+            <span class="sil-table__cell">
+                <i class="icon-unit-gray"></i>
+                {{ unit.name }}
+            </span>
+            <span class="sil-table__cell sil-table__cell--abbreviaton">
+                {{ unit.abbreviation | lowercase }}
+            </span>
+            <div class="sil-table__group-cell">
+                <span class="sil-table__cell">
+                    {{ unit.units_converter.length | number: "2.0" : "en" }}
+                </span>
+                <!-- Conversion badges -->
+                <ng-container *ngIf="unit.units_converter.length > 0; else editToAdd">
+                    <div class="sil-table__badge__group">
+                        <span class="sil-table__badge-cell" *ngFor="let conversion of unit.units_converter">{{
+                            conversion.conversion_measurement_unit | lowercase
+                            }}
+                        </span>
+                    </div>
+                </ng-container>
+                <!-- Click edit to add coversions -->
+                <ng-template #editToAdd>
+                    <span class="sil-table__cell add-conversion-msg">
+                        {{ "add-conversion-msg" | i18n }} "{{ "edit" | i18n }}"
+                    </span>
+                </ng-template>
+            </div>
+            <app-table-action-button-group [disableDelete]="true" [permissionTag]="PERMISSIONS.MEASUREMENT_UNITS"
+                (actionClicked)="onActionClicked($event, unit.name)"></app-table-action-button-group>
+        </article>
+        <app-not-results-found [showSubtitle]="false" *ngIf="units.length === 0"></app-not-results-found>
+    </section>
+    <!-- delete unit modal -->
+    <app-unit-delete-modal *ngIf="unitToDelete" [unit]="unitToDelete" (cancelClicked)="onActionClicked(ACTIONS.CANCEL)"
+        (deleteClicked)="onDeleteUnitMeasure($event)"></app-unit-delete-modal>
+</div>

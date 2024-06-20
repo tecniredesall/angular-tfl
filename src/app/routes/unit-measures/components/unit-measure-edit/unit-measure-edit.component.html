@@ -1,0 +1,98 @@
+<div class="sil-container sil-container--filled">
+    <header class="sil-form__header">
+        <h1 class="sil-form__title">
+            {{ action === ACTIONS.UPDATE ? ("edit" | i18n) : ("new" | i18n) }}
+            {{ "unit-measurenment-info" | i18n | lowercase }}
+        </h1>
+    </header>
+    <form class="sil-form unit-edit-form" [formGroup]="form" *ngIf="form">
+        <section class="sil-form__section unit-edit-form__section-name">
+            <label for="name">{{ "name" | i18n }} *</label>
+            <input id="name" type="text" [placeholder]="'placeholder-name' | i18n" class="sil-form__input"
+                formControlName="name" autocomplete="off" />
+            <span class="sil-form__section__error-message" *ngIf="
+                    form.get('name').touched &&
+                    form.get('name').hasError('required')
+                ">{{ "is-required-msg" | i18n }}</span>
+        </section>
+        <section class="sil-form__section unit-edit-form__section-abb">
+            <label for="abbreviation">{{ "abbreviation" | i18n }} *</label>
+            <input id="abbreviation" type="text" [placeholder]="'abbrevation-placeholder' | i18n"
+                class="sil-form__input" formControlName="abbreviation" autocomplete="off" />
+            <span class="sil-form__section__error-message" *ngIf="
+                    form.get('abbreviation').touched &&
+                    form.get('abbreviation').hasError('required')
+                ">{{ "is-required-msg" | i18n }}</span>
+        </section>
+        <h2 class="title-base unit-edit-form__sub-header">
+            {{ "convertion-unit-msg" | i18n }}
+        </h2>
+        <div class="unit-edit-form__section-convertions">
+            <section class="sil-form__section unit-edit-form__convertion" formArrayName="units_converter" *ngFor="
+                    let c of form.get('units_converter').controls;
+                    let i = index
+                ">
+                <section class="sil-form__section unit-edit-form__section-base" [formGroupName]="i">
+                    <label for="base-unit" [ngClass]="{ 'hide-on-single-column': i > 0 }">{{ "units-base" | i18n }}
+                    </label>
+                    <span class="sil-form__input" id="base-unit" disabled="true">{{ baseMeasureLabel }}</span>
+                </section>
+                <span class="equals-icon unit-edit-form__icon-equals">=</span>
+                <section [ngClass]="{
+                        invalid:
+                            form.get('units_converter').at(i).touched &&
+                            form.get('units_converter').at(i).invalid
+                    }" class="sil-form__section unit-edit-form__section-equivalence" [formGroupName]="i">
+                    <label for="equivalence" [ngClass]="{ 'hide-on-single-column': i > 0 }">{{ "equivalence" | i18n }}
+                        *</label>
+                    <div id="equivalence">
+                        <input type="text" class="sil-form__input" formControlName="factor" placeholder="0.000"
+                            onlyNumber autocomplete="off" />
+                        <ng-select formControlName="conversion_measurement_unit_id" [placeholder]="'select' | i18n"
+                            appearance="outline" [searchable]="false" [clearable]="false"
+                            class="equivalence__name-input" bindLabel="name" bindValue="measurement_unit_id"
+                            [items]="units">
+                            <ng-template let-item="item">{{
+                                item.name
+                                }}</ng-template>
+                        </ng-select>
+                    </div>
+                    <span class="sil-form__section__error-message" *ngIf="
+                            form.get('units_converter').at(i).touched &&
+                            form.get('units_converter').at(i).invalid &&
+                            !c.get('conversion_measurement_unit_id').hasError('duplicate')
+                        ">{{ "is-required-msg" | i18n }}</span>
+                    <span class="sil-form__section__error-message" *ngIf="c.get('conversion_measurement_unit_id').hasError('duplicate')
+                    ">{{"conversion-unit-duplicate" | i18n}}</span>
+
+                </section>
+                <section class="unit-edit-form__icon-delete">
+                    <div class>
+                        <button [disabled]="readOnly" class="btn-delete btn btn-default"
+                            (click)="onDeleteConvertion(i)">
+                            <i class="icon-erase"></i>
+                        </button>
+                    </div>
+                </section>
+            </section>
+        </div>
+        <button class="btn btn-transparent-blue sil-form__action-button" (click)="onAddConvertion()">
+            <i class="icon-plus"></i>
+            {{ "add-conversion" | i18n }}
+        </button>
+        <section class="sil-form__section-form-action-buttons">
+            <button class="btn btn-resize gray-btn button-lg" (click)="onActionSelected(ACTIONS.CANCEL)">
+                {{ "cancel" | i18n }}
+            </button>
+            <button class="btn btn-resize blue-btn button-lg" [disabled]="form?.invalid || form?.pristine"
+                (click)="onActionSelected(action)">
+                <ng-container *ngIf="action === ACTIONS.UPDATE; else create">
+                    {{ "save" | i18n }}
+                </ng-container>
+                <ng-template #create>
+                    {{ "create" | i18n }}
+                </ng-template>
+            </button>
+        </section>
+    </form>
+</div>

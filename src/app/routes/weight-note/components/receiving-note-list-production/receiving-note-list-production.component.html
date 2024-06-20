@@ -1,0 +1,253 @@
+<div class="principal-panel panel-receiving-note"
+*blockUI="'notes-reception-production'; template: templateBlockModalUiComponent"
+>
+
+<ng-container *ngIf="receptionNotesProduction.length > 0 || this.isLoadData; else emptyState">
+    <!-- HEADERS -->
+    <div
+        class="col-xs-12 pad-top-10 p0 mrg-top-25 panel-receiving-note-headers hidden-xs hidden-sm"
+    >
+        <div class="note-column-arrow">
+            <span class="fa fa-sort pointer sort-left"></span>
+        </div>
+        <div class="col-xs-11 col-sm-11 notes-table-headers p0">
+            <div  (click)="sortData('date_start')"
+                class="col-lg-2 label-table hidden-sm p0 note-column-start"
+            >
+                {{ "creation" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.date_start ? 'icon-caret-down' : 'icon-caret-up' "></i>
+
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-id" (click)="sortData('transaction_in_id')">
+                {{ "id" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.transaction_in_id ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-producer"  (click)="sortData('producer_name')">
+                {{ "producer" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.producer_name ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-type" (click)="sortData('ct_name')">
+                {{ "type" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.ct_name ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-tanks"  (click)="sortData('vtank_name')">
+                {{ "warehouse" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.vtank_name ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-weight"  (click)="sortData('net')">
+                {{ "net-weight" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.net ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-certifications">
+                {{ "seals" | i18n | uppercase }}
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-options note-column-production-status">
+                {{ "production_status" | i18n | uppercase }}
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-options note-column-tittle-payment-status">
+                {{ "payment_status" | i18n | uppercase }}
+            </div>
+        </div>
+    </div>
+    <!-- TABLE BODY  -->
+
+        <ng-container *ngFor="let note of receptionNotesProduction ">
+            <div class="pad-top-10 panel-receiving-note-notes">
+                <div class="header-titles-table p0">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading row-collapse row-height-c">
+                            <div class="note-column-arrow icon-reception-child"  >
+                                <i class="icon-notas"></i>
+                            </div>
+                             <div class="note-columns-container">
+                                <div class="note note-column-start hidden-xs " >
+                                    <p class="label-table hidden-xs visible-sm">{{ "creation" | i18n | uppercase }}</p>
+                                    <p>{{ note?.startDate | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm" : true }}</p>
+                                    <p>{{ note.creationName }}</p>
+                                </div>
+                                <div class="note note-column-id">
+                                    <p class="label-table visible-xs visible-sm"> {{ "id" | i18n | uppercase }}</p>
+                                        {{ note.transactionInId }}
+                                </div>
+                                <div class="note note-column-producer">
+                                    <p class="label-table visible-xs visible-sm"> {{ "producer" | i18n | uppercase }}</p>
+                                    <span class="note-text-producer">   {{ note.producerName }} {{note.paternalLast}}</span>
+                                </div>
+                                <div class="note note-column-type">
+                                      <p  class="label-table visible-xs visible-sm">  {{ "type" | i18n | uppercase }}</p>
+                                      {{note.ctName}}
+                                </div>
+                                <div class="note note-column-tanks">
+                                    <p  class="label-table visible-xs visible-sm">  {{ "warehouse" | i18n | uppercase }}</p>
+                                    {{note.vtankName}}
+                                </div>
+                                <div class="note note-column-weight">
+                                    <p class="label-table visible-xs visible-sm"
+                                    > {{ "net-weight" | i18n | uppercase }}
+                                    </p>
+                                    {{ (note.netdrywt * configuration.baseMeasurementUnitFactor) | number : "1." +  DECIMAL_DIGITS +  "-" +  DECIMAL_DIGITS : "en" }}
+                                    {{ configuration.conversionMeasurementUnitAbbreviation }}
+                                </div>
+                                <div class="note note-column-certifications">
+                                    <p class="label-table visible-xs visible-sm">{{ "seals" | i18n | uppercase }} </p>
+                                    <div>
+                                        <ng-container
+                                            *ngFor="let certification of note.certifications">
+                                            <div class="img-cont-seal-note" style="z-index: 5">
+                                                <img [src]="certification.image" [alt]="certification.name"/>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="note note-column-options note-column-production-status notes-production hidden-xs  hidden-sm">
+                                    <!--  Production  status -->
+                                    <div class="note-status"
+                                        [ngClass]="{
+                                                'notes-production__status--in-process' : note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS,
+                                                'notes-production__status--processed' : note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED,
+                                                'notes-production__status--unprocessed' : note.status == RECEIVING_NOTE_PRODUCTION_STATUS.UNPROCESSED
+                                            }"
+                                    >
+                                        <i class=" no-select font-ss16" [ngClass]="{ 
+                                                'icon-in-process': note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS,
+                                                'icon-processed': note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED,
+                                                'icon-unprocessed': note.status == RECEIVING_NOTE_PRODUCTION_STATUS.UNPROCESSED  
+                                            }">
+                                        </i>
+                                        <p class="hidden-sm">
+                                            {{
+                                                (note.status ==
+                                                    RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS
+                                                        ? "receiving-note-production-status-in-process"
+                                                        : note.status ==
+                                                        RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED ?  "receiving-note-production-status-processed" 
+                                                            : "unprocessed"
+                                                    ) | i18n
+                                            }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="note note-column-options notes-production">
+                                   <!--  Payment status -->
+                                    <div class="note-status hidden-xs  hidden-sm"
+                                        [ngClass]=" {
+                                            'notes-production__status--in-process' : note.paymentStatus == PAYMENT_STATUS.PROCESS,
+                                            'notes-production__status--liquidated' : note.paymentStatus == PAYMENT_STATUS.LIQUIDATED,
+                                            'notes-production__status--unsettled' : note.paymentStatus == PAYMENT_STATUS.UNSETTLED
+                                        } "
+                                    >
+                                        <i class=" no-select font-ss16" [ngClass]="{
+                                            'icon-in-process': note.paymentStatus == PAYMENT_STATUS.PROCESS,
+                                            'icon-note-open': note.paymentStatus == PAYMENT_STATUS.LIQUIDATED,
+                                            'icon-unsettled': note.paymentStatus == PAYMENT_STATUS.UNSETTLED  
+                                        }">
+                                        </i>
+                                        <p class="hidden-sm">
+                                            {{
+                                                (note.paymentStatus ==
+                                                     PAYMENT_STATUS.PROCESS
+                                                        ? "receiving-note-production-status-in-process"
+                                                        : note.paymentStatus ==
+                                                        PAYMENT_STATUS.LIQUIDATED ?  "purchase-order-liquidated"
+                                                            : "unsettled"
+                                                    ) | i18n
+                                            }}
+                                        </p>
+                                    </div>
+                                    <span
+                                          mat-icon-button
+                                         [matMenuTriggerFor]="options">
+                                        <i class=" note note-column-menu-options no-select icon-options-vertical" ></i>
+                                    </span>
+                                    <mat-menu #options="matMenu">
+                                        <button
+                                            mat-menu-item
+                                            *permission="{
+                                                tag: PERMISSIONS.UPDATE_CLOSE_NOTE,
+                                                type: PERMISSION_TYPES.UPDATE
+                                            }"
+                                            (click)="onEdit(note)">
+                                            {{ "edit" | i18n }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            [routerLink]="[
+                                                'detail-note',
+                                                note.receptionId
+                                            ]"
+                                            [queryParams]="{ production: 'true'}"
+
+                                        >
+                                            {{ "view" | i18n }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            (click)="onPrint(note)"
+                                            *permission="{
+                                                tag: PERMISSIONS.WEIGHT_NOTE,
+                                                type: PERMISSION_TYPES.PRINT
+                                            }"
+                                        >
+                                            {{ "print" | i18n }}
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                                <div class="visible-xs visible-sm  note-column-status notes-production">
+                                    <p class="label-table hidden-xs visible-sm "> {{ "production_status" | i18n | uppercase }} </p>
+                                    <div class="note-status"
+                                        [ngClass]="{
+                                            'notes-production__status--in-process' : note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS,
+                                            'notes-production__status--processed' : note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED,
+                                            'notes-production__status--unprocessed' : note.status == RECEIVING_NOTE_PRODUCTION_STATUS.UNPROCESSED
+                                        }"
+                                    >
+                                    <i class=" no-select font-ss16"
+                                        [ngClass]="{ 
+                                            'icon-in-process': note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS,
+                                            'icon-processed': note.status == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED,
+                                            'icon-unprocessed': note.status == RECEIVING_NOTE_PRODUCTION_STATUS.UNPROCESSED  
+                                        }"
+                                    ></i>
+                                    <p class="hidden-xs visible-sm ">
+                                        {{
+                                            (note.status ==
+                                                RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS
+                                                    ? "receiving-note-production-status-in-process"
+                                                    : note.status ==
+                                                    RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED ?  "receiving-note-production-status-processed" 
+                                                        : "unprocessed"
+                                                ) | i18n
+                                        }}
+                                    </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+
+    <div class="pl-container-paginator">
+        <mat-paginator
+            class="custom-paginator"
+            [length]="paginator.totalItems"
+            [pageIndex]="paginator.currentPage - 1"
+            [pageSize]="paginator.itemsPerPage"
+            [pageSizeOptions]="[paginator?.itemsPerPage]"
+            (page)="eventPaginator($event)"
+            showFirstLastButtons
+            #matPaginator
+        >
+        </mat-paginator>
+    </div>
+
+</ng-container>
+
+
+<ng-template #emptyState>
+    <app-not-results-found></app-not-results-found>
+</ng-template>
+
+</div>

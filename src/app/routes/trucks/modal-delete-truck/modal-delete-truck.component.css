@@ -1,0 +1,14 @@
+.modal-delete-truck-container {
+    max-width: 554px;
+    height: auto;
+    padding: 0;
+    margin: 0;
+  }
+
+.modal-delete-truck-icon {
+    width: 50px;
+}
+
+.dark :host .modal-delete-truck-confirmation {
+    color: white;
+}

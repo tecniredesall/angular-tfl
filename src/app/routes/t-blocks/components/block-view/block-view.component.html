@@ -1,0 +1,128 @@
+<header class="sil-form__header" *ngIf="!isForFederatedItem">
+    <h1 class="sil-form__title">
+        {{ "block-detail" | i18n }}
+        <i class="icon-logo-grain sil-table__federated-icon" *ngIf="block.federated"></i>
+    </h1>
+
+    <button class="sil-form__header-button btn btn-transparent-blue" (click)="onCloseClick()">
+        <i class="icon-erase"></i>
+    </button>
+</header>
+<form class="sil-form profile" *ngIf="block">
+    <section class="sil-form__section producer__name" *ngIf="producer && !isForFederatedItem">
+        <label>{{ "producer" | i18n }}</label>
+        <p class="sil-form__profile-text sil-form__profile-text-bold">
+            {{ producer.fullName }}
+        </p>
+    </section>
+    <ng-container *ngIf="!isForFederatedItem">
+        <button *permission="{tag: PERMISSION_TAG.BLOCKS, type: PERMISSION_TYPES.UPDATE}"
+            class="sil-form__header-button btn btn-transparent-blue btn-edit" (click)="onEditClick()">
+            <i class="icon-edit"></i>
+            {{ "edit" | i18n }}
+        </button>
+    </ng-container>
+    <div class="form_container">
+        <section class="sil-form__section block__name" *ngIf="!isForFederatedItem">
+            <label>{{ "name" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{ block.name }}
+            </p>
+        </section>
+        <section class="sil-form__section block__farm" *ngIf="!isForFederatedItem">
+            <label>{{ "farm" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{ block.farmName ? block.farmName : "-" }}
+            </p>
+        </section>
+        <div class="sil-form__section__header header__location">
+            <p>
+                {{ "location" | i18n }}
+            </p>
+        </div>
+        <app-address-component class="location" [item]="address" [action]="action">
+        </app-address-component>
+        <section class="sil-form__section block__latitude">
+            <label>{{ "latitude" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{ block.latitude }}
+            </p>
+        </section>
+        <section class="sil-form__section block__longitude">
+            <label>{{ "longitude" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{ block.longitude }}
+            </p>
+        </section>
+        <div class="sil-form__section__header header__dimensions">
+            <p>
+                {{ "dimensions" | i18n }}
+            </p>
+        </div>
+        <section class="sil-form__section block__height">
+            <label>{{ "height" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{
+                block.height
+                | number
+                : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES
+                : "en"
+                }}
+                {{ "MSNM" }}
+            </p>
+        </section>
+        <section class="sil-form__section block__extension">
+            <label>{{ "extension" | i18n }}</label>
+            <p class="sil-form__profile-text sil-form__profile-text-bold">
+                {{
+                block.extension
+                | number
+                : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES
+                : "en"
+                }}
+                {{
+                block.measurementUnitName ? block.measurementUnitName : "MZ"
+                }}
+            </p>
+        </section>
+        <div class="sil-form__section__header header__characs">
+            <p>
+                {{ "characteristics" | i18n }}
+            </p>
+        </div>
+        <section class="sil-form__section block__shade-variety">
+            <label>{{ "shade-variety" | i18n }}</label>
+            <div>
+                <ng-container *ngIf="block.shadeVariety.length > 0; else emptyTemplate">
+                    <span class="sil-form__section-select-labels" *ngFor="let s of block.shadeVariety">
+                        {{ s.shadeVarietyName }}
+                    </span>
+                </ng-container>
+            </div>
+        </section>
+        <section class="sil-form__section block-soil-type">
+            <label>{{ "soil-type" | i18n }}</label>
+            <div>
+                <ng-container *ngIf="block.soilType.length > 0; else emptyTemplate">
+                    <span class="sil-form__section-select-labels" *ngFor="let so of block.soilType">
+                        {{ so.soilTypeName }}
+                    </span>
+                </ng-container>
+            </div>
+        </section>
+        <section class="sil-form__section block-coffee-variety">
+            <label>{{ "coffee-variety" | i18n }}</label>
+            <div>
+                <ng-container *ngIf="block.coffeeVariety.length > 0; else emptyTemplate">
+                    <span class="sil-form__section-select-labels" *ngFor="let c of block.coffeeVariety">
+                        {{ c.coffeeVarietyName }}
+                    </span>
+                </ng-container>
+            </div>
+        </section>
+    </div>
+</form>
+
+<ng-template #emptyTemplate>
+    <span>-</span>
+</ng-template>

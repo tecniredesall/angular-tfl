@@ -1,0 +1,38 @@
+@import 'src/scss/breakpoints.scss';
+
+.modal-new{
+    padding: 25px;
+    max-width: 740px;
+    max-height: 800px;
+    .modal-new__footer-producer{
+        height: 40px;
+        width: 100%;
+    }
+}
+
+.modal-new-title{
+    font-size: 28px;
+    font-weight: 600;
+    padding: 12px;
+    hr{
+        margin: 12px 0 0 0;
+        height: 1px;
+        width: 284px;
+        color: #92a2b6;
+    }
+}
+
+@media(max-width: $screen-xs-max){
+    .modal-new{
+        padding: 16px;
+    }
+    
+    .modal-new-title{
+        font-size: 28px;
+        font-weight: 600;
+        padding: 12px;
+        hr{
+            width: 100px;
+        }
+    }
+}

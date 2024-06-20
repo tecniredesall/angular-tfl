@@ -1,0 +1,81 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.title-base {
+    color: black;
+    margin-bottom: 12px;
+}
+
+.sil-form {
+    margin-top: 8px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "age"
+        "schooling"
+        "profession"
+        "contact_name"
+        "contact_phone"
+        "marital_status"
+        "gender";
+    .producer-edit-form__age {
+        grid-area: age;
+    }
+    .producer-edit-form__schooling {
+        grid-area: schooling;
+    }
+    .producer-edit-form__profession {
+        grid-area: profession;
+    }
+    .producer-edit-form_contact_name {
+        grid-area: contact_name;
+    }
+    .producer-edit-form__contact_phone {
+        grid-area: contact_phone;
+    }
+    .producer-edit-form__marital_status {
+        grid-area: marital_status;
+    }
+    .producer-edit-form__gender {
+        grid-area: gender;
+    }
+    mat-radio-group{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 768px) {
+    .sil-form {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+            "age schooling"
+            "profession contact_name"
+            "contact_phone marital_status"
+            "gender .";
+        column-gap: 10px;
+        row-gap: 8px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .sil-form {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas:
+            "age schooling profession"
+            "contact_name contact_phone marital_status"
+            "gender . .";
+        row-gap: 16px;
+        &.columns--two{
+            row-gap: 24px;
+            column-gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas:
+                "age schooling"
+                "profession contact_name"
+                "contact_phone marital_status"
+                "gender .";
+        }
+    }
+}

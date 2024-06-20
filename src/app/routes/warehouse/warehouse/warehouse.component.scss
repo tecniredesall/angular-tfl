@@ -1,0 +1,317 @@
+.w-view {
+    position: relative;
+    top: -70px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 70px 0 0 0;
+}
+
+.w-container-view {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.w-wrapper {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    margin: 0;
+    padding: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.warehouse-panel {
+    padding: 0;
+    position: static;
+}
+
+.warehouses-container {
+    margin-top: 30px;
+}
+
+.header-container {
+    margin-bottom: 20px;
+}
+
+.arrow-container {
+    grid-area: arrow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0 10px 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: transparent;
+    border: 0;
+}
+
+.name-container {
+    padding: 12px 0 10px 0;
+    grid-area: name;
+}
+
+.tank-type {
+    padding: 12px 0 10px 0;
+    grid-area: tank-type;
+    margin-left: 12px;
+    display: none;
+}
+
+
+.commodity-container {
+    padding: 12px 0 10px 0;
+    grid-area: commodity;
+    display: none;
+}
+
+.storage-container {
+    padding: 12px 0 10px 10px;
+    grid-area: storage;
+}
+
+.button-container {
+    grid-area: button;
+    padding: 12px 0 10px 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.options-container {
+    padding: 12px 0 10px 0;
+    grid-area: options;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.options-container i {
+    color: var(--tr-primary-color);
+}
+
+.tank-type{
+    display: none;
+}
+
+.commodity-container{
+    display: none;
+}
+
+.warehouse-grid {
+    display: grid;
+    gap: 0 8px;
+    &--small{
+        grid-template-columns: 50px minmax(160px, 1fr) minmax(92px, 1fr) 50px;
+        grid-template-areas:
+            "arrow name button options"
+            ". storage storage storage";
+    }
+    &--medium{
+        grid-template-columns: 50px minmax(160px, 1fr) minmax(150px, 1fr) minmax(92px, 1fr) 50px;
+        grid-template-areas: "arrow name storage button options";
+        grid-template-rows: 1fr;
+    }
+}
+
+.low-level-use {
+    border: 0.45em solid #f7c137 !important;
+}
+
+.low-level-50bar {
+    background-color: #f7c137 !important;
+}
+
+.normal-level-50bar {
+    background-color: #0068d1 !important;
+}
+
+.high-level-50bar {
+    background-color: #d63649 !important;
+}
+
+.normal-level-use {
+    border: 0.45em solid #0068d1 !important;
+}
+
+.high-level-use {
+    border: 0.45em solid #d63649 !important;
+}
+
+.progress {
+    margin-top: 8px;
+    margin-bottom: 0px !important;
+}
+
+.progress-circle span {
+    margin: 0;
+    margin-bottom: 0 !important;
+    line-height: normal !important;
+}
+
+.w-92 {
+    width: 92px;
+}
+
+.wharehouse-modal-delete-icon {
+    width: 50px;
+}
+
+.disabled-arrow-container {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.warehouse-item {
+    box-shadow: 0 0 20px 0 rgba(46, 91, 255, 0.1);
+    border: solid 1px rgba(46, 91, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-bottom: 15px;
+}
+
+.container-status-request-subtanks {
+    padding: 20px;
+}
+
+.loading-subtanks {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 160px;
+}
+
+.container-subtanks{
+    padding: 12px;
+}
+
+.container-subtank-card {
+    display: grid;
+    gap: 16px;
+    &--small {
+        grid-template-columns: 100%;
+    }
+    &--medium {
+        grid-template-columns: calc((100% / 2) - 8px) calc((100% / 2) - 8px);
+    }
+    &--large {
+        grid-template-columns: calc((100% / 3) - 8px) calc((100% / 3) - 16px) calc((100% / 3) - 8px);
+    }
+}
+
+@media (min-width: 500px) {
+    .warehouses-container {
+        margin-top: 30px;
+    }
+
+    .storage-container {
+        padding: 12px 0 10px 0px;
+    }
+
+    .warehouse-subtank-card {
+        display: grid;
+        grid-template-columns: auto 40px;
+        padding: 15px;
+    }
+    .w-wrapper {
+        padding: 40px 40px 110px 40px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .w-wrapper{
+        padding: 40px 40px 148px 40px;
+    }
+    .tank-type{
+        margin: 0;
+        display: block;
+    }
+
+    .commodity-container{
+        display: block;
+    }
+    .progress{
+        width: 110px;
+    }
+
+    .warehouse-grid {
+        gap: 12px;
+        display: grid;
+        grid-template-columns: 50px minmax(160px, 1fr) minmax(min-content, 1fr) minmax(min-content, 1fr) minmax(170px, 1fr) minmax(92px, 1fr) 50px;
+        grid-template-areas: "arrow name tank-type commodity storage button options";
+    }
+}
+
+
+.chip-type-tank {
+    &__virutal {
+        color: var(--tr-macro-lot-color);
+        background-color: var(--tr-macro-lot-background-color);
+        border-color: var(--tr-macro-lot-border-color);
+        border-width: var(--tr-lot-type-border-width);
+    }
+
+    &__pyshical {
+        color: var(--tr-nano-lot-color);
+        background-color: var(--tr-nano-lot-background-color);
+        border-color: var(--tr-nano-lot-border-color);
+        border-width: var(--tr-lot-type-border-width);
+    }
+
+    border-style: solid;
+    padding: 4px 8px;
+    border-radius: 9.5px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.measurement_unit-container {
+    width: 40px;
+}
+
+.measurement_unit {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.57;
+    color: var(--tr-data-grid-color);
+}
+
+.warehouse__storage{
+    &--physical {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        .warehouse-label-value{
+            min-width: 50px;
+        }
+        .progress{
+            width: 68px;
+            height: 12px;
+            border-radius: 5px;
+        }
+    }
+    &--virtual{
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+    }
+}

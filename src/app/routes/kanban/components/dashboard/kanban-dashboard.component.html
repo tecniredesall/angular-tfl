@@ -1,0 +1,213 @@
+<div class="kanban-dashboard" *blockUI="'kanban-dashboard-layout'; template: templateBlockModalUiComponent">
+  <div class="kanban-dashboard__wrapper">
+    <div cdkScrollable class="kanban-dashboard__wrapper__container tr__scroll">
+      <!-- Header -->
+      <div class="kanban-dashboard__header">
+        <div class="kanban-dashboard__header__title">
+          {{'kanban-dashboard-title' | i18n}}
+        </div>
+        <div class="kanban-dashboard__header__select">
+          <ng-select
+          class="tr__ng-select__custom-scroll"
+              [(ngModel)]="workflowId"
+              [items]="workflows"
+              [multiple]="false"
+              [closeOnSelect]="true"
+              [clearable]="false"
+              [loading]="isLoadingWorkflows"
+              loadingText="{{ 'loading' | i18n }}"
+              [notFoundText]="'not-items-found' | i18n"
+              bindValue="id"
+              bindLabel="name"
+              placeholder="{{'kanban-dashboard-select-placeholder' | i18n}}"
+              [searchable]="true"
+              [virtualScroll]="true"
+              [typeahead]="searchWorkflowsTerm$"
+              (scrollToEnd)="onWorkflowScrollReachedEnd()"
+              (change)="onWorkflowSelect($event)">
+              <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                <div>{{item.name}}</div>
+                <div
+                class="kanban-dashboard__header__select__production-type"
+                [ngClass]="{
+                  'tr__lot__type__nano':LOT_TYPES.NANO_LOTE==item.productionTypeName,
+                  'tr__lot__type__micro':LOT_TYPES.MICRO_LOTE==item.productionTypeName,
+                  'tr__lot__type__macro':LOT_TYPES.MACRO_LOTE==item.productionTypeName
+                }">{{item.productionTypeName | i18n}}</div>
+              </ng-template>
+          </ng-select>
+        </div>
+        <div class="kanban-dashboard__header__production-type">
+          <div
+          class="kanban-dashboard__header__production-type__name no-select"
+          [ngClass]="{
+            'tr__lot__type__nano':LOT_TYPES.NANO_LOTE==selectedWorkflow.productionTypeName,
+            'tr__lot__type__micro':LOT_TYPES.MICRO_LOTE==selectedWorkflow.productionTypeName,
+            'tr__lot__type__macro':LOT_TYPES.MACRO_LOTE==selectedWorkflow.productionTypeName
+          }">
+            {{selectedWorkflow.productionTypeName | i18n}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="kanban-dashboard__filters">
+        <div class="kanban-dashboard__filters__action">
+          <button class="tr__button__filter kanban-dashboard__filters__action__button"
+            [ngClass]="{'tr__button__filter--active': hasFilter}"
+            matRipple
+            (click)="openFilter()">
+            <i class="icon-filter-icon no-select"></i>
+            &nbsp;
+            &nbsp;
+            <span>{{'filter' | i18n}}</span>
+            &nbsp;
+            &nbsp;
+            <div *ngIf="hasFilter" class="tr__button__filter__count">
+              <span>{{countFilter}}</span>
+            </div>
+          </button>
+        </div>
+        <div class="kanban-dashboard__filters__search">
+          <app-search-input [isDisabledSearchInput]="false" [searchValue]="searchTextProcess"
+            [isFocused]="isFocusOnInputSearch" (clearEvent)="clearSearchInput()">
+            <input
+              searchInput
+              type="text"
+              class="elipsis"
+              (input)="onTypeSearchInput($event)"
+              [placeholder]="'kanban-dashboard-search-placeholder' | i18n"
+              [(ngModel)]="searchTextProcess"
+              (focus)="isFocusOnInputSearch = true"
+              (blur)="isFocusOnInputSearch = false"
+              autocomplete="not" />
+          </app-search-input>
+        </div>
+      </div>
+
+      <!-- Processes -->
+      <div cdkScrollable cdkDropListGroup class="kanban-dashboard__processes tr__scroll" [ngStyle]="{overflowX: (selectedWorkflow.processes.length>0) ? 'auto' : 'hidden', gridTemplateColumns: isMobileResolution ? 'repeat('+selectedWorkflow.processes.length+', calc(100% - 40px)' : 'repeat('+selectedWorkflow.processes.length+', minmax(256px, 1fr))'}" *blockUI="'kanban-dashboard-processes'; template: templateBlockModalUiComponent">
+
+        <ng-container *ngIf="selectedWorkflow.processes.length>0 || isLoadingProcesses; else emptySearchResults">
+          <div class="kanban-dashboard__processes__column" *ngFor="let process of selectedWorkflow.processes; let idxProcess = index;">
+            <div class="kanban-dashboard__processes__column__content">
+
+              <!-- Process header -->
+              <div class="kanban-dashboard__processes__column__content__header" [ngStyle]="{borderColor: process.color}">
+                <div class="kanban-dashboard__processes__column__content__header__text">
+                  {{process.name | i18n}}
+                </div>
+                <div class="kanban-dashboard__processes__column__content__header__count">
+                  <span>
+                    {{process.numberLots | number : "2.0-0" : "en"}}
+                  </span>
+                </div>
+                <div class="kanban-dashboard__processes__column__content__header__total-label">
+                  {{'total' | i18n}}:
+                </div>
+                <div class="kanban-dashboard__processes__column__content__header__total-value">
+                  {{process.weightQQ | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"}} {{configuration.conversionMeasurementUnitAbbreviation}}
+                </div>
+              </div>
+
+              <!-- cdk drop list -->
+              <div class="kanban-dashboard__processes__column__content__drop-list" cdkDropList cdkDropListSortingDisabled [ngStyle]="{borderColor: process.color}" [id]="idxProcess" [cdkDropListData]="process.filteredLots" [cdkDropListEnterPredicate]="processPredicate" (cdkDropListDropped)="onDrop($event)">
+
+                <!-- Process lots -->
+                <div cdkDrag [cdkDragStartDelay]="dragStartDelay" class="kanban-dashboard__processes__column__content__drop-list__wrapper-card" [ngClass]="{'long-pressing': lot.id == pressedLotId}" *ngFor="let lot of process.filteredLots" [cdkDragData]="{lot:lot, previousStep: selectedWorkflow.processes[idxProcess].step, processes: selectedWorkflow.processes}" (cdkDragMoved)="onMoved($event)" (cdkDragReleased)="onReleased($event)" (cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)" (touchstart)="onTouchStartLotEvent(lot.id)" (touchend)="onTouchEndLotEvent()" (touchmove)="onTouchMoveLotEvent()">
+                  <div class="kanban-dashboard__processes__column__content__drop-list__card" [ngStyle]="{borderColor: process.color}">
+                    <div *cdkDragPlaceholder></div>
+                    <!-- Lot data -->
+                    <div class="kanban-dashboard__processes__column__content__drop-list__card__data">
+
+                      <!-- Lot name -->
+                      <div class="kanban-dashboard__processes__column__content__drop-list__card__data__name">
+                        {{lot.name}}
+                      </div>
+
+                      <!-- Lot date -->
+                      <div class="kanban-dashboard__processes__column__content__drop-list__card__data__date">
+                        {{lot.date | formatMoment : 'MMM DD, YYYY HH:mm' : true}}
+                      </div>
+
+                      <!-- Lot warehouse -->
+                      <div *ngIf="null != lot.warehouse" class="kanban-dashboard__processes__column__content__drop-list__card__data__warehouse">
+                        <i class="icon-almacen-blue no-select"></i>
+                        <span>{{lot.warehouse}}</span>
+                      </div>
+
+                      <!-- Lot weight -->
+                      <div class="kanban-dashboard__processes__column__content__drop-list__card__data__weight">
+                        <i class="icon-unit-gray no-select"></i>
+                        <span>
+                          {{lot.currentWeightQQ | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"}} {{configuration.conversionMeasurementUnitAbbreviation}}
+                        </span>
+                      </div>
+
+                      <!-- Lot producers -->
+                      <div class="kanban-dashboard__processes__column__content__drop-list__card__data__producers">
+                        <div class="kanban-dashboard__processes__column__content__drop-list__card__data__producers__icon">
+                          <i class="icon-users"></i>
+                        </div>
+                        <div class="kanban-dashboard__processes__column__content__drop-list__card__data__producers__value">
+                          <span>
+                            {{lot.producers.length}} {{(1 == lot.producers.length ? 'producer' : 't-producers') | i18n}}
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Lot seals -->
+                      <div class="kanban-dashboard__processes__column__content__drop-list__card__data__seals">
+                        <div>
+                          <span *ngFor="let seal of lot.seals" [matTooltip]="seal.name" matTooltipPosition="below"
+                            matTooltipClass="kanban-dashboard__processes__column__content__drop-list__card__data__seals__tooltip">
+                            <img [src]="seal.image | safeContent : 'url'" />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Lot actions -->
+                    <div class="kanban-dashboard__processes__column__content__drop-list__card__actions">
+                      <span class="kanban-dashboard__processes__column__content__drop-list__card__actions__icon-wrapper" [matMenuTriggerFor]="actionsMenu">
+                        <i class="icon-options-vertical no-select"></i>
+                      </span>
+                      <mat-menu #actionsMenu="matMenu">
+                        <button mat-menu-item (click)="openLotDetail(lot)">
+                          {{'view' | i18n}}
+                        </button>
+                        <button *ngIf="0==idxProcess" mat-menu-item (click)="openDeleteLotDialog(lot, idxProcess)">
+                          {{'delete' | i18n}}
+                        </button>
+                        <button *ngIf="idxProcess>0" mat-menu-item (click)="openLotEdit(lot)">
+                          {{'edit' | i18n}}
+                        </button>
+                        <button *ngIf="process.step == lastLevel" mat-menu-item
+                          (click)="finalizeLot(lot)">
+                          {{'finish' |i18n}}
+                        </button>
+                      </mat-menu>
+                    </div>
+
+                    <!-- Lot damaged mark -->
+                    <div *ngIf="lot.isDamaged" class="kanban-dashboard__processes__column__content__drop-list__card__damaged">
+                      {{'kanban-dashboard-lot-damaged' | i18n}}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Empty search results template -->
+<ng-template #emptySearchResults>
+  <app-not-results-found></app-not-results-found>
+</ng-template>

@@ -1,0 +1,140 @@
+<div class="principal-panel panel-retention-note"
+*blockUI="'notes-reception-production'; template: templateBlockModalUiComponent"
+>
+<app-tags [tags]="paramTags" [keyStorageFilter]="KEY_TAGS" (eventOnDeleteTag)="onDeleteTag($event)"></app-tags>
+<ng-container *ngIf="retentionOders.length > 0 || this.isLoadData; else emptyState">
+    <!-- HEADERS -->
+    <div class="col-xs-12 pad-top-10 p0 mrg-top-25 panel-retention-note-headers hidden-xs hidden-sm" >
+        <div class="note-column-arrow">
+        </div>
+        <div class="col-xs-11 col-sm-11 notes-table-headers p0">
+            <div  (click)="sortData('retention_date')"
+                class="col-lg-2 label-table hidden-sm p0 note-column-start"
+            >
+                {{ "creation" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.retentionDate ? 'icon-caret-down' : 'icon-caret-up' "></i>
+
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-id" (click)="sortData('id')">
+                {{ "id" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.id ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-producer"  (click)="sortData('seller')">
+                {{ "producer" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.seller ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-type" (click)="sortData('ihcafe')">
+                {{ "retention-orders-ihcafe" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.ihcafe ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-weight"  (click)="sortData('weight')">
+                {{ "net-weight" | i18n | uppercase }} ({{ configuration.conversionMeasurementUnitAbbreviation | uppercase}})
+                <i [ngClass]="columnAscState.weight ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-options">
+                {{ "status" | i18n | uppercase }}
+            </div>
+        </div>
+    </div>
+    <!-- TABLE BODY  -->
+
+        <ng-container *ngFor="let order of retentionOders " id="list-retention-orders">
+            <div class="pad-top-10 panel-retention-note-notes">
+                <div class="header-titles-table p0">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading row-collapse row-height-c">
+                            <div class="note-column-arrow icon-reception-child"  >
+                                <i class="icon-retention"></i>
+                            </div>
+                             <div class="note-columns-container">
+                                <div class="note note-column-start hidden-xs " >
+                                    <p class="label-table hidden-xs visible-sm">{{ "creation" | i18n | uppercase }}</p>
+                                    <p>{{ order?.retentionDate | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm" : true }}</p>
+                                    <p>{{ order.createdName }}</p>
+                                </div>
+                                <div class="note note-column-id">
+                                    <p class="label-table visible-xs visible-sm"> {{ "id" | i18n | uppercase }}</p>
+                                        {{ order.folio }}
+                                </div>
+                                <div class="note note-column-producer">
+                                    <p class="label-table visible-xs visible-sm"> {{ "producer" | i18n | uppercase }}</p>
+                                    <span class="note-text-producer">   {{ order.sellerName }}</span>
+                                </div>
+                                <div class="note note-column-type">
+                                      <p  class="label-table visible-xs visible-sm">  {{ "retention-orders-ihcafe" | i18n | uppercase }}</p>
+                                      {{order.cvIhcafe}}
+                                </div>
+                                <div class="note note-column-weight">
+                                    <p class="label-table visible-xs visible-sm"
+                                    > {{ "net-weight" | i18n | uppercase }}
+                                    </p>
+                                    {{ (order.totalNetOut | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en")}}
+                                    {{ configuration.conversionMeasurementUnitAbbreviation }}
+                                </div>
+                                <div class="note note-column-options orders-status">
+                                    <div class="note-status hidden-xs  hidden-sm" [ngClass]="order.classStatus?.css" >
+                                        <i class=" no-select font-ss16" [ngClass]="order.classStatus?.icon"></i>
+                                        <p class="hidden-sm">{{order.classStatus?.label | i18n }} </p>
+                                    </div>
+                                    <span
+                                          mat-icon-button
+                                         [matMenuTriggerFor]="options">
+                                        <i class=" note note-column-menu-options no-select icon-options-vertical" ></i>
+                                    </span>
+                                    <mat-menu #options="matMenu">
+                                        <button mat-menu-item [routerLink]="['view',order.id ]" [queryParams]="{ production: 'true'}"> {{ "view" | i18n }}
+                                        </button>
+                                        <button mat-menu-item  [hidden]="order.status == RETENTION_ORDER_STATUS.CLOSED || order.status == RETENTION_ORDER_STATUS.DISABLED" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.UPDATE }" (click)="onActionClicked(ACTIONS.UPDATE,order)"> {{ "edit" | i18n }}
+                                        </button>
+                                        <button mat-menu-item [hidden]="order.status != RETENTION_ORDER_STATUS.CLOSED && order.status != RETENTION_ORDER_STATUS.DISABLED"  (click)="onActionClicked(ACTIONS.PRINT,order)" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.PRINT }"> {{ "print" | i18n }}
+                                        </button>
+                                        <button mat-menu-item [hidden]="order.status != RETENTION_ORDER_STATUS.CLOSED && order.status != RETENTION_ORDER_STATUS.DISABLED"  (click)="onActionClicked(ACTIONS.DOWNLOAD,order)" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.PRINT }"> {{ "dowload" | i18n }}
+                                        </button>
+                                        <button mat-menu-item [routerLink]="['view',order.id ]" [queryParams]="{ production: 'true'}"  [hidden]="order.status != RETENTION_ORDER_STATUS.CLOSED || order.status == RETENTION_ORDER_STATUS.DISABLED" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.VOID }"> {{ "void" | i18n }}
+                                        </button>
+                                        <button mat-menu-item  [hidden]="order.status == RETENTION_ORDER_STATUS.CLOSED || order.status == RETENTION_ORDER_STATUS.DISABLED" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.DELETE }" (click)="onActionClicked(ACTIONS.DELETE,order)"> {{ "delete" | i18n }}
+                                        </button>
+                                        <!-- <button mat-menu-item [hidden]="order.status == RETENTION_ORDER_STATUS.CLOSED || order.status == RETENTION_ORDER_STATUS.DISABLED "  (click)="onActionClicked(ACTIONS.CLOSE,order)" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.UPDATE }"> {{ "close" | i18n }}
+                                        </button> -->
+                                    </mat-menu>
+                                </div>
+                                <div class="visible-xs visible-sm  note-column-status orders-status">
+                                    <p class="label-table hidden-xs visible-sm "> {{ "status" | i18n | uppercase }} </p>
+                                    <div class="note-status" [ngClass]="order.classStatus?.css">
+                                    <i class=" no-select font-ss16" [ngClass]="order.classStatus?.icon"></i>
+                                    <p class="hidden-xs visible-sm ">
+                                        {{ order.classStatus?.label | i18n }}
+                                    </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+
+    <div class="pl-container-paginator">
+        <mat-paginator
+            class="custom-paginator"
+            [length]="paginator.totalItems"
+            [pageIndex]="paginator.currentPage - 1"
+            [pageSize]="paginator.itemsPerPage"
+            [pageSizeOptions]="[paginator?.itemsPerPage]"
+            (page)="eventPaginator($event)"
+            showFirstLastButtons
+            #matPaginator
+        >
+        </mat-paginator>
+    </div>
+
+</ng-container>
+
+
+<ng-template #emptyState>
+    <app-not-results-found [customMessage]="DataEmptyComponent.customMessage" [imgName]="DataEmptyComponent.imgName" [buttonLink]="DataEmptyComponent.buttonLink"></app-not-results-found>
+</ng-template>
+
+</div>
+

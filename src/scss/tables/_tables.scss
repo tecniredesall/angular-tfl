@@ -1,0 +1,303 @@
+//Custom properties for theming
+:root {
+    --table-header-cell-color: var(--gray-medium);
+    --table-header-cell-color-disbled: var(--base-gray);
+    --table-row-background: var(--base-white);
+    --table-cell-color: var(--colors-neutral-2);
+    --table-cell-icon-color: var(--base-teal);
+    --table-cell-light-icon-color: #869aab;
+    --table-badge-cell-background: var(--dark-blue);
+    --no-items-message-title-color: var(--colors-neutral-2);
+    --table-row-border-color: var(--light-border);
+    .dark {
+        --table-header-cell-color: var(--base-gray);
+        --table-header-cell-color-disbled: var(--colors-neutral-1);
+        --table-row-background: var(--colors-neutral-1);
+        --table-cell-color: var(--base-white);
+        --table-cell-icon-color: var(--base-blu-dark);
+        --table-cell-light-icon-color: var(--base-blu-dark);
+        --no-items-message-title-color: var(--base-white);
+    }
+}
+//Styles
+// Mobile first
+.sil-table {
+    display: flex;
+    flex-direction: column;
+    &--scrollable {
+        overflow: auto;
+        &::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px var(--container-scrollbar-track-color);
+            -webkit-box-shadow: inset 0 0 6px
+                var(--container-scrollbar-track-color);
+            background-color: var(--container-scrollbar-track-background);
+        }
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+            background-color: var(--container-scrollbar-track-background);
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--container-scrollbar-track-color);
+        }
+        &::-webkit-scrollbar-track-piece {
+            background-color: var(--container-scrollbar-track-background);
+        }
+        &--padded {
+            padding: 0 0 40px 0;
+        }
+    }
+    .sil-table__header-row {
+        display: grid;
+        width: 100%;
+        .sil-table__header-cell {
+            display: inline-flex;
+            font-size: 10px;
+            color: var(--table-header-cell-color);
+            font-weight: 600;
+            text-align: left;
+            align-items: center;
+            &.sil-table__action-header-cell {
+                justify-content: flex-end;
+                display: none;
+            }
+            [class^="icon-"],
+            [class*=" icon-"] {
+                cursor: pointer;
+                display: none;
+                &.show-on-mobile {
+                    display: inline-flex;
+                }
+                &.sort-icon-invert::before {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+    .sil-table__row {
+        display: grid;
+        width: 100%;
+        background: var(--table-row-background);
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 2px;
+        &--bordered {
+            border: 0.2px solid var(--table-row-border-color);
+        }
+        &.selected {
+            border: 0.2px solid var(--tr-panel-header-toggle-icon-color);
+            position: relative;
+            &::after {
+                font-family: "silosys-icons";
+                display: flex;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 20px;
+                height: 20px;
+                content: "\e905";
+                background-color: var(--tr-primary-color);
+                color: var(--tr-background-color);
+                margin-top: -8px;
+                justify-content: center;
+                border-radius: 50%;
+                align-items: center;
+                font-size: 10px;
+            }
+        }
+        .sil-table__cell {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.57;
+            color: var(--table-cell-color);
+            [class^="icon-"],
+            [class*=" icon-"] {
+                margin-right: 5px;
+                font-size: 16px;
+                color: var(--table-cell-icon-color);
+                &.light {
+                    color: var(--table-cell-light-icon-color);
+                }
+            }
+            &-label {
+                font-size: 12px;
+                color: var(--table-header-cell-color);
+                display: block;
+                margin: 0 0 2px 0;
+            }
+            .sil-table__initials-icon {
+                min-width: 35px;
+                min-height: 35px;
+                border-radius: 50%;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 8px;
+                color: var(--dark-blue);
+                background: var(--base-teal-2);
+                font-weight: bold;
+                font-size: 16px;
+                text-transform: uppercase;
+            }
+            .sil-table__tooltip {
+                white-space: pre-line;
+                font-size: 12px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.42;
+                letter-spacing: normal;
+                text-align: left;
+                padding: 10px;
+            }
+        }
+        .sil-table__group-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sil-table__badge-cell {
+            display: inline;
+            margin-left: 10px;
+            background-color: var(--table-badge-cell-background);
+            color: #fff;
+            padding: 2px 15px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            display: none;
+        }
+    }
+    &__checkbox-row {
+        @extend .sil-table__row;
+        grid-template-columns: 40px 1fr;
+        justify-content: center;
+        align-items: center;
+        padding: 4px !important;
+        margin-top: 0 !important;
+        .sil-table__checkbox {
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            .mat-checkbox-frame {
+                border-radius: 70% !important;
+                border-color: var(--tr-checkbox-border-color);
+                background-color: var(--tr-checkbox-background-color);
+            }
+            .mat-checkbox-background {
+                border-radius: 70%;
+            }
+            &.mat-checkbox-checked .mat-checkbox-background,
+            &.mat-checkbox-indeterminate .mat-checkbox-background {
+                background-color: var(--base-blue) !important;
+            }
+            &.mat-checkbox:not(.mat-checkbox-disabled)
+                .mat-checkbox-ripple
+                .mat-ripple-element {
+                background-color: var(--base-blue) !important;
+            }
+        }
+    }
+    .sil-table__paginator {
+        margin: 10px auto;
+        .mat-paginator-range-label {
+            margin: 0 24px 0 10px;
+        }
+        .mat-icon-button {
+            color: var(--table-header-cell-color);
+            &:disabled {
+                color: var(--table-header-cell-color-disbled);
+            }
+        }
+    }
+}
+
+//For now class needs to outside main table class
+.sil-table__federated-icon {
+    font-size: 20px;
+    background-color: var(--base-green);
+    color: white !important;
+    padding: 3px;
+    border-radius: 6px;
+}
+
+/* Responsive*/
+/* tablet */
+@media (min-width: 768px) {
+    .sil-table {
+        .sil-table__row {
+            padding: 20px;
+            .sil-table__group-cell {
+                justify-content: flex-start;
+            }
+            .sil-table__cell {
+                text-align: start;
+                font-size: 14px;
+                flex-direction: row;
+                align-items: center;
+                &-label {
+                    display: none;
+                    &.show-on-tablet {
+                        display: block;
+                    }
+                }
+                [class^="icon-"],
+                [class*=" icon-"] {
+                    font-size: 30px;
+                    margin-right: 10px;
+                    display: inline-flex;
+                }
+                .sil-table__federated-icon {
+                    font-size: 20px;
+                }
+            }
+            .sil-table__badge-cell {
+                display: block;
+            }
+        }
+        .sil-table__header-row {
+            .sil-table__header-cell {
+                font-size: 12px;
+                &.sil-table__action-header-cell {
+                    display: inline-flex;
+                }
+                [class^="icon-"],
+                [class*=" icon-"] {
+                    display: inline-flex;
+                }
+            }
+        }
+        .sil-table__paginator {
+            margin: 10px 0 10px auto;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .sil-table {
+        .sil-table__header-row {
+            .sil-table__header-cell {
+                [class^="icon-"],
+                [class*=" icon-"] {
+                    margin-left: 4px;
+                }
+            }
+        }
+        .sil-table__row {
+            padding: 20px;
+            .sil-table__group-cell {
+                justify-content: flex-start;
+            }
+            .sil-table__cell {
+                &-label {
+                    &.show-on-tablet {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

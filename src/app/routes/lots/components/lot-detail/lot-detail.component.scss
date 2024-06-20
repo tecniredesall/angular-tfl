@@ -1,0 +1,67 @@
+#backToList {
+    width: fit-content;
+    margin-bottom: 20px;
+    padding: 0;
+    i {
+        margin-right: 8px;
+    }
+}
+
+.sil-container {
+    padding: 24px;
+    .sil-form__header {
+        .lot__damaged-badge {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            padding: 8px;
+            background-color: var(--tr-base-color-red);
+            color: white;
+            font-weight: 600;
+        }
+        .tr__button__primary  {
+            height: 36px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+    }
+}
+
+::ng-deep .mat-menu-content {
+    min-width: 168px;
+}
+
+app-lot-detail-events {
+    position: relative;
+}
+
+::ng-deep .mat-menu-content {
+    min-width: 168px;
+}
+
+@media (min-width: 1200px) {
+    .sil-container {
+        display: grid;
+        grid-template-columns: 1fr 0.4fr;
+        grid-template-areas:
+            "header events"
+            "details events";
+        column-gap: 40px;
+        grid-template-rows: max-content;
+        .sil-form__header {
+            padding-top: 16px;
+        }
+        header {
+            grid-area: header;
+        }
+        app-lot-info {
+            grid-area: details;
+        }
+        app-lot-detail-events {
+            grid-area: events;
+            border-left: 0.2px solid var(--form-input-border-color);
+            padding-left: 16px;
+        }
+    }
+}

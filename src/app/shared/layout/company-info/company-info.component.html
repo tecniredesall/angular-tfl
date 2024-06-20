@@ -1,0 +1,128 @@
+<!-- COMPANY INFO -->
+<button data-target="#myModalCompany" data-toggle="modal" id="openCompanyModal" style="visibility: hidden;"></button>
+<div id="myModalCompany" class="modal fade your-modal-class" role="dialog">
+    <div class="modal-dialog animated effect modal-lg">
+      <div class="modal-content h-auto">
+        <div class="modal-header">
+          <div class="col-lg-8 p0">
+            <h4 class="modal-title">{{'company_info' | i18n}}</h4>
+            <!-- <label class="waiting-text waiting-appr-text">{{'fields-waiting-approval' | i18n}}</label> -->
+          </div>
+          <ng-container *ngIf="!updatingInfo">
+            <div class="col-lg-4 icon-pend-container p0" *ngIf="pending != null">
+              <img class="pull-right icon-pendings" src="./../../../../assets/img/icon-pending-circle.png" alt=""
+                *ngIf="pending.error_code === 0" tooltip="{{'waiting-for-d-app' | i18n}}" placement="top" delay="300">
+              <img class="pull-right icon-pendings" src="./../../../../assets/img/icons/icon-info-gray.png"
+                tooltip="{{'show-info' | i18n}}" placement="top" delay="300" *ngIf="pending.error_code !== 0"
+                (click)="showRequestInfo(pending.error_code)">
+            </div>
+          </ng-container>
+          <div class="col-md-2 spinner-separator pull-right" *ngIf="updatingInfo">
+            <div id="overlay">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+        <form id="company_info">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <span>{{'name' |i18n}}:</span>
+                <input id="name" name="name" type="text" class="form-control mrg-btm-15" placeholder="{{'name' | i18n}}"
+                  required autofocus [(ngModel)]="currentCompany.name" name="name" #name="ngModel" autocomplete="off"
+                  [disabled]="hasPending()">
+                <label *ngIf="name.dirty" class="error-msg-form">
+                  <label [hidden]="!name.hasError('required')">{{'is-required-msg' | i18n }}</label>
+                </label>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="mrg-top-15">{{'email'| i18n}}:</span>
+                <input id="email" name="email" type="text" class="form-control mrg-btm-15" placeholder="{{'email'| i18n}}"
+                  required [(ngModel)]="currentCompany.email" name="email" #email="ngModel" [disabled]="hasPending()"
+                  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" autocomplete="off">
+                <label *ngIf="email.dirty" class="error-msg-form">
+                  <label [hidden]="!email.hasError('required')">{{'is-required-msg' | i18n }}</label>
+                  <label [hidden]="!email.hasError('pattern')">{{'not-email-valid-msg' | i18n}}</label>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="mrg-top-15">{{'sqs-name'| i18n}}: <span class="fa fa-question-circle pointer font-ss18"
+                    tooltip="{{'sqs-help' | i18n}}" placement="top" delay="300" largeTool="true"></span> </span>
+                <input id="sqs_name" name="sqsname" type="text" class="form-control" placeholder="{{'sqs-name'| i18n}}"
+                  [(ngModel)]="currentCompany.sqs_name" name="sqsname" #sqsname="ngModel" type="tel" autocomplete="off"
+                  [disabled]="hasPending()" pattern="^[a-zA-Z0-9-_]+$">
+                <label *ngIf="sqsname.dirty" class="error-msg-form">
+                  <label [hidden]="!sqsname.hasError('pattern')">{{'invalid-queue-name' | i18n}}</label>
+                </label>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <span class="mrg-top-15">{{'phone'| i18n}}:</span>
+                <input id="phone" name="phone" type="text" class="form-control" placeholder="{{'phone'| i18n}}"
+                  [(ngModel)]="currentCompany.phone" name="phone" #phone="ngModel" type="tel"
+                  [textMask]="{mask: phoneMask}" autocomplete="off" [disabled]="hasPending()"
+                  pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$">
+                <label *ngIf="phone.dirty" class="error-msg-form">
+                  <label [hidden]="!phone.hasError('pattern')">{{'invalid-phone-number' | i18n}}</label>
+                </label>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 mrg-top-15">
+                <span class="mrg-top-15">{{'address'| i18n}}:</span>
+                <textarea class="form-control non-border mrg-btm-15 non-resize" autocomplete="off"
+                  [disabled]="hasPending()" [(ngModel)]="currentCompany.address" name="address"
+                  #address="ngModel"></textarea>
+              </div>
+            </div>
+            <hr>
+            <div class="row mrg-btm-15">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <span>{{'deafult-location' | i18n}}:</span>
+                <ng-select [items]="locations" name="locations" [multiple]="false" [clearable]="false" bindLabel="name"
+                  placeholder="{{'select-location' | i18n}}" (change)="setLocation($event)" [(ngModel)]="locationSelected"
+                  [closeOnSelect]="true" [disabled]="hasPending()">
+                </ng-select>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <span>{{'metric' | i18n}}:</span>
+                <ng-select [items]="metrics" name="metrics" [multiple]="false" [clearable]="false" bindLabel="name"
+                  placeholder="{{'select-option' | i18n}}" (change)="setSystem($event)" [(ngModel)]="metricsSelected"
+                  [closeOnSelect]="true" [disabled]="hasPending()">
+                </ng-select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-2 col-sm-12">
+                <span>{{'money' | i18n}}:</span>
+                <input type="number" id="money" name="money" min="0" max="4" class="form-control"
+                  [(ngModel)]="currentCompany.decimals_for_money" [disabled]="hasPending()">
+              </div>
+              <div class="col-lg-4 col-md-2 col-sm-12">
+                <span>{{'ticket' | i18n}}:</span>
+                <input type="number" id="ticket" name="ticket" min="0" max="3" class="form-control"
+                  [(ngModel)]="currentCompany.decimals_in_tickets" [disabled]="hasPending()">
+              </div>
+              <div class="col-lg-4 col-md-2 col-sm-12">
+                <span>{{'general' | i18n}}:</span>
+                <input type="number" id="general" name="general" min="0" max="3" class="form-control"
+                  [(ngModel)]="currentCompany.decimals_in_general" [disabled]="hasPending()">
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="edit" *ngIf="pending === null"
+            [disabled]="!name.valid || !phone.valid || !email.valid || !address.valid || currentCompany.default_location == 0  || currentCompany.metric_system_id == 0  || !sqsname.valid"
+            (click)="updateCompanyInfo()">{{'accept' | i18n}}</button>
+          <ng-container *ngIf="pending !== null">
+            <button type="button" class="btn btn-warning" id="edit" *ngIf="pending.error_code !== 0"
+              [disabled]="!name.valid || !phone.valid || !email.valid || !address.valid || currentCompany.default_location == 0  || currentCompany.metric_system_id == 0  || !sqsname.valid"
+              (click)="updateCompanyInfo(true)">{{'edit' | i18n}}</button>
+          </ng-container>
+  
+          <button type="button" class="btn btn-default close-modal" data-dismiss="modal"
+            (click)="destroyModal()">{{'close' | i18n}}</button>
+        </div>
+      </div>
+    </div>
+  </div>

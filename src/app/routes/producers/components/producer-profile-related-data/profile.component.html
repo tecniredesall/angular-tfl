@@ -1,0 +1,270 @@
+<div
+    class="col-xs-12 p0 panel panel-default"
+    *blockUI="
+        'panel-producers-profile';
+        template: templateBlockModalUiComponent
+    "
+>
+    <div class="panel-body border-pad-5">
+        <div class="pad-form-d">
+            <div class="producers-profile-relation">
+                <div
+                    class="producers-profile-relation-header row"
+                    (resized)="onResizeRelationHeader($event)"
+                >
+                    <div
+                        [ngStyle]="headerRelationStyle.tabsContainer"
+                        class="producers-profile-relation-header-tabs p0"
+                    >
+                        <div class="row">
+                            <div
+                                (click)="onSelectTab(actionDataTypeEnum.Farms)"
+                                [ngStyle]="headerRelationStyle.tabContainer"
+                                class="producers-profile-relation-header-tab"
+                                [ngClass]="{
+                                    active:
+                                        selectionTab ===
+                                        actionDataTypeEnum.Farms
+                                }"
+                            >
+                                <p
+                                    class="producer-profile-relation-header-text"
+                                >
+                                    {{ "t-farms" | i18n }}
+                                </p>
+                                <span
+                                    class="producer-profile-relation-header-count"
+                                    >{{
+                                        producer.farms.length | number: "2.0"
+                                    }}</span
+                                >
+                            </div>
+                            <div
+                                (click)="onSelectTab(actionDataTypeEnum.Blocks)"
+                                [ngStyle]="headerRelationStyle.tabContainer"
+                                class="producers-profile-relation-header-tab"
+                                [ngClass]="{
+                                    active:
+                                        selectionTab ===
+                                        actionDataTypeEnum.Blocks
+                                }"
+                            >
+                                <p
+                                    class="producer-profile-relation-header-text"
+                                >
+                                    {{ "blocks" | i18n }}
+                                </p>
+                                <span
+                                    class="producer-profile-relation-header-count"
+                                    >{{
+                                        producer.totalRelatedBlocks
+                                            | number: "2.0"
+                                    }}</span
+                                >
+                            </div>
+                            <div
+                                (click)="
+                                    onSelectTab(actionDataTypeEnum.Associates)
+                                "
+                                [ngStyle]="headerRelationStyle.tabContainer"
+                                class="producers-profile-relation-header-tab"
+                                [ngClass]="{
+                                    active:
+                                        selectionTab ===
+                                        actionDataTypeEnum.Associates
+                                }"
+                            >
+                                <p
+                                    class="producer-profile-relation-header-text"
+                                >
+                                    {{ "associates" | i18n }}
+                                </p>
+                                <span
+                                    class="producer-profile-relation-header-count"
+                                    >{{
+                                        producer?.associates.length
+                                            | number: "2.0"
+                                    }}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        [ngStyle]="headerRelationStyle.actionsContainer"
+                        class="producers-profile-relation-header-actions p0 row"
+                    >
+                        <div class="producers-profile-relation-header-search">
+                            <app-search-input
+                                [searchValue]="search"
+                                [isFocused]="isInputSearchFocused"
+                                (clearEvent)="onClearSearchInput()"
+                            >
+                                <input
+                                    searchInput
+                                    type="text"
+                                    class="elipsis"
+                                    name="text"
+                                    (input)="searchFilter()"
+                                    [placeholder]="'search' | i18n"
+                                    [(ngModel)]="search"
+                                    (focus)="isInputSearchFocused = true"
+                                    (blur)="isInputSearchFocused = false"
+                                />
+                            </app-search-input>
+                        </div>
+                        <div
+                            class="producers-profile-relation-header-add"
+                            [ngSwitch]="selectionTab"
+                        >
+                            <ng-container *ngSwitchCase="actionDataTypeEnum.Farms">
+                                <button
+                                    (click)="addFarm()"
+                                    class="btn btn-success btn-xs pull-right"
+                                    *permission="{tag: PERMISSIONS.FARMS, type: PERMISSION_TYPES.CREATE}"
+                                >
+                                    <span>+ {{ "add" | i18n }}</span>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="actionDataTypeEnum.Blocks">
+                                <button
+                                    (click)="addBlock()"
+                                    class="btn btn-success btn-xs pull-right"
+                                    *permission="{tag: PERMISSIONS.BLOCKS, type: PERMISSION_TYPES.CREATE}"
+                                >
+                                    <span>+ {{ "add" | i18n }}</span>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="actionDataTypeEnum.Associates">
+                                <button
+                                    (click)="linkProducers()"
+                                    class="btn btn-success btn-xs pull-right"
+                                    *permission="{tag: PERMISSIONS.RELATED_PRODUCERS, type: PERMISSION_TYPES.CREATE}"
+                                >
+                                    <span>{{ "t-producers-relate" | i18n }}</span>
+                                </button>
+                            </ng-container>
+                            <div *ngSwitchDefault></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="producers-profile-relation-content">
+                    <div [ngSwitch]="selectionTab">
+                        <!-- FARMS -->
+                        <div *ngSwitchCase="actionDataTypeEnum.Farms">
+                            <div
+                                class="producers-profile-relation-content-farms"
+                            >
+                                <ng-container
+                                    *ngIf="
+                                        producer.farms.length > 0;
+                                        else emptyFarms
+                                    "
+                                >
+                                    <ng-container
+                                        *ngIf="farms.length > 0; else notFoundFarms">
+                                        <tfarms-list-view
+                                            [farms]="farms"
+                                            (editEvent)="onEditFarm($event)"
+                                            (readEvent)="onShowDetails($event)"
+                                            (deleteEvent)="onDeleteFarm()"
+                                        >
+                                        </tfarms-list-view>
+                                    </ng-container>
+                                    <ng-template #notFoundFarms>
+                                        <app-not-results-found></app-not-results-found>
+                                    </ng-template>
+                                </ng-container>
+                                <ng-template #emptyFarms>
+                                    <div
+                                        class="producers-profile-empty whitout-result"
+                                    >
+                                        <p class="producers-profile-empty-text">
+                                            {{
+                                                "t-producers-profile-empty-farm"
+                                                    | i18n
+                                            }}
+                                        </p>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <!-- BLOCKS -->
+                        <div *ngSwitchCase="actionDataTypeEnum.Blocks">
+                            <div
+                                class="producers-profile-relation-content-farms"
+                            >
+                                <ng-container
+                                    *ngIf="
+                                        producer.totalRelatedBlocks > 0;
+                                        else emptyBlocks
+                                    "
+                                >
+                                    <ng-container
+                                        *ngIf="blocks.length > 0; else notFoundBlocks">
+                                        <tblocks-list-view
+                                            [blocks]="blocks"
+                                            (editEvent)="onEditBlock($event)"
+                                            (deleteEvent)="onDeleteBlock()"
+                                            (viewEvent)="onViewBlock($event)"
+                                        ></tblocks-list-view>
+                                    </ng-container>
+                                    <ng-template #notFoundBlocks>
+                                        <app-not-results-found></app-not-results-found>
+                                    </ng-template>
+                                </ng-container>
+                                <ng-template #emptyBlocks>
+                                    <div
+                                        class="producers-profile-empty whitout-result"
+                                    >
+                                        <p class="producers-profile-empty-text">
+                                            {{
+                                                "t-producers-profile-empty-block"
+                                                    | i18n
+                                            }}
+                                        </p>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <!-- ASSOCIATES -->
+                        <div *ngSwitchCase="actionDataTypeEnum.Associates">
+                            <div
+                                class="producers-profile-relation-content-farms"
+                            >
+                                <ng-container
+                                    *ngIf="producer.associates?.length > 0;
+                                        else emptyAssociates"
+                                >
+                                    <ng-container
+                                        *ngIf="associates.length > 0; else notAssociatesFound">
+                                        <app-related-producers-list-view
+                                            [producers]="associates"
+                                            (deleteEvent)="onDeleteRelation()"
+                                            #relatedProducersListView
+                                        ></app-related-producers-list-view>
+                                    </ng-container>
+                                    <ng-template #notAssociatesFound>
+                                        <app-not-results-found></app-not-results-found>
+                                    </ng-template>
+                                </ng-container>
+                                <ng-template #emptyAssociates>
+                                    <div
+                                        class="producers-profile-empty whitout-result"
+                                    >
+                                        <p class="producers-profile-empty-text">
+                                            {{
+                                                "t-producers-profile-empty-associates"
+                                                    | i18n
+                                            }}
+                                        </p>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div *ngSwitchDefault></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

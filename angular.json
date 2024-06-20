@@ -1,0 +1,473 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "transformaciones-web": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "sst",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "aot": true,
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "node_modules/devexpress-diagram/dist/dx-diagram.css",
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.light.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss",
+              "src/scss/tr-colors.scss",
+              "src/scss/tr-helper-class.scss",
+              "src/scss/tr-styles.scss",
+              "src/assets/css/themes/default.styles.css",
+              "src/assets/css/dashboard.css",
+              "src/assets/css/themes/dark-theme.css",
+              "src/assets/css/themes/light-theme.css",
+              "src/assets/css/block-ui.css",
+              "src/assets/css/sbar.css",
+              "src/assets/css/checkbox.css",
+              "src/assets/css/circle.css",
+              "src/assets/css/global.css",
+              "src/assets/css/css-circular-prog-bar.css",
+              "node_modules/font-awesome-animation/dist/font-awesome-animation.min.css",
+              "node_modules/font-awesome/css/font-awesome.css",
+              "node_modules/angular-notifier/styles.css",
+              "src/assets/fonts/material-icons/material-icons.css"
+            ],
+            "scripts": [
+              "src/assets/js/sweetalert.min.js",
+              "src/assets/js/sbar.js",
+              "src/assets/jquery/jquery.min.js",
+              "src/assets/js/bootstrap.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "xlsx",
+              "file-saver",
+              "angular2-text-mask"
+            ]
+          },
+          "configurations": {
+            "development":{
+              "sourceMap": true,
+              "optimization": false
+            },
+            "production": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "14mb",
+                  "maximumError": "20mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kb",
+                  "maximumError": "1mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "staging": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "14mb",
+                  "maximumError": "20mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kb",
+                  "maximumError": "1mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            },
+            "staging2": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "14mb",
+                  "maximumError": "20mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kb",
+                  "maximumError": "1mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging2.ts"
+                }
+              ]
+            },
+            "solcafe": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "14mb",
+                  "maximumError": "20mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kb",
+                  "maximumError": "1mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.solcafe.ts"
+                }
+              ]
+            },
+            "demo": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "14mb",
+                  "maximumError": "20mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "14kb",
+                  "maximumError": "1mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.demo.ts"
+                }
+              ]
+            },
+            "ecocacao": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                  {
+                      "type": "initial",
+                      "maximumWarning": "14mb",
+                      "maximumError": "20mb"
+                  },
+                  {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "14kb",
+                      "maximumError": "1mb"
+                  }
+              ],
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.ecocacao.ts"
+                  }
+              ]
+            },
+            "comicovel": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                  {
+                      "type": "initial",
+                      "maximumWarning": "14mb",
+                      "maximumError": "20mb"
+                  },
+                  {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "14kb",
+                      "maximumError": "1mb"
+                  }
+              ],
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.comicovel.ts"
+                  }
+              ]
+            },
+            "honduras1": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                  {
+                      "type": "initial",
+                      "maximumWarning": "14mb",
+                      "maximumError": "20mb"
+                  },
+                  {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "14kb",
+                      "maximumError": "1mb"
+                  }
+              ],
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.honduras1.ts"
+                  }
+              ]
+            },
+            "honduras2": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                  {
+                      "type": "initial",
+                      "maximumWarning": "14mb",
+                      "maximumError": "20mb"
+                  },
+                  {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "14kb",
+                      "maximumError": "1mb"
+                  }
+              ],
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.honduras2.ts"
+                  }
+              ]
+            },
+            "honduras3": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                  {
+                      "type": "initial",
+                      "maximumWarning": "14mb",
+                      "maximumError": "20mb"
+                  },
+                  {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "14kb",
+                      "maximumError": "1mb"
+                  }
+              ],
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.honduras3.ts"
+                  }
+              ]
+            },
+            "honduras4": {
+              "optimization": true,
+              "outputPath": "dist",
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                  {
+                      "type": "initial",
+                      "maximumWarning": "14mb",
+                      "maximumError": "20mb"
+                  },
+                  {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "14kb",
+                      "maximumError": "1mb"
+                  }
+              ],
+              "fileReplacements": [
+                  {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.honduras4.ts"
+                  }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "transformaciones-web:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "transformaciones-web:build:production"
+            },
+            "staging": {
+              "browserTarget": "transformaciones-web:build:staging"
+            },
+            "staging2": {
+              "browserTarget": "transformaciones-web:build:staging2"
+            },
+            "development": {
+              "browserTarget": "transformaciones-web:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "transformaciones-web:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "styles": [
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/swiper/swiper-bundle.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ]
+          }
+        }
+      }
+    },
+    "transformaciones-web-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "transformaciones-web:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "transformaciones-web:serve:production"
+            }
+          }
+        }
+      }
+    }
+  }
+}

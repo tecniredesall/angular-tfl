@@ -1,0 +1,6 @@
+<button class="tr__button__filter tr__button__filter__sync"
+        [disabled]="isSyncStarted" 
+        (click)="onUpdateFederatedData($event)">
+  <i [ngClass]="isSyncStarted ? 'icon-loading fa fa-spin' : 'icon-refresh'"></i>
+  {{(isSyncStarted ? 'updating' : 'update-data') | i18n}}
+</button>

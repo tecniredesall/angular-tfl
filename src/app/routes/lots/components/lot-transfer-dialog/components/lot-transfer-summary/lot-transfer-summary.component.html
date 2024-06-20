@@ -1,0 +1,80 @@
+<div class="lot-transfer-container">
+    <div class="lot-transfer-container__title">
+        {{'transition-summary' | i18n}}
+    </div>
+    <div class="lot-transfer-container__content">
+        <section class="lot-transfer-container__content-lot-info">
+            <section class="lot-transfer-container__content-lot-info__date">
+                <span class="lot-transfer-container__content-lot-info__date-info">
+                    ID {{lot.folio}}
+                </span>
+                <p class="lot-transfer-container__content-lot-info__date-label">
+                    <i class="icon-clock"></i>{{ lot.createdDate | formatMoment: "MMM DD, YYYY HH:mm":true }}
+                </p>
+            </section>
+            <section class="lot-transfer-container__content-lot-info__totals">
+                <div class="lot-transfer-container__content-lot-info__totals-label">
+                    {{'total-quantity' | i18n}}:
+                </div>
+                <div class="lot-transfer-container__content-lot-info__totals-quantity">
+                    {{summary.totalWeightQQ| number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"}} {{summary.conversionMeasurementUnitAbbreviation}}
+                </div>
+
+            </section>
+        </section>
+        <section class="lot-transfer-container__content-lot-label">
+            <p><i class="icon-alert_icon"></i> {{'new-batch-will-be-created' | i18n}}</p>
+        </section>
+        <section class="lot-transfer-container__content-summary">
+            <div class="lot-transfer-container__content-summary__title">
+                {{'lot' | i18n | titlecase}} {{lot.folio}}
+            </div>
+            <div class="lot-transfer-container__content-detail">
+                <div class="lot-transfer-container__content-detail-info">
+                    <div class="lot-transfer-container__content-detail-info__label">
+                        <i class="green-label icon-arrow_icon"></i> {{'weighing-quantity' | i18n}}:
+                    </div>
+                    <div class="lot-transfer-container__content-detail-info__number green-label">{{summary.lotWeightQQ| number : "1." + DECIMAL_DIGITS + "-" +
+                        DECIMAL_DIGITS : "en"}} {{summary.conversionMeasurementUnitAbbreviation}}
+                    </div>
+                </div>
+                <div class="lot-transfer-container__content-detail-info">
+                    <div class="lot-transfer-container__content-detail-info__label percentage-info">
+                        {{'percentage' | i18n}}:
+                    </div>
+                    <div class="blue-label lot-transfer-container__content-detail-info__number">
+                        {{100-percentageRejected | number : "1." + DECIMAL_DIGITS + "-" +
+                        DECIMAL_DIGITS : "en"}} %</div>
+                </div>
+            </div>
+            <div class="lot-transfer-container__content-summary__title">
+                {{'new-lot' | i18n | titlecase}}
+            </div>
+            <div class="lot-transfer-container__content-detail">
+                <div class="lot-transfer-container__content-detail-info">
+                    <div class="lot-transfer-container__content-detail-info__label">
+                        <div class="rotate-icon">
+                            <i class="red-label icon-arrow_icon"></i>
+                        </div>
+                        {{'output-quantity' | i18n}}:
+                    </div>
+                    <div class="lot-transfer-container__content-detail-info__number red-label">
+                        {{summary.rejectedWeightQQ| number : "1." + DECIMAL_DIGITS + "-" +
+                        DECIMAL_DIGITS : "en"}} {{summary.conversionMeasurementUnitAbbreviation}}</div>
+                </div>
+                <div class="lot-transfer-container__content-detail-info">
+                    <div class="lot-transfer-container__content-detail-info__label percentage-info">
+                        {{'percentage' | i18n}}:
+                    </div>
+                    <div class="blue-label lot-transfer-container__content-detail-info__number">{{percentageRejected| number : "2." + DECIMAL_DIGITS + "-" +
+                        DECIMAL_DIGITS : "en"}} %
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="lot-transfer-container__footer">
+        <app-action-footer (onActionSelected)="onEventTransferLot($event)" [buttonSubmitText]="'accept'">
+        </app-action-footer>
+    </div>
+</div>

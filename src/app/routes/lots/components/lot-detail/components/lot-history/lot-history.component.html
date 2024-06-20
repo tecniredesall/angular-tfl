@@ -1,0 +1,98 @@
+<div class="lot__history__container tr__scroll" (scroll)="onScroll($event)">
+  <div *ngFor="let event of history; let i = index">
+    <div class="lot__history__container__item">
+      <mat-divider *ngIf="i < history.length - 1" [vertical]="true"></mat-divider>
+      <div class="lot__history__container__icon"
+        [ngClass]="{'lot__history__container__icon-damage': event.type == TYPES.DAMAGE_LOT}">
+        <ng-container [ngSwitch]="event.type">
+          <i *ngSwitchCase="TYPES.CREATED" class="icon-lote"></i>
+          <i *ngSwitchCase="TYPES.TRANSITION_CREATED" class="icon-transition"></i>
+          <i *ngSwitchCase="TYPES.TRANSITION_UPDATED" class="icon-edit"></i>
+          <i *ngSwitchCase="TYPES.NOTE_CREATED" class="icon-calendar-edit"></i>
+          <i *ngSwitchCase="TYPES.NOTE_DELETED" class="icon-calendar-edit"></i>
+          <i *ngSwitchCase="TYPES.DAMAGE_LOT" class="icon-problem"></i>
+          <i *ngSwitchCase="TYPES.REPROCESS_LOT" class="icon-reprocess"></i>
+          <i *ngSwitchCase="TYPES.FINALIZED_LOT" class="icon-finished"></i>
+          <i *ngSwitchCase="TYPES.TASTING_CREATED" class="icon-cup"></i>
+        </ng-container>
+      </div>
+      <div class="lot__history__container__description"
+        [ngClass]="{'lot__history__container__description-damage': event.type == TYPES.DAMAGE_LOT}">
+        <ng-container [ngSwitch]="event.type">
+          <p class="font-sssb" *ngSwitchCase="TYPES.CREATED">
+            {{'lot-history-type-created' |i18n}}
+          </p>
+          <p class="font-sssb" *ngSwitchCase="TYPES.TRANSITION_CREATED">
+            {{'lot-transition' |i18n}}
+          </p>
+          <p class="font-sssb" *ngSwitchCase="TYPES.REPROCESS_LOT">
+            {{'lot-history-type-reprocessed' |i18n}}
+          </p>
+          <p class="font-sssb" *ngSwitchCase="TYPES.TASTING_CREATED">
+            {{'lot-history-type-cupping-created' |i18n}}
+          </p>
+        </ng-container>
+        <p>
+          <span class="font-sssb">{{event.author.email}}</span>
+          <ng-container [ngSwitch]="event.type">
+            <ng-container *ngSwitchCase="TYPES.CREATED">
+              {{'lot-history-type-created-description' |i18n}}
+              <span class="font-sssb">[{{event.folio}}].</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.TRANSITION_CREATED">
+              {{'lot-history-type-transition-created-description' |i18n}}
+              <span class="font-sssb">[{{event.payload.processName}}].</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.TRANSITION_UPDATED">
+              {{'lot-history-type-transition-updated-description' |i18n}}
+              <span class="font-sssb">[{{event.payload.processName}}].</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.NOTE_CREATED">
+              {{'lot-history-type-note-created-description' |i18n}}
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.NOTE_DELETED">
+              {{'lot-history-type-note-deleted-description' |i18n}}
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.DAMAGE_LOT">
+              {{'lot-history-type-damage-lot-description' |i18n}}
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.REPROCESS_LOT">
+              {{'lot-history-type-reprocess-lot-description' |i18n}}
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.FINALIZED_LOT">
+              {{'lot-history-type-finished-lot-description' |i18n}}
+            </ng-container>
+            <ng-container *ngSwitchCase="TYPES.TASTING_CREATED">
+              {{'lot-history-type-cupping-created-description' |i18n}}
+            </ng-container>
+          </ng-container>
+        </p>
+        <span class="lot__history__container__description_date">
+          {{event.createdAt | formatMoment : "MMM DD, YYYY ["+("at" | i18n)+"] HH:mm" : true}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="lot__history__container--loader" *ngIf="isLoadingHistory">
+    <div class="lot__history__container--loader__separator">
+      <div></div>
+      <mat-divider></mat-divider>
+    </div>
+    <div class="lot__history__container__item lot__history__container--loader__item">
+      <div class="lot__history__container__description lot__history__container--loader__description">
+        <p>
+        </p>
+        <div>
+          <div class="lot__history__container--loader__item__element">
+            <div></div>
+            <span></span>
+          </div>
+          <div class="lot__history__container--loader__item__element">
+            <div></div>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

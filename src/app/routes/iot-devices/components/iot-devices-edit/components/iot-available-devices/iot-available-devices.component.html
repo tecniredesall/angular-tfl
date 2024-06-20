@@ -1,0 +1,52 @@
+<h3 class="title-base--black">
+    {{ "available-devices" | i18n }}
+    <span class="title-counter">
+        {{ devices.length }}
+    </span>
+</h3>
+<section class="sil-table">
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__icon"></span>
+        <span class="sil-table__header-cell header__brand">
+            {{ "brand" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__model">
+            {{ "scales-model" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__ip">
+            {{ "scales-ip-address" | i18n | uppercase }}
+        </span>
+    </header>
+    <article
+        class="sil-table__row sil-table__row--bordered"
+        *ngFor="let device of devices"
+        (click)="onDeviceSelected(device)"
+        [ngClass]="{ selected: selectedDevice === device }"
+    >
+        <span class="sil-table__cell cell__icon">
+            <i class="icon-io-t"></i>
+        </span>
+        <span class="sil-table__cell cell__brand">
+            <span>
+                {{ device.brand ? device.brand : ("-" | uppercase) }}
+            </span>
+        </span>
+        <span class="sil-table__cell cell__model">
+            <span>
+                {{ device.model ? device.model : ("-" | uppercase) }}
+            </span>
+        </span>
+        <span class="sil-table__cell cell__ip">
+            <span>
+                {{ device | uppercase }}
+            </span>
+        </span>
+    </article>
+</section>
+<button
+    class="sil-form__header-button btn btn-transparent-blue btn-new-device"
+    (click)="onNewDevice()"
+>
+    <i class="icon-plus"></i>
+    {{ "new-device" | i18n }}
+</button>

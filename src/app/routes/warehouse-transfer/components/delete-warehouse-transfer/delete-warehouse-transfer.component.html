@@ -1,0 +1,24 @@
+<div class="delete-warehouse-transfer">
+    <div class="delete-warehouse-transfer__title">
+        {{'void-warehouse-transfer-title' | i18n | stringReplace : '[value]' : data.folio }}
+    </div>
+    <p class="delete-warehouse-transfer__subtitle">{{'void-warehouse-transfer-comment' |i18n}}</p>
+    <div class="delete-warehouse-transfer__reason">
+        <p>{{'void-warehouse-transfer-reason' | i18n}}</p>
+        <textarea
+            rows="4"
+            [formControl]="reasonDelete"
+            [placeholder]="'write-comment' | i18n"
+        ></textarea>
+    </div>
+    <div class="delete-warehouse-transfer__buttons">
+        <button class="delete-warehouse-transfer__buttons--cancel" (click)="cancel()">
+            {{ 'cancel' | i18n }}
+        </button>
+        <button class="delete-warehouse-transfer__buttons--accept"
+            [disabled]="reasonDelete.invalid"
+            (click)="deleteWeightNote()">
+            {{'void' | i18n}}
+        </button>
+    </div>
+</div>

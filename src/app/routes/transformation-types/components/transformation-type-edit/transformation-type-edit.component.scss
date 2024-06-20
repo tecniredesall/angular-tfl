@@ -1,0 +1,41 @@
+.sil-form {
+    .transfor-edit-form__transformations {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-areas:
+            "name"
+            "action";
+        .sil-form__section {
+            grid-area: name;
+        }
+        + .transfor-edit-form__transformations {
+            margin-top: 10px;
+        }
+        .sil-form__action-button {
+            grid-area: action;
+        }
+    }
+    .sil-form__action-button {
+        &.btn-transparent-delete {
+            padding: 10px 0;
+        }
+        &.btn-transparent-blue {
+            margin: 30px auto 0;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .sil-form {
+        .sil-form__section {
+            input {
+                max-width: 50%;
+            }
+        }
+        .sil-form__action-button {
+            &.btn-transparent-blue {
+                margin: 30px 0 0;
+            }
+        }
+    }
+}

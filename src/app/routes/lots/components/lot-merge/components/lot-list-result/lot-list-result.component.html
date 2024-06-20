@@ -1,0 +1,275 @@
+<div class="lot-list">
+    <div class="lot-list__body">
+        <div [ngClass]="isOnlyView ? 'lot-list__body__only-view': 'lot-list__body-check'">
+            <mat-checkbox *ngIf="!isOnlyView" color="primary" class="lot__all__selected" 
+                           (change)="onToggleSelectAll()"
+                           [checked]="isAllSelected"
+                           [indeterminate]="selectedLots.length > 0 && selectedLots.length !== lots.length">
+            </mat-checkbox>
+            <div class="lot-list__columns">
+                <div class="lot-list__area__data__toggle" (click)="onToggle()">
+                    <i *ngIf="!isOnlyView" class="icon-collapse no-select"></i>
+                </div>
+                <div class="tr__list__column__label lot-list__columns__toogle-status" (click)="onToggle()">
+                    <span class="no-select">
+                        {{
+                            ((lots | filterObjectArray: { opened: true }).length > 0
+                            ? "lots-list-view-fold-instruct"
+                            : "lots-list-view-unfold-instruct"
+                            ) | i18n
+                        }}
+                    </span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__creation">
+                    <span class="no-select lot-list__columns__sortable" (click)="sortData('createdDate')">
+                        <span>{{ "creation" | i18n | uppercase }}</span>
+                        <i [ngClass]="columnAscState.createdDate  ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                    </span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__id">
+                    <span class="no-select lot-list__columns__sortable" (click)="sortData('folio')">
+                        <span>{{ "lots-list-id" | i18n | uppercase }}</span>
+                        <i [ngClass]=" columnAscState.folio ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                    </span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__type">
+                    <span class="no-select lot-list__columns__sortable" (click)="sortData('commodityType')">
+                        <span>{{ "type" | i18n | uppercase }}</span>
+                        <i [ngClass]="columnAscState.commodityType ? 'icon-caret-down' : 'icon-caret-up'"></i>
+                    </span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__warehouse">
+                    <span class="no-select lot-list__columns__sortable" (click)="sortData('warehouse')">
+                        <span>{{ "warehouse" | i18n | uppercase }}</span>
+                        <i [ngClass]="columnAscState.warehouse  ? 'icon-caret-down': 'icon-caret-up'"></i>
+                    </span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__net-weight">
+                    <span class="no-select lot-list__columns__sortable" (click)="sortData('weightQQ')">
+                        <span>{{ "featured-weight" | i18n | uppercase }}</span>
+                        <i [ngClass]="columnAscState.weightQQ ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                    </span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__total-notes">
+                    <span>{{ "lots-list-number-notes" | i18n | uppercase }}</span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__flow">
+                    <span>{{ "lots-list-flow" | i18n | uppercase }}</span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__process">
+                    <span>{{ "lots-list-process" | i18n | uppercase }}</span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__seals">
+                    <span>{{ "seals" | i18n | uppercase }}</span>
+                </div>
+                <div class="tr__list__column__label lot-list__area__data__actions">
+                </div>
+            </div>
+        </div>
+
+        <!-- Rows -->
+        <mat-accordion multi>
+            <ng-container *ngFor="let lot of lots; let idxLot = index">
+                <div [ngClass]="isOnlyView ? 'lot-list__body__only-view': 'lot-list__body-check'">
+                    <mat-checkbox *ngIf="!isOnlyView" 
+                                  color="primary" 
+                                  class="lot__checkbox"
+                                  (change)="onToggleSelectLot(lot)" 
+                                  [checked]="lot.isSelected">
+                    </mat-checkbox>
+                    <mat-expansion-panel hideToggle 
+                                         (opened)="onOpenedPanelEvent(idxLot)"
+                                         (closed)="onOpenedPanelEvent(idxLot)" 
+                                         #lotPanel>
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" 
+                                                    [expandedHeight]="'auto'">
+                            <ng-container [ngTemplateOutlet]="panelHeader" 
+                                          [ngTemplateOutletContext]="{
+                                                                        panel: lotPanel,
+                                                                        data: lot
+                                                                      }">
+                            </ng-container>
+                        </mat-expansion-panel-header>
+                        <ng-container [ngTemplateOutlet]="panelBody" 
+                                      [ngTemplateOutletContext]="{ data: lot.weightNotes }">
+                        </ng-container>
+                    </mat-expansion-panel>
+                </div>
+            </ng-container>
+        </mat-accordion>
+    </div>
+</div>
+
+
+<!-- Panel header template -->
+<ng-template #panelHeader let-panel="panel" let-data="data">
+    <div class="lot-list__panel__header">
+        <div class="lot-list__area__data__toggle">
+            <i class="lot-list__area__data__toggle__icon icon-arrow_right no-select" 
+               [ngClass]="{ 'lot-list__area__data__toggle__icon--rotated':  panel.expanded }">
+            </i>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__creation">
+            <span>{{ "creation" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__creation">
+            <div class="lot-list__area__data__creation__value">
+                <div class="lot-list__area__data__creation__value__date">
+                    {{ data.createdDate | formatMoment: 'MMM DD, YYYY HH:mm' : true }}
+                </div>
+                <div class="lot-list__area__data__creation__value__creator">
+                    {{ data.creatorUser }}
+                </div>
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__id">
+            <span>{{ "lots-list-id" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__id">
+            <div class="lot-list__area__data__id__value">
+                {{ data.folio }}
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__type">
+            <span>{{ "type" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__type">
+            <div class="lot-list__area__data__type__value">
+                {{ data.commodityType }}
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__warehouse" *ngIf="!isProcessedMode">
+            <span>{{ "warehouse" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__warehouse" *ngIf="!isProcessedMode">
+            <div class="lot-list__area__data__warehouse__value">
+                {{ data.warehouse }}
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__net-weight">
+            <span>{{ "featured-weight" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__net-weight">
+            <div class="lot-list__area__data__net-weight__value">
+                {{ data.weightQQ | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }}
+                {{ configuration.conversionMeasurementUnitAbbreviation }}
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__total-notes">
+            <span>{{ "lots-list-number-notes" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__total-notes">
+            <div class="lot-list__area__data__total-notes__value">
+                <i class="icon-icon-menu-notas no-select"></i>
+                &nbsp;
+                <span>
+                    {{ data.totalNotes | number: "2.0-0":"en" }}
+                </span>
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__flow">
+            <span>{{ "lots-list-flow" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__flow">
+            <div class="lot-list__area__data__flow__value">
+                <span [ngClass]="{
+                                    tr__lot__type__nano: LOT_TYPES.NANO_LOTE == data.productionTypeName,
+                                    tr__lot__type__micro: LOT_TYPES.MICRO_LOTE == data.productionTypeName,
+                                    tr__lot__type__macro: LOT_TYPES.MACRO_LOTE == data.productionTypeName
+                                 }">
+                    {{ data.productionTypeName | i18n }}
+                </span>
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__process" *ngIf="!isProcessedMode">
+            <span>{{ "lots-list-process" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__process" *ngIf="!isProcessedMode">
+            <div class="lot-list__area__data__process__value">
+                <div class="lot-list__area__data__process__value__name">
+                    <span class="lot-list__area__data__process__value__name__mark">
+                        <div class="lot-list__area__data__process__value__name__mark__dot"
+                            [ngStyle]="{ backgroundColor: data.processColor }"></div>
+                    </span>
+                    <span>
+                        {{ data.process | i18n}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="lot-list__area__label lot-list__area__label__seals">
+            <span>{{ "seals" | i18n }}</span>
+        </div>
+        <div class="lot-list__area__data__seals">
+            <div class="lot-list__area__data__seals__value">
+                <div>
+                    <span *ngFor="let seal of data.seals" 
+                          [matTooltip]="seal.name" 
+                          matTooltipPosition="below"
+                          matTooltipClass="lot-list__area__data__seals__value__tooltip">
+                        <img [src]="seal.image | safeContent: 'url'" />
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="lot-list__area__data__actions">
+        </div>
+    </div>
+</ng-template>
+
+<!-- Panel body template -->
+<ng-template #panelBody let-data="data">
+    <div class="lot-list__panel__body">
+        <div class="lot-list__panel__body__row" *ngFor="let note of data">
+            <div class="lot-list__area__data__toggle">
+                <i class="icon-icon-menu-notas no-select lot-list__area__data__toggle__icon"></i>
+            </div>
+            <div class="lot-list__area__label lot-list__area__label__creation">
+                <span>{{ "creation" | i18n }}</span>
+            </div>
+            <div class="lot-list__area__data__creation">
+                <div class="lot-list__area__data__creation__value">
+                    <div class="lot-list__area__data__creation__value__date">
+                        {{ note.createdDate | formatMoment: 'MMM DD, YYYY HH:mm' : true }}
+                    </div>
+                    <div class="lot-list__area__data__creation__value__creator">
+                        {{ note.creatorUser }}
+                    </div>
+                </div>
+            </div>
+            <div class="lot-list__area__label lot-list__area__label__id">
+                <span>{{ "lots-list-id" | i18n }}</span>
+            </div>
+            <div class="lot-list__area__data__id">
+                <div class="lot-list__area__data__id__value">
+                    {{ note.transactionInId }}
+                </div>
+            </div>
+            <div class="lot-list__area__data__type">
+                <div class="lot-list__area__data__type__value"></div>
+            </div>
+            <div class="lot-list__area__data__warehouse" *ngIf="!isProcessedMode"></div>
+            <div class="lot-list__area__data__net-weight">
+            </div>
+            <div class="lot-list__area__data__total-notes"></div>
+            <div class="lot-list__area__data__flow"></div>
+            <div class="lot-list__area__data__process" *ngIf="!isProcessedMode"></div>
+            <div class="lot-list__area__label lot-list__area__label__seals">
+                <span>{{ "seals" | i18n }}</span>
+            </div>
+            <div class="lot-list__area__data__seals">
+                <div class="lot-list__area__data__seals__value">
+                    <div>
+                        <span *ngFor="let seal of note.seals" 
+                               [matTooltip]="seal.name" 
+                               matTooltipPosition="below"
+                               matTooltipClass="lot-list__area__data__seals__value__tooltip">
+                            <img [src]="seal.image | safeContent: 'url'" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="lot-list__area__data__actions"></div>
+        </div>
+    </div>
+</ng-template>

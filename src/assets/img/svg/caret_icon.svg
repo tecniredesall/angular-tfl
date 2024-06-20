@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="6px" viewBox="0 0 10 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Icon/Caret</title>
+    <desc>Created with Sketch.</desc>
+    <g id="SiloSys-match" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="SS_Tickets-match" transform="translate(-1044.000000, -447.000000)" fill="#69707F">
+            <g id="Icon/Caret" transform="translate(1041.000000, 442.000000)">
+                <path d="M12.849896,9.63848755 L8.36159385,5.14972949 C8.16175913,4.95009017 7.83810244,4.95009017 7.6384957,5.14972949 L3.14970506,9.63848755 C2.95009831,9.838192 2.95009831,10.1618161 3.14970506,10.3615206 L3.51123785,10.7230534 C3.7108446,10.9228881 4.0347944,10.9228881 4.23453141,10.7230534 L8,6.95739345 L11.7655907,10.7230534 C11.9651649,10.9228881 12.2889518,10.9228881 12.4886237,10.7230534 L12.8501565,10.3615206 C13.0499912,10.1615882 13.0499912,9.838192 12.849896,9.63848755 Z" id="🎨-Icon-color" transform="translate(8.000000, 7.936465) scale(1, -1) translate(-8.000000, -7.936465) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

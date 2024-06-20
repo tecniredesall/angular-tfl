@@ -1,0 +1,130 @@
+<div class="action-commodity-container">
+
+    <!-- header -->
+    <div class="action-commodity__header">
+        <div class="action-commodity__header-title">
+            {{ isEdit ? ('edit-commodity' | i18n) : ('new-commodity' | i18n) }}
+        </div>
+    </div>
+
+    <div class="row action-commodity__body">
+        <form [formGroup]="commodityForm" novalidate>
+            <!-- Commodity -->
+            <div class="action-commodity__input-container col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <label class="action-commodity__label-input">
+                    {{ 'commodityM' | i18n }}*
+                </label>
+                <ng-select formControlName="generalCommodity" class="action-commodity__control custom-ng-select"
+                    [items]="commodities" [multiple]="false" [closeOnSelect]="true" [clearable]="true"
+                    [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingCommodities" bindLabel="name"
+                    placeholder="{{'select-cmodity-general' | i18n}}" loadingText="{{'loading' | i18n}}"></ng-select>
+                <label
+                    *ngIf="(commodityForm.get('generalCommodity').dirty || isEdit) && commodityForm.get('generalCommodity').hasError('required')"
+                    class="error-msg-form">
+                    {{'is-required-msg' | i18n}}
+                </label>
+            </div>
+            <!-- Name -->
+            <div class="action-commodity__input-container col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <label class="action-commodity__label-input">
+                    {{ 'name' | i18n }}
+                </label>
+                <input formControlName="name" type="text" class="action-commodity__control create-input"
+                    [placeholder]="null==commodityForm.get('generalCommodity').value ? ('placeholder-alias-commodity-name' | i18n) : commodityForm.get('generalCommodity').value.name"
+                    autocomplete="off">
+                <label *ngIf="commodityForm.get('name').dirty || isEdit" class="error-msg-form">
+                    <label *ngIf="commodityForm.get('name').hasError('pattern')">
+                        {{'alphanumeric-pattern' | i18n}}
+                    </label>
+                    <label *ngIf="commodityForm.get('name').hasError('maxlength')">
+                        {{'input-max-length-value' | i18n | stringReplace : '[value]' :
+                        CONSTANTS.MAX_LENGTH_COMMODITY_ALIAS_NAME}}
+                    </label>
+                </label>
+            </div>
+            <!-- TODO: Comment for release a prod, uncomment in version 21 -->
+            <!-- <div class="action-commodity__input-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <p class="label-form-title" > {{'measure-settings' | i18n }} </p>
+            </div> -->
+            <!-- TODO: Comment for release a prod, uncomment in version 21 -->
+            <!-- Recepcion de Pesajes -->
+            <!-- <div class="action-commodity__input-container col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="action-commodity__content">
+                    <label class="action-commodity__content__label"></label>
+                    {{ 'weigth-in-reception' | i18n }} *
+                    <div>
+                        <span class="note-information" #tooltip="matTooltip"
+                        matTooltip="{{ 'weigth-in-reception-legend' | i18n }}"
+                        matTooltipPosition="below"
+                        matTooltipHideDelay="100000">i </span>
+                    </div>
+                </div>
+
+                <ng-select formControlName="measureUnitInId" class="action-commodity__control custom-ng-select"
+                    [items]="units"
+                    [multiple]="false"
+                    [closeOnSelect]="true"
+                    [clearable]="true"
+                    [notFoundText]="'not-items-found' | i18n"
+                    [loading]="isLoadingCommodities"
+                    placeholder="{{'weigth-in-reception-placeholder' | i18n}}"
+
+                    [bindLabel]="'name'"
+                    [bindValue]="'measurementUnitId'"
+                    loadingText="{{'loading' | i18n}}"
+                    (change)="onWigthReception($event)"
+                    >
+
+                </ng-select>
+                <label
+                    *ngIf="(commodityForm.get('measureUnitInId').dirty || isEdit) && commodityForm.get('measureUnitInId').hasError('required')"
+                    class="error-msg-form">
+                    {{'is-required-msg' | i18n}}
+                </label>
+            </div> -->
+
+            <!-- TODO: Comment for release a prod, uncomment in version 21 -->
+            <!-- Conversion para totales -->
+            <!-- <div class="action-commodity__input-container col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="action-commodity__content">
+                    <label class="action-commodity__content__label"></label>
+                    {{ 'conversion-for-totals' | i18n }} *
+                    <div>
+                        <span class="note-information" #tooltip="matTooltip"
+                        matTooltip="{{ 'conversion-for-totals-legend' | i18n }}"
+                        matTooltipPosition="below"
+                        matTooltipHideDelay="100000">i </span>
+                    </div>
+                </div>
+
+                <ng-select formControlName="measureUnitOutId" class="action-commodity__control custom-ng-select"
+                    [items]="unitsForTotals"
+                    [multiple]="false"
+                    [closeOnSelect]="true"
+                    [clearable]="true"
+                    [notFoundText]="'not-items-found' | i18n"
+                    [loading]="isLoadingUnitsMeasure"
+                    [bindLabel]="'conversionMeasurementUnitName'"
+                    [bindValue]="'conversionMeasurementUnitId'"
+                    placeholder="{{'conversion-for-placeholder' | i18n}}"
+                    loadingText="{{'loading' | i18n}}">
+
+                </ng-select>
+                <label
+                    *ngIf="(commodityForm.get('measureUnitOutId').dirty || isEdit) && commodityForm.get('measureUnitOutId').hasError('required')"
+                    class="error-msg-form">
+                    {{'is-required-msg' | i18n}}
+                </label>
+            </div> -->
+            <div class="clearfix"></div>
+        </form>
+    </div>
+
+    <div class="action-commodity__footer">
+        <app-action-footer [isEdit]="isEdit"
+            [isButtonSubmitDisabled]="commodityForm.invalid || commodityForm.pending || (isEdit && !dataWasMadeModified) || null!=indexVarietyDelete"
+            [isButtonCancelDisabled]="null!=indexVarietyDelete" (onActionSelected)="onActionFooterSelected($event)">
+        </app-action-footer>
+    </div>
+
+</div>

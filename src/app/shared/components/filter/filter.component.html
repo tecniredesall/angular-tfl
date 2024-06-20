@@ -1,0 +1,425 @@
+<div class="sil-container sil-container--filled">
+    <header class="sil-form__header">
+        <h1 class="sil-form__title">
+            {{ "filters" | i18n }}
+        </h1>
+        <button type="button" class="btn btn-transparent-blue sil-form__action-button filter-form__delete-filters"
+            (click)="onClearFilters()" [disabled]="!hasSelectedFilters">
+            {{ "delete-filters" | i18n }}
+        </button>
+    </header>
+    <form class="sil-form" *ngIf="form" [formGroup]="form"
+        [ngClass]="filter.producersRequired ? 'margin-width-producer ': ''">
+        <div class="sil-form__content">
+            <section class="filter-form__date-range">
+                <h3 class="title-base--black">{{ "date" | i18n }}</h3>
+                <div class="sil-form__section date-range__start">
+                    <label>{{ "from" | i18n }}</label>
+                    <div formGroupName="date">
+                        <app-custom-date-picker formControlName="start" [dateFormat]="dateFormatInput"
+                            [placeholder]="'placeholder-date'" [maxDate]="form.get('date').get('end').value"
+                            class="sil-form__input" [hasInputClass]="false">
+                        </app-custom-date-picker>
+                        <p class="sil-form__profile-text">
+                            {{ form.get('start').value | date: dateFormatLabel }}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="sil-form__section date-range__end">
+                    <label>{{ "to" | i18n }}</label>
+                    <div formGroupName="date">
+                        <app-custom-date-picker formControlName="end" [dateFormat]="dateFormatInput"
+                            [placeholder]="'placeholder-date'" [minDate]="form.get('date').get('start').value"
+                            class="sil-form__input" [hasInputClass]="false">
+                        </app-custom-date-picker>
+                        <p class="sil-form__profile-text">
+                            {{ form.get('date').get('end').value | date: dateFormatLabel }}
+                        </p>
+
+                    </div>
+                </div>
+                <label *ngIf="
+                        form
+                            .get('date')
+                            .get('start')
+                            .hasError('matDatepickerMax')
+                    " class="sil-form__section__error-message">
+                    {{ "filter-max-date-from" | i18n }}
+                </label>
+            </section>
+            <ng-container *ngIf="filter.sealsRequired">
+                <section class="sil-form__section filter-form__seals"
+                    *blockUI="'seals-section'; template: templateBlockModalUiComponent">
+                    <h3 class="title-base--black">{{ "seals" | i18n }}</h3>
+                    <div class="filter-form__seals-container">
+                        <ng-container *ngFor="let seal of seals">
+                            <article class="filter-form__seal" (click)="onSealSelected(seal.id)">
+                                <div class="seal__frame" [ngClass]="{
+                                    selected:
+                                        form
+                                            .get('seals')
+                                            .value.indexOf(
+                                                seal.id
+                                            ) !== -1
+                                }">
+                                    <img [src]="seal.image | safeContent : 'url'" />
+                                    <i *ngIf="form.get('seals').value.indexOf(seal.id) !== -1" class="icon-check"></i>
+                                </div>
+                                <label class="seal__label">{{ seal.name }}</label>
+                            </article>
+                        </ng-container>
+                    </div>
+                </section>
+            </ng-container>
+            <ng-container *ngIf="filter.producersRequired">
+                <section class="sil-form__section filter-form__producers">
+                    <h3 class="title-base--black mrg-top-0">{{ "t-producers" | i18n }}</h3>
+                    <custom-select formControlName="producer" [placeholder]="'select-producer' | i18n"
+                        [items]="producers" [clearable]="true" [bindLabel]="'fullName'"
+                        [emptyLabel]="'producers-empty-label' | i18n" [emptyImage]="'assets/img/svg/empty-producer.svg'"
+                        [isLoading]="isLoadingProducers" [isVisibleRequiredMark]="false"
+                        [searchPlaceholder]="'search-producer' | i18n" (onSearch)="onSearchProducer($event)"
+                        (onNextPage)="paginatorProducer()" (clear)="getProducers(null,{})">
+                    </custom-select>
+                </section>
+            </ng-container>
+            <section class="sil--form__section filter-form__status" *ngIf="filter.status">
+                <h3 class="title-base--black">{{ "receiving-note-status" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of filter.status.lookups | keyvalue">
+                        <button type="button" (click)="onStatusSelected(status.value)"
+                            class="btn btn-default button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--closed':
+                                    status.value === RECEIVING_NOTE_STATUS.CLOSED,
+                                'filter-form__status-button--open':
+                                    status.value === RECEIVING_NOTE_STATUS.OPEN,
+                                selected:
+                                    form.get('status').value.indexOf(status.value) !==
+                                    -1
+                            }">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="form.get('status').value.indexOf(status.value) !==
+                            -1"></i>
+                            <ng-container *ngIf="status.value === RECEIVING_NOTE_STATUS.CLOSED">
+                                <i class="icon-note-close"></i>&nbsp;
+                                {{ "closed" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.value === RECEIVING_NOTE_STATUS.OPEN">
+                                <i class="icon-note-open"></i>&nbsp;
+                                {{ "open" | i18n }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+
+             <!-- Users -->
+             <section class="filter-form__user" *ngIf="filter.users?.required">
+                <h3 class="title-base--black">{{ filter.users.label | i18n }}</h3>
+                <div>
+                    <div class="sil-form__section">
+                        <ng-select formControlName="users" class="lot-results-filter__control custom-ng-select"
+                            [items]="_users" [multiple]="true" [closeOnSelect]="true" [clearable]="true"
+                            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingUsers" bindLabel="name"
+                            placeholder="{{'select-user' | i18n}}" loadingText="{{'loading' | i18n}}"
+                            >
+                        </ng-select>
+                    </div>
+                </div>
+            </section>
+
+            <!--productionStatus payment status -->
+            <section class="sil--form__section filter-form__status" *ngIf="filter.productionStatus">
+                <h3 class="title-base--black">{{ "production_status" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of filter.productionStatus.lookups | keyvalue">
+                        <button type="button" (click)="onProductionStatus(status.value)"
+                            class="btn btn-default button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--in-process':
+                                    status.value === RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS,
+                                'filter-form__status-button--processed':
+                                    status.value === RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED,
+                                'filter-form__status-button--unprocessed':
+                                    status.value === RECEIVING_NOTE_PRODUCTION_STATUS.UNPROCESSED,
+                                selected:
+                                    form.get('productionStatus').value.indexOf(status.value) !==
+                                    -1
+                            }">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="form.get('productionStatus').value.indexOf(status.value) !==
+                            -1"></i>
+                            <ng-container>
+                                <i [ngClass]="{
+                                    'icon-in-process': status.value == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS,
+                                    'icon-processed': status.value == RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED,
+                                    'icon-unprocessed': status.value == RECEIVING_NOTE_PRODUCTION_STATUS.UNPROCESSED
+                                }"></i>&nbsp;
+                                {{
+                                    (status.value  ==
+                                        RECEIVING_NOTE_PRODUCTION_STATUS.PROCESS
+                                            ? "receiving-note-production-status-in-process"
+                                            : status.value  ==
+                                            RECEIVING_NOTE_PRODUCTION_STATUS.PROCESSED ?  "receiving-note-production-status-processed"
+                                                : "unprocessed"
+                                        ) | i18n
+                                }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- Payment status -->
+            <section class="sil--form__section filter-form__status" *ngIf="filter.paymentStatus">
+                <h3 class="title-base--black">{{ "payment_status" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of filter.paymentStatus.lookups | keyvalue: keepOrder">
+                        <button type="button" (click)="onPaymentStatus(status.value)"
+                            class="btn btn-default button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--in-process':
+                                    status.value === PAYMENT_STATUS.PROCESS,
+                                'filter-form__status-button--liquidated':
+                                    status.value === PAYMENT_STATUS.LIQUIDATED,
+                                'filter-form__status-button--unsettled':
+                                    status.value === PAYMENT_STATUS.UNSETTLED,
+                                selected:
+                                    form.get('paymentStatus').value.indexOf(status.value) !==
+                                    -1
+                            }">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="form.get('paymentStatus').value.indexOf(status.value) !==
+                            -1"></i>
+                            <ng-container >
+                                <i [ngClass]="{
+                                    'icon-in-process': status.value == PAYMENT_STATUS.PROCESS,
+                                    'icon-note-open': status.value == PAYMENT_STATUS.LIQUIDATED,
+                                    'icon-unsettled': status.value == PAYMENT_STATUS.UNSETTLED
+                                }"></i>&nbsp;
+                                {{
+                                    (status.value ==
+                                         PAYMENT_STATUS.PROCESS
+                                            ? "receiving-note-production-status-in-process"
+                                            : status.value ==
+                                            PAYMENT_STATUS.LIQUIDATED ?  "purchase-order-liquidated"
+                                                : "unsettled"
+                                        ) | i18n
+                                }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- Purchase order general status -->
+            <section class="sil--form__section filter-form__status" *ngIf="filter.purchaseOrderStatusWN ">
+                <h3 class="title-base--black">{{ "filter-retention-orders-label-status-wn" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of filter.purchaseOrderStatusWN.lookups | keyvalue ">
+                        <button type="button" (click)="onPurchaseOrderStatusWN(status.value)"
+                            class="btn btn-default button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--liquidated':
+                                    status.value === PURCHASE_ORDER_STATUS.LIQUIDATE,
+                                'filter-form__status-button--unsettled':
+                                    status.value === PURCHASE_ORDER_STATUS.CREATED,
+                                selected:
+                                    form.get('purchaseOrderStatusWN').value.indexOf(status.value) !==
+                                    -1
+                            }">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="form.get('purchaseOrderStatusWN').value.indexOf(status.value) !==
+                            -1"></i>
+                            <ng-container >
+                                <i [ngClass]="{
+                                    'icon-note-open': status.value == PURCHASE_ORDER_STATUS.LIQUIDATE,
+                                    'icon-unsettled': status.value == PURCHASE_ORDER_STATUS.CREATED
+                                }"></i>&nbsp;
+                                {{
+                                    (status.value == PURCHASE_ORDER_STATUS.CREATED ? "unsettled" : "purchase-order-liquidated") | i18n
+                                }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- Characteristics -->
+            <section class="filter-form__characteristics" *ngIf="filter.characteristics && !isLoadingCharacteristics">
+                <h3 class="title-base--black">{{ "characteristics" | i18n }}</h3>
+                <div>
+                    <div class="sil-form__section">
+                        <ng-container formArrayName="characteristics" *ngFor="
+                            let characteristic of form.get('characteristics')
+                                .controls;
+                            let i = index
+                        ">
+                            <ng-container [formGroupName]="i">
+                                <div class="section__controls" [ngClass]="{
+                                    'section__controls--unselected': characteristic.value.type == '',
+                                    'section__controls--type__choice': characteristic.value.type == DEDUCTION_TYPE.CHOICE,
+                                    'section__controls--type__input--equal': characteristic.value.type == DEDUCTION_TYPE.INPUT &&
+                                        characteristic.value.operationType != CHARACTERISTICS_FILTER_OPERATION_TYPE.RANGE,
+                                    'section__controls--type__input--range': characteristic.value.type == DEDUCTION_TYPE.INPUT &&
+                                         characteristic.value.operationType == CHARACTERISTICS_FILTER_OPERATION_TYPE.RANGE
+                                  }">
+                                    <section class="form__select-characteristic">
+                                        <custom-select
+                                            formControlName="characteristic"
+                                            [label]="'commodity-feature' | i18n"
+                                            [items]="availableCharacteristics"
+                                            [bindLabel]="'name'"
+                                            [emptyLabel]="'not-items-found' | i18n"
+                                            [isLoading]="isLoadingCharacteristics"
+                                            [searchPlaceholder]="'search-characteristic-placeholder' | i18n"
+                                            (onSelect)="setCharacteristic(i)"
+                                            >
+                                        </custom-select>
+                                    </section>
+
+                                    <ng-container *ngIf="characteristic.value.type === DEDUCTION_TYPE.INPUT">
+                                        <section class="form__select-value">
+                                            <label for="value" >{{ (characteristic.value.operationType != CHARACTERISTICS_FILTER_OPERATION_TYPE.RANGE ?
+                                                "value" : "from") | i18n | titlecase  }}*</label>
+                                            <input class="sil-form__input" type="number"  formControlName="value" placeholder="0.00" onlyNumber autocomplete="off"
+                                                />
+                                        </section>
+                                        <section class="form__select-range" *ngIf="characteristic.value.operationType == CHARACTERISTICS_FILTER_OPERATION_TYPE.RANGE">
+                                            <label for="maxValue" >{{ "to" | i18n | titlecase  }}*</label>
+                                            <input class="sil-form__input" type="number"  formControlName="maxValue" placeholder="0.00" onlyNumber autocomplete="off"
+                                                />
+                                        </section>
+                                        <section class="form__select--operationType">
+                                            <mat-radio-group formControlName="operationType" class="sil-form__radio" (change)="setCharacteristicsValidators(i)">
+                                                <mat-radio-button *ngFor="let operationType of CHARACTERISTICS_FILTER_OPERATION_TYPE_DESCRIPTION"
+                                                    [value]="operationType.id" >
+                                                    {{operationType.label |i18n}}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </section>
+                                    </ng-container>
+
+                                    <section class="form__select-choice--selection" *ngIf="characteristic.value.type === DEDUCTION_TYPE.CHOICE">
+                                        <custom-select
+                                            formControlName="selectedChoice"
+                                            [label]="'select' | i18n"
+                                            [items]="characteristic.get('choices').value"
+                                            [emptyLabel]="'not-items-found' | i18n"
+                                            [isLoading]="isLoadingCharacteristicChoices"
+                                            class="form__select-characteristic"
+                                            >
+                                        </custom-select>
+                                    </section>
+                                    <section class="form__icon-delete">
+                                        <button class="btn-delete btn btn-default"
+                                            (click)="removeCharacteristic(i)">
+                                            <i class="icon-erase"></i>
+                                        </button>
+                                    </section>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+
+                    </div>
+                </div>
+                <button class="add--button btn btn-transparent-blue"
+                    (click)="addCharacteristic()"
+                    [disabled]="(form.get('characteristics').controls).length >= _characteristics.length">
+                    <i class="icon-plus"></i>
+                    {{ "add" | i18n }}
+                </button>
+            </section>
+
+            <!-- Rentention Order Status -->
+            <section class="sil--form__section filter-form__status" *ngIf="filter.retentionOrderStatus">
+                <h3 class="title-base--black">{{ "filter-retention-orders-label-status" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of filter.retentionOrderStatus.status">
+                        <button type="button" (click)="onRetentionOrderSelected(status.status)"
+                            class="btn btn-default button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--closed':
+                                    status.status === RETENTION_ORDER_STATUS.CLOSED,
+                                'filter-form__status-button--open':
+                                    status.status === RETENTION_ORDER_STATUS.OPEN,
+                                'filter-form__status-button--canceled':
+                                    status.status === RETENTION_ORDER_STATUS.DISABLED,
+                                selected: status.selected  }">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="status.selected"></i>
+                            <ng-container *ngIf="status.status === RETENTION_ORDER_STATUS.CLOSED">
+                                <i class="icon-note-close"></i>&nbsp;
+                                {{ "closed" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.status === RETENTION_ORDER_STATUS.OPEN">
+                                <i class="icon-note-open"></i>&nbsp;
+                                {{ "open" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.status === RETENTION_ORDER_STATUS.DISABLED">
+                                <i class="icon-note-canceled"></i>&nbsp;
+                                {{ "retention-order-status-voided" | i18n }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+
+
+            <!-- Shippin Ticket -->
+            <section class="sil--form__section filter-form__status" *ngIf="filter.shippingTicketStatus">
+                <h3 class="title-base--black">{{ filter.shippingTicketStatus.sectionName | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let item of filter.shippingTicketStatus.filters">
+                        <button type="button" (click)="onFilterStatusSelected(item)"
+                            class="btn btn-default button-lg filter-form__status-button"
+                             [ngClass]="[item.cssButton.cssButton, (item.selected? 'selected': '')]">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="item.selected"></i>
+                            <ng-container >
+                                <i [ngClass]="[item.cssButton.icon]"></i>&nbsp;
+                                {{ item.cssButton.label | i18n }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- Weight Note Status  -->
+            <section class="sil--form__section filter-form__status" *ngIf="filter.weightNoteStatus">
+                <h3 class="title-base--black">{{ "weight-note-status" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of filter.weightNoteStatus?.lookups | keyvalue">
+                        <button type="button" (click)="onWeightNoteStatus(status.value)"
+                            class="btn btn-default button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--closed':
+                                    status.value === WEIGHT_NOTE_STATUS.CLOSED,
+                                     'filter-form__status-button--canceled':
+                                    status.value === WEIGHT_NOTE_STATUS.DELETED,
+                                'filter-form__status-button--open':
+                                    status.value === WEIGHT_NOTE_STATUS.OPEN,
+                                selected:
+                                    form.get('weightNoteStatus').value.indexOf(status.value) !==
+                                    -1}">
+                            <i class="icon-check filter-form__status-button__check"
+                                *ngIf="form.get('weightNoteStatus').value.indexOf(status.value) !== -1"></i>
+
+                            <ng-container *ngIf="status.value === WEIGHT_NOTE_STATUS.CLOSED">
+                                <i class="icon-note-close"></i>&nbsp;
+                                {{ "closed" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.value === WEIGHT_NOTE_STATUS.OPEN">
+                                <i class="icon-note-open"></i>&nbsp;
+                                {{ "open" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.value === WEIGHT_NOTE_STATUS.DELETED">
+                                <i class="icon-note-canceled"></i>&nbsp;
+                                {{ "voided" | i18n }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+        </div>
+        <section class="sil-form__section-form-action-buttons">
+            <button type="button" class="btn btn-resize gray-btn button-lg" (click)="onCancelClick()">
+                {{ "cancel" | i18n }}
+            </button>
+            <button type="button" class="btn btn-resize blue-btn button-lg" [disabled]="form?.invalid || form?.pristine"
+                (click)="onApplyClick()">
+                {{ "apply" | i18n }}
+            </button>
+        </section>
+    </form>
+</div>

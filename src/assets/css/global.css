@@ -1,0 +1,41 @@
+.spinner{
+    border: 5px dotted #979797 !important;
+}
+/*a{
+    background: #0068d1 !important;
+}*/
+
+#div_farms .spinner{
+    background-color: #979797;
+    width: 20px;
+    height: 20px;
+}
+
+#types a.down,#commodities a.down, #group a.down {
+    background-color:#07538b;
+}
+
+@media screen and (max-width: 1800px) {
+    button #generar_reporte{
+        height: 45px !important;
+        width: 45px !important;
+        margin-right: 5px;
+    }
+    .report-image img{
+        margin-top: 0px !important;
+        margin-left: 0px !important;
+    }
+    .send-form a{
+        margin-left: 20px;
+    }
+    .reports{
+        margin-left: -40px;
+    }
+
+    .send-form-title span {
+        margin-left: 28px !important;
+    }
+
+}
+
+

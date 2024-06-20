@@ -1,0 +1,480 @@
+<div class="panel-container-overflow scroll-view-app">
+    <div class="shipping-ticket" *blockUI="'shipping-ticket-detail'; template: templateBlockModalUiComponent">
+        <div class="shipping-ticket__back-list" [routerLink]="['/routes/shipping-ticket']">
+            <i class="icon-arrow_icon"></i>
+            <span>{{ "back-to-list" | i18n }}</span>
+        </div>
+        <div class="shipping-ticket__title-detail">
+            <div class="shipping-ticket__title-detail__name">
+                {{'shipping-ticket-detail' | i18n}}
+            </div>
+            <div class="shipping-ticket__title-detail__date">
+                <div class="information">
+                    <div>{{'created' | i18n}}:</div>
+                    <div class="created shipping-ticket-right-title">
+                        {{shippingTicket.generalInformation.createdNameUser}},&nbsp;
+                        {{shippingTicket.generalInformation.creationDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}
+                    </div>
+                </div>
+                <div class="information">
+                    <div>{{'last-edition' | i18n}}:</div>
+                    <div class="shipping-ticket-right-title">
+                        {{shippingTicket.generalInformation.updatedNameUser || ' ---- '}},&nbsp;
+                        {{
+                        shippingTicket.generalInformation.updatedNameUser ?
+                        (shippingTicket.generalInformation.updatedDate | formatMoment : 'MMM DD, YYYY HH:mm' : true) :
+                        ' ---- '
+                        }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shipping-ticket__container-detail">
+            <div class="shipping-ticket__container-detail-description">
+                <div class="shipping-ticket__container-detail-description__company-info">
+                    <div class="icon">
+                        <img src="./assets/img/svg/menu/logo-icon.svg" />
+                    </div>
+                    <div class="description">
+                        <div class="description__ticket-number">
+                            <span class="description__ticket-number__folio">
+                                #{{shippingTicket.generalInformation.folio}}</span>
+                            <span class="description__ticket-number__title">{{'shipping-ticket' | i18n}}</span>
+                        </div>
+                        <div class="description__ticket-information">
+                            <div class="company-title">{{companyInfo.name}}</div>
+                            <div>
+                                <span class="company-title">{{"phone" | i18n}}: </span>
+                                <span>{{companyInfo.phone}}</span>
+                            </div>
+                            <div>
+                                <span class="company-title">{{"flo-id" | i18n}}: </span>
+                                <span>{{companyInfo.floId}}</span>
+                            </div>
+                            <div>
+                                <span class="company-title">{{"rtn" | i18n}}: </span>
+                                <span>{{companyInfo.rtn}}</span>
+                            </div>
+                            <div>
+                                <span class="company-title">{{"mail" | i18n}}: </span>
+                                <span>{{companyInfo.email}}</span>
+                            </div>
+                        </div>
+                        <div class="description__ticket-actions">
+                            <div (click)="onGenerateTicketPdf(CONSTANTS.CRUD_ACTION.DOWNLOAD)"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-download' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint">
+                                <i class="icon-download"></i>
+                            </div>
+                            <div (click)="onGenerateTicketPdf(CONSTANTS.CRUD_ACTION.PRINT)"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-print' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint">
+                                <i class="icon-report-print"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shipping-ticket__container-detail-description__shipping-detail">
+                    <div class="shipping-general-information">
+                        <div class="shipping-general-information__container">
+                            <div class="shipping-general-information__container-header">
+                                <div class="shipping-general-information__container-header-title">
+                                    <div class="title-info">
+                                        {{'general-information' | i18n}}
+                                    </div>
+                                    <div class="tag-void" *ngIf="shippingTicket?.generalInformation?.isVoided">
+                                        <i class="icon-note-canceled"></i>
+                                        <span>{{'retention-order-status-voided' | i18n}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="shipping-general-information__container-details">
+                                <div>
+                                    <span class="shipping-ticket-title-commun">{{'date' | i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun">
+                                        {{
+                                        shippingTicket.generalInformation.ticketDate
+                                        | formatMoment : 'dddd, DD MMMM YYYY'
+                                        :true
+                                        }}
+                                    </span>
+                                    <span class="shipping-ticket-title-commun">{{'delivered-by' | i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun">
+                                        {{shippingTicket.origin.company.name}}
+                                    </span>
+                                    <span class="shipping-ticket-title-commun">{{'shipping-ticket-buyer' | i18n}}:
+                                    </span>
+                                    <span class="shipping-ticket-description-commun">
+                                        {{shippingTicket.destination.buyer.name}}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="shipping-ticket-title-commun">{{'shipping-ticket-reason-transfer'|
+                                        i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                        {{shippingTicket.reasonTransfer.name}}
+                                    </span>
+                                    <span class="shipping-ticket-title-commun">{{'shipping-ticket-company-branch-point'|
+                                        i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                        {{shippingTicket.origin.completeAddress}}
+                                    </span>
+                                    <span class="shipping-ticket-title-commun">{{'shipping-ticket-buyer-location'|
+                                        i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                        {{shippingTicket.destination.completeAddress}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weight-capture-information">
+                        <div class="weight-capture-information__title">
+                            {{'driver-information' | i18n}}
+                        </div>
+                        <div class="weight-capture-information__details">
+                            <div class="weight-capture-information__details-description">
+                                <span class="shipping-ticket-title-commun">{{'delivered-by'| i18n}}: </span>
+                                <span class="shipping-ticket-description-commun">
+                                    {{(shippingTicket.driverInformation.transportCompanyId ? 'drive-type-third' :
+                                    'drive-type-owner') | i18n}}
+                                </span>
+                                <span class="shipping-ticket-title-commun">{{'driver'| i18n}}: </span>
+                                <span class="shipping-ticket-description-commun">
+                                    {{shippingTicket.driverInformation.driverName}}
+                                </span>
+                                <span class="shipping-ticket-title-commun">{{'shipping-ticket-vehicle-license'| i18n}}:
+                                </span>
+                                <span class="shipping-ticket-description-commun">
+                                    {{shippingTicket.vehicleInformation.truck.license}}
+                                </span>
+                                <span class="shipping-ticket-title-commun">{{'shipping-ticket-vehicle'| i18n}}: </span>
+                                <span class="shipping-ticket-description-commun">
+                                    {{shippingTicket.vehicleInformation.truck.name}}
+                                </span>
+                            </div>
+                            <div class="weight-capture-information__details-description">
+                                <span class="shipping-ticket-title-commun">{{'drive-type-third'| i18n}}:
+                                </span>
+                                <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                    {{shippingTicket.driverInformation.transportCompanyId ?
+                                    shippingTicket.driverInformation.driver.transportCompany?.name:
+                                    '---'}}
+                                </span>
+                                <span class="shipping-ticket-title-commun">{{'shipping-ticket-driver-identity'| i18n}}:
+                                </span>
+                                <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                    {{shippingTicket.driverInformation.driverIdentity}}
+                                </span>
+                                <span class="shipping-ticket-title-commun">{{'vehicle-type'| i18n}}: </span>
+                                <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                    {{shippingTicket.vehicleInformation.vehicleType.type}}
+                                </span>
+                                <span class="shipping-ticket-title-commun">{{'shipping-ticket-label-number'| i18n}}:
+                                </span>
+                                <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                    {{shippingTicket.generalInformation.labelNumber || '-'}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="weight-capture-information">
+                        <div class="weight-capture-information__title">
+                            {{'weight-capture' | i18n}}
+                        </div>
+                        <div class="" *ngFor="let itemWeightNotes of shippingTicket.weightCapture; let i = index">
+
+                            <div class="graybar-note-weight">
+                                {{'weight-note-num' | i18n }} #{{itemWeightNotes.noteFolio}}
+                            </div>
+
+                            <section class="weight-capture-information-subtitle">
+                                {{'commodity-information' | i18n}}
+                            </section>
+                            <div class="weight-capture-information__details">
+                                <div class="weight-capture-information__details-description">
+                                    <span class="shipping-ticket-title-commun">{{'commodity' | i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun">
+                                        {{itemWeightNotes.commodityTransformation.commodity.name}}</span>
+                                    <span class="shipping-ticket-title-commun">{{'commodity-state' | i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun">
+                                        {{itemWeightNotes.commodityTransformation.transformationTypeName.name}}</span>
+                                </div>
+                                <div class="weight-capture-information__details-description">
+                                    <span class="shipping-ticket-title-commun">{{'commodity-type'| i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun shipping-ticket-right-title">
+                                        {{itemWeightNotes.commodityTransformationName}}</span>
+                                </div>
+                            </div>
+                            <section class="weight-capture-information-subtitle">
+                                {{'warehouse-information' | i18n}}
+                            </section>
+                            <div class="weight-capture-information__details">
+                                <div class="weight-capture-information__details-description">
+                                    <span class="shipping-ticket-title-commun">{{'warehouse'| i18n}}: </span>
+                                    <span class="shipping-ticket-description-commun">
+                                        {{itemWeightNotes.warehouse.name}}</span>
+                                </div>
+                            </div>
+                            <div class="weight-capture-information__details">
+                            </div>
+                            <app-weighing-table [configuration]="config" [weights]="itemWeightNotes.weights"
+                                [readOnly]="true" [placeholderContainerColumn]="'sacks' | i18n"
+                                [tableBodySubtitle]="'weighings-information' | i18n"
+                                [component]="PARAM_WEIGHING_TABLE.SHIPPING_TICKET" [isContainer]="false"
+                                [viewMode]="true">
+                            </app-weighing-table>
+
+                            <div class="weight-capture-information__details">
+                                <section class="weight-capture-information-subtitle">
+                                    {{'characteristics-information' | i18n}}
+                                </section>
+                            </div>
+                            <div class="weight-capture-information__details">
+                                <section class="weight-capture-information__details__features">
+                                    <div class="weight-capture-information__details__features-headers">
+                                        <span>{{'features' | i18n}}</span>
+                                        <span>{{'selection' | i18n}}</span>
+                                        <span class="shipping-ticket-right-title">{{'value' | i18n}}</span>
+                                        <span class="shipping-ticket-right-title">
+                                            {{'total' | i18n}}({{config.measurementUnitAbbreviation}})
+                                        </span>
+                                    </div>
+                                    <div class="weight-capture-information__details__features-data"
+                                        *ngFor="let penalty of itemWeightNotes.penalties">
+                                        <span>
+                                            <span class="title-detail-header">
+                                                {{'features' | i18n }}
+                                            </span>
+                                            {{penalty.characteristic?.deduction.name}}:
+                                        </span>
+                                        <span class="shipping-ticket-description-commun shipping-ticket-font-normal">
+                                            <span class="title-detail-header">
+                                                {{'selection' | i18n }}
+                                            </span>
+                                            {{
+                                            penalty.characteristic?.deduction.type == CONSTANTS.DEDUCTION_TYPE.TABLE ||
+                                            penalty.characteristic?.deduction.type == CONSTANTS.DEDUCTION_TYPE.INPUT ?
+                                            'N/A'
+                                            : penalty.choiceDeduction?.name
+                                            }}
+                                        </span>
+                                        <span
+                                            class="shipping-ticket-description-commun shipping-ticket-font-normal shipping-ticket-right-title">
+                                            <span class="title-detail-header">
+                                                {{'value' | i18n }}
+                                            </span>
+                                            {{
+                                            penalty.characteristic?.deduction.type == CONSTANTS.DEDUCTION_TYPE.TABLE ||
+                                            penalty.characteristic?.deduction.type == CONSTANTS.DEDUCTION_TYPE.INPUT
+                                            ? (penalty.value | number : "1." + CHARACTERISTICS_DECIMAL + "-" + CHARACTERISTICS_DECIMAL: "en") +
+                                               (getDeductionsAllowAction(penalty.characteristic) === DEDUCTIONS_ALLOW_ACTIONS.NOT_ACTION ? '' : ' %')
+                                            : (penalty.choiceDeduction?.coefficient | number : "1." +
+                                            CHARACTERISTICS_DECIMAL + "-"+ CHARACTERISTICS_DECIMAL: "en") + ' %'
+                                            }}
+                                        </span>
+                                        <div>
+                                            <span class="title-detail-header">
+                                                {{'total' | i18n }}
+                                            </span>
+
+                                            <span class="shipping-ticket-right-title"
+                                                [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT" [format]="'1.2'"
+                                                appSignedValue [value]="penalty.total">
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                    <mat-divider class="mrg-top-5"></mat-divider>
+                                    <div class="weight-capture-information__details__features-headers mrg-top-15">
+                                        <span></span>
+                                        <span></span>
+                                        <span class="shipping-ticket-right-title">{{'total' | i18n|uppercase }}:</span>
+                                        <span class="shipping-ticket-right-title"
+                                            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT" [format]="'1.2'"
+                                            appSignedValue [value]="shippingTicket.totalNotesPenalties">
+                                        </span>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="shipping-note-inforation">
+                                <div class="shipping-note-inforation__note">
+                                    <span class="shipping-note-inforation__note-title">
+                                        {{'note' | i18n}}:
+                                    </span>
+                                    <span class="shipping-note-inforation__note-description">
+                                        {{itemWeightNotes.noteDescription}}
+                                    </span>
+                                </div>
+                                <div class="shipping-note-inforation__totals">
+                                    <div class="info-total">
+                                        <span>
+                                            {{'total-gross' | i18n}}
+                                            ({{config.measurementUnitAbbreviation}}):
+                                        </span>
+                                        <span class="shipping-ticket-right-title shipping-ticket-right-totals">
+                                            {{itemWeightNotes.totalGross | number : "1." + DECIMAL_DIGITS
+                                            +
+                                            "-"+ DECIMAL_DIGITS: "en"}}
+                                        </span>
+                                    </div>
+                                    <div class="info-total">
+                                        <span>
+                                            {{'total-tares' | i18n}}
+                                            ({{config.measurementUnitAbbreviation}}):
+                                        </span>
+                                        <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                            [value]="itemWeightNotes.totalTares" appSignedValue
+                                            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                                            [format]="'1.'+ DECIMAL_DIGITS">
+                                        </span>
+                                    </div>
+                                    <div class="info-total">
+                                        <span>
+                                            {{'featured-weight' | i18n}}
+                                            ({{config.measurementUnitAbbreviation}}):
+                                        </span>
+                                        <span class="shipping-ticket-right-title shipping-ticket-right-totals">
+                                            {{itemWeightNotes.featuredWeight | number : "1." + DECIMAL_DIGITS
+                                            +"-"
+                                            + DECIMAL_DIGITS: "en"}}
+                                        </span>
+                                    </div>
+                                    <div class="info-total">
+                                        <span>
+                                            {{'discount' | i18n}}
+                                            ({{config.measurementUnitAbbreviation}}):
+                                        </span>
+                                        <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                            [value]="shippingTicket.totalNotesPenalties" appSignedValue
+                                            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                                            [format]="'1.'+ DECIMAL_DIGITS">
+                                        </span>
+                                    </div>
+                                    <div class="info-total">
+                                        <span>
+                                            {{'addition' | i18n}}
+                                            ({{config.measurementUnitAbbreviation}}):
+                                        </span>
+                                        <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                            [value]="itemWeightNotes.totalAddition ?? 0" appSignedValue
+                                            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT"
+                                            [format]="'1.'+ DECIMAL_DIGITS">
+                                        </span>
+                                    </div>
+                                    <div class="info-total">
+                                        <span class="info-total-title-total">
+                                            {{'net-weight' | i18n}}
+                                            ({{config.conversionMeasurementUnitAbbreviation}}):
+                                        </span>
+                                        <span class="shipping-ticket-right-title shipping-ticket-right-totals tr--font-red"  [ngClass]="{'tr--font-red': shippingTicket.totalNetWeightDetailsQQ  == 0}">
+                                            {{
+                                            shippingTicket.totalNetWeightDetailsQQ | number :"1." + DECIMAL_DIGITS
+                                            +
+                                            "-" + DECIMAL_DIGITS: "en"
+                                            }}
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="total-end" *ngIf="shippingTicket.weightCapture.length > 1">
+                            <div class="shipping-note-inforation__totals">
+                                <div class="info-total">
+                                    <span>
+                                        {{'total-gross' | i18n}}
+                                        ({{config.measurementUnitAbbreviation}}):
+                                    </span>
+                                    <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                        [value]="shippingTicket.totalGrossWeightLB" appSignedValue
+                                        [format]="'1.'+ DECIMAL_DIGITS">
+                                        {{shippingTicket.totalGrossWeightLB}}
+                                    </span>
+                                </div>
+
+                                <div class="info-total">
+                                    <span>
+                                        {{'total-tares' | i18n}}
+                                        ({{config.measurementUnitAbbreviation}}):
+                                    </span>
+                                    <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                        [value]="shippingTicket.totalTareLB" appSignedValue
+                                        [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                                        [format]="'1.'+ DECIMAL_DIGITS">
+                                    </span>
+                                </div>
+
+                                <div class="info-total">
+                                    <span>
+                                        {{'featured-weight' | i18n}}
+                                        ({{config?.measurementUnitAbbreviation}}):
+                                    </span>
+                                    <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                        [value]="shippingTicket.totalNetWeightLB" appSignedValue>
+                                    </span>
+                                </div>
+
+                                <div class="info-total">
+                                    <span>
+                                        {{'discount' | i18n}}
+                                        ({{config?.measurementUnitAbbreviation}}):
+                                    </span>
+                                    <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                        [value]="shippingTicket?.totalDiscountLB" appSignedValue
+                                        [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                                        [format]="'1.'+ DECIMAL_DIGITS">
+                                    </span>
+                                </div>
+
+                                <div class="info-total">
+                                    <span>
+                                        {{'addition' | i18n}}
+                                        ({{config.measurementUnitAbbreviation}}):
+                                    </span>
+                                    <span class="shipping-ticket-right-title shipping-ticket-right-totals"
+                                        [value]="shippingTicket?.totalAdditionQQ" appSignedValue
+                                        [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT"
+                                        [format]="'1.'+ DECIMAL_DIGITS">
+                                    </span>
+                                </div>
+
+                                <div class="info-total">
+                                    <span class="info-total-title-total">
+                                        {{'net-weight' | i18n}}
+                                        ({{config.conversionMeasurementUnitAbbreviation}}):
+                                    </span>
+                                    <span class="shipping-ticket-right-title shipping-ticket-right-totals"  [ngClass]="{'tr--font-red': shippingTicket.totalNetDryWeightQQ  == 0}">
+                                        {{shippingTicket.totalNetDryWeightQQ }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt__31" *ngIf="!shippingTicket?.generalInformation?.isVoided">
+                    <div class="container-footer-btns">
+                        <div class="content-btn">
+                            <button (click)="onVoid(shippingTicket)"
+                            *permission="{
+                                tag: PERMISSION_TAG,
+                                type: PERMISSION_TYPES.VOID}">
+                                <i class="icon-trash-gray"></i>
+                                {{'shipping-ticket-void' | i18n}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt__16" *ngIf="shippingTicket?.generalInformation?.isVoided">
+                    <div class="container-void-note">
+                        <span class="info-label info-label__12">{{'void-weight-note-reason' | i18n}}</span>
+                        <span class="info-value info-value__12">{{shippingTicket.generalInformation.voidReason}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

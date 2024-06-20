@@ -1,0 +1,456 @@
+<div class="producer-new sil-container sil-container--filled">
+  <header class="producer-new__header">
+    <div>
+      <h1 class="producer-new__header__title">
+        {{ ("new" | i18n) }}
+        {{ "producer" | i18n | lowercase }}
+      </h1>
+      <p>{{'producer-id' |i18n}} '----'</p>
+    </div>
+  </header>
+  <div class="producer-new__body">
+    <mat-tab-group [selectedIndex]="currentStep">
+      <mat-tab
+        [disabled]="currentStep != CONSTANTS.NEW_PRODUCER_TABS.REFERENCE"
+        [label]="
+          ((CONSTANTS.NEW_PRODUCER_TABS.REFERENCE + 1) | number: '2.0-0')
+          + ' ' +
+          ('producer-reference-data' |i18n)
+        ">
+        <ng-container *ngIf="!isViewSelectPlatform; else selectPlatform">
+          <form [formGroup]="producerForm" class="producer-new__form">
+            <p class="producer-new__form__title">{{'producer-data'|i18n}}</p>
+            <div class="producer-new__form__container__reference">
+              <!-- IDENTITY -->
+              <section class="producer-new__form__section__identity">
+                <label>
+                    {{ "producer-identity" | i18n }} *
+                </label>
+                <input
+                  type="text"
+                  autocomplete="off"
+                  formControlName="identity"
+                  class="producer-new__form__input"
+                  [placeholder]="'producer-identity-placeholder' | i18n"
+                  [textMask]="{
+                    mask: CONSTANTS.IDENTITY_MASK,
+                    guide: false
+                  }"/>
+                <span
+                  *ngIf="
+                      producerForm.get('identity').dirty ||
+                      producerForm.get('identity').touched
+                  ">
+                    <span
+                      *ngIf="producerForm.get('identity').hasError('required')"
+                      class="producer-new__form__section__error">
+                        {{ "is-required-msg" | i18n }}
+                    </span>
+                    <span
+                      *ngIf="producerForm.get('identity').hasError('minlength')"
+                      class="producer-new__form__section__error">
+                        {{
+                          "min-length-value-error"
+                          | i18n
+                          | stringReplace
+                          : "[value]"
+                          : CONSTANTS.MIN_LENGTH_PRODUCER_IDENTITY
+                        }}
+                    </span>
+                </span>
+              </section>
+              <!-- EMAIL -->
+              <section class="producer-new__form__section__email">
+                <label>
+                  {{ "email-address" | i18n }}
+                </label>
+                <input 
+                  type="text"
+                  autocomplete="off"
+                  formControlName="email"
+                  class="producer-new__form__input"
+                  [value]="producerForm.get('email').value | lowercase"
+                  [placeholder]="'t-producers-placeholder-email' | i18n"/>
+                <span 
+                  class="producer-new__form__section__error"
+                  *ngIf="
+                      (producerForm.get('email').dirty ||
+                      producerForm.get('email').touched)
+                    ">
+                  <span
+                    *ngIf="producerForm.get('email').hasError('maxlength')"
+                    class="producer-new__form__section__error">
+                    {{ "max-length-value-error" | i18n | stringReplace : "[value]" : CONSTANTS.MAX_LENGTH_EMAIL }}
+                  </span>
+                  <span 
+                    *ngIf="producerForm.get('email').invalid"
+                    class="producer-new__form__section__error">
+                      {{ "email-error" | i18n }}
+                  </span>
+                </span>
+              </section>
+              <!-- PHONE -->
+              <section class="producer-new__form__section__phone">
+                <label>
+                  {{ "phone" | i18n }}
+                </label>
+                <div class="producer-new__form__input--group producer-new__form__phone">
+                  <app-phone-code-dropdown
+                    (countryChange)="onCountryChanged($event)"
+                    [country]="producerForm.get('phoneCountry').value" 
+                    class="producer-new__form__input--inline">
+                  </app-phone-code-dropdown>
+                  <input 
+                    type="text" 
+                    [textMask]="{
+                        mask: CONSTANTS.INTERNATIONAL_PHONES[
+                                producerForm.get('phoneCountry').value
+                            ].MASK,
+                        guide: false,
+                        showMask: true
+                    }"
+                    [placeholder]="'t-producers-placeholder-phone' | i18n"
+                    class="producer-new__form__input producer-new__form__input--inline producer-new__form__input--phone"
+                    formControlName="phone"
+                    autocomplete="off" />
+                </div>
+                <span 
+                  *ngIf="
+                      producerForm.get('phone').dirty
+                  ">
+                  <span 
+                    *ngIf="producerForm.get('phone').hasError('pattern')" 
+                    class="producer-new__form__section__error">
+                    {{
+                      "t-alphanumeric-pattern-producer-phone"
+                      | i18n
+                      : producerForm.get("phone").value
+                      | stringReplace
+                      : "[length]"
+                      : CONSTANTS.INTERNATIONAL_PHONES[
+                        producerForm.get("phoneCountry").value
+                      ].LENGTH
+                    }}
+                  </span>
+                </span>
+              </section>
+            </div>
+          </form>
+        </ng-container>
+        <ng-template #selectPlatform>
+          <div class="producer-new__platforms">
+            <div class="producer-new__platforms__info">
+              <i class="icon-alert_icon"></i>
+              <div>
+                <p>{{'producer-new-apps-info' |i18n}}</p>
+                <p>{{'producer-new-apps-info-autocomplete' |i18n}}</p>
+              </div>
+            </div>
+            <div class="producer-new__platforms__list">
+              <p class="producer-new__platforms__list__title">{{'producer-new-apps-title' |i18n}}</p>
+              <mat-radio-group class="producer-new__platforms__list__apps" (change)="onSelectPlatform($event)">
+                <mat-radio-button *ngFor="let app of appsFederated" [value]="app">
+                  <div class="producer-new__platforms__list__apps__title" (click)="toogleApp(app)"
+                    [ngClass]="{'active': openApps[app.code]}">
+                    <i [class]="openApps[app.code] ? 'icon-caret-up' : 'icon-caret-down'"></i>
+                    <img [src]="'assets/img/svg/' + app.code + '-icon.svg'" alt="">
+                    <p>{{app.code | i18n}}</p>
+                  </div>
+                  <div *ngIf="openApps[app.code]" class="producer-new__platforms__list__apps__content">
+                    <!-- GENERAL INFORMATION -->
+                    <div class="producer-new__platforms__list__apps__content__section">
+                      <p class="producer-new__platforms__list__apps__content__section__title">
+                        {{'producer-general-data' |i18n}}
+                      </p>
+                      <!-- NAME -->
+                      <div *ngIf="app.name"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'name' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.name}}
+                        </p>
+                      </div>
+                      <!-- LASTNAMES -->
+                      <div *ngIf="app.paternalLast"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'last-names' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.paternalLast}}
+                        </p>
+                      </div>
+                      <!-- BIRTHDATE -->
+                      <div *ngIf="app.birthdate"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-birthdate' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.birthdate | date: 'dd/MM/yyyy'}}
+                        </p>
+                      </div>
+                      <!-- ASSOCIATION DATE -->
+                      <div *ngIf="app.associationDate"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-association-date' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.associationDate | date: 'dd/MM/yyyy'}}
+                        </p>
+                      </div>
+                      <!-- IDENTITY -->
+                      <div *ngIf="app.identity"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-identity' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.identity}}
+                        </p>
+                      </div>
+                      <!-- PRODUCER TYPE -->
+                      <div *ngIf="app.typeName"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'t-producer-type' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.typeName}}
+                        </p>
+                      </div>
+                      <!-- PRODUCER NUMBER -->
+                      <div *ngIf="app.externalId"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'t-producer-number' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.externalId}}
+                        </p>
+                      </div>
+                      <!-- RTN -->
+                      <div *ngIf="app.rtn"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-rtn' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.rtn}}
+                        </p>
+                      </div>
+                      <!-- EMAIL -->
+                      <div *ngIf="app.email"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'email-address' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.email}}
+                        </p>
+                      </div>
+                      <!-- PHONE -->
+                      <div *ngIf="app.phone"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'phone' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{CONSTANTS.INTERNATIONAL_PHONES[app.phoneCountry].PREFIX}} 
+                          {{app.phone}}
+                        </p>
+                      </div>
+                      <!-- IHCAFE -->
+                      <div *ngIf="app.ihcafeCarnet"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'t-producer-ihcafe' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.ihcafeCarnet}}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- ADDITIONAL -->
+                    <div *ngIf="app.scholarshipId || app.professionId || app.contactName || app.contactPhone || app.maritalStatusId || app.gender"
+                      class="producer-new__platforms__list__apps__content__section">
+                      <p class="producer-new__platforms__list__apps__content__section__title">
+                        {{'producer-additional-data' |i18n}}
+                      </p>
+                      <!-- SCHOOLING -->
+                      <div *ngIf="app.scholarship"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-schooling' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.scholarship}}
+                        </p>
+                      </div>
+                      <!-- PROFESSION -->
+                      <div *ngIf="app.profession"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-profession' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.profession}}
+                        </p>
+                      </div>
+                      <!-- CONTACT NAME -->
+                      <div *ngIf="app.contactName"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-contact-name' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.contactName}}
+                        </p>
+                      </div>
+                      <!-- CONTACT PHONE -->
+                      <div *ngIf="app.contactPhone"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-contact-phone' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{CONSTANTS.INTERNATIONAL_PHONES[app.contactPhoneCountry].PREFIX}} 
+                          {{app.contactPhone}}
+                        </p>
+                      </div>
+                      <!-- MARITAL STATUS -->
+                      <div *ngIf="app.maritalStatus"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-marital-status' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.maritalStatus}}
+                        </p>
+                      </div>
+                      <!-- GENDER -->
+                      <div *ngIf="app.gender"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-gender' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{('producer-gender-' + app.gender) |i18n}}
+                        </p>
+                      </div>
+                    </div>
+                    <!-- DOMICILE -->
+                    <div *ngIf="app.countryId || app.stateId || app.cityId || app.townId || app.address"
+                      class="producer-new__platforms__list__apps__content__section">
+                      <p class="producer-new__platforms__list__apps__content__section__title">
+                        {{'domicile' |i18n}}
+                      </p>
+                      <!-- COUNTRY -->
+                      <div *ngIf="app.country"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'country' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.country}}
+                        </p>
+                      </div>
+                      <!-- STATE ID -->
+                      <div *ngIf="app.state"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'state-department' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.state}}
+                        </p>
+                      </div>
+                      <!-- CITY -->
+                      <div *ngIf="app.city"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'producer-municipality' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.city}}
+                        </p>
+                      </div>
+                      <!-- TOWN ID -->
+                      <div *ngIf="app.town"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'town' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.town}}
+                        </p>
+                      </div>
+                      <!-- ADDRESS -->
+                      <div *ngIf="app.address"
+                        class="producer-new__platforms__list__apps__content__section__info">
+                        <p class="producer-new__platforms__list__apps__content__section__info--label">
+                          {{'address' |i18n}}:
+                        </p>
+                        <p class="producer-new__platforms__list__apps__content__section__info--data">
+                          {{app.address}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </mat-radio-button>
+            </mat-radio-group>
+            </div>
+            <div class="producer-new__platforms__skip">
+              <button class="btn btn-resize gray-btn button-lg" (click)="onSkip()">
+                {{ "skip" | i18n }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab
+        [disabled]="currentStep != CONSTANTS.NEW_PRODUCER_TABS.GENERAL"
+        [label]="
+          ((CONSTANTS.NEW_PRODUCER_TABS.GENERAL + 1) | number: '2.0-0')
+          + ' ' +
+          ('producer-general-data' |i18n)
+        "> 
+        <app-producer-edit
+          *ngIf="currentStep == CONSTANTS.NEW_PRODUCER_TABS.GENERAL"
+          [isFromNewProducer]="true"
+          [createSubject]="onCreate$"
+          [federatedId]="federatedId"
+          [producer]="producer ? producer : producerForm.value"
+          (goToReferenceData)="goToReferenceData($event)"
+          (formReady)="onProducerFormReady($event)"></app-producer-edit>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="producer-new__body__actions">
+      <button class="btn btn-resize gray-btn button-lg" (click)="onBack()" 
+        [disabled]="currentStep == CONSTANTS.NEW_PRODUCER_TABS.REFERENCE && !isViewSelectPlatform"
+        [ngClass]="{'producer-new__body__actions--hide': (currentStep == CONSTANTS.NEW_PRODUCER_TABS.REFERENCE && !isViewSelectPlatform)}">
+        <i class="icon-arrow_icon"></i>
+        {{ "back" | i18n }}
+      </button>
+      <div>
+        <button class="btn btn-resize gray-btn button-lg" (click)="onCancel()">
+          {{ "cancel" | i18n }}
+        </button>
+        <button
+          class="btn btn-resize blue-btn button-lg"
+          [disabled]="
+            producerForm.invalid || 
+            (!isViewSelectPlatform && initialForm && !formHasChanges) ||
+            (isViewSelectPlatform && !hasPlatform) || 
+            (currentStep == CONSTANTS.NEW_PRODUCER_TABS.GENERAL && !enableCreateProducer)
+          "
+          (click)="onNext()">
+          {{ currentStep == CONSTANTS.NEW_PRODUCER_TABS.REFERENCE ? ("next" | i18n) : ('create' | i18n) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

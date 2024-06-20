@@ -1,0 +1,86 @@
+.producer-action-farm-container {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.producer-action-farm-body {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+:not(.dark) :host .producer-action-farm-body {
+    background-color: white;
+}
+
+.dark :host .producer-action-farm-body {
+    background-color: #2f3b52;
+}
+
+.header-producer-action-farm {
+    width: 100%;
+    height: auto;
+    padding: 0 0px 0px 15px;
+    margin: 0 0 15px 0;
+    text-align: left;
+}
+
+.icon-logo-grain{
+    color: white !important;
+    padding: 3px;
+    font-size: 26px;
+    margin-left: 16px;
+    border-radius: 6px;
+    background-color: var(--base-green);
+}
+
+.title-producer-action-farm {
+    width: 100%;
+    height: auto;
+    font-size: 28px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+}
+:not(.dark) :host .title-producer-action-farm {
+    color: #0068d1;
+    display: grid;
+    grid-template-columns: 1fr 45px;
+}
+
+.dark :host .title-producer-action-farm {
+    color: white;
+    display: grid;
+    grid-template-columns: 1fr 45px;
+}
+
+.header-line-producer-action-farm {
+    height: 0;
+    border-width: 1px;
+    border-style: solid;
+    padding: 0;
+    margin: 11px 0 0 0;
+}
+
+:not(.dark) :host .header-line-producer-action-farm {
+    border-color: rgba(146, 162, 182, 0.3);
+}
+
+.dark :host .header-line-producer-action-farm {
+    border-color: #92a2b6;
+}

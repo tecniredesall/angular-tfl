@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="13px" viewBox="0 0 8 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>timer-sand</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Element/Status/aproved" transform="translate(-12.000000, -5.000000)" fill="#F7C137">
+            <g id="timer-sand" transform="translate(12.000000, 5.000000)">
+                <path d="M0,0 L7.68,0 L7.68,3.84 L7.68,3.84 L7.68,3.84 L5.12,6.4 L7.68,8.96 L7.68,8.96 L7.68,8.96 L7.68,12.8 L0,12.8 L0,8.96 L0,8.96 L0,8.96 L2.56,6.4 L0,3.84 L0,3.84 L0,3.84 L0,0 M6.4,9.28 L3.84,6.72 L1.28,9.28 L1.28,11.52 L6.4,11.52 L6.4,9.28 M3.84,6.08 L6.4,3.52 L6.4,1.28 L1.28,1.28 L1.28,3.52 L3.84,6.08 M2.56,2.56 L5.12,2.56 L5.12,3.04 L3.84,4.32 L2.56,3.04 L2.56,2.56 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

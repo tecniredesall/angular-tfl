@@ -1,0 +1,1132 @@
+<div class="t-receiving-note" *blockUI="'receiving-layout'; template: templateBlockModalUiComponent">
+    <div class="t-receiving-note__container">
+        <div class="t-receiving-note__content scroll-view-app" (resized)="onResizeReceivingNote($event)">
+            <div class="t-receiving-note__header">
+                <div class="t-receiving-note__header__title">
+                    {{ "weight-note" | i18n }}
+                </div>
+                <div class="t-receiving-note__header__id weight-note-create-input">
+                    {{ receivingNote.information.get("folio").value }}
+                </div>
+                <ng-container [ngTemplateOutlet]="totalsReceivingNote"></ng-container>
+            </div>
+
+            <div class="t-receiving-note__body">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle [expanded]="0 == openedPanelIndex" (opened)="setOpenedPanel(0)"
+                        (closed)="setClosedPanel(0)" #generalInformationPanel>
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'" [ngClass]="{
+                                expanded: generalInformationPanel.expanded,
+                                disabled: generalInformationPanel.disabled,
+                                enabled: generalInformationPanel.enabled
+                            }">
+                            <ng-container [ngTemplateOutlet]="panelHeader" [ngTemplateOutletContext]="{
+                                    panel: generalInformationPanel,
+                                    labelHeader: 'general-information',
+                                    showTotal: false,
+                                    total: 0
+                                }"></ng-container>
+                        </mat-expansion-panel-header>
+                        <ng-container [ngTemplateOutlet]="generalInformation"></ng-container>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel hideToggle [disabled]="
+                            receivingNote.information.invalid ||
+                            receivingNote.information.pending
+                        " [expanded]="1 == openedPanelIndex" (opened)="setOpenedPanel(1)" (closed)="setClosedPanel(1)"
+                        #descriptionPanel>
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'" [ngClass]="{
+                                expanded: descriptionPanel.expanded,
+                                disabled: descriptionPanel.disabled,
+                                enabled: descriptionPanel.enabled
+                            }">
+                            <ng-container [ngTemplateOutlet]="panelHeader" [ngTemplateOutletContext]="{
+                                    panel: descriptionPanel,
+                                    labelHeader: 'weight-notes',
+                                    showTotal: true,
+                                    total: 0
+                                }"></ng-container>
+                            <app-update-worker-data [action]="workerSyncAction" [isSyncStarted]="isSyncStarted">
+                            </app-update-worker-data>
+                        </mat-expansion-panel-header>
+                        <ng-container [ngTemplateOutlet]="description"></ng-container>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+
+            <div class="t-receiving-note__footer">
+                <ng-container [ngTemplateOutlet]="footerReceivingNote"></ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #generalInformation>
+    <form [formGroup]="receivingNote.information" novalidate>
+        <div class="row">
+            <div class="col-xs-12 pad-top-15">
+                <!-- Season -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 weight-note-control">
+                        <custom-select formControlName="season" [label]="'harvest' | i18n"
+                            [placeholder]="'select-harvest' | i18n" [items]="seasons" [bindLabel]="'name'"
+                            [emptyLabel]="'not-items-found' | i18n" [isLoading]="isLoadingSeasons"
+                            [searchPlaceholder]="'search-harvest-placeholder' | i18n" (onSelect)="setSeason($event)">
+                        </custom-select>
+                    </div>
+                </div>
+                <!-- Producer -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="weight-note-control">
+                        <custom-select formControlName="producer" [label]="'producer' | i18n"
+                            [placeholder]="'select-producer' | i18n" [items]="sellersPaginator.sellers"
+                            [bindLabel]="'fullName'" [addLabel]="'t-new-producer' | i18n"
+                            [emptyLabel]="'producers-empty-label' | i18n"
+                            [emptyImage]="'assets/img/svg/empty-producer.svg'" [isLoading]="
+                                sellersPaginator.isDataLoading ||
+                                sellersPaginator.isExecutingSearch
+                            " [searchPlaceholder]="'search-producer' | i18n" [permissionTag]="PERMISSIONS.PRODUCERS"
+                            [permissionType]="PERMISSION_TYPES.CREATE" (onSearch)="onChangeSearchSeller($event)"
+                            (onNextPage)="onSellerScrollToEnd()" (onSelect)="setSeller($event)"
+                            (onNew)="openModalNewElement(OPTIONS_MODAL.PRODUCER)" (clear)="clearProducer()">
+                        </custom-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 pad-top-15">
+                <div class="col-xs-12">
+                    <span class="t-receiving-note__body__general-information__subtitle">
+                        {{ "additional-Information" | i18n }}
+                    </span>
+                </div>
+                <!-- Field ticket -->
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="col-xs-12 weight-note-label">
+                        <span>{{ "field-ticket" | i18n }}</span>
+                    </div>
+                    <div class="col-xs-12 weight-note-control">
+                        <input formControlName="fieldTicket" class="weight-note-create-input" type="text" [placeholder]="
+                                receivingNote.information.get('fieldTicket')
+                                    .enabled
+                                    ? ('ticket-field-placeholder' | i18n)
+                                    : ''
+                            " autocomplete="off" />
+
+                        <label *ngIf="
+                                receivingNote.information.get('fieldTicket')
+                                    .dirty || isEditing
+                            " class="error-msg-form">
+                            <label *ngIf="
+                                    receivingNote.information
+                                        .get('fieldTicket')
+                                        .hasError('pattern')
+                                ">
+                                {{ "t-producers-alphanumeric-pattern" | i18n }}
+                            </label>
+                            <label *ngIf="
+                                    receivingNote.information
+                                        .get('fieldTicket')
+                                        .hasError('maxlength')
+                                ">
+                                {{
+                                "input-max-length-value"
+                                | i18n
+                                | stringReplace
+                                : "[value]"
+                                : CONSTANTS.MAX_LENGTH_FIELD_TICKET
+                                }}
+                            </label>
+                        </label>
+                    </div>
+                </div>
+                <!-- Contract ID -->
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <custom-select formControlName="contractId" [label]="'contract-id' | i18n"
+                        [placeholder]="'contract-placeholder' | i18n" [items]="producerContracts"
+                        [emptyLabel]="'not-items-found' | i18n" [isLoading]="isLoadingProducerContracts"
+                        [searchPlaceholder]="'search-contracts-placeholder' | i18n" [clearable]="true"
+                        (onSelect)="setContract($event)" (clear)="clearContract()" [isVisibleRequiredMark]="false">
+                    </custom-select>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row t-receiving-note__body__general-information__capture-weight">
+        <button
+            class="btn btn-default t-receiving-note__body__general-information__capture-weight__button t-receiving-note__footer__button"
+            [disabled]="
+                receivingNote.information.invalid ||
+                receivingNote.information.pending
+            " (click)="captureWeight()">
+            {{ "capture-weight" | i18n }}
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #description>
+    <!-- Number weight note -->
+    <div class="row t-receiving-note__body__description__note-buttons">
+        <div class="row t-receiving-note__body__description__note-buttons__list">
+            <div *ngFor="
+                    let wn of receivingNote.description.controls;
+                    let titleIndex = index
+                " class="weight-note-name-item no-select" [ngClass]="{
+                    'blue-content': titleIndex == descIndex,
+                    'gray-content': titleIndex != descIndex,
+                    'weight-note-name-item-disabled':
+                        !isEnabledChangeNote || isLoadingCertifications
+                }" (click)="selectNoteWeight(titleIndex)">
+                <ng-container [formGroup]="wn">
+                    {{ "note-of-weight" | i18n }}
+                    <span *ngIf="null != wn.get('weightNoteId').value">
+                        # {{ wn.get("indexSort").value }}
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+
+        <div class="t-receiving-note__body__description__add-note">
+            <button class="btn btn-default t-receiving-note__body__description__add-note__button pull-right no-select"
+                [disabled]="!isEnabledChangeNote || isLoadingCertifications" (click)="addNewWeighNote()">
+                +
+                {{ "add-note" | i18n }}
+            </button>
+        </div>
+    </div>
+
+    <ng-container *ngFor="
+            let description of receivingNote.description.controls;
+            let wnIndex = index
+        ">
+        <form *ngIf="wnIndex == descIndex" [formGroup]="description" novalidate>
+            <!-- Name and date of weight note -->
+            <div class="row t-receiving-note__name-date">
+                <!-- Name -->
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="t-receiving-note__name-date__title">
+                        {{ "note-of-weight" | i18n }}
+                        <span *ngIf=" null != description.get('weightNoteId').value">
+                            # {{ description.get("indexSort").value }}
+                        </span>
+                        <span *ngIf="description.get('status').value == WEIGHT_NOTE_STATUS.DELETED"
+                            class="t-receiving-note__name-date__status">
+                            <i class="icon-note-canceled"></i>
+                            {{'voided' | i18n}}
+                        </span>
+                    </div>
+                </div>
+                <!-- Date -->
+                <div class="col-lg-offset-4 col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 weight-note-label" [ngClass]="{
+                            't-receiving-note__date__label--error':
+                                description.get('date').dirty &&
+                                description.get('date').errors
+                        }">
+                        <span>{{ "date" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 weight-note-control">
+                        <app-custom-date-picker formControlName="date" [dateFormat]="'dddd, LL'" [minDate]="
+                                receivingNote.information.get('season').value
+                                    ?.startDate
+                            " [maxDate]="description.get('allowedMaxDate').value">
+                        </app-custom-date-picker>
+                        <label *ngIf="
+                                description.get('date').dirty &&
+                                description.get('date').errors
+                            " class="error-msg-form">
+                            <label *ngIf="
+                                    description.get('date').hasError('required')
+                                ">
+                                {{ "is-required-msg" | i18n }}
+                            </label>
+                            <label
+                                *ngIf="description.get('date').hasError('dateMin') || description.get('date').hasError('dateMax')">
+                                {{ "weight-note-invalid-date" | i18n }}
+                            </label>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!-- Block information -->
+            <div class="row t-receiving-note__block-information">
+                <div class="rn-blocks-information-container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <span class="rn-blocks-information-title">
+                                {{ "farm-information" | i18n }} *
+                            </span>
+                            <span class="rn-blocks-information-instruction">
+                                &nbsp;{{
+                                "weight-note-farm-section-instruction"
+                                | i18n
+                                }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Farm and block -->
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 p0">
+                            <!-- Farm -->
+                            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                                <custom-select formControlName="farm" [isVisibleRequiredMark]="false"
+                                    [label]="'t-farm' | i18n" [placeholder]="
+                                        description.get('farm').enabled
+                                            ? ('select-farm' | i18n)
+                                            : ''
+                                    " [items]="farmsByProducer" [bindLabel]="'name'" [addLabel]="'t-farms-new' | i18n"
+                                    [emptyLabel]="'farms-empty-label' | i18n" [emptyImage]="
+                                        'assets/img/svg/empty-finca.svg'
+                                    " [permissionTag]="PERMISSIONS.FARMS" [permissionType]="PERMISSION_TYPES.CREATE"
+                                    [isLoading]="sellersPaginator.isDataLoading" [clearable]="true"
+                                    (onSelect)="setFarm($event)" (onNew)="
+                                        openModalNewElement(OPTIONS_MODAL.FARM)
+                                    " (onSearch)="searchFarm($event)" (clear)="clearFarm()">
+                                </custom-select>
+                            </div>
+                            <!-- Block -->
+                            <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                                <custom-select formControlName="block" [isVisibleRequiredMark]="false"
+                                    [label]="'block' | i18n" [placeholder]="
+                                        description.get('block').enabled
+                                            ? ('select-block' | i18n)
+                                            : ''
+                                    " [items]="
+                                        description.get('blocksByFarm').value
+                                    " [isBlockItems]="true" [bindLabel]="'name'" [addLabel]="'t-new-block' | i18n"
+                                    [emptyLabel]="'blocks-empty-label' | i18n" [emptyImage]="
+                                        'assets/img/svg/icon-parcela.svg'
+                                    " [permissionTag]="PERMISSIONS.BLOCKS" [permissionType]="PERMISSION_TYPES.CREATE"
+                                    [isLoading]="isLoadingBlocks" [clearable]="true"
+                                    [farmId]="description.get('farm').value?.id" (onNew)="
+                                        openModalNewElement(OPTIONS_MODAL.BLOCK)
+                                    " (onSelect)="setBlock($event)" (onSearch)="searchBlock($event)"
+                                    (clear)="clearBlock()"></custom-select>
+                            </div>
+                        </div>
+                        <!-- Certificates -->
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-xs-12 weight-note-label">
+                                <span>{{ "certificates" | i18n }}</span>&nbsp;
+                                <span *ngIf="
+                                        description.get(
+                                            'certificationsWasLoaded'
+                                        ).value
+                                    ">({{
+                                    description.get("totalCertifications")
+                                    .value
+                                    }})</span>
+                            </div>
+                            <div class="col-xs-12 weight-note-control">
+                                <div class="reception-note-certifications-area">
+                                    <ng-container *ngIf="
+                                            description.get(
+                                                'isLoadingCertifications'
+                                            ).value
+                                        ">
+                                        <div class="reception-note-loading-certifications"></div>
+                                        <div class="block-ui-message-container">
+                                            <div class="block-ui-message">
+                                                <div class="spinner"></div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="
+                                            0 ==
+                                                description.get(
+                                                    'certifications'
+                                                ).value.length;
+                                            else showSeals
+                                        ">
+                                        <div class="col-xs-12 mrg-top-5 empty-seal">
+                                            <img src="assets/img/svg/stamper.svg" class="no-select" alt="" />
+                                        </div>
+                                        <div class="col-xs-12 empty-seal empty-seal-text no-select">
+                                            {{ "producer-certificates" | i18n }}
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #showSeals>
+                                        <div class="seal-space-controls">
+                                            <div *ngIf="
+                                                    description.get(
+                                                        'showCertificationControls'
+                                                    ).value
+                                                " class="seal-control" (click)="
+                                                    onMoveCertificationsList(-1)
+                                                ">
+                                                <i class="fa fa-caret-left fa-2x" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="seal-space-controls-content scroll-view-app" [ngClass]="{
+                                                    'seal-space-visible-controls': description.get(
+                                                        'showCertificationControls'
+                                                    ).value,
+                                                    'seal-space-hidden-controls': !description.get(
+                                                        'showCertificationControls'
+                                                    ).value
+                                                }" #certificationsContainer>
+                                                <table>
+                                                    <tr>
+                                                        <td class="seal-separator"></td>
+                                                        <td *ngFor="
+                                                                let seal of description.get(
+                                                                    'certifications'
+                                                                ).value;
+                                                                let isFirstSeal = first
+                                                            ">
+                                                            <div class="seal-container">
+                                                                <div class="img-seal-rec" [ngStyle]="{
+                                                                        'marginLeft.px': isFirstSeal
+                                                                            ? 0
+                                                                            : 15
+                                                                    }">
+                                                                    <img class="no-select" [src]="
+                                                                            seal.image
+                                                                        " alt="" />
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="seal-separator"></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div *ngIf="
+                                                    description.get(
+                                                        'showCertificationControls'
+                                                    ).value
+                                                " class="seal-control" (click)="
+                                                    onMoveCertificationsList(1)
+                                                ">
+                                                <i class="fa fa-caret-right fa-2x" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Commodity information -->
+                <div class="t-receiving-note__commodity-information col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-xs-12 mrg-btm-5">
+                        <span class="subtitle">{{
+                            "commodity-information" | i18n
+                            }}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pad-btm-15">
+                        <custom-select formControlName="commodity" [label]="'commodity' | i18n"
+                            [placeholder]="'select-commodity' | i18n" [items]="commodities" [bindLabel]="'name'"
+                            [emptyLabel]="'not-items-found' | i18n" [isLoading]="isLoadingCommodities"
+                            [searchPlaceholder]="'search-commodities-placeholder' | i18n"
+                            (onSelect)="setCommodity($event)" (clear)="clearCommodity($event)">
+                        </custom-select>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <custom-select formControlName="commodityType" [label]="'commodity-type' | i18n"
+                            [placeholder]="'select-commodity-type' | i18n"
+                            [items]="description.get('commodityTypesByCommodity').value" [bindLabel]="'name'"
+                            [emptyLabel]="'not-items-found' | i18n" [isLoading]="isLoadingCommodities"
+                            [searchPlaceholder]="'search-commodity-types-placeholder' | i18n"
+                            (onSelect)="setCommodityType($event)" (clear)="clearCommodityType()">
+                        </custom-select>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 weight-note-label">
+                            <span>{{ "commodity-state" | i18n }}</span>
+                        </div>
+                        <div class="col-xs-12 weight-note-control">
+                            <div class="weight-note-create-input disabled">
+                                {{
+                                description.get("commodityTransformation")
+                                .value?.name
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" [ngClass]="{
+                            'rn-warning-container': description.get(
+                                'isWarningContainer'
+                            ).value
+                        }">
+                        <div class="col-xs-12 weight-note-control">
+                            <custom-select [ngClass]="{'invalid': description.get('isWarningContainer').value }"
+                                formControlName="container" [label]="'container' | i18n"
+                                [placeholder]="'select-warehouses' | i18n"
+                                [items]="description.get('containersByCommodityTransformation').value"
+                                [bindLabel]="'name'" [emptyLabel]="'not-items-found' | i18n"
+                                [isLoading]="description.get('isLoadingContainers').value"
+                                [searchPlaceholder]="'search-container-placeholder' | i18n" [groupBy]="'tankName'"
+                                (onSelect)="setContainer($event)" (clear)="clearContainer()">
+                            </custom-select>
+                            <label *ngIf="
+                                    description.get('isWarningContainer').value
+                                " class="rn-warning-container-message pad-top-10">
+                                {{
+                                "weight-note-warning-container-message"
+                                | i18n
+                                }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carrier information -->
+                <div class="t-receiving-note__carrier-information col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-xs-12 mrg-btm-5">
+                        <span class="subtitle">{{
+                            "carrier-information" | i18n
+                            }}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- Delivered by producer-->
+                    <div
+                        class="t-receiving-note__body__description__delivered-by-producer col-lg-4 col-md-4 col-sm-12 col-xs-12 col-lg-push-8 col-md-push-8">
+                        <div class="col-xs-12 weight-note-label">
+                            <span>{{ "delivered-by" | i18n }}:</span>
+                        </div>
+                        <div class="col-xs-12 p0">
+                            <mat-checkbox formControlName="deliveredByProducer"
+                                (change)="onDeliveryByProducerChange($event)" color="primary"
+                                class="weight-note__checkbox">{{ "the-producer" | i18n }}</mat-checkbox>
+                        </div>
+                    </div>
+                    <!-- Driver -->
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-pull-4 col-md-pull-4">
+                        <custom-select formControlName="driver" [label]="'driver' | i18n" [isVisibleRequiredMark]="
+                                !description.get('deliveredByProducer').value
+                            " [placeholder]="
+                                description.get('deliveredByProducer').value
+                                    ? ''
+                                    : ('select-driver' | i18n)
+                            " [items]="driversPaginator.drivers" [bindLabel]="'fullName'"
+                            [addLabel]="'new-driver' | i18n" [emptyLabel]="'drivers-empty-label' | i18n"
+                            [emptyImage]="'assets/img/svg/empty-driver.svg'" [isLoading]="
+                                driversPaginator.isDataLoading ||
+                                driversPaginator.isExecutingSearch
+                            " [permissionTag]="PERMISSIONS.DRIVERS" [permissionType]="PERMISSION_TYPES.CREATE"
+                            [searchPlaceholder]="'search-driver-placeholder' | i18n"
+                            (onSearch)="onChangeSearchDriver($event)" (onNextPage)="onDriverScrollToEnd()"
+                            (onSelect)="setDriver($event)" [clearable]="true" (clear)="clearDriver()"
+                            (onNew)="openModalNewElement(OPTIONS_MODAL.DRIVER)"></custom-select>
+                    </div>
+                    <!-- Truck -->
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-pull-4 col-md-pull-4">
+                        <div class="col-xs-12 weight-note-control">
+                            <custom-select formControlName="truck" [label]="'truck-plate' | i18n"
+                                [isVisibleRequiredMark]="
+                                    !description.get('deliveredByProducer')
+                                        .value
+                                " [placeholder]="
+                                    description.get('deliveredByProducer').value
+                                        ? ''
+                                        : ('select-truck' | i18n)
+                                " [items]="trucksPaginator.trucks" [bindLabel]="'plate'"
+                                [addLabel]="'new-vehicle' | i18n" [emptyLabel]="'trucks-empty-label' | i18n"
+                                [emptyImage]="
+                                    'assets/img/svg/vehiculo-empty.svg'
+                                " [isLoading]="
+                                    trucksPaginator.isDataLoading ||
+                                    trucksPaginator.isExecutingSearch
+                                " [permissionTag]="PERMISSIONS.TRUCKS" [permissionType]="PERMISSION_TYPES.CREATE"
+                                [searchPlaceholder]="'search-truck-placeholder' | i18n" (onSelect)="setTruck($event)"
+                                (onSearch)="onChangeSearchTruck($event)" (onNextPage)="onTruckScrollToEnd()" (onNew)="
+                                    openModalNewElement(OPTIONS_MODAL.TRUCK)
+                                " (onClose)="onTruckSelectClose()" [clearable]="true" (clear)="clearTruck()">
+                            </custom-select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- Driver license -->
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 weight-note-label">
+                            <span>{{ "license" | i18n }}</span>
+                        </div>
+                        <div class="col-xs-12 weight-note-control">
+                            <div class="weight-note-create-input disabled">
+                                {{ description.get("driver").value?.license }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Truck vehicle -->
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 weight-note-label">
+                            <span>{{ "vehicle" | i18n }}</span>
+                        </div>
+                        <div class="col-xs-12 weight-note-control">
+                            <div class="weight-note-create-input disabled">
+                                {{ description.get("truck").value?.name }}
+                            </div>
+                            <label *ngIf="
+                                    description.get('isWarningContainer').value
+                                " class="rn-warning-container-message-space"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weighings information -->
+            <div class="t-receiving-note__weights-section__container">
+                <app-weighing-table *ngIf="!isLoadConfiguration" [configuration]="configuration"
+                    [weights]="weights[wnIndex]" [readOnly]="
+                        description.get('status').value == WEIGHT_NOTE_STATUS.DELETED ||
+                        description.get('inProcess').value == TYPE_WEIGHT_NOTE.PRODUCTION ||
+                        description.get('statusLot').value == LOT_STATUS.PROCESSED ||
+                        description.get('inPurchaseOrder').value ||
+                        (description.get('status').value == WEIGHT_NOTE_STATUS.CLOSED && !hasPermissionToEditClosedNote)
+                    " [isContainer]="false" [placeholderContainerColumn]="'sacks' | i18n"
+                    [tableBodySubtitle]="'weighings-information' | i18n" [component]="PARAM_WEIGHING_TABLE.WEIGHT_NOTE"
+                    (formWeightCaptureReady)="formWeightCaptureReady($event, wnIndex)">
+                </app-weighing-table>
+            </div>
+
+            <!-- Characteristics information -->
+            <div class="row t-receiving-note__characteristics-section__container" [ngClass]="{
+                    'with-right-space':
+                        (description.get('penalties').controls.length > 1 || deductionsTradingStatus.isBeingCalculated) &&
+                        WEIGHT_NOTE_STATUS.DELETED != description.get('status').value &&
+                        TYPE_WEIGHT_NOTE.PRODUCTION != description.get('inProcess').value &&
+                        LOT_STATUS.PROCESSED != description.get('statusLot').value &&
+                        !description.get('inPurchaseOrder').value &&
+                        (WEIGHT_NOTE_STATUS.CLOSED == description.get('status').value && hasPermissionToEditClosedNote)
+                }">
+                <div class="t-receiving-note__characteristics-section__title">
+                    {{ "characteristics-information" | i18n }}
+                </div>
+
+                <div class="t-receiving-note__characteristics-section__subtitle">
+                    <i class="icon-alert_icon"></i>
+                    {{ "characteristics-information-warning" | i18n }}
+                </div>
+
+                <div class="t-receiving-note__characteristics-section">
+                    <ng-container [formGroup]="penalty" *ngFor="
+                            let penalty of description.get('penalties')
+                                .controls;
+                            let penaltyIndex = index;
+                            let lastPenalty = last
+                        ">
+                        <div class="t-receiving-note__characteristics-section__controls">
+                            <!-- Characteristic -->
+                            <div class="t-receiving-note__characteristics-section__controls__characteristic">
+
+                                <custom-select
+                                    formControlName="characteristic"
+                                    [label]="'commodity-feature' | i18n"
+                                    [isVisibleRequiredMark]="penalty.get('characteristic')?.value?.mandatory"
+                                    [placeholder]="penalty.get('characteristic').enabled
+                                                        ? ('placeholder-characteristic'
+                                                        | i18n)
+                                                        : ''"
+                                    [items]="penalty.get('characteristicsEnabled').value"
+                                    [bindLabel]="'name'" [emptyLabel]="'not-items-found' | i18n"
+                                    [isLoading]="description.get('isLoadingCharacteristics').value"
+                                    [searchPlaceholder]="'search-characteristic-placeholder' | i18n"
+                                    (onSelect)="setCharacteristic(penaltyIndex)">
+                                </custom-select>
+                            </div>
+                            <!-- Selection -->
+                            <div class="t-receiving-note__characteristics-section__controls__selection">
+                                <div class="weight-note-label">
+                                    <span>{{"deduction-selection" | i18n}} {{penalty.get('characteristic')?.value?.mandatory ? '*' : ''}}</span>
+                                </div>
+                                <div class="weight-note-control" [ngSwitch]="
+                                        penalty.get('characteristic').value
+                                            ?.deduction?.type
+                                    ">
+                                    <span *ngSwitchCase="DEDUCTION_TYPE.TABLE"
+                                        class="rn-deduction__container-empty-selection">N/A</span>
+                                    <span *ngSwitchCase="DEDUCTION_TYPE.INPUT"
+                                        class="rn-deduction__container-empty-selection">N/A</span>
+                                    <ng-container *ngSwitchCase="DEDUCTION_TYPE.CHOICE">
+                                        <custom-select formControlName="choiceDeduction"
+                                            [placeholder]="'select-choice-deduction' | i18n"
+                                            [isVisibleRequiredMark]="penalty.get('characteristic')?.value?.mandatory"
+                                            [items]="penalty.get('characteristic').value?.deduction?.options"
+                                            [bindLabel]="'name'" [emptyLabel]="'not-items-found' | i18n"
+                                            [isLoading]="description.get('isLoadingCharacteristics').value"
+                                            [searchPlaceholder]="'t-buyers-placeholder-search' | i18n"
+                                            (onSelect)="setDeductionSelection(penaltyIndex,$event)"
+                                            (clear)="clearDeductionSelection(penaltyIndex ,$event)"
+                                            class="custom-select">
+                                        </custom-select>
+                                    </ng-container>
+                                    <label
+                                        *ngIf="penalty.get('choiceDeduction').dirty || penalty.get('choiceDeduction').untouched "
+                                        class="error-msg-form">
+                                        <label *ngIf="penalty.get('choiceDeduction').hasError('required')">
+                                            {{ "is-required-msg" | i18n }}
+                                        </label>
+                                    </label>
+                                    <span *ngSwitchDefault class="rn-deduction__container-empty-selection">N/A</span>
+                                </div>
+                            </div>
+                            <!-- Value -->
+                            <div class="t-receiving-note__characteristics-section__controls__value">
+                                <div class="weight-note-label">
+                                    <span>{{ "valueM" | i18n }} {{penalty.get('characteristic')?.value?.mandatory ? '*' : ''}}</span>
+                                </div>
+                                <ng-container [ngSwitch]="
+                                        penalty.get('characteristic').value
+                                            ?.deduction?.type
+                                    ">
+                                    <!-- Value for deduction type table -->
+                                    <div *ngSwitchCase="DEDUCTION_TYPE.TABLE">
+                                        <input formControlName="value" class="weight-note-create-input" type="text"
+                                            (input)="
+                                                eventChangePenaltyValue(
+                                                    penaltyIndex
+                                                )
+                                            " [placeholder]="
+                                                'placeholder-value-penalty'
+                                                    | i18n
+                                            " [textMask]="{
+                                                mask: characteristicDecimalNumberMask,
+                                                guide: false,
+                                                showMask: false
+                                            }" autocomplete="off" />
+                                        <label *ngIf="penalty.get('value').dirty" class="error-msg-form">
+                                            <label *ngIf="
+                                                    penalty
+                                                        .get('value')
+                                                        .hasError('required')
+                                                ">
+                                                {{ "is-required-msg" | i18n }}
+                                            </label>
+                                            <label *ngIf="
+                                                    penalty
+                                                        .get('value')
+                                                        .hasError('min')
+                                                ">
+                                                {{
+                                                "deduction-min-value"
+                                                | i18n
+                                                | stringReplace
+                                                : "[min]"
+                                                : penalty.get(
+                                                "characteristic"
+                                                ).value?.deduction
+                                                ?.min
+                                                }}
+                                            </label>
+                                            <label *ngIf="
+                                                    penalty
+                                                        .get('value')
+                                                        .hasError('max')
+                                                ">
+                                                {{
+                                                "deduction-max-value"
+                                                | i18n
+                                                | stringReplace
+                                                : "[max]"
+                                                : penalty.get(
+                                                "characteristic"
+                                                ).value?.deduction
+                                                ?.max
+                                                }}
+                                            </label>
+                                        </label>
+                                    </div>
+                                    <!-- Value for deduction type INPUT -->
+                                    <div *ngSwitchCase="DEDUCTION_TYPE.INPUT">
+                                        <input formControlName="value" class="weight-note-create-input" type="text"
+                                            (input)="eventChangePenaltyValue(penaltyIndex)"
+                                            [placeholder]="'placeholder-value-penalty' | i18n"
+                                            [textMask]="{
+                                                mask: getDeductionsAllowAction(penalty.get('characteristic').value) ==
+                                                    DEDUCTIONS_ALLOW_ACTIONS.NO_ACTION ?
+                                                        positiveDecimalNumberMask : characteristicDecimalNumberMask,
+                                                guide: false,
+                                                showMask: false
+                                            }"
+                                            autocomplete="off" />
+                                        <label *ngIf="penalty.get('value').dirty" class="error-msg-form">
+                                            <label *ngIf="penalty.get('value').hasError('required')">
+                                                {{ "is-required-msg" | i18n }}
+                                            </label>
+                                            <label *ngIf="penalty.get('value').hasError('min')">
+                                                {{
+                                                    "deduction-min-value"
+                                                    | i18n
+                                                    | stringReplace
+                                                    : "[min]"
+                                                    : penalty.get("characteristic").value?.deduction?.min
+                                                }}
+                                            </label>
+                                            <label *ngIf="penalty.get('value').hasError('max') ">
+                                                {{
+                                                    "deduction-max-value"
+                                                    | i18n
+                                                    | stringReplace
+                                                    : "[max]"
+                                                    : penalty.get( "characteristic" ).value?.deduction?.max
+                                                }}
+                                            </label>
+                                        </label>
+                                    </div>
+                                    <!--Value for deduction type choice  -->
+                                    <div class="weight-note-control" *ngSwitchCase="DEDUCTION_TYPE.CHOICE">
+                                        <div class="weight-note-create-input disabled">
+                                            <span *ngIf="
+                                                    penalty.get(
+                                                        'choiceDeduction'
+                                                    ).value
+                                                ">
+                                                {{
+                                                100 -
+                                                penalty.get(
+                                                "choiceDeduction"
+                                                ).value?.coefficient
+                                                | number
+                                                : "1." +
+                                                DECIMAL_DIGITS +
+                                                "-" +
+                                                DECIMAL_DIGITS
+                                                : "en"
+                                                }}
+                                                %
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="weight-note-control" *ngSwitchDefault>
+                                        <div class="weight-note-create-input disabled"></div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <!-- Total -->
+                            <div class="t-receiving-note__characteristics-section__controls__total">
+                                <div class="weight-note-label">
+                                    <span>
+                                        {{ "total" | i18n }} ({{configuration.measurementUnitAbbreviation}})
+                                    </span>
+                                </div>
+                                <div class="weight-note-control">
+                                    <div class="weight-note-create-input disabled">
+                                        <span *ngIf="null != penalty.get('total').value"
+                                            appSignedValue [value]="penalty.get('total').value"
+                                            [valueType]="penalty.get('sign').value">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Not allowed, remove or spinner -->
+                            <div class="t-receiving-note__characteristics-section__controls__button" *ngIf="
+                                    (description.get('penalties').controls.length > 1 || deductionsTradingStatus.isBeingCalculated) &&
+                                    WEIGHT_NOTE_STATUS.DELETED != description.get('status').value
+                                ">
+                                <ng-container *ngIf="
+                                        !deductionsTradingStatus.isBeingCalculated
+                                    ">
+                                    <img *ngIf="penalty.get('characteristic')?.value?.mandatory" class="not-allowed"
+                                        src="assets/img/svg/not-allow.svg" />
+                                    <img *ngIf="!penalty.get('characteristic')?.value?.mandatory" class="pointer"
+                                        (click)="removePenalty(penaltyIndex)" src="assets/img/svg/remove.svg" />
+                                </ng-container>
+                                <span *ngIf="
+                                        deductionsTradingStatus.isBeingCalculated
+                                    "
+                                    class="fa fa-circle-o-notch fa-spin t-receiving-note__characteristics-section__controls__button__spin-icon"></span>
+                            </div>
+                        </div>
+                        <div *ngIf="!lastPenalty" class="visible-xs col-xs-12 p0">
+                            <div class="rn-penalty-separator"></div>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div class="t-receiving-note__characteristics-section__totals">
+                    <div class="t-receiving-note__characteristics-section__totals__row">
+                        <div
+                            class="t-receiving-note__characteristics-section__totals__row__item t-receiving-note__characteristics-section__totals__row__item__label">
+                            {{ "total" | i18n }}:
+                        </div>
+                        <div
+                            class="t-receiving-note__characteristics-section__totals__row__item t-receiving-note__characteristics-section__totals__row__item__value">
+                            {{description.get('totalPercentCharacteristics')?.value | number : "1." +
+                            CHARACTERISTICS_DECIMAL + "-" + CHARACTERISTICS_DECIMAL : "en"}} %
+                        </div>
+                        <div class="t-receiving-note__characteristics-section__totals__row__item t-receiving-note__characteristics-section__totals__row__item__value"
+                            appSignedValue [value]="
+                                description.get('totalCharacteristics').value
+                            "></div>
+                    </div>
+                </div>
+
+                <!-- Add penalty record -->
+                <div class="row t-receiving-note__characteristics-section__add-item">
+                    <button class="t-receiving-note__characteristics-section__add-item__button btn btn-transparent-blue"
+                        (click)="addPenalty()" [disabled]="
+                            WEIGHT_NOTE_STATUS.DELETED == description.get('status').value ||
+                            TYPE_WEIGHT_NOTE.PRODUCTION == description.get('inProcess').value ||
+                            LOT_STATUS.PROCESSED == description.get('statusLot').value ||
+                            description.get('inPurchaseOrder').value ||
+                            (WEIGHT_NOTE_STATUS.CLOSED == description.get('status').value && !hasPermissionToEditClosedNote) ||
+                            !description.get('characteristicsWasLoaded').value
+                        ">
+                        <i class="icon-plus"></i>
+                        {{ "add-characteristic" | i18n }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Text note and totals weight note-->
+            <div class="t-receiving-note__other-section">
+                <!-- Text note -->
+                <div class="t-receiving-note__other-section__text-note">
+                    <div class="t-receiving-note__other-section__text-note__label weight-note-label">
+                        <span>{{ "note" | i18n }}</span>
+                    </div>
+                    <div class="t-receiving-note__other-section__text-note__control">
+                        <textarea formControlName="textNote" class="weight-note-create-input"
+                            [placeholder]="'write-description' | i18n"></textarea>
+                        <span class="t-receiving-note__other-section__text-note__control__length pull-right" [ngClass]="{
+                                'max-length': description
+                                    .get('textNote')
+                                    .hasError('maxlength')
+                            }">
+                            {{ description.get("textNote").value?.length }} /
+                            {{ CONSTANTS.MAX_LENGTH_TEXT_NOTE }}
+                        </span>
+                    </div>
+                </div>
+                <!-- Totals weight note -->
+                <div class="t-receiving-note__other-section__totals">
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__label">
+                        {{ "total-gross" | i18n }} ({{
+                       QQ
+                        }}):
+                    </div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__value">
+                        {{
+                        description.get("totalGross").value
+                        | number
+                        : "1." +
+                        DECIMAL_DIGITS +
+                        "-" +
+                        DECIMAL_DIGITS
+                        : "en"
+                        }}
+                    </div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__label">
+                        {{ "total-tares" | i18n }} ({{
+                        configuration.measurementUnitAbbreviation
+                        }}):
+                    </div>
+                    <div class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__value"
+                        appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                        [value]="description.get('totalSumTares').value"></div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__label">
+                        {{ "featured-weight" | i18n }} ({{
+                        configuration.measurementUnitAbbreviation
+                        }}):
+                    </div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__value">
+                        {{
+                        description.get("totalNet").value
+                        | number
+                        : "1." +
+                        DECIMAL_DIGITS +
+                        "-" +
+                        DECIMAL_DIGITS
+                        : "en"
+                        }}
+                    </div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__label t-receiving-note__other-section__totals__label__discount">
+                        {{ "discountM" | i18n }} ({{
+                        configuration.measurementUnitAbbreviation
+                        }}):
+                    </div>
+                    <div class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__value"
+                        appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                        [value]="description.get('totalDiscount').value"></div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__label t-receiving-note__other-section__totals__label__addition">
+                        {{ "addition" | i18n }} ({{
+                        configuration.measurementUnitAbbreviation
+                        }}):
+                    </div>
+                    <div class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__value"
+                        appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT"
+                        [value]="description.get('totalAddition').value"></div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__label t-receiving-note__other-section__totals__net-dry">
+                        {{ "net-weight" | i18n }} ({{ configuration.conversionMeasurementUnitAbbreviation }}):
+                    </div>
+                    <div
+                        class="t-receiving-note__other-section__totals__item t-receiving-note__other-section__totals__value t-receiving-note__other-section__totals__net-dry">
+                        {{
+                        description.get("totalNetDryWtQQ").value
+                        | number
+                        : "1." +
+                        DECIMAL_DIGITS +
+                        "-" +
+                        DECIMAL_DIGITS
+                        : "en"
+                        }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Close and delete weight note buttons -->
+            <div class="row t-receiving-note__body__description__footer__buttons">
+                <button *ngIf="description.get('status').value == WEIGHT_NOTE_STATUS.OPEN"
+                    class="btn btn-default t-receiving-note__body__description__footer__buttons__close t-receiving-note__footer__button pull-right"
+                    (click)="closeWeightNote()" [disabled]="
+                        receivingNote.information.invalid ||
+                        description.invalid ||
+                        !isEnabledChangeNote ||
+                        disableBtnCloseWeightNote ||
+                        isLoadingCertifications
+                    ">
+                    {{ "close-weight-note" | i18n }}
+                </button>
+                <button *ngIf="description.get('status').value == WEIGHT_NOTE_STATUS.CLOSED"
+                    class="btn btn-default t-receiving-note__body__description__footer__buttons__close t-receiving-note__footer__button pull-right"
+                    (click)="editWeightNoteClosed()" [disabled]="
+                        receivingNote.information.invalid ||
+                        description.invalid ||
+                        !isEnabledChangeNote ||
+                        disableBtnCloseWeightNote ||
+                        isLoadingCertifications ||
+                        !dataWasModified
+                    ">
+                    {{ "save-changes" | i18n }}
+                </button>
+                <ng-container
+                    *ngIf="(description.get('status').value == WEIGHT_NOTE_STATUS.CLOSED && hasPermissionToDeleteClosedNote) || (description.get('status').value == WEIGHT_NOTE_STATUS.OPEN && hasPermissionToDeleteOpenNote)">
+                    <button *ngIf="description.get('status').value != WEIGHT_NOTE_STATUS.DELETED" [disabled]="
+                            (description.get('status').value == WEIGHT_NOTE_STATUS.OPEN && receivingNote.description.controls.length == 1) ||
+                            description.get('inProcess').value == TYPE_WEIGHT_NOTE.PRODUCTION ||
+                            description.get('statusLot').value == LOT_STATUS.PROCESSED ||
+                            description.get('inPurchaseOrder').value ||
+                            !isEnabledChangeNote ||
+                            isDisabledDeleteWeightNoteBtn ||
+                            isLoadingCertifications ||
+                            (receivingNote.information.get('status').value == RECEIVING_NOTE_STATUS.OPEN &&
+                            receivingNote.description.controls.length == 1)
+                        "
+                        class="btn btn-transparent-delete pull-left t-receiving-note__body__description__footer__buttons__delete"
+                        (click)="deleteWeightNote()">
+                        <i class="icon-trash-gray"></i>
+                        {{ description.get('status').value == WEIGHT_NOTE_STATUS.OPEN ?
+                        ("delete-note" | i18n) : ("void-weight-note" | i18n) }}
+                    </button>
+                </ng-container>
+                <p *ngIf="description.get('status').value == WEIGHT_NOTE_STATUS.DELETED && description.get('deletionReason').value"
+                    class="btn btn-transparent-delete pull-left t-receiving-note__body__description__footer__buttons__delete__reason">
+                    <span>{{"void-weight-note-reason" |i18n}}</span>
+                    <br />
+                    {{description.get('deletionReason').value}}
+                </p>
+            </div>
+        </form>
+    </ng-container>
+</ng-template>
+
+<ng-template #totalsReceivingNote>
+    <div class="t-receiving-note__header__totals">
+        <div class="t-receiving-note__header__totals__item t-receiving-note__header__totals__label">
+            {{ "featured-weight" | i18n }} ({{
+            configuration.measurementUnitAbbreviation
+            }}):
+        </div>
+        <div class="t-receiving-note__header__totals__item t-receiving-note__header__totals__value">
+            {{
+            receivingNote.information.get("totalNetWeight").value
+            | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS:"en"
+            }}
+        </div>
+        <div
+            class="t-receiving-note__header__totals__item t-receiving-note__header__totals__label t-receiving-note__header__totals__label__discount">
+            {{ "discounts" | i18n }} ({{
+            configuration.measurementUnitAbbreviation
+            }}):
+        </div>
+        <div class="t-receiving-note__header__totals__item t-receiving-note__header__totals__value" appSignedValue
+            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+            [value]="receivingNote.information.get('totalDiscount').value"></div>
+        <div
+            class="t-receiving-note__header__totals__item t-receiving-note__header__totals__label t-receiving-note__header__totals__label__addition">
+            {{ "additions" | i18n }} ({{
+            configuration.measurementUnitAbbreviation
+            }}):
+        </div>
+        <div class="t-receiving-note__header__totals__item t-receiving-note__header__totals__value" appSignedValue
+            [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT"
+            [value]="receivingNote.information.get('totalAddition').value"></div>
+        <div
+            class="t-receiving-note__header__totals__item t-receiving-note__header__totals__label t-receiving-note__header__totals__net-dry">
+            {{ "total-net-weight" | i18n }} ({{ configuration.conversionMeasurementUnitAbbreviation}}):
+        </div>
+        <div
+            class="t-receiving-note__header__totals__item t-receiving-note__header__totals__value t-receiving-note__header__totals__net-dry">
+            {{
+            receivingNote.information.get("totalNetDryWeightQQ").value
+            | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS:"en"
+            }}
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #footerReceivingNote>
+    <button class="btn btn-default t-receiving-note__footer__button--save t-receiving-note__footer__button float-right"
+        (click)="saveAndExit()" [disabled]="saveExitDisabled()">
+        {{ "save-exit" | i18n }}
+    </button>
+    <button class="btn btn-default t-receiving-note__footer__button--close t-receiving-note__footer__button float-right"
+        (click)="submitRequestCloseReceivingNote()"
+        [disabled]="!isAllowedCloseReceivingNote || isDisabledCloseReceivingBtn">
+        {{ "close-receiving-note" | i18n }}
+    </button>
+    <button
+        class="btn btn-default t-receiving-note__footer__button--cancel t-receiving-note__footer__button float-right"
+        [routerLink]="['/routes/weight-note']" [queryParams]="this.queryParams">
+        {{ "cancel" | i18n }}
+    </button>
+</ng-template>
+
+<ng-template #hightLimitContainerNotification let-notificationData="notification">
+    <div class="rn-warning-container-notification">
+        <div class="rn-warning-container-notification__icon">
+            <img src="assets/img/svg/alert-outline.svg" class="no-select" alt="" />
+        </div>
+        <div>{{ notificationData.message }}</div>
+        <div class="rn-warning-container-notification__close" (click)="hideHightLimitNotification(true)">
+            <img src="assets/img/svg/close-circle-outline.svg" class="no-select" alt="" />
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #panelHeader let-panel="panel" let-labelHeader="labelHeader" let-showTotal="showTotal" let-total="total">
+    <div class="t-receiving-note__body__panel__header">
+        <div class="t-receiving-note__body__panel__header__toggle">
+            <i class="t-receiving-note__body__panel__header__toggle__icon icon-arrow_right no-select"
+                [ngClass]="{ rotated: panel.expanded }"></i>
+        </div>
+        <div class="t-receiving-note__body__panel__header__title no-select">
+            {{ labelHeader | i18n }}
+        </div>
+        <div *ngIf="showTotal" class="t-receiving-note__body__panel__header__counter">
+            <div class="t-receiving-note__body__panel__header__counter__total no-select">
+                {{
+                receivingNote.description.controls.length
+                | number: "2.0":"en"
+                }}
+            </div>
+        </div>
+    </div>
+</ng-template>

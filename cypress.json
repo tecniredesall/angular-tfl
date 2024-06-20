@@ -1,0 +1,8 @@
+{
+    "baseUrl":"http://localhost:4200/",
+    "user":"admin@grainchain.io",
+    "password":"Pass1234;",
+    "urlLot" :"http://localhost:4200/routes/weight-note/lots/create?isFromNoteList=true&production=false",
+    "urlWeightNote" :"http://localhost:4200/routes/weight-note/receiving-ticket?isFromNoteList=true&production=false",
+    "urlProducers":"http://localhost:4200/routes/producers"
+}

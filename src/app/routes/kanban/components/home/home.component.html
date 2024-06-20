@@ -1,0 +1,140 @@
+<div class="kanban__home scroll-view-app">
+  <div class="kanban__home__header">
+    <h3>{{'lots-management' | i18n}}</h3>
+    <div class="kanban__home__header__select">
+      <h6> {{ 'commodity' | i18n }} </h6>
+      <ng-select
+        class="tr__ng-select__custom-scroll"
+          [(ngModel)]="commodityId"
+          [items]="commodities"
+          [multiple]="false"
+          [closeOnSelect]="true"
+          [clearable]="false"
+          [loading]="isLoadingCommodities"
+          loadingText="{{ 'loading' | i18n }}"
+          [notFoundText]="'not-items-found' | i18n"
+          bindValue="id"
+          bindLabel="name"
+          placeholder="{{'kanban-home-select-placeholder' | i18n}}"
+          [searchable]="true"
+          [virtualScroll]="true"
+          (change)="selectCommodity($event)">
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.name | i18n }}
+            <div class="kanban__home__commodities__item__description__flows">
+              {{ 'flows-quantity' | i18n }}
+              {{item.totalModels | number: "2.0":"en"}}
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-index="index">
+            <div>{{item.name}}</div>
+            <div class="kanban__home__commodities__item__description__flows">
+              {{ 'flows-quantity' | i18n }}
+              {{item.totalModels | number: "2.0":"en"}}
+            </div>
+          </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="kanban__home__container">
+    <ng-container [ngTemplateOutlet]="commodity"></ng-container>
+    <ng-container [ngTemplateOutlet]="flows"></ng-container>
+  </div>
+</div>
+
+<ng-template #commodity>
+  <div class="kanban__home__commodities">
+    <h5> {{ 'commodity' | i18n | uppercase }} </h5>
+    <div class="kanban__home__commodities__items" *ngFor="let commodity of commodities">
+        <mat-card class="kanban__home__commodities__item"
+            [ngClass]="{'kanban__home__commodities__item--active': selectedCommodity == commodity}"
+            (click)="selectCommodity(commodity)">
+            <div class="kanban__home__commodities__item__description">
+                <p class="kanban__home__commodities__item__description__name"> {{commodity.name}} </p>
+                <div>
+                    <p> {{ 'flows-quantity' | i18n }} </p>
+                    <p class="kanban__home__commodities__item__description__flows">
+                        {{commodity.totalModels | number: "2.0":"en"}}
+                    </p>
+                </div>
+            </div>
+            <i *ngIf="selectedCommodity == commodity" class="icon-arrow_right"></i>
+        </mat-card>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #flows>
+  <div class="kanban__home__flows">
+    <h5>{{ 'production-flows' | i18n | uppercase }}</h5>
+    <div class="kanban__home__flows__subheader">
+      <mat-tab-group class="tr__tab__group" mat-align-tabs="start" [selectedIndex]="selectedIndexTab"
+        (selectedIndexChange)="filterWorkflows($event)">
+        <mat-tab *ngFor="let tab of tabs" [label]="tab.name |i18n">
+        </mat-tab>
+      </mat-tab-group>
+      <app-search-input [searchValue]="searchText" [isFocused]="isInputSearchFocused" (clearEvent)="onClearSearch()">
+        <input searchInput type="text" class="elipsis main-header__input" (input)="onSearch()"
+          [placeholder]="'search-name' | i18n" [(ngModel)]="searchText" (focus)="isInputSearchFocused = true"
+          (blur)="isInputSearchFocused = false" autocomplete="not" />
+      </app-search-input>
+    </div>
+    <div class="kanban__home__flows__body {{responsiveClass}}" (resized)="onEventViewResized($event)">
+      <ng-container *ngIf="workflows.length > 0; else empty">
+        <div class="kanban__home__flows__body__workflow" *blockUI="'kanban-home'; template: templateBlockModalUiComponent">
+          <div class="kanban__home__flows__body__workflow__card" *ngFor="let workflow of workflows">
+            <mat-card class="tr__workflow__card" [routerLink]="['dashboard', workflow.id]" [queryParams]="{commodity: selectedCommodity.id}">
+              <div class="tr__workflow__card__header">
+                <div class="tr__workflow__card__header_name">
+                  <span> {{'name' | i18n }} </span>
+                  <p>
+                    {{ workflow.name }}
+                  </p>
+                </div>
+              </div>
+              <p class="tr__workflow__card_description">
+                {{ workflow.description }}
+              </p>
+              <div class="tr__workflow__card__footer">
+                <div>
+                  <p class="tr__workflow__card_text">
+                    {{ 'workflow-lots-qty' | i18n | titlecase }} </p>
+                  <p class="tr__workflow__card_text-blue">
+                    {{workflow.lots}} </p>
+                </div>
+                <span
+                  [ngClass]="{
+                    'tr__lot__type__nano':LOT_TYPES.NANO_LOTE==workflow.productionTypeName,
+                    'tr__lot__type__micro':LOT_TYPES.MICRO_LOTE==workflow.productionTypeName,
+                    'tr__lot__type__macro':LOT_TYPES.MACRO_LOTE==workflow.productionTypeName
+                  }">
+                  {{workflow.productionTypeName | i18n}}
+                </span>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+        <mat-paginator
+          [hidden]="workflows.length == 0"
+          class="custom-paginator" [length]="pagination.totalItems"
+          [pageIndex]="pagination.currentPage - 1"
+          [pageSize]="pagination.itemsPerPage"
+          [pageSizeOptions]="[pagination.itemsPerPage]"
+          (page)="eventPaginator($event)"
+          showFirstLastButtons #paginator>
+        </mat-paginator>
+      </ng-container>
+      <ng-template #empty>
+        <ng-container *ngIf="searchText == ''; else notFound">
+          <div class="kanban__home--empty">
+            <img [src]="'assets/img/workflow_empty_' + (isDarkTheme ? 'dark' : 'light') + '.png'">
+            <p>{{ 'empty-state-home-kanban' | i18n}}</p>
+          </div>
+        </ng-container>
+        <ng-template #notFound>
+          <app-not-results-found></app-not-results-found>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>

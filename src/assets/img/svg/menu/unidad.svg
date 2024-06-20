@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="25" viewBox="0 0 26 25">
+    <defs>
+        <filter id="prefix__a">
+            <feColorMatrix in="SourceGraphic" values="0 0 0 0 0.000000 0 0 0 0 0.407843 0 0 0 0 1.000000 0 0 0 1.000000 0"/>
+        </filter>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g fill="#000" fill-rule="nonzero" filter="url(#prefix__a)" transform="translate(4 3)">
+            <path d="M19.02 17.69L16.893 5.997c-.122-.672-.706-1.159-1.388-1.159H3.546c-.683 0-1.267.487-1.39 1.16L.032 17.69c-.075.413.036.835.305 1.156.268.323.664.508 1.084.508h16.212c.42 0 .815-.185 1.083-.508.269-.321.38-.743.304-1.156z"/>
+            <path d="M9.526 6.048c-1.668 0-3.024-1.356-3.024-3.024S7.858 0 9.526 0c1.667 0 3.024 1.356 3.024 3.024s-1.357 3.024-3.024 3.024zm0-4.435c-.779 0-1.412.633-1.412 1.411s.633 1.411 1.412 1.411c.778 0 1.41-.633 1.41-1.411s-.632-1.411-1.41-1.411z"/>
+        </g>
+        <text fill="#FFF" font-family="OpenSans-Bold, Open Sans" font-size="8" font-weight="bold" letter-spacing="-.218" transform="translate(4 3)">
+            <tspan x="4.5" y="15.3">KG</tspan>
+        </text>
+    </g>
+</svg>

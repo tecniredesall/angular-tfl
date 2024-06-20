@@ -1,0 +1,83 @@
+<div class="body-background-img" *blockUI="'login-container'; template: templateBlockModalUiComponent">
+  <div class="container cont">
+    <div class="row mtop">
+      <div class="col-md-12">
+        <div class="col-md-6 left-text-login">
+          <div class="col-md-12 login-logo">
+            <img src="./../../../assets/img/logo.png" width="50%" alt="brand" />
+          </div>
+          <div class="col-md-12 text-definition">
+            {{'login-msg' | i18n}}
+          </div>
+          <div class="col-md-12">
+            <img class="pull-right" src="./../../../assets/img/gc.png" alt="grainchain" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="panel login-form">
+            <div class="panel-body bodyh">
+              <div class="col-md-12 padding-0">
+                <div class="col-md-12 login-title ">
+                  <h2 class="font-blue">{{'welcome-to' |  i18n}}</h2>
+                  <h5 class="font-blue">{{ 'SiloSys' }}</h5>
+                </div>
+                <ng-container *ngIf="!hasInstaces; else elseInstance">
+                  <form (submit)="getInstance()">
+                    <div class="col-md-12 enter-btn enter-btn">
+                      <div class="input-group margin-bottom-sm">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                        <input autocomplete="off" class="form-control" type="email" name="email" id="email"
+                          placeholder="{{'email-address' | i18n}}" [formControl]="emailControl" />
+                      </div>
+                      <label *ngIf="emailControl.dirty && emailControl.hasError('required')" class="error-msg-form">
+                        {{'is-required-msg' | i18n}}
+                      </label>
+                      <label *ngIf="emailControl.dirty && emailControl.hasError('pattern')" class="error-msg-form">
+                        {{'not-email-valid-msg' | i18n}}
+                      </label>
+                      <div class="col-md-12 login-btn">
+                        <div class="col-md-5 pull-right p0">
+                          <button class="btn btn-primary btn-sm w-100" [disabled]="emailControl.invalid">
+                            {{'log-in' | i18n}}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </ng-container>
+                <ng-template #elseInstance>
+                  <form (submit)="login($event)">
+                    <div class="col-md-12 frm-usr-login">
+                      <div class="input-group margin-bottom-sm mrg-btm-10">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                        <select class="form-control" (change)=setInstance($event.target.value)>
+                          <option *ngFor="let item of instances" [value]="item.id">{{item.name}}</option>
+                        </select>
+
+                      </div>
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                        <input autocomplete="off" class="form-control" type="password" name="password" id="password" 
+                        autofocus placeholder="{{'password' | i18n}}" [formControl]="passwordControl"/>
+                      </div>
+                      <label *ngIf="passwordControl.dirty && passwordControl.hasError('required')" class="error-msg-form">
+                        {{'is-required-msg' | i18n}}
+                      </label>
+                      <div class="col-md-12 btn-login">
+                        <div class="col-md-5 pull-right btn-blue-log pding-left-0 p0">
+                          <button [disabled]="passwordControl.invalid" class="btn btn-primary btn-sm w-100">
+                            {{'log-in' | i18n}}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="panel-body panel-body-req" *ngIf="pendings.length > 0">
+  <div class="col-md-12 col-xs-12 pad-top-1 p0 req-body-h" perfectScrollbar>
+    <ng-container *ngFor="let pending of pendings">
+      <div class="col-xs-12 row-info" *ngIf="pending.entity_name === entity">
+        <div class="col-lg-8 col-xs-7 row-detail">
+          <img class="hidden-xs pad-right-5 entity-icon" src="{{srcIcon}}">
+          <span class="font-ss11">{{pending.name }}</span>
+        </div>
+        <div class="col-lg-4 col-xs-5 pointer p0 waiting-icon" *ngIf="pending.error_code === 0; else actions">
+          <img class="pull-right" src="./../../../assets/img/icon-pending-circle.png"
+            tooltip="{{'waiting-for-d-app' | i18n}}" placement="top" delay="300">
+        </div>
+        <ng-template #actions>
+          <div class="col-lg-4 col-xs-5 pointer p0 cud-icon">
+            <img class="pull-right pointer" src="./../../../assets/img/icon-cross.png"
+              (click)="emitEvent('delete', pending)" tooltip="{{'delete' | i18n}}" placement="top" delay="300">
+            <img *ngIf="pending.error_code === 0 && pending.cudtype_id !== 3" class="pull-right mrg-rifht-2" src="./../../../assets/img/icons/icon-edit.png"
+              (click)="emitEvent('edit', pending)" tooltip="{{'edit' | i18n}}" placement="top" delay="300">
+            <img class="pull-right mrg-rifht-2" src="./../../../assets/img/icons/icon-info-gray.png"
+              (click)="showRequestInfo(pending.error_code)" tooltip="{{'show-info' | i18n}}" placement="top"
+              delay="300">
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+</div>

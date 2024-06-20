@@ -1,0 +1,165 @@
+<section class="sort-machine-listener" [ngSwitch]="listenerStatus">
+    <div class="sort-machine-listener__area">
+        <ng-container *ngSwitchCase="LISTENER_STATUS.UNSELECTED" [ngTemplateOutlet]="buttonCaptureInformation">
+        </ng-container>
+        <ng-container *ngSwitchCase="LISTENER_STATUS.DISABLED" [ngTemplateOutlet]="buttonCaptureInformation"></ng-container>
+        <ng-container *ngSwitchCase="LISTENER_STATUS.STABILIZED" [ngTemplateOutlet]="areaData">
+        </ng-container>
+        <ng-container *ngSwitchCase="LISTENER_STATUS.STABILIZING" [ngTemplateOutlet]="connectingStatusMessage">
+        </ng-container>
+        <ng-container *ngSwitchCase="LISTENER_STATUS.CONNECTING" [ngTemplateOutlet]="connectingStatusMessage">
+        </ng-container>
+        <ng-container *ngSwitchCase="LISTENER_STATUS.DISCONNECTED" [ngTemplateOutlet]="disconnectedStatusMessage">
+        </ng-container>
+        <ng-container *ngSwitchCase="LISTENER_STATUS.RESET" [ngTemplateOutlet]="resetStatusMessage">
+        </ng-container>
+    </div>
+    <ng-container *ngSwitchCase="LISTENER_STATUS.STABILIZED" [ngTemplateOutlet]="successStatusMessage">
+    </ng-container>
+    <div *ngSwitchDefault class="sort-machine-listener__default-status"></div>
+</section>
+
+<ng-template #areaData>
+    <div class="sort-machine-listener__sorter-machine">
+        <div class="sort-machine-listener__sorter-machine__data">
+            <p class="sort-machine-listener__sorter-machine__label">
+                {{'sort-machine-product-in' |i18n}}:
+            </p>
+            <p class="sort-machine-listener__sorter-machine__value">
+                {{eventSortMachine.total | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}}
+                <span class="sort-machine-listener__sorter-machine__label">{{weightUnity}}</span> 
+                <span *ngIf="weightUnity != configuration.measurementUnitAbbreviation">
+                    /
+                    {{
+                        eventSortMachine.total * configuration.baseMeasurementUnitFactorKgs 
+                        / configuration.baseMeasurementUnitFactor
+                        | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} 
+                    <span class="sort-machine-listener__sorter-machine__label">
+                        {{configuration.measurementUnitAbbreviation}}
+                    </span>
+                </span>
+                <span class="sort-machine-listener__sorter-machine__label"> - 100 %</span>
+            </p>
+        </div>
+        <div class="sort-machine-listener__sorter-machine__data">
+            <p class="sort-machine-listener__sorter-machine__label">
+                {{'sort-machine-product-out' |i18n}}:
+            </p>
+            <p class="sort-machine-listener__sorter-machine__value">
+                {{eventSortMachine.bad | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}}
+                <span class="sort-machine-listener__sorter-machine__label">{{weightUnity}}</span>
+                <span *ngIf="weightUnity != configuration.measurementUnitAbbreviation">
+                    /
+                    {{
+                        eventSortMachine.bad * configuration.baseMeasurementUnitFactorKgs 
+                        / configuration.baseMeasurementUnitFactor
+                        | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} 
+                    <span class="sort-machine-listener__sorter-machine__label">
+                        {{configuration.measurementUnitAbbreviation}}
+                    </span>
+                </span>
+                <span class="sort-machine-listener__sorter-machine__label"> 
+                    - {{eventSortMachine.exitRatio | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} %
+                </span>
+            </p>
+        </div>
+        <div class="sort-machine-listener__sorter-machine__data">
+            <p class="sort-machine-listener__sorter-machine__label">
+                {{'sort-machine-speed-production' |i18n}}:
+            </p>
+            <p class="sort-machine-listener__sorter-machine__value">
+                {{eventSortMachine.speed | number : "1." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} t/h
+            </p>
+        </div>
+        <div class="sort-machine-listener__sorter-machine__data">
+            <p class="sort-machine-listener__sorter-machine__label">
+                {{'sort-machine-impurity-ratio' |i18n}}:
+            </p>
+            <p class="sort-machine-listener__sorter-machine__value">
+                {{eventSortMachine.impurityRatio | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} %
+            </p>
+        </div>
+        <div class="sort-machine-listener__sorter-machine__data">
+            <p class="sort-machine-listener__sorter-machine__label">
+                {{'sort-machine-defective-ratio' |i18n}}:
+            </p>
+            <p class="sort-machine-listener__sorter-machine__value">
+                {{eventSortMachine.defectiveRatio | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} %
+            </p>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #buttonCaptureInformation>
+    <div class="sort-machine-listener__unselected-status">
+        <div class="sort-machine-listener__unselected-status__text">
+            {{'sort-machine-default-message' | i18n}}
+        </div>
+        <div *ngIf="sortMachine" class="sort-machine-listener__unselected-status__action no-select" (click)="captureInformation()">
+            {{'sort-machine-capture-message' | i18n}}
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #disconnectedStatusMessage>
+    <div class="sort-machine-listener__disconnected-status">
+        <div class="sort-machine-listener__disconnected-status__icon">
+            <i class="icon-close-circle"></i>
+        </div>
+        <div class="sort-machine-listener__disconnected-status__text">
+            {{'sort-machine-unestabilized-status' | i18n}}
+        </div>
+        <div class="sort-machine-listener__disconnected-status__action no-select" (click)="captureInformation()">
+            {{'sort-machine-retry-connection' | i18n}}
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #connectingStatusMessage>
+    <div class="sort-machine-listener__stabilizing-status">
+        <div class="sort-machine-listener__stabilizing-status__icon">
+            <i class="icon-loading"></i>
+        </div>
+        <div class="sort-machine-listener__stabilizing-status__text">
+            {{'sort-machine-coneccting-status' | i18n}}
+        </div>
+        <div class="sort-machine-listener__stabilizing-status__action no-select" (click)="cancelCapture()">
+            {{'sort-machine-cancel-message' | i18n}}
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #successStatusMessage>
+    <div class="sort-machine-listener__sucess-status">
+        <div class="sort-machine-listener__sucess-status__icon">
+            <i class="icon-note-open"></i>
+        </div>
+        <div class="sort-machine-listener__sucess-status__text">
+            {{'sort-machine-sucess-status' | i18n}}
+        </div>
+        <div class="sort-machine-listener__sucess-status__action no-select" (click)="captureInformation()">
+            {{'sort-machine-capture-new-message' | i18n}}
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #resetStatusMessage>
+    <div class="sort-machine-listener__reset-status">
+        <div class="sort-machine-listener__reset-status__text">
+            <p class="sort-machine-listener__reset-status__text__title">
+                {{'sort-machine-listener-reset-title' |i18n}}
+            </p>
+            <ol>
+                <li>
+                    {{'sort-machine-listener-reset-information' |i18n}} 
+                    <span>“{{'reset' |i18n}}”</span>.
+                </li>
+                <li>
+                    {{'sort-machine-listener-reset-information-continue' |i18n}} 
+                    <span>“{{'continue' |i18n}}”</span>.
+                </li>
+            </ol>
+        </div>
+    </div>
+</ng-template>

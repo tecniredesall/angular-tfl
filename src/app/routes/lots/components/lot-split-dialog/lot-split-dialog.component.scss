@@ -1,0 +1,198 @@
+@import "src/scss/breakpoints.scss";
+
+.lot-split-container {
+    padding: 16px;
+    display: grid;
+
+    .error-percentage {
+        border: 1px solid #df0000;
+        box-shadow: 0 1px 5px rgba(255, 0, 0, 0.2);
+    }
+    .error-percentage-lbl {
+        color: #df0000;
+    }
+    &__title {
+        font-size: 28px;
+        font-weight: 600;
+        height: 60px;
+        border-bottom: solid 1px var(--tr-border-color);
+        color: var(--tr-base-color-blue);
+        padding: 0px 15px;
+        width: 100%;
+    }
+    &__content {
+        display: grid;
+        margin-top: 20px;
+        &-lot-info {
+            display: grid;
+            padding: 0px 15px;
+            &__date {
+                display: grid;
+                font-weight: 600;
+                &-info {
+                    font-size: 26px;
+                    color: var(--tr-dialog-confirmation-color);
+                }
+                &-label {
+                    font-size: 14px;
+                    color: var(--tr-labe-columns-list-color);
+                    i {
+                        margin-right: 10px;
+                    }
+                }
+            }
+            &__totals {
+                display: grid;
+                padding: 4px 16px;
+                margin-top: 8px;
+                box-shadow: 0 0 7px 0 var(--tr-panel-shadown-color);
+                align-items: center;
+                border-radius: 5px;
+                grid-template-columns: repeat(2, 1fr);
+                &-label {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: var(--tr-data-grid-color);
+                }
+                &-quantity {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: var(--tr-mat-icons-documents-color);
+                    text-align: end;
+                }
+            }
+        }
+        &-lot-label {
+            padding: 0px 15px;
+            font-size: 14px;
+            color: var(--tr-labe-columns-list-color);
+            margin-top: 15px;
+            align-content: center;
+            i {
+                color: var(--tr-base-color-yellow);
+                margin-right: 10px;
+            }
+        }
+
+        &-lot-origin {
+            box-shadow: 0 0 7px 0 var(--tr-panel-shadown-color);
+            display: grid;
+            padding: 15px;
+            &__info {
+                display: grid;
+                span {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: var(--tr-data-grid-color);
+                }
+                p {
+                    font-size: 12px;
+                    color: var(--tr-labe-columns-list-color);
+                }
+            }
+            &__percentage {
+                display: grid;
+                column-gap: 20px;
+                grid-template-columns: 35% 1fr;
+                color: var(--tr-data-grid-color);
+                .group-form-input {
+                    position: relative;
+                    .sil-form__input {
+                        margin-bottom: 15px;
+                        position: relative;
+                    }
+                    span {
+                        color: var(--tr-base-color-blue);
+                        font-size: 16px;
+                        right: 10px;
+                        position: absolute;
+                        top: 30px;
+                        z-index: 1;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+        &__split {
+            padding: 0px 15px;
+            margin-top: 15px;
+            display: grid;
+            &__percentage {
+                display: grid;
+                column-gap: 20px;
+                grid-template-columns: 35% 1fr;
+                color: var(--tr-data-grid-color);
+                .group-form-input {
+                    position: relative;
+                    margin-bottom: 15px;
+                    .sil-form__input {
+                        background: transparent;
+                        position: relative;
+                        z-index: 2;
+                    }
+                    span {
+                        color: var(--tr-base-color-blue);
+                        font-size: 16px;
+                        right: 10px;
+                        position: absolute;
+                        top: 7px;
+                        z-index: 1;
+                        font-weight: 600;
+                    }
+                }
+                .form__input-percentage {
+                    width: 80%;
+                    display: inline;
+                    margin-right: 10px;
+                }
+                .erase-icon {
+                    color: #df0000;
+                    text-align: center;
+                }
+                &__container{
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 15px;
+                }
+            }
+        }
+        &__add {
+            padding: 0px 15px;
+        }
+    }
+    &__footer {
+        margin-top: 16px;
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .lot-split-container {
+        padding: 30px;
+        &__title {
+            width: 50%;
+        }
+        &__content {
+            &-lot-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            &-lot-origin {
+                &__percentage {
+                    column-gap: 40px;
+                    grid-template-columns: 30% 1fr;
+                }
+            }
+            &__split {
+                &__percentage {
+                    display: grid;
+                    column-gap: 40px;
+                    grid-template-columns: 30% 1fr;
+                    .form__input-percentage {
+                        width: 90%;
+                        margin-right: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

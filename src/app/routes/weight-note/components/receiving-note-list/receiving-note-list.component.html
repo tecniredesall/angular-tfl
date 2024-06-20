@@ -1,0 +1,291 @@
+<div class="principal-panel panel-receiving-note" *blockUI="'notes-reception'; template: templateBlockModalUiComponent">
+    <ng-container *ngIf="receptionNotes.length > 0; else emptyState">
+        <div class="col-xs-12 pad-top-10 p0 mrg-top-25 panel-receiving-note-headers hidden-xs hidden-sm">
+            <div class="note-column-arrow">
+                <span class="fa fa-sort pointer sort-left" (click)="colapseExpandAllElements()"></span>
+            </div>
+            <div class="col-xs-11 col-sm-11 notes-table-headers p0">
+                <div class="col-lg-2 label-table hidden-sm p0 note-column-start" (click)="sortData('start_date')">
+                    {{ "creation" | i18n | uppercase }}
+                    <i [ngClass]="columnAscState.start_date ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-id" (click)="sortData('reception_code')">
+                    {{ "id" | i18n | uppercase }}
+                    <i [ngClass]="columnAscState.reception_code ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-producer" (click)="sortData('seller')">
+                    {{ "producer" | i18n | uppercase }}
+                    <i [ngClass]="columnAscState.seller ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-type" (click)="sortData('transformations')">
+                    {{ "type" | i18n | uppercase }}
+                    <i [ngClass]="columnAscState.transformations ? 'icon-caret-down' : 'icon-caret-up' "></i>
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-tanks" (click)="sortData('tanks')">
+                    {{ "warehouse" | i18n | uppercase }}
+                    <i [ngClass]="columnAscState.tanks ? 'icon-caret-down' : 'icon-caret-up' "></i>
+
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-weight" (click)="sortData('net_weight')">
+                    {{ "net-weight" | i18n | uppercase }}
+                    <i [ngClass]="columnAscState.net_weight ? 'icon-caret-down' : 'icon-caret-up' "></i>
+
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-certifications">
+                    {{ "seals" | i18n | uppercase }}
+                </div>
+                <div class="col-lg-1 label-table p0 note-column-options">
+                    {{ "status" | i18n | uppercase }}
+                </div>
+            </div>
+        </div>
+        <div>
+            <ng-container *ngFor="let note of receptionNotes; let i = index">
+                <div class="pad-top-10 panel-receiving-note-notes">
+                    <div class="header-titles-table p0">
+                        <div class="panel panel-default">
+                            <div class="panel-heading row-collapse row-height-c">
+                                <div class="note-column-arrow" (click)="openNote(note.id,i)">
+                                    <div *ngIf="note.weightNotes.length > 0">
+                                        <ng-container *ngIf="
+                                           note.isColapse;
+                                            else closeIconTemplate
+                                        ">
+                                            <i class="icon icon-caret-down"></i>
+                                        </ng-container>
+                                        <ng-template #closeIconTemplate>
+                                            <i class="icon icon-arrow_right"></i>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div class="note-columns-container">
+                                    <div class="note note-column-start hidden-xs">
+                                        <p class="label-table hidden-xs visible-sm">{{ "creation" | i18n | uppercase }}
+                                        </p>
+                                        <p>{{ note?.startDate | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY
+                                            HH:mm" : true }}</p>
+                                        <p>{{ note.creationName }}</p>
+                                    </div>
+                                    <div class="note note-column-id">
+                                        <p class="label-table visible-xs visible-sm">{{ "id" | i18n | uppercase}}</p>
+                                        {{ note.folio }}
+                                    </div>
+                                    <div class="note note-column-producer">
+                                        <p class="label-table visible-xs visible-sm"> {{ "producer" | i18n | uppercase
+                                            }}</p>
+                                        <span class="note-text-producer">{{ note.weightNotes[0]?.producerName }}
+                                            {{note.weightNotes[0]?.paternalLast}}</span>
+                                    </div>
+                                    <div class="note note-column-type">
+                                        <p class="label-table visible-xs visible-sm"> {{ "type" | i18n | uppercase }}
+                                        </p>
+                                        <div [ngClass]="{'note-column-information':note.tanks > 1 }">
+                                            {{ note.transformations > 1 || note.transformations == 0
+                                            ? note.transformations
+                                            : note.weightNotes[0]?.ctName
+                                            }}
+                                            <span *ngIf="note.transformations > 1" class="note-information "
+                                                #tooltip="matTooltip" [matTooltip]="note.transformationsMessage">i
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="note note-column-tanks">
+
+                                        <p class="label-table visible-xs visible-sm"> {{ "warehouse" | i18n | uppercase
+                                            }}</p>
+                                        <div [ngClass]="{'note-column-information':note.tanks > 1 }">
+                                            {{ note.tanks > 1 || note.tanks == 0? note.tanks :
+                                            note.weightNotes[0]?.vtankName}}
+                                            <span *ngIf="note.tanks > 1" class="note-information" #tooltip="matTooltip"
+                                                [matTooltip]="note.tanksMessage">i
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="note note-column-weight"
+                                        [ngClass]="{'tr--font-red': note.netWeight == 0}">
+                                        <p class="label-table visible-xs visible-sm"> {{ "net-weight" | i18n | uppercase
+                                            }} </p>
+                                        {{ note.netQQ | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }}
+                                        {{ configuration.conversionMeasurementUnitAbbreviation }}
+                                    </div>
+                                    <div class="note note-column-certifications">
+                                        <p class="label-table visible-xs visible-sm"> {{ "seals" | i18n | uppercase }}
+                                        </p>
+
+                                    </div>
+
+                                    <div class="note note-column-options">
+                                        <div class="note-status hidden-xs hidden-sm"
+                                            [ngClass]=" note.isClose ? 'note-close': 'note-open' ">
+                                            <i class="no-select font-ss16"
+                                                [ngClass]="note.isClose ? 'icon-note-close': 'icon-note-open'">
+                                            </i>
+                                            <p class="hidden-sm">
+                                                {{ (note.isClose ? "closed" : "open" ) | i18n }}
+                                            </p>
+                                        </div>
+
+                                        <span mat-icon-button [matMenuTriggerFor]="options"> <i
+                                                class=" note note-column-menu-options no-select icon-options-vertical"></i>
+                                        </span>
+
+                                        <mat-menu #options="matMenu">
+                                            <button mat-menu-item [routerLink]="
+                                            ['detail-note', note.id]"
+                                                [disabled]="note.weightNotes.length == 0 ||  !note.weightNotes[0].ctName || !note.weightNotes[0].vtankName">
+                                                {{ "view" | i18n }}
+                                            </button>
+                                            <button mat-menu-item (click)="onEditNote(note)" *permission="{
+                                                tag: note.isClose ? PERMISSIONS.UPDATE_CLOSE_NOTE : PERMISSIONS.WEIGHT_NOTE,
+                                                type: PERMISSION_TYPES.UPDATE
+                                            }">
+                                                {{ "edit" | i18n }}
+                                            </button>
+                                            <button mat-menu-item (click)="closeReceivingNote(note)"
+                                                *permission="{
+                                                    tag: PERMISSIONS.WEIGHT_NOTE,
+                                                    type: PERMISSION_TYPES.UPDATE
+                                                }"
+                                                [disabled]="!note.isAllowedCloseNote">
+                                                {{ "close-note" | i18n }} </button>
+                                        </mat-menu>
+                                    </div>
+                                    <div class="visible-xs visible-sm note-column-status">
+                                        <p class="label-table hidden-xs visible-sm "> {{ "status" | i18n | uppercase }}
+                                        </p>
+                                        <div class="note-status" [ngClass]="note.isClose ? 'note-close' : 'note-open' ">
+                                            <i class="no-select  font-ss16"
+                                                [ngClass]="note.isClose ==RECEIVING_NOTE_STATUS.CLOSED ? 'icon-note-close': 'icon-note-open'"></i>
+                                            <p class="hidden-xs visible-sm ">{{ (note.isClose ? "closed" : "open" ) |
+                                                i18n }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="note.isColapse" [id]="note.id" class="panel-collapse collapse in panel-body-c"
+                            role="tabpanel" style="padding: 0px">
+                            <div class="child-row-note panel-body" *ngFor="let weightNote of note.weightNotes">
+                                <div class="note-column-arrow icon-reception-child ">
+                                    <i class="icon-notas"></i>
+                                </div>
+                                <div class="note-weight-container">
+                                    <div class="note note-column-start hidden-xs ">
+                                        <p class="label-table hidden-xs visible-sm">{{ "creation" | i18n | uppercase }}
+                                        </p>
+                                        <p> {{ weightNote?.startDate | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM
+                                            DD, YYYY HH:mm" : true }}</p>
+                                        <p>{{ weightNote.creationName }}</p>
+                                    </div>
+                                    <div class="note note-column-id">
+                                        <p class="label-table visible-xs visible-sm"> {{ "id" | i18n | uppercase }}</p>
+                                        {{ weightNote.transactionInId }}
+                                    </div>
+                                    <div class="note note-column-producer">
+                                        <p class="label-table visible-xs visible-sm"> {{ "producer" | i18n | uppercase
+                                            }}</p>
+                                        {{ weightNote.producerName }}
+                                    </div>
+                                    <div class="note note-column-type">
+                                        <p class="label-table visible-xs visible-sm"> {{ "type" | i18n | uppercase }}
+                                        </p>{{ weightNote.ctName }}
+                                    </div>
+                                    <div class="note note-column-tanks">
+                                        <p class="label-table visible-xs visible-sm"> {{ "warehouse" | i18n | uppercase
+                                            }}</p>{{ weightNote.vtankName }}
+                                    </div>
+                                    <div class="note note-column-weight"
+                                        [ngClass]="{'tr--font-red': weightNote.status == WEIGHT_NOTE_STATUS.DELETED}">
+                                        <p class="label-table visible-xs visible-sm"> {{ "net-weight" | i18n | uppercase
+                                            }}</p>
+                                        {{ (weightNote.netdrywt * configuration.baseMeasurementUnitFactor) | number :
+                                        "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }}
+                                        {{ configuration.conversionMeasurementUnitAbbreviation }}
+                                    </div>
+                                    <div class="note-column-certifications">
+                                        <p class="label-table visible-xs visible-sm"> {{ "seals" | i18n | uppercase }}
+                                        </p>
+                                        <div>
+                                            <ng-container *ngFor=" let certification of weightNote.certifications">
+                                                <div class="img-cont-seal-note" style="z-index: 5">
+                                                    <img [src]="certifications[certification.name]?.image"
+                                                        [alt]="certification.name" />
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                    <div class="note-column-options">
+
+                                        <div class="note-status hidden-xs hidden-sm"
+                                            [ngClass]=" weightNote.status == WEIGHT_NOTE_STATUS.OPEN ? 'note-open' : weightNote.status == WEIGHT_NOTE_STATUS.CLOSED ? 'note-close' : 'note-cancel' ">
+                                            <i class=" no-select font-ss16"
+                                                [ngClass]="weightNote.status == WEIGHT_NOTE_STATUS.OPEN ? 'icon-note-open': weightNote.status == WEIGHT_NOTE_STATUS.CLOSED ? 'icon-note-close' : 'icon-note-canceled'">
+                                            </i>
+                                            <p class="hidden-sm">
+                                                {{ (weightNote.status == WEIGHT_NOTE_STATUS.OPEN ? "open" :
+                                                weightNote.status == WEIGHT_NOTE_STATUS.CLOSED ? "closed" : "voided") |
+                                                i18n }}
+                                            </p>
+                                        </div>
+
+                                        <span mat-icon-button [matMenuTriggerFor]="menu">
+                                            <i
+                                                class=" note note-column-menu-options no-select icon-options-vertical"></i>
+                                        </span>
+
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item [routerLink]="[
+                                                'detail-note',
+                                                note.id
+                                            ]">
+                                                {{ "view" | i18n }}
+                                            </button>
+                                            <button
+                                                [disabled]="weightNote.status == WEIGHT_NOTE_STATUS.DELETED || weightNote.lotId"
+                                                mat-menu-item (click)="onEditNote(note, weightNote)" *permission="{
+                                                tag: weightNote.status == WEIGHT_NOTE_STATUS.CLOSED ?
+                                                    PERMISSIONS.UPDATE_CLOSE_NOTE : PERMISSIONS.WEIGHT_NOTE,
+                                                type: PERMISSION_TYPES.UPDATE
+                                            }">
+                                                {{ "edit" | i18n }}
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+
+                                    <div class="visible-xs note-column-status visible-sm note-column-status">
+                                        <p class="label-table hidden-xs visible-sm "> {{ "status" | i18n | uppercase }}
+                                        </p>
+                                        <div class="note-status"
+                                            [ngClass]="weightNote.status == WEIGHT_NOTE_STATUS.OPEN? 'note-open' : weightNote.status == WEIGHT_NOTE_STATUS.CLOSED ? 'note-close': 'note-cancel' ">
+                                            <i class=" no-select  font-ss16"
+                                                [ngClass]="weightNote.status == WEIGHT_NOTE_STATUS.OPEN ? 'icon-note-open': weightNote.status == WEIGHT_NOTE_STATUS.CLOSED ? 'icon-note-close' : 'icon-note-canceled'"></i>
+                                            <p class="hidden-xs visible-sm">{{(weightNote.status ==
+                                                WEIGHT_NOTE_STATUS.OPEN ? "open" : weightNote.status ==
+                                                WEIGHT_NOTE_STATUS.CLOSED ? "closed" : "voided") | i18n}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <!-- Paginator -->
+        <div class="pl-container-paginator">
+            <mat-paginator class="custom-paginator" [length]="paginator.totalItems"
+                [pageIndex]="paginator.currentPage - 1" [pageSize]="paginator.itemsPerPage"
+                [pageSizeOptions]="[paginator?.itemsPerPage]" (page)="eventPaginator($event)" showFirstLastButtons
+                #matPaginator>
+            </mat-paginator>
+        </div>
+    </ng-container>
+
+
+    <ng-template #emptyState>
+        <app-not-results-found></app-not-results-found>
+    </ng-template>
+</div>

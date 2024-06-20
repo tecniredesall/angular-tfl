@@ -1,0 +1,426 @@
+.t-drivers {
+  position: relative;
+  top: -70px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 70px 0 0 0;
+
+  .t-drivers-container {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    .t-drivers-content {
+      @extend .t-drivers-container;
+      padding: 40px;
+      height: 100%;
+      max-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      .t-drivers-list-view {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: max-content auto;
+        grid-template-areas:
+          "mainHeader"
+          "dataGrid";
+
+        &.t-drivers-view-xs .t-drivers-main-header,
+        &.t-drivers-view-sm .t-drivers-main-header {
+          padding-bottom: 30px !important;
+        }
+
+        &.t-drivers-view-lg .t-drivers-main-header {
+          padding-bottom: 50px !important;
+        }
+
+        .t-drivers-main-header {
+          grid-area: mainHeader;
+        }
+
+        .t-drivers-data-grid {
+          grid-area: dataGrid;
+
+          @at-root .t-drivers-view-md .t-drivers-data-grid {
+            margin-top: 16px;
+          }
+
+          @at-root .t-drivers-view-xs .t-drivers-data-grid-header {
+            display: none !important;
+          }
+
+          @at-root .t-drivers-view-sm .t-drivers-data-grid-header {
+            display: none !important;
+          }
+
+          @at-root .t-drivers-view-md .t-drivers-data-grid-header {
+            grid-template-areas: "driverName driverName driverLicense driverIdentity driverType driverActions";
+            grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 0.8fr) minmax(130px, 1fr) minmax(130px, 1fr) 45px;
+          }
+
+          @at-root .t-drivers-view-lg .t-drivers-data-grid-header {
+            grid-template-areas: "driverName driverName driverLicense driverIdentity driverType driverActions";
+            grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+          }
+
+          @at-root .t-drivers-view-xl .t-drivers-data-grid-header {
+            grid-template-areas: "driverName driverName driverLicense driverIdentity driverType driverActions";
+            grid-template-columns: 60px minmax(130px, 2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+          }
+
+          .t-drivers-data-grid-header {
+            width: 100%;
+            height: auto;
+            margin-bottom: 12px;
+            display: grid;
+            grid-template-rows: auto;
+
+            .t-drivers-data-grid-header__column {
+              height: auto;
+              font-size: 12px;
+              font-weight: 600;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 1.12px;
+            }
+
+            @at-root :not(.dark) :host .t-drivers-data-grid-header__column {
+              color: #8798ad;
+            }
+
+            @at-root .dark :host .t-drivers-data-grid-header__column {
+              color: #ffffff;
+            }
+
+            .t-drivers-data-grid-header__text {
+              padding: 8px 0;
+              display: inline-block;
+
+              .sort-icon {
+                margin-left: 5px;
+                margin-bottom: 5px;
+              }
+            }
+
+            .t-drivers-data-grid-header__column--name {
+              grid-area: driverName;
+            }
+
+            .t-drivers-data-grid-header__column--license {
+              grid-area: driverLicense;
+            }
+
+            .t-drivers-data-grid-header__column--identity {
+              grid-area: driverIdentity;
+            }
+
+            .t-drivers-data-grid-header__column--type {
+              grid-area: driverType;
+            }
+
+            .t-drivers-data-grid-header__column--actions {
+              grid-area: driverActions;
+
+              @at-root .t-drivers-view-xs
+                  .t-drivers-data-grid-header__text-actions {
+                display: none !important;
+              }
+
+              @at-root .t-drivers-view-sm
+                  .t-drivers-data-grid-header__text-actions {
+                display: none !important;
+              }
+
+              @at-root .t-drivers-view-md
+                .t-drivers-data-grid-header__text-actions {
+                  display: none !important;
+              }
+
+              @at-root .t-drivers-view-lg
+                  .t-drivers-data-grid-header__text-actions {
+                display: block !important;
+              }
+            }
+
+          }
+
+          @at-root .t-drivers-view-xs .t-drivers-data-grid-row {
+            grid-template-areas:
+              "driverNameHeader  driverLicenseHeader driverActions"
+              "driverName driverLicense driverActions"
+              "driverIdentityHeader driverTypeHeader driverTypeHeader"
+              "driverIdentity driverType driverType";
+            grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) 45px;
+            grid-template-rows: 32px auto 32px auto !important;
+            padding: 16px;
+          }
+
+          @at-root .t-drivers-view-sm .t-drivers-data-grid-row {
+            grid-template-areas:
+              "driverNameHeader driverNameHeader  driverLicenseHeader driverActions"
+              "driverInitialsName driverName driverLicense driverActions"
+              "driverIdentityHeader driverIdentityHeader driverTypeHeader driverTypeHeader"
+              "driverIdentity driverIdentity driverType driverType";
+            grid-template-columns: 60px minmax(130px, 1fr) minmax(130px, 1fr) 45px;
+            grid-template-rows: 32px auto 32px auto !important;
+            padding: 16px;
+          }
+
+          @at-root .t-drivers-view-md .t-drivers-data-grid-row {
+            grid-template-areas: "driverInitialsName driverName driverLicense driverIdentity driverType driverActions";
+            grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 0.8fr) minmax(130px, 1fr) minmax(130px, 1fr) 45px;
+          }
+
+          @at-root .t-drivers-view-lg .t-drivers-data-grid-row {
+            grid-template-areas: "driverInitialsName driverName driverLicense driverIdentity driverType driverActions";
+            grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+          }
+
+          @at-root .t-drivers-view-xl .t-drivers-data-grid-row {
+            grid-template-areas: "driverInitialsName driverName driverLicense driverIdentity driverType driverActions";
+            grid-template-columns: 60px minmax(130px, 2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+          }
+
+          .t-drivers-data-grid-row {
+            width: 100%;
+            height: auto;
+            min-height: 53px;
+            margin-bottom: 5px;
+            display: grid;
+            grid-template-rows: auto;
+
+            .t-drivers-initials-name-container {
+              grid-area: driverInitialsName;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding-right: 10px;
+              padding-left: 15px;
+              height: 100%;
+              width: 60px;
+            }
+
+            .t-drivers-initials-name-text {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 35px;
+              width: 35px;
+              -moz-border-radius: 50%;
+              -webkit-border-radius: 50%;
+              border-radius: 50%;
+              background-color: #78bcef;
+              color: white;
+              font-size: 16px;
+              font-weight: 500;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: 1.75;
+              letter-spacing: normal;
+              text-align: center;
+            }
+
+            .t-drivers-data {
+              display: flex;
+              justify-content: left;
+              align-items: center;
+              height: 100%;
+              font-size: 14px;
+              font-weight: 600;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: 1.57;
+              letter-spacing: normal;
+              padding-right: 24px;
+              word-break: break-all;
+            }
+
+            .t-drivers-data-grid-row-header__text{
+              padding: 8px 0;
+              display: inline-block;
+              font-size: 12px;
+              font-weight: 600;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              color: var(--tr-labe-columns-list-color);
+            }
+
+            .t-drivers-name {
+              grid-area: driverName;
+            }
+
+            .t-drivers-header-name {
+              grid-area: driverNameHeader;
+            }
+
+            .t-drivers-license {
+              grid-area: driverLicense;
+            }
+
+            .t-drivers-header-license {
+              grid-area: driverLicenseHeader;
+            }
+
+            .t-drivers-identity {
+              grid-area: driverIdentity;
+            }
+
+            .t-drivers-header-identity {
+              grid-area: driverIdentityHeader;
+            }
+
+            .t-drivers-type {
+              grid-area: driverType;
+            }
+
+            .t-drivers-header-type {
+              grid-area: driverTypeHeader;
+            }
+
+            .t-drivers-actions-container {
+              grid-area: driverActions;
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              height: 100%;
+              padding-right: 8px;
+
+              & .dropdown-menu {
+                width: 92px;
+                min-width: 92px;
+              }
+
+              & .dropdown-menu a {
+                padding: 8px;
+              }
+
+              .t-drivers-action-button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 30px;
+                width: 30px;
+                box-shadow: none;
+                outline: none;
+                border: none;
+                background-color: transparent !important;
+              }
+
+              @at-root .t-drivers-view-xs {
+                .t-drivers-action-button-edit, .t-drivers-action-button-remove {
+                  display: none !important;
+                }
+                .t-drivers-action-button-options {
+                  display: block !important;
+                }
+                .t-drivers-initials-name-container{
+                  display: none !important;
+                }
+              }
+
+              @at-root .t-drivers-view-sm {
+                .t-drivers-action-button-edit, .t-drivers-action-button-remove {
+                  display: none !important;
+                }
+                .t-drivers-action-button-options {
+                  display: block !important;
+                }
+              }
+
+              @at-root .t-drivers-view-md {
+                .t-drivers-action-button-edit, .t-drivers-action-button-remove {
+                  display: none !important;
+                }
+                .t-drivers-action-button-options {
+                  display: block !important;
+                }
+                .t-drivers-data-grid-row-header__text{
+                  display: none !important;
+                }
+              }
+
+              @at-root .t-drivers-view-lg {
+                .t-drivers-action-button-edit .t-drivers-action-button-remove {
+                  display: block !important;
+                }
+                .t-drivers-action-button-options {
+                  display: none !important;
+                }
+                .t-drivers-data-grid-row-header__text{
+                  display: none !important;
+                }
+              }
+
+              @at-root .t-drivers-view-xl {
+                .t-drivers-action-button-edit .t-drivers-action-button-remove {
+                  display: block !important;
+                }
+                .t-drivers-action-button-options {
+                  display: none !important;
+                }
+                .t-drivers-data-grid-row-header__text{
+                  display: none !important;
+                }
+              }
+
+            }
+          }
+
+          @at-root :not(.dark) :host .t-drivers-data-grid-row {
+            background-color: white;
+          }
+
+          @at-root .dark :host .t-drivers-data-grid-row {
+            background-color: #3e4e6c;
+          }
+        }
+      }
+
+      .t-drivers-list-view--fill {
+        height: auto;
+      }
+
+      .t-drivers-list-view--empty {
+        min-height: 100%;
+      }
+    }
+
+    .t-drivers-actions-component {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0;
+      padding: 40px;
+    }
+
+    @at-root :not(.dark) :host .t-drivers-actions-component {
+      background-color: white;
+    }
+
+    @at-root .dark :host .t-drivers-actions-component {
+      background-color: #2f3b52;
+    }
+
+    .t-driver-empty-search-results{
+      margin-top: 90px;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+@media (max-width: 539px) {
+  .t-drivers-content{
+    padding-bottom: 120px !important;
+  }
+}

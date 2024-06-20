@@ -1,0 +1,27 @@
+<div class="t-container-view scroll-view-app">
+    <ng-template #loaderComponent></ng-template>
+    <div class="t-wrapper">
+        <div class="principal-panel p0" style="position: static">
+            
+            <span title class="font-ss18 title-contratc"> {{'dashboard' | i18n}}</span>
+            
+            <div class="col-xs-12">
+                <ng-container *ngIf="hasAnalitycs; else emptyDash">
+
+                </ng-container>
+                <ng-template #emptyDash>
+                    <div class="notfoud-content">
+                        <div class="col-lg-12">
+                            <img [src]="'./assets/img/'+getImageTheme()">
+                        </div>
+                        <div class="col-lg-12"> <span class="not-found-title">{{'empty-dashboard' | i18n}}</span>
+                        </div>
+                        <div class="col-lg-12 not-found-msg-t"> <span>{{ 'empty-dashboard-msg' | i18n}}</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+    </div>
+</div>

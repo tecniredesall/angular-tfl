@@ -1,0 +1,23 @@
+<div class="lot-delete-dialog" *blockUI="'block-delete';template: templateBlockModalUi">
+  <div class="lot-delete-dialog__question no-select">
+    {{'lot-dialog-delete-question' | i18n | stringReplace : '[value]' : data.name}}
+  </div>
+  <div class="lot-delete-dialog__note__title no-select">
+    {{'lot-dialog-delete-note' | i18n}}
+  </div>
+  <div class="lot-delete-dialog__note__info no-select">
+    {{'lot-dialog-delete-info' | i18n}}
+  </div>
+  <div class="lot-delete-dialog__buttons">
+    <div class="lot-delete-dialog__buttons__wrapper">
+      <button class="tr__button__second lot-delete-dialog__buttons__wrapper__cancel" matRipple (click)="onClose()">
+        <span>{{'cancel' | i18n }}</span>
+      </button>
+    </div>
+    <div class="lot-delete-dialog__buttons__wrapper">
+      <button class="tr__button__delete lot-delete-dialog__buttons__wrapper__delete" matRipple (click)="onSumbitDelete()">
+        <span>{{'delete' | i18n }}</span>
+      </button>
+    </div>
+  </div>
+</div>

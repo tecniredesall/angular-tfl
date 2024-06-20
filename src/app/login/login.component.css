@@ -1,0 +1,250 @@
+.body-background-img {
+    color: #fff;
+    font-family: "Open Sans", sans-serif;
+    background-image: url("/assets/img/MainBg.jpg");
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+select.form-control {
+    height: 34px !important;
+}
+
+.input-group {
+    height: 34px !important;
+}
+
+.body-background {
+    font-family: "Open Sans", sans-serif;
+    height: 100%;
+    color: #fff;
+
+    -webkit-background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    background-size: 100% 100%;
+
+    background-image: url("/assets/img/MainBg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    /* The image used */
+    /*  background-size:cover;*/
+    background-size: cover;
+}
+/* Portrait */
+
+@media screen and (orientation: portrait) {
+    /* Portrait styles */
+    .body-background {
+        background-image: url("/assets/img/MainBg.jpg");
+        height: 100%;
+        color: #fff;
+        -webkit-background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        -o-background-size: 100% 100%;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        /* The image used */
+        /*  background-size:cover;*/
+        background-size: cover;
+    }
+}
+
+/* Landscape */
+
+@media screen and (orientation: landscape) {
+    /* Landscape styles */
+    .body-background {
+        background-image: url("/assets/img/MainBg.jpg");
+        height: 100%;
+        color: #fff;
+        -webkit-background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        -o-background-size: 100% 100%;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        /* The image used */
+        /*  background-size:cover;*/
+        background-size: cover;
+    }
+}
+
+@media (min-width: 320px) {
+    /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+    .cont {
+        width: 800px;
+    }
+}
+
+@media (min-width: 320px) {
+    .bodyh {
+        height: 332px;
+    }
+    .mtop {
+        margin-top: 0px;
+    }
+    .cont {
+        width: 100%;
+    }
+    /* smartphones, iPhone, portrait 480x320 phones */
+}
+
+@media (min-width: 481px) {
+    .bodyh {
+        height: 332px;
+    }
+    .mtop {
+        margin-top: 0px;
+    }
+    .cont {
+        width: 450px;
+    }
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+}
+
+@media (min-width: 641px) {
+    .bodyh {
+        height: 332px;
+    }
+    .mtop {
+        margin-top: 0px;
+    }
+    .cont {
+        width: 450px;
+    }
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+}
+
+@media (min-width: 961px) {
+    .bodyh {
+        height: 332px;
+    }
+    .mtop {
+        margin-top: 130px;
+    }
+    .cont {
+        width: 800px;
+    }
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+}
+
+@media (min-width: 1025px) {
+    .bodyh {
+        height: 300px;
+    }
+    .mtop {
+        margin-top: 300px;
+    }
+    .cont {
+        width: 800px;
+    }
+    /* big landscape tablets, laptops, and desktops */
+}
+
+@media (min-width: 1281px) {
+    .bodyh {
+        height: 300px;
+    }
+    .mtop {
+        margin-top: 300px;
+    }
+    .cont {
+        width: 800px;
+    }
+    /* hi-res laptops and desktops */
+}
+
+.spinner {
+    margin: 0 auto;
+    height: 25px;
+    width: 25px;
+    animation: rotate 0.8s infinite linear;
+    border: 5px dotted grey;
+    border-right-color: transparent;
+    border-radius: 50%;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.text-definition {
+    margin-bottom: 40px;
+    font-size: 12px;
+    padding: 0px 5px 0px 15px;
+}
+
+.left-text-login {
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.login-logo {
+    margin-bottom: 40px;
+}
+
+.login-form {
+    border: 1px solid #ddd;
+    box-shadow: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.login-title {
+    margin-bottom: 17px;
+    color: #002e5c;
+}
+
+.error-msg {
+    padding: 0px 0px 0px 20px;
+    color: #ff0000;
+    font-size: 11px;
+    margin-top: -8px;
+}
+
+.enter-btn {
+    padding: 10px 0px 0px 20px;
+}
+
+.login-btn {
+    padding: 25px 0px 0px 20px;
+}
+
+.login-btn div {
+    margin-bottom: 17px;
+    color: #002e5c;
+    padding-left: 0px;
+}
+
+.spinner-separator {
+    margin-bottom: 17px;
+    color: #002e5c;
+    padding-left: 10px;
+}
+
+.frm-usr-login {
+    padding: 0px 0px 0px 20px;
+}
+
+.btn-login {
+    padding: 25px 0px 0px 20px;
+}
+
+.btn-blue-log {
+    margin-bottom: 17px;
+    color: #002e5c;
+}

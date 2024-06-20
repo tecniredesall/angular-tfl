@@ -1,0 +1,202 @@
+<div class="row penalties-table__container" [ngClass]="{
+    'with-right-space': (penaltiesFormArray.controls.length > 1 || deductionsTradingStatus.isBeingCalculated)
+}">
+  <div class="penalties-table__title">
+    {{ "characteristics-information" | i18n }}
+  </div>
+
+  <div class="penalties-table">
+    <ng-container [formGroup]="penalty" *ngFor="
+            let penalty of penaltiesFormArray.controls;
+            let penaltyIndex = index;
+            let lastPenalty = last
+        ">
+      <div class="penalties-table__controls">
+        <!-- Characteristic -->
+        <div class="penalties-table__controls__characteristic">
+
+          <custom-select formControlName="characteristic" [label]="'commodity-feature' | i18n" [placeholder]="penalty.get('characteristic').enabled?
+              ('placeholder-characteristic'| i18n)
+              : ''" [items]="penalty.get('characteristicsEnabled').value" [bindLabel]="'name'"
+            [emptyLabel]="'not-items-found' | i18n" [isLoading]="isLoadingCharacteristics"
+            [searchPlaceholder]="'search-characteristic-placeholder' | i18n"
+            (onSelect)="setCharacteristic(penaltyIndex)"
+
+            >
+          </custom-select>
+        </div>
+        <!-- Selection -->
+        <div class="penalties-table__controls__selection">
+          <div class="penalties-table__controls__label">
+            <span>
+              {{"deduction-selection" | i18n}}*
+            </span>
+          </div>
+          <div class="penalties-table__controls__input" [ngSwitch]=" penalty.get('characteristic').value?.deduction?.type">
+            <span *ngSwitchCase="DEDUCTION_TYPE.TABLE" class="rn-deduction__container-empty-selection">N/A</span>
+            <span *ngSwitchCase="DEDUCTION_TYPE.INPUT" class="rn-deduction__container-empty-selection">N/A</span>
+            <ng-container *ngSwitchCase="DEDUCTION_TYPE.CHOICE">
+              <custom-select formControlName="choiceDeduction" [placeholder]="'select-choice-deduction' | i18n"
+                [items]="penalty.get('characteristic').value?.deduction?.options" [bindLabel]="'name'"
+                [emptyLabel]="'not-items-found' | i18n" [isLoading]="isLoadingCharacteristics"
+                [searchPlaceholder]="'t-buyers-placeholder-search' | i18n"
+                (onSelect)="setDeductionSelection(penaltyIndex,$event)" class="custom-select"
+
+                >
+              </custom-select>
+            </ng-container>
+            <label *ngIf="penalty.get('choiceDeduction').dirty" class="error-msg-form">
+              <label *ngIf="penalty.get('choiceDeduction').hasError('required')">
+                {{ "is-required-msg" | i18n }}
+              </label>
+            </label>
+            <span *ngSwitchDefault class="rn-deduction__container-empty-selection">N/A</span>
+          </div>
+        </div>
+        <!-- Value -->
+        <div class="penalties-table__controls__value">
+          <div class="penalties-table__controls__label">
+            <span>{{ "valueM" | i18n }} *</span>
+          </div>
+          <ng-container [ngSwitch]="penalty.get('characteristic').value?.deduction?.type">
+            <!-- Value for deduction type table -->
+            <div *ngSwitchCase="DEDUCTION_TYPE.TABLE">
+              <input formControlName="value" class="penalties-table__input" type="text"
+                (input)="eventChangePenaltyValue(penaltyIndex)" [placeholder]="'placeholder-value-penalty' | i18n"
+                [textMask]="{
+                  mask: characteristicDecimalNumberMask,
+                  guide: false,
+                  showMask: false
+              }" autocomplete="off" />
+              <label *ngIf="penalty.get('value').dirty" class="error-msg-form">
+                <label *ngIf="penalty.get('value').hasError('required')">
+                  {{ "is-required-msg" | i18n }}
+                </label>
+                <label *ngIf="penalty.get('value').hasError('min')">
+                  {{
+                  "deduction-min-value"| i18n | stringReplace: "[min]"
+                  : penalty.get("characteristic").value?.deduction?.min
+                  }}
+                </label>
+                <label *ngIf="penalty.get('value').hasError('max')">
+                  {{
+                  "deduction-max-value"
+                  | i18n
+                  | stringReplace
+                  : "[max]"
+                  : penalty.get("characteristic").value?.deduction?.max
+                  }}
+                </label>
+              </label>
+            </div>
+            <!-- Value for deduction type INPUT -->
+            <div *ngSwitchCase="DEDUCTION_TYPE.INPUT">
+              <input formControlName="value" class="penalties-table__input" type="text"
+                (input)="eventChangePenaltyValue(penaltyIndex)" [placeholder]="'placeholder-value-penalty'| i18n"
+                [textMask]="{
+                    mask: getDeductionsAllowAction(penalty.get('characteristic').value) ==
+                        DEDUCTIONS_ALLOW_ACTIONS.NO_ACTION ?
+                            positiveDecimalNumberMask : characteristicDecimalNumberMask,
+                    guide: false,
+                    showMask: false
+                }"
+                autocomplete="off" />
+              <label *ngIf="penalty.get('value').dirty" class="error-msg-form">
+                <label *ngIf="penalty.get('value').hasError('required')">
+                  {{ "is-required-msg" | i18n }}
+                </label>
+                <label *ngIf="penalty.get('value').hasError('min')">
+                  {{
+                  "deduction-min-value"
+                  | i18n
+                  | stringReplace
+                  : "[min]"
+                  : penalty.get( "characteristic").value?.deduction?.min
+                  }}
+                </label>
+                <label *ngIf="penalty.get('value').hasError('max')">
+                  {{
+                  "deduction-max-value"
+                  | i18n
+                  | stringReplace
+                  : "[max]"
+                  : penalty.get("characteristic").value?.deduction?.max
+                  }}
+                </label>
+              </label>
+            </div>
+            <!--Value for deduction type choice  -->
+            <div class="penalties-table__controls__input" *ngSwitchCase="DEDUCTION_TYPE.CHOICE">
+              <div class="penalties-table__input disabled">
+                <span *ngIf="penalty.get('choiceDeduction').value">
+                  {{
+                  100 - penalty.get("choiceDeduction").value?.coefficient
+                  | number
+                  : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                  : "en"
+                  }}
+                  %
+                </span>
+              </div>
+            </div>
+            <div class="penalties-table__controls__input" *ngSwitchDefault>
+              <div class="penalties-table__input disabled"></div>
+            </div>
+          </ng-container>
+        </div>
+        <!-- Total -->
+        <div class="penalties-table__controls__total">
+          <div class="penalties-table__controls__label">
+            <span>{{ "total" | i18n }}
+              ({{ configuration.measurementUnitAbbreviation }})
+            </span>
+          </div>
+          <div class="penalties-table__controls__input">
+            <div class="penalties-table__input disabled">
+              <span *ngIf="null != penalty.get('total').value" appSignedValue [value]="penalty.get('total').value"
+                [valueType]="penalty.get('sign').value">
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- Not allowed, remove or spinner -->
+        <div class="penalties-table__controls__button" *ngIf="!readOnly">
+          <ng-container *ngIf="!deductionsTradingStatus.isBeingCalculated">
+            <i *ngIf="penalty.get('characteristic')?.value?.mandatory && characteristicsAreMandatory; else iconEraseNoMandatory" class="icon-status_rejected_icon"></i>
+            <ng-template #iconEraseNoMandatory>
+              <i (click)="removePenalty(penaltyIndex)" class="icon-erase pointer"></i>
+            </ng-template>
+          </ng-container>
+          <span *ngIf="deductionsTradingStatus.isBeingCalculated"
+            class="fa fa-circle-o-notch fa-spin penalties-table__controls__button__spin-icon"></span>
+        </div>
+      </div>
+      <div *ngIf="!lastPenalty" class="visible-xs col-xs-12 p0">
+        <div class="rn-penalty-separator"></div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="penalties-table__totals">
+    <div class="penalties-table__totals__row">
+      <div class="penalties-table__totals__row__item penalties-table__totals__row__item__label">
+        {{ "total" | i18n }}:
+      </div>
+      <div class="penalties-table__totals__row__item penalties-table__totals__row__item__value">
+        {{this.penaltiesTableForm.get('totalPercentCharacteristics').value | number : "1." + CHARACTERISTICS_DECIMAL + "-" + CHARACTERISTICS_DECIMAL : "en"}}
+        %
+      </div>
+      <div class="penalties-table__totals__row__item penalties-table__totals__row__item__value" appSignedValue
+        [value]="this.penaltiesTableForm.get('totalCharacteristics').value"></div>
+    </div>
+  </div>
+
+  <!-- Add penalty record -->
+  <div class="row penalties-table__add-item">
+    <button class="penalties-table__add-item__button btn btn-transparent-blue" (click)="addPenalty()"
+      [disabled]="!allowAddPenalty">
+      <i class="icon-plus"></i>
+      {{ "add-characteristic" | i18n }}
+    </button>
+  </div>
+</div>

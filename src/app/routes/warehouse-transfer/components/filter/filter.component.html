@@ -1,0 +1,175 @@
+<div class="sil-container sil-container--filled">
+    <header class="sil-form__header">
+        <h1 class="sil-form__title">
+            {{ "filters" | i18n }}
+        </h1>
+        <button type="button" class="btn btn-transparent-blue sil-form__action-button filter-form__delete-filters"
+            (click)="onClearFilters()" [disabled]="!hasSelectedFilters">
+            {{ "delete-filters" | i18n }}
+        </button>
+    </header>
+    <form class="sil-form" *ngIf="form" [formGroup]="form"
+        [ngClass]="data.filter.producersRequired ? 'margin-width-producer ': ''">
+        <div class="sil-form__content">
+            <section class="filter-form__date-range">
+                <h3 class="title-base--black">{{ "date" | i18n }}</h3>
+                <div class="sil-form__section date-range__start">
+                    <label>{{ "from" | i18n }}</label>
+                    <div formGroupName="date">
+                        <app-custom-date-picker
+                        formControlName="start"
+                        [dateFormat]="dateFormatInput"
+                        [placeholder]="'placeholder-date'"
+                        [maxDate]="form.get('date').get('end').value"
+                        class="sil-form__input" [hasInputClass]="false">
+                        </app-custom-date-picker>
+                        <p class="sil-form__profile-text">
+                            {{ form.get('start').value | date: dateFormatLabel }}
+                        </p>
+
+                    </div>
+                </div>
+                <div class="sil-form__section date-range__end">
+                    <label>{{ "to" | i18n }}</label>
+                    <div formGroupName="date">
+                        <app-custom-date-picker
+                        formControlName="end"
+                        [dateFormat]="dateFormatInput"
+                        [placeholder]="'placeholder-date'"
+                        [minDate]="form.get('date').get('start').value"
+                        class="sil-form__input" [hasInputClass]="false">
+                        </app-custom-date-picker>
+                        <p class="sil-form__profile-text">
+                            {{ form.get('date').get('end').value | date: dateFormatLabel }}
+                        </p>
+
+                    </div>
+                </div>
+                <label *ngIf="
+                        form
+                            .get('date')
+                            .get('start')
+                            .hasError('matDatepickerMax')
+                    " class="sil-form__section__error-message">
+                    {{ "filter-max-date-from" | i18n }}
+                </label>
+            </section>
+           
+
+            <section class="filter-form__user">
+                <p class="title-body-modal">{{'user-author' |i18n}}</p>
+                <div>
+                    <div class="sil-form__section">
+                        <label>{{ 'user-author' | i18n }}</label>
+                        <ng-select formControlName="users" class="lot-results-filter__control custom-ng-select"
+                            [items]="_users" [multiple]="true" [closeOnSelect]="true" [clearable]="true"
+                            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingUsers" bindLabel="name"
+                            placeholder="{{'select-user' | i18n}}" loadingText="{{'loading' | i18n}}"
+                            >
+                        </ng-select>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="filter-form__origin">
+                <p class="title-body-modal">{{'origin-location' |i18n}}</p>
+                <div>
+                    <div class="sil-form__section">
+                        <label>{{ 'origin-location' | i18n }}</label>
+                        <ng-select formControlName="origin" class="lot-results-filter__control custom-ng-select"
+                            [items]="_companies" [multiple]="true" [closeOnSelect]="true" [clearable]="true"
+                            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingCompanies" bindLabel="name"
+                            placeholder="{{'select-origin-location' | i18n}}" loadingText="{{'loading' | i18n}}"
+                            >
+                        </ng-select>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="filter-form__destination">
+                <p class="title-body-modal">{{'destination-location' |i18n}}</p>
+                <div>
+                    <div class="sil-form__section">
+                        <label>{{ 'destination-location' | i18n }}</label>
+                        <ng-select formControlName="destination" class="lot-results-filter__control custom-ng-select"
+                            [items]="_companies" [multiple]="true" [closeOnSelect]="true" [clearable]="true"
+                            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingCompanies" bindLabel="name"
+                            placeholder="{{'select-destination-location' | i18n}}" loadingText="{{'loading' | i18n}}"
+                            >
+                        </ng-select>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="filter-form__warehouse">
+                <p class="title-body-modal">{{'origin-warehouse' |i18n}}</p>
+                <div>
+                    <div class="sil-form__section">
+                        <label>{{ 'origin-warehouse' | i18n }}</label>
+                        <ng-select formControlName="warehouse" class="lot-results-filter__control custom-ng-select"
+                            [items]="_warehouses" [multiple]="true" [closeOnSelect]="true" [clearable]="true"
+                            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingWarehouses" bindLabel="name"
+                            placeholder="{{'select-origin-warehouse' | i18n}}" loadingText="{{'loading' | i18n}}"
+                            >
+                        </ng-select>
+                    </div>
+                </div>
+                <label *ngIf="
+                        form
+                            .get('date')
+                            .get('start')
+                            .hasError('matDatepickerMax')
+                    " class="sil-form__section__error-message">
+                    {{ "filter-max-date-from" | i18n }}
+                </label>
+            </section>
+
+            <section class="sil--form__section filter-form__status" *ngIf="data.filter.status">
+                <h3 class="title-base--black">{{ "status" | i18n }}</h3>
+                <div class="filter-form__status-list">
+                    <ng-container *ngFor="let status of data.filter.status.lookups | keyvalue">
+                        <button type="button" (click)="onStatusSelected(status.value)"
+                            class="btn  button-lg filter-form__status-button" [ngClass]="{
+                                'filter-form__status-button--open':
+                                    status.value === WAREHOUSE_TRANSFER_STATUS.OPEN,
+                                'filter-form__status-button--closed':
+                                    status.value === WAREHOUSE_TRANSFER_STATUS.CLOSE,
+                                'filter-form__status-button--deleted':
+                                    status.value === WAREHOUSE_TRANSFER_STATUS.CANCELED,
+                                selected:
+                                    form.get('status').value.indexOf(status.value) !==
+                                    -1
+                            }">
+                            <i class="icon-check filter-form__status-button__check" *ngIf="form.get('status').value.indexOf(status.value) !==
+                            -1"></i>
+                            <ng-container *ngIf="status.value ===  WAREHOUSE_TRANSFER_STATUS.OPEN">
+                                <i class="icon-note-open"></i>&nbsp;
+                                {{ "open" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.value ===  WAREHOUSE_TRANSFER_STATUS.CLOSE">
+                                <i class="icon-note-close"></i>&nbsp;
+                                {{ "closed" | i18n }}
+                            </ng-container>
+                            <ng-container *ngIf="status.value ===  WAREHOUSE_TRANSFER_STATUS.CANCELED">
+                                <i class="icon-note-canceled"></i>&nbsp;
+                                {{ "voided" | i18n }}
+                            </ng-container>
+                        </button>
+                    </ng-container>
+                </div>
+            </section>
+        </div>
+        <section class="sil-form__section-form-action-buttons">
+            <button type="button" class="btn btn-resize gray-btn button-lg" (click)="onCancelClick()">
+                {{ "cancel" | i18n }}
+            </button>
+            <button type="button" class="btn btn-resize blue-btn button-lg" [disabled]="form?.invalid || form?.pristine"
+                (click)="onApplyClick()">
+                {{ "apply" | i18n }}
+            </button>
+        </section>
+    </form>
+</div>

@@ -1,0 +1,276 @@
+@at-root {
+    :not(.dark) :host {
+        --main-font-color: #333;
+        --model-label-color: #616161;
+        --description-label-color: #616161;
+        --default-label-color: #616161;
+        --select-border-color: #e1e7f5;
+        --main-icon-color: #8798ad;
+    }
+
+    .dark :host {
+        --main-font-color: #fff;
+        --model-label-color: #fff;
+        --description-label-color: #c4c4c4;
+        --default-label-color: #969696;
+        --select-border-color: #1f8efa;
+        --main-icon-color: #9fb2ca;
+    }
+
+    .scale-dialog {
+        --dialog-max-width: 740px;
+        --dialog-body-min-height: 340px;
+
+        display: block;
+        min-width: min(80vw, var(--dialog-max-width));
+        max-width: var(--dialog-max-width);
+        height: auto;
+        margin: 0;
+
+        &__header {
+            width: 100%;
+            height: auto;
+            padding: 0 0 24px 0;
+
+            &__title {
+                font-size: 28px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.36;
+                letter-spacing: normal;
+                text-align: left;
+                color: var(--tr-base-color-blue);
+                padding-bottom: 12px;
+                word-break: break-word;
+            }
+
+            &__line {
+                width: min(280px, 100%);
+                border-width: 0 0 1px 0;
+                border-style: solid;
+                border-color: #92a2b6;
+            }
+        }
+
+        &__body {
+            width: 100%;
+            min-height: var(--dialog-body-min-height);
+            height: auto;
+
+            &__label {
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.14;
+                letter-spacing: normal;
+                text-align: left;
+                color: var(--main-font-color);
+                word-break: break-word;
+            }
+
+            ::ng-deep &__select.ng-select {
+                margin-top: 8px;
+                .ng-select-container {
+                    min-height: 50px;
+                    box-shadow: none !important;
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: var(--select-border-color) !important;
+
+                    &.ng-has-value .ng-value-container .ng-input {
+                        left: -2px;
+                        top: 1px !important;
+                    }
+
+                    &:not(.ng-has-value) .ng-value-container .ng-input {
+                        left: -2px;
+                        top: 12px !important;
+                    }
+                }
+
+                .ng-dropdown-panel {
+                    border-style: solid;
+                    border-width: 1px !important;
+                    border-color: var(--select-border-color) !important;
+                    box-shadow: 1px -2px 7px 0 rgba(0, 0, 0, 0.1);
+                }
+            }
+
+            &__toggle {
+                width: 100%;
+                height: auto;
+                text-align: left;
+                margin-top: 8px;
+                display: grid;
+                grid-template-rows: max-content;
+                grid-template-columns: max-content 1fr;
+                column-gap: 16px;
+                justify-items: start;
+                align-items: center;
+
+                &__label {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                &__slide {
+                    padding-top: 3px;
+
+                    .mat-checked ::ng-deep {
+                        .mat-slide-toggle-bar {
+                            background-color: var(
+                                --tr-toggle-bar-background-color
+                            );
+                        }
+                        .mat-slide-toggle-thumb {
+                            background-color: var(--tr-base-color-blue);
+                        }
+                    }
+
+                    .mat-slide-toggle.mat-checked
+                        ::ng-deep
+                        .mat-ripple-element {
+                        background-color: var(--tr-base-color-blue);
+                    }
+                }
+            }
+
+            &__main-icon {
+                width: 100%;
+                height: auto;
+                padding: 32px 0 16px 0;
+                text-align: center;
+
+                i {
+                    font-size: 36px;
+                    color: var(--main-icon-color);
+                }
+            }
+        }
+
+        &__text-overflow {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &__text-opacity {
+            opacity: 0.6 !important;
+        }
+
+        &__text-value{
+            font-weight: 600;
+            color: var(--tr-title-detail-order-color);
+        }
+
+        &__model-label {
+            font-size: 14px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: left;
+            color: var(--model-label-color);
+        }
+
+        &__connection-label {
+            font-size: 12px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.36;
+            letter-spacing: normal;
+            text-align: center;
+            color: var(--tr-base-color-red);
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-right: 2px 10px;
+            background-color: var(--tr-base-color-red-20);
+            &--connected{
+                color: var(--tr-base-color-green);
+                background-color: var( --tr-base-color-green-20);
+            }
+        }
+
+        &__default-label {
+            font-size: 12px;
+            font-weight: 300;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: left;
+            color: var(--default-label-color);
+        }
+
+        &__description-label {
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.71;
+            letter-spacing: normal;
+            text-align: left;
+            color: var(--description-label-color);
+        }
+
+        &__footer {
+            width: 100%;
+            height: auto;
+            padding-top: 32px;
+
+            button {
+                font-weight: 500 !important;
+            }
+
+            .tr__button__primary[disabled] {
+                cursor: not-allowed;
+                pointer-events: auto;
+                color: var(--tr-button-disabled-color) !important;
+                background-color: var(
+                    --tr-button-disabled-background-color
+                ) !important;
+            }
+
+            .tr__button__second {
+                background-color: transparent;
+            }
+        }
+
+        @media (max-width: 599px) {
+            & {
+                padding: 20px;
+            }
+            &__footer {
+                .tr__button__second {
+                    margin-bottom: 16px;
+                }
+                button {
+                    width: 100%;
+                }
+            }
+        }
+
+        @media (min-width: 600px) {
+            & {
+                padding: 40px;
+            }
+            &__footer {
+                display: inline-block;
+                text-align: right;
+
+                .tr__button__second {
+                    margin-right: 32px;
+                }
+
+                button {
+                    width: 160px;
+                }
+            }
+        }
+    }
+}

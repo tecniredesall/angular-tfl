@@ -1,0 +1,263 @@
+.scale-list__view{
+    position: relative;
+    top: -70px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 70px 0 0 0;
+    &__wrapper{
+        display: block;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        &__container{
+            display: grid;
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 8px 0 0 0;
+            max-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            grid-template-columns: 100%;
+            grid-template-rows: -webkit-max-content 1fr;
+            grid-template-rows: max-content 1fr;
+        }
+    }
+}
+
+.scale-list{
+    padding: 32px 24px;
+    margin-top: 25px;
+    &__body{
+        margin-top: 57px;
+    }
+    &__columns, &__area__data{
+        width: 100%;
+        height: auto;
+        padding: 8px 16px;
+        display: grid;
+        justify-items: left;
+        align-items: start;
+        column-gap: 16px;
+        grid-template-columns: 32px repeat(6, 1fr) 102px 65px 75px;
+        grid-template-areas: "empty-data creation-data device-data brand-data model-data location-data ip-data user-data status-data actions-data";
+        &__sortable{
+            i{
+                margin-left: 8px;
+            }
+        }
+    }
+    &__area{
+        &__label{
+            display: none;
+            width: 100%;
+            padding: 0;
+            word-break: break-word;
+            font-size: 12px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.42;
+            letter-spacing: 1.12px;
+            text-align: left;
+            color: var(--tr-labe-columns-list-color);
+            text-transform: uppercase;
+            &__creation{
+                grid-area: creation-label;
+            }
+            &__device{
+                grid-area: device-label;
+            }
+            &__brand{
+                grid-area: brand-label;
+            }
+            &__model{
+                grid-area: model-label;
+            }
+            &__location{
+                grid-area: location-label;
+            }
+            &__ip{
+                grid-area: ip-label;
+            }
+            &__user{
+                grid-area: user-label;
+            }
+            &__status{
+                grid-area: status-label;
+            }
+        }
+        &__data{
+            background-color: var(--tr-foreground-color);
+            height: 56px;
+            margin-bottom: 8px;
+            &__empty{
+                grid-area: empty-data;
+                &__value{
+                    i{
+                        font-size: 24px;
+                        color: var(--tr-panel-header-toggle-icon-color);
+                    }
+                }
+            }
+            &__creation{
+                grid-area: creation-data;
+                &__value{
+                    display: flex;
+                    flex-direction: column;
+                    &__creator{
+                        font-size: 12px;
+                    }
+                }
+            }
+            &__device{
+                grid-area: device-data;
+            }
+            &__brand{
+                grid-area: brand-data;
+            }
+            &__model{
+                grid-area: model-data;
+            }
+            &__location{
+                grid-area: location-data;
+            }
+            &__ip{
+                grid-area: ip-data;
+                &__value{
+                    max-width: 120px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+            &__user{
+                grid-area: user-data;
+            }
+            &__status{
+                grid-area: status-data;
+                &__value{
+                    .mat-checked ::ng-deep {
+                        .mat-slide-toggle-bar {
+                            background-color: var(
+                                --tr-toggle-bar-background-color
+                            );
+                        }
+                        .mat-slide-toggle-thumb {
+                            background-color: var(--tr-base-color-blue);
+                        }
+                    }
+
+                    .mat-slide-toggle.mat-checked
+                        ::ng-deep
+                        .mat-ripple-element {
+                        background-color: var(--tr-base-color-blue);
+                    }
+                }
+            }
+            &__actions{
+                width: 100%;
+                grid-area: actions-data;
+                &__value{
+                    display: flex;
+                    justify-content: flex-end;
+                    &__icon-wrapper{
+                        cursor: pointer;
+                        font-size: 18px;
+                        color: var(--tr-panel-header-toggle-icon-color);
+                    }
+                }
+            }
+        }
+    }
+    &__empty{
+        height: 100%;
+        margin: auto;
+        max-width: 387px;
+        text-align: center;
+        padding-top: 10%;
+        p{
+            margin-top: 16px;
+            color: var(--tr-labe-columns-list-color);
+        }
+        span{
+            color: var(--tr-base-color-blue);
+            cursor: pointer;
+        }
+    }
+
+    @media (min-width: 481px) and (max-width: 1199px) {
+        &__columns{
+            display: none;
+        }
+        &__area{
+            &__label{
+                display: block;
+                &__user, &__status{
+                    padding-top: 8px;
+                }
+            }
+            &__data{
+                height: auto;
+                row-gap: 0;
+                column-gap: 20px;
+                grid-template-rows: repeat(4, max-content);
+                grid-template-columns: max-content repeat(3, 1fr) 110px max-content;
+                grid-template-areas:
+                    ". creation-label device-label brand-label model-label actions-data"
+                    "empty-data creation-data device-data brand-data model-data actions-data"
+                    "empty-data location-label ip-label user-label status-label actions-data"
+                    "empty-data location-data ip-data user-data status-data actions-data";
+                &__status{
+                    padding-top: 8px;
+                }
+            }
+        }
+    }
+    @media (max-width: 480px) {
+        padding-bottom: 65px;
+        margin-top: 0;
+        &__columns{
+            display: none;
+        }
+        &__area{
+            &__label{
+                display: block;
+                &__user, &__status, &__ip, &__location{
+                    padding-top: 8px;
+                }
+            }
+            &__data{
+                height: auto;
+                row-gap: 0;
+                column-gap: 20px;
+                grid-template-rows: repeat(6, max-content);
+                grid-template-columns: max-content repeat(2, 1fr) max-content;
+                grid-template-areas:
+                    ". creation-label model-label actions-data"
+                    "empty-data creation-data model-data actions-data"
+                    "empty-data device-label brand-label actions-data"
+                    "empty-data device-data brand-data actions-data"
+                    "empty-data location-label ip-label actions-data"
+                    "empty-data location-data ip-data actions-data"
+                    "empty-data user-label status-label actions-data"
+                    "empty-data user-data status-data actions-data";
+            }
+        }
+        &__empty{
+            max-width: 320px;
+            img{
+                width: 320px;
+            }
+        }
+    }
+}

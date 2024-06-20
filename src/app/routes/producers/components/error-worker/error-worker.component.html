@@ -1,0 +1,8 @@
+<div class="error-worker">
+    <h1>{{'producer-worker-error-title' |i18n}}</h1>
+    <p>{{ (message ? message : 'producer-worker-error-info') |i18n}}</p>
+    <p *ngIf="!message">{{'producer-worker-error-info-producer' |i18n}}</p>
+    <button class="btn btn-resize blue-btn button-lg" (click)="goToReferenceData()">
+        {{ "accept" | i18n }}
+    </button>
+</div>

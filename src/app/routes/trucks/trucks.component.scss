@@ -1,0 +1,426 @@
+.t-trucks {
+    position: relative;
+    top: -70px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 70px 0 0 0;
+  
+    .t-trucks-container {
+      display: block;
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+  
+      .t-trucks-content {
+        @extend .t-trucks-container;
+        padding: 40px;
+        height: 100%;
+        max-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+  
+        .t-trucks-list-view {
+          display: grid;
+          grid-template-columns: 100%;
+          grid-template-rows: max-content auto;
+          grid-template-areas:
+            "mainHeader"
+            "dataGrid";
+
+            &.t-trucks-view-xs .t-trucks-main-header,
+            &.t-trucks-view-sm .t-trucks-main-header {
+                padding-bottom: 30px !important;
+            }
+
+            &.t-trucks-view-lg .t-trucks-main-header {
+                padding-bottom: 50px !important;
+            }
+
+          .t-trucks-main-header {
+            grid-area: mainHeader;
+          }
+  
+          .t-trucks-data-grid {
+            grid-area: dataGrid;
+  
+            @at-root .t-trucks-view-md .t-trucks-data-grid {
+              margin-top: 16px;
+            }
+  
+            @at-root .t-trucks-view-xs .t-trucks-data-grid-header {
+              display: none !important;
+            }
+  
+            @at-root .t-trucks-view-sm .t-trucks-data-grid-header {
+              display: none !important;
+            }
+  
+            @at-root .t-trucks-view-md .t-trucks-data-grid-header {
+              grid-template-areas: "truckBrand truckBrand truckLicense truckType truckService truckActions";
+              grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 0.8fr) minmax(130px, 1fr) minmax(130px, 1fr) 45px;
+            }
+  
+            @at-root .t-trucks-view-lg .t-trucks-data-grid-header {
+              grid-template-areas: "truckBrand truckBrand truckLicense truckType truckService truckActions";
+              grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+            }
+  
+            @at-root .t-trucks-view-xl .t-trucks-data-grid-header {
+              grid-template-areas: "truckBrand truckBrand truckLicense truckType truckService truckActions";
+              grid-template-columns: 60px minmax(130px, 2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+            }
+  
+            .t-trucks-data-grid-header {
+              width: 100%;
+              height: auto;
+              margin-bottom: 12px;
+              display: grid;
+              grid-template-rows: auto;
+
+              .t-trucks-data-grid-header__column {
+                height: auto;
+                font-size: 12px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1.12px;
+              }
+
+              @at-root :not(.dark) :host .t-trucks-data-grid-header__column {
+                color: #8798ad;
+              }
+
+              @at-root .dark :host .t-trucks-data-grid-header__column {
+                color: #ffffff;
+              }
+
+              .t-trucks-data-grid-header__text {
+                padding: 8px 0;
+                display: inline-block;
+
+                .sort-icon {
+                  margin-left: 5px;
+                  margin-bottom: 5px;
+                }
+              }
+
+              .t-trucks-data-grid-header__column--brand {
+                grid-area: truckBrand;
+              }
+
+              .t-trucks-data-grid-header__column--license {
+                grid-area: truckLicense;
+              }
+
+              .t-trucks-data-grid-header__column--type {
+                grid-area: truckType;
+              }
+
+              .t-trucks-data-grid-header__column--service {
+                grid-area: truckService;
+              }
+  
+              .t-trucks-data-grid-header__column--actions {
+                grid-area: truckActions;
+  
+                @at-root .t-trucks-view-xs
+                    .t-trucks-data-grid-header__text-actions {
+                  display: none !important;
+                }
+  
+                @at-root .t-trucks-view-sm
+                    .t-trucks-data-grid-header__text-actions {
+                  display: none !important;
+                }
+  
+                @at-root .t-trucks-view-md
+                  .t-trucks-data-grid-header__text-actions {
+                    display: none !important;
+                }
+  
+                @at-root .t-trucks-view-lg
+                    .t-trucks-data-grid-header__text-actions {
+                  display: block !important;
+                }
+              }
+  
+            }
+  
+            @at-root .t-trucks-view-xs .t-trucks-data-grid-row {
+              grid-template-areas:
+                "truckNameHeader  truckLicenseHeader truckActions"
+                "truckBrand truckLicense truckActions"
+                "truckTypeHeader truckServiceHeader truckServiceHeader"
+                "truckType truckService truckService";
+              grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) 45px;
+              grid-template-rows: 32px auto 32px auto !important;
+              padding: 16px;
+            }
+  
+            @at-root .t-trucks-view-sm .t-trucks-data-grid-row {
+              grid-template-areas:
+                "truckNameHeader truckNameHeader  truckLicenseHeader truckActions"
+                "truckIcon truckBrand truckLicense truckActions"
+                "truckTypeHeader truckTypeHeader truckServiceHeader truckServiceHeader"
+                "truckType truckType truckService truckService";
+              grid-template-columns: 60px minmax(130px, 1fr) minmax(130px, 1fr) 45px;
+              grid-template-rows: 32px auto 32px auto !important;
+              padding: 16px;
+            }
+  
+            @at-root .t-trucks-view-md .t-trucks-data-grid-row {
+              grid-template-areas: "truckIcon truckBrand truckLicense truckType truckService truckActions";
+              grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 0.8fr) minmax(130px, 1fr) minmax(130px, 1fr) 45px;
+            }
+  
+            @at-root .t-trucks-view-lg .t-trucks-data-grid-row {
+              grid-template-areas: "truckIcon truckBrand truckLicense truckType truckService truckActions";
+              grid-template-columns: 60px minmax(130px, 1.5fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+            }
+  
+            @at-root .t-trucks-view-xl .t-trucks-data-grid-row {
+              grid-template-areas: "truckIcon truckBrand truckLicense truckType truckService truckActions";
+              grid-template-columns: 60px minmax(130px, 2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(130px, 1fr) 100px;
+            }
+  
+            .t-trucks-data-grid-row {
+              width: 100%;
+              height: auto;
+              min-height: 53px;
+              margin-bottom: 5px;
+              display: grid;
+              grid-template-rows: auto;
+  
+              .t-trucks-icon {
+                grid-area: truckIcon;
+                width: auto;
+                height: auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-right: 10px;
+                padding-left: 15px;
+              }
+  
+              .t-trucks-initials-name-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 35px;
+                width: 35px;
+                -moz-border-radius: 50%;
+                -webkit-border-radius: 50%;
+                border-radius: 50%;
+                background-color: #78bcef;
+                color: white;
+                font-size: 16px;
+                font-weight: 500;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.75;
+                letter-spacing: normal;
+                text-align: center;
+              }
+  
+              .t-trucks-data {
+                display: flex;
+                justify-content: left;
+                align-items: center;
+                height: 100%;
+                font-size: 14px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.57;
+                letter-spacing: normal;
+                padding-right: 24px;
+                word-break: break-all;
+              }
+  
+              .t-trucks-data-grid-row-header__text{
+                padding: 8px 0;
+                display: inline-block;
+                font-size: 12px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                color: var(--tr-labe-columns-list-color);
+              }
+  
+              .t-trucks-name {
+                grid-area: truckBrand;
+              }
+  
+              .t-trucks-header-name {
+                grid-area: truckNameHeader;
+              }
+  
+              .t-trucks-license {
+                grid-area: truckLicense;
+              }
+  
+              .t-trucks-header-license {
+                grid-area: truckLicenseHeader;
+              }
+  
+              .t-trucks-type {
+                grid-area: truckType;
+              }
+  
+              .t-trucks-header-type {
+                grid-area: truckTypeHeader;
+              }
+  
+              .t-trucks-service {
+                grid-area: truckService;
+              }
+  
+              .t-trucks-header-service {
+                grid-area: truckServiceHeader;
+              }
+  
+              .t-trucks-actions-container {
+                grid-area: truckActions;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                height: 100%;
+                padding-right: 8px;
+  
+                & .dropdown-menu {
+                  width: 92px;
+                  min-width: 92px;
+                }
+  
+                & .dropdown-menu a {
+                  padding: 8px;
+                }
+  
+                .t-trucks-action-button {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  height: 30px;
+                  width: 30px;
+                  box-shadow: none;
+                  outline: none;
+                  border: none;
+                  background-color: transparent !important;
+                }
+  
+                @at-root .t-trucks-view-xs {
+                  .t-trucks-action-button-edit, .t-trucks-action-button-remove {
+                    display: none !important;
+                  }
+                  .t-trucks-action-button-options {
+                    display: block !important;
+                  }
+                  .t-trucks-initials-name-container{
+                    display: none !important;
+                  }
+                }
+  
+                @at-root .t-trucks-view-sm {
+                  .t-trucks-action-button-edit, .t-trucks-action-button-remove {
+                    display: none !important;
+                  }
+                  .t-trucks-action-button-options {
+                    display: block !important;
+                  }
+                }
+  
+                @at-root .t-trucks-view-md {
+                  .t-trucks-action-button-edit, .t-trucks-action-button-remove {
+                    display: none !important;
+                  }
+                  .t-trucks-action-button-options {
+                    display: block !important;
+                  }
+                  .t-trucks-data-grid-row-header__text{
+                    display: none !important;
+                  }
+                }
+  
+                @at-root .t-trucks-view-lg {
+                  .t-trucks-action-button-edit .t-trucks-action-button-remove {
+                    display: block !important;
+                  }
+                  .t-trucks-action-button-options {
+                    display: none !important;
+                  }
+                  .t-trucks-data-grid-row-header__text{
+                    display: none !important;
+                  }
+                }
+  
+                @at-root .t-trucks-view-xl {
+                  .t-trucks-action-button-edit .t-trucks-action-button-remove {
+                    display: block !important;
+                  }
+                  .t-trucks-action-button-options {
+                    display: none !important;
+                  }
+                  .t-trucks-data-grid-row-header__text{
+                    display: none !important;
+                  }
+                }
+  
+              }
+            }
+  
+            @at-root :not(.dark) :host .t-trucks-data-grid-row {
+              background-color: white;
+            }
+  
+            @at-root .dark :host .t-trucks-data-grid-row {
+              background-color: #3e4e6c;
+            }
+          }
+        }
+  
+        .t-trucks-list-view--fill {
+          height: auto;
+        }
+  
+        .t-trucks-list-view--empty {
+          min-height: 100%;
+        }
+      }
+  
+      .t-trucks-actions-component {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 40px;
+      }
+  
+      @at-root :not(.dark) :host .t-trucks-actions-component {
+        background-color: white;
+      }
+  
+      @at-root .dark :host .t-trucks-actions-component {
+        background-color: #2f3b52;
+      }
+  
+      .t-driver-empty-search-results{
+        margin-top: 90px;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+  
+  @media (max-width: 539px) {
+    .t-trucks-content{
+      padding-bottom: 120px !important;
+    }
+  }

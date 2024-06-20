@@ -1,0 +1,98 @@
+<!--  -->
+<button class="sil-form__header-button btn btn-transparent-blue" id="backToList" [disabled]="
+        action === ACTIONS.UPDATE &&
+        (purchaseOrder?.totalNotes === 0 ||
+            orderToSave.weight_notes.length === 0 ||
+            notesReachedZero)
+    " (click)="onCancelClicked()">
+    <i class="icon-arrow_icon"></i>
+    {{ "back-to-list" | i18n }}
+</button>
+<div class="sil-overflow-container--padded sil-overflow-container">
+    <div class="sil-container sil-container--filled">
+        <header class="sil-form__header">
+            <h1 class="sil-form__title">
+                <ng-container *ngIf="action === ACTIONS.UPDATE; else create">
+                    {{ "purchase-orders-edit-order" | i18n }}
+                </ng-container>
+                <ng-template #create>
+                    {{ "purchase-orders-create-order" | i18n }}
+                </ng-template>
+            </h1>
+        </header>
+        <div class="sil-container__sync">
+            <button class="tr__button__filter tr__button__filter__sync" [disabled]="isSyncContractsStarted"
+                [ngClass]="{'sync-started': isSyncContractsStarted}" (click)="onSyncContractsEvent()">
+                <i [ngClass]="isSyncContractsStarted ? 'icon-loading fa fa-spin' : 'icon-refresh'"></i>
+                {{(isSyncContractsStarted ? 'updating' : 'update-data') | i18n}}
+            </button>
+        </div>
+        <ng-container>
+            <mat-tab-group class="sil-tab-group" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex">
+                <mat-tab label="01 {{ 'general-information' | i18n }}">
+                    <ng-container *ngIf="!contractNeedsMatching; else mapFeatures">
+                        <app-purchase-order-data-form *ngIf="purchaseOrder" [order]="purchaseOrder"
+                            [currentProducer]="currentProducer" [action]="action"
+                            (producerChanged)="onProducerChanged($event)" (formChanged)="onFormChanged($event)"
+                            (formIsValid)="onFormIsValid($event)"></app-purchase-order-data-form>
+                        <app-purchase-order-contracts *ngIf="contracts" [producer]="currentProducer"
+                            [order]="purchaseOrder" [contracts]="contracts" [config]="config" [selectedContract]="currentContract"
+                            (contractChanged)="onContractChanged($event)" (editCharacteristics)="
+                                onEditContractCharacteristics($event)
+                            ">
+                        </app-purchase-order-contracts>
+                    </ng-container>
+                    <ng-template #mapFeatures>
+                        <app-match-feature [contractId]="currentContract.id" (success)="onFeaturesMatched()"
+                            (cancelAction)="onCancelFeaturesMatch()">
+                        </app-match-feature>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab [disabled]="
+                        !purchaseOrder ||
+                        !currentProducer ||
+                        contractNeedsMatching
+                    " label="02 {{ 'weight-notes' | i18n }}">
+                    <app-purchase-order-related-notes *ngIf="purchaseOrder && currentProducer"
+                        [contract]="currentContract" [producer]="currentProducer"
+                        [hasPlacePriceFeature]="hasPlacePriceFeature" [order]="purchaseOrder"
+                        [orderToSave]="orderToSave" [action]="action" [companyInfo]="companyInfo"
+                        (noteChanged)="onNoteChanged($event)" (selectedNotesChanged)="onSelectedNotesChanged($event)"
+                        (notesTotalValidityChanged)="notesAreValid = $event"
+                        (amountValidityChanged)="amountIsValid = $event"></app-purchase-order-related-notes>
+                </mat-tab>
+                <mat-tab>
+                </mat-tab>
+            </mat-tab-group>
+
+        </ng-container>
+    </div>
+</div>
+<div class="footer-buttons">
+    <button *ngIf="selectedTabIndex === 1" class="btn btn-transparent-blue" (click)="selectedTabIndex = 0">
+        <i class="icon-arrow_icon"></i>
+        {{ "back" | i18n }}
+    </button>
+    <button class="btn btn-resize gray-btn button-lg" (click)="onCancelClicked()" [disabled]="
+            action === ACTIONS.UPDATE &&
+            (purchaseOrder?.totalNotes === 0 ||
+                orderToSave.weight_notes.length === 0 ||
+                notesReachedZero)
+        ">
+        {{ "cancel" | i18n }}
+    </button>
+    <button class="btn btn-resize blue-btn button-lg" (click)="onNextClick()" *ngIf="selectedTabIndex === 0"
+        [disabled]="!formIsValid || contractNeedsMatching">
+        {{ "next" | i18n }}
+    </button>
+    <button class="btn btn-resize blue-btn button-lg" (click)="onNextClick()" *ngIf="selectedTabIndex === 1" [disabled]="
+            !formIsValid ||
+            !notesAreValid ||
+            !amountIsValid ||
+            !hasPriceNote ||
+            contractNeedsMatching ||
+            !(orderToSave.weight_notes.length > 0)
+        ">
+        {{ "save" | i18n }}
+    </button>
+</div>

@@ -1,0 +1,64 @@
+:host {
+    display: block;
+    width: 100%;
+
+    .mat-form-field {
+        line-height: 0.72;
+    }
+
+    .sil-form {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "date"
+            "producer"
+            "type"
+            "address";
+        row-gap: 16px;
+
+        .date {
+            grid-area: date;
+
+            mat-form-field {
+                display: block;
+            }
+        }
+
+        .producer {
+            grid-area: producer;
+        }
+
+        .type {
+            grid-area: type;
+        }
+
+        .address {
+            grid-area: address;
+        }
+
+        .date {
+              label {
+                padding: 5px 0 0;
+            }
+            
+        }
+    }
+}
+
+:host ::ng-deep.ng-select.ng-select-single.ng-select-filtered .ng-select-container .ng-value-container .ng-value {
+    visibility: initial;
+}
+
+@media (min-width: 768px) {
+    :host {
+        .sil-form {
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+                "date producer"
+                "type address";
+            row-gap: 16px;
+            column-gap: 16px;
+        }
+    }
+}
+
+@media (min-width: 1200px) {}

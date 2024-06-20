@@ -1,0 +1,148 @@
+@import "src/scss/breakpoints.scss";
+@import "src/scss/breakpoints.scss";
+
+:host {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+    .producer__name {
+        p {
+            display: block;
+        }
+    }
+    .found-federated {
+        margin-top: 8px;
+        display: grid;
+        grid-template-columns: 0.8fr 0.2fr;
+        grid-template-areas:
+            "message new-block"
+            "select-items select-items";
+        &__message {
+            grid-area: message;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            color: var(--tr-info-text-color);
+            font-size: 14px;
+            max-width: 95%;
+            i {
+                padding: 12px;
+                color: var(--tr-base-color-yellow);
+            }
+        }
+        &__new {
+            grid-area: new-block;
+            font-size: 14px;
+        }
+
+        &__select-items {
+            grid-area: select-items;
+            font-size: 14px;
+            margin: 16px 0;
+            color: var(--tr-panel-body-color);
+        }
+    }
+    .search-block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid var(--form-input-border-color);
+        border-radius: 21px;
+        color: var(--form-label-color);
+        app-search-input {
+            border: none;
+            height: 35px;
+            background-color: transparent;
+        }
+        .blue-btn {
+            border-radius: 21px;
+            min-width: 135px;
+            height: 35px;
+        }
+    }
+    .sil-table {
+        margin-top: 25px;
+        max-height: 400px;
+        &__header-row {
+            grid-template-columns: 40px 1fr 1fr 60px;
+            grid-template-areas: ". name farm platform";
+            .header__name {
+                grid-area: name;
+            }
+            .header__farm {
+                grid-area: farm;
+            }
+            .header__platform {
+                grid-area: platform;
+            }
+        }
+        &__checkbox-row {
+            padding: 2px !important;
+            height: 40px;
+            margin-bottom: 6px;
+            background-color: transparent;
+            mat-checkbox {
+                width: 16px;
+                height: 16px;
+                margin: auto;
+            }
+        }
+        &__row {
+            margin-top: 2px;
+            padding: 4px;
+            grid-template-columns: 1fr 1fr 60px;
+            .cell__name {
+                i {
+                    font-size: 32px;
+                }
+            }
+            &__platform {
+                gap: 8px;
+                display: flex;
+                font-size: 14px;
+                line-height: 1.57;
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+                span {
+                    display: none;
+                }
+            }
+
+        }
+        .sil-table__row {
+            background-color: transparent;
+        }
+    }
+    .sil-form__section-form-action-buttons {
+        .block__counter {
+            background-color: var(--form-select-label-background-color);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: auto;
+            padding: 8px;
+            color: var(--tr-panel-body-color);
+        }
+    }
+
+    @media (min-width: $screen-sm-min) {
+        .sil-table {
+            &__header-row {
+                grid-template-columns: 40px 1fr 1fr 1fr;
+            }
+            &__row {
+                margin-top: 2px;
+                padding: 4px;
+                grid-template-columns: 1fr 1fr 1fr;
+                &__platform {
+                    span {
+                        display: inline;
+                    }
+                }
+            }
+        }
+    }
+}

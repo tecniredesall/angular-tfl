@@ -1,0 +1,73 @@
+@at-root {
+    .lot-delete-dialog {
+        display: block;
+        max-width: 554px;
+        height: auto;
+        padding: 50px 30px 30px 30px;
+        margin: 0;
+
+        &__question {
+            width: 100%;
+            height: auto;
+            font-family: "Open Sans", sans-serif !important;
+            font-size: 28px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.36;
+            letter-spacing: normal;
+            text-align: center;
+            color: var(--tr-dialog-confirmation-color);
+            padding-bottom: 30px;
+        }
+
+        &__note {
+            &__title {
+                width: 100%;
+                height: auto;
+                font-family: "Open Sans", sans-serif !important;
+                font-size: 16px;
+                font-weight: 600;
+                text-align: center;
+                color: var(--tr-dialog-confirmation-color);
+            }
+
+            &__info {
+                width: 100%;
+                height: auto;
+                font-family: "Open Sans", sans-serif !important;
+                font-size: 16px;
+                font-weight: normal;
+                text-align: center;
+                color: var(--tr-dialog-confirmation-color);
+                padding-bottom: 50px;
+            }
+        }
+
+        &__buttons {
+            display: block;
+            width: 100%;
+            height: auto;
+            text-align: center;
+
+            &__wrapper {
+                display: inline-block;
+                padding: 16px;
+
+                &__cancel,
+                &__delete {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 15px;
+                    font-weight: 600;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.4;
+                    letter-spacing: normal;
+                    padding: 8px 48px !important;
+                }
+            }
+        }
+    }
+}

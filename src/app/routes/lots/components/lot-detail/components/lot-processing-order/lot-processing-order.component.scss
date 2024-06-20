@@ -1,0 +1,260 @@
+:not(.dark) :host {
+    --note-border-color: #e1e7f5;
+    --note-font-color: #757575;
+}
+
+.dark :host {
+    --note-border-color: #18203080;
+    --note-font-color: #fff;
+}
+
+:host {
+    .panel__header {
+        display: flex;
+        align-items: center;
+        padding: 16px 0;
+        width: 100%;
+
+        i {
+            font-size: 12px;
+            color: var(--form-title-color);
+        }
+
+        h3 {
+            font-size: 16px;
+            margin: 0 24px 0 8px;
+            font-weight: 400;
+        }
+
+        span {
+            color: white;
+            background-color: var(--form-title-annotation);
+            border-radius: 12px;
+            min-width: 40px;
+            text-align: center;
+        }
+    }
+
+    .panel-opened {
+        transform: rotate(270deg);
+        display: inline-flex;
+    }
+
+    .note__print--disabled {
+        opacity: 0.5;
+    }
+
+    .lot-detail__orders-panel {
+        &__header {
+            display: grid;
+            grid-template-columns: 95% 5%;
+            align-items: center;
+            width: 100%;
+
+            .process {
+                display: grid;
+                grid-template-columns: 65% 35%;
+            }
+
+            .process__label-lot {
+                text-align: center;
+                min-width: 112px;
+                margin: 0 5px 0px;
+                color: #fff;
+                height: 35px;
+                border-radius: 5px;
+                max-width: max-content;
+                padding: 7px 20px 0px 21px;
+            }
+
+            .order__label-number {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--tr-data-grid-color);
+                display: inline;
+                margin-left: 10px;
+            }
+
+            .order-actions {
+                .note__print {
+                    width: 35px;
+                    height: 35px;
+                    padding: 8px;
+                    margin: 0 5px;
+                    text-align: center;
+                    color: var(--tr-mat-icons-documents-color);
+                    font-size: 20px;
+
+                    .icon-email {
+                        font-size: 16px;
+                    }
+
+                    .icon-download {
+                        font-size: 17px;
+                    }
+                }
+
+                .mobile-actions {
+                    text-align: end;
+                    color: var(--tr-base-color-blue);
+                }
+            }
+
+            i {
+                color: var(--form-title-color);
+            }
+        }
+
+        &__details {
+            display: grid;
+            grid-template-columns: 1fr;
+
+            &-title {
+                background-color: var(--tr-title-detail-order-backgroud-color);
+                color: var(--tr-title-detail-order-color);
+                font-size: 16px;
+                font-weight: 600;
+                padding: 10px 16px;
+            }
+
+            &-info {
+                padding: 15px 16px;
+                display: grid;
+                row-gap: 2px;
+                grid-template-columns: 1fr 1fr;
+                font-size: 14px;
+                font-weight: bold;
+                color: var(--tr-data-grid-color);
+            }
+
+            &-info>div:nth-of-type(odd) {
+                font-weight: 500;
+            }
+
+            &__note {
+                padding: 0px 16px 25px 16px;
+
+                div {
+                    border: solid 1px var(--note-border-color);
+                    border-radius: 5px;
+                    padding: 10px 15px;
+                    color: var(--tr-data-grid-color);
+                }
+
+                .description {
+                    font-size: 10px;
+                    color: var(--note-font-color);
+                }
+            }
+        }
+    }
+
+    .lot-detail__notes-panel ::ng-deep {
+        .mat-expansion-panel {
+            box-shadow: none;
+            background: none;
+
+            .mat-expansion-panel-header {
+                background-color: var(--tr-background-color) !important;
+                padding: 0 16px;
+            }
+
+            .mat-expansion-panel-content {
+                background-color: var(--container-background) !important;
+                border-radius: 4px;
+
+                .mat-expansion-panel-body {
+                    padding: 0;
+                }
+
+                .lot-detail__orders-panel .mat-expansion-panel {
+                    box-shadow: none;
+                    background: none;
+
+                    .mat-expansion-panel-header {
+                        border-radius: 5px;
+                        margin-top: 15px;
+                        background-color: var(--tr-header-background-color) !important;
+                        padding: 10px;
+                        border: solid 1px var(--tr-title-detail-order-backgroud-color);
+                    }
+
+                    .mat-expansion-panel-content {
+                        border-radius: 0px;
+                        background-color: var(--container-background) !important;
+                        border: solid 1px var(--tr-title-detail-order-backgroud-color);
+
+                        .mat-expansion-panel-body {
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        .panel__header {
+            padding: 24px 0;
+            width: 100%;
+
+            i {
+                font-size: 14px;
+                color: var(--form-title-color);
+            }
+
+            h3 {
+                font-size: 18px;
+                margin: 0 24px 0 8px;
+            }
+        }
+
+        .lot-detail__orders-panel {
+            &__header {
+                display: grid;
+                grid-template-columns: 70% 30%;
+
+                .process {
+                    display: grid;
+                    grid-template-columns: 65% 35%;
+                }
+            }
+
+            &__details {
+                display: grid;
+                grid-template-columns: 1fr;
+
+                &-info {
+                    padding: 15px 16px;
+                    row-gap: 2px;
+                    grid-template-columns: 40% 1fr;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .lot-detail__orders-panel {
+            &__header {
+                display: grid;
+                grid-template-columns: 70% 30%;
+
+                .process {
+                    display: flex;
+                    align-items: center;
+                }
+
+            }
+
+            &__details {
+                display: grid;
+                grid-template-columns: 1fr;
+
+                &-info {
+                    padding: 15px 16px;
+                    grid-template-columns: 30% 1fr;
+                }
+            }
+        }
+    }
+}

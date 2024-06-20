@@ -1,0 +1,25 @@
+<div class="producer-action-block-container" *blockUI="'action-block-container'; template: templateBlockModalUiComponent">
+
+  <div class="producer-action-block-body scroll-view-app" (resized)="handleResponsive($event)"
+    [ngStyle]="{'paddingTop.px': style.paddingTopContainer, 'paddingRight.px': style.paddingRightContainer, 'paddingBottom.px': style.paddingBottomContainer, 'paddingLeft.px': style.paddingLeftContainer}">
+
+    <!-- header -->
+    <div class="row header-producer-action-block">
+
+      <div class="title-producer-action-block">
+        <span>
+          {{ data.isEdit ? ('t-edit-block' | i18n) : ('t-new-block' | i18n) }}
+        </span>
+      </div>
+
+      <div class="header-line-producer-action-block" [ngStyle]="{'width': style.widthHeaderLine}"></div>
+
+    </div>
+
+    <!-- Body -->
+    <app-actions-block [data]="inputActionBlock" (eventCancel)="onCancelEvent()" (eventRefresh)="onRefreshEvent()">
+    </app-actions-block>
+
+  </div>
+
+</div>

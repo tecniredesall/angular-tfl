@@ -1,0 +1,70 @@
+.modal-notes-associated{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    &__title{
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.36;
+        text-align: center;
+        color: var(--tr-dialog-confirmation-color);
+        margin-bottom: 16px;
+    }
+    &__description{
+        max-width: 462px;
+        font-size: 16px;
+        line-height: 1.38;
+        text-align: center;
+        color: var(--tr-dialog-confirmation-color);
+        margin-bottom: 32px;
+    }
+    &__table{
+        width: 100%;
+        margin-bottom: 32px;
+        &__header{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas: 'weight-note purchase-order';
+            padding: 0 40px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.36;
+            text-align: left;
+            color: var(--tr-dialog-confirmation-color);
+        }
+        &__body{
+            max-width: 462px;
+            &__row{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas: 'weight-note purchase-order';
+                padding: 4px 40px;
+                font-size: 16px;
+                line-height: 1.38;
+                text-align: left;
+                color: var(--tr-dialog-confirmation-color);
+                &:nth-child(2){
+                    background-color: var(--tr-card-background-color-disabled);
+                }
+            }
+        }
+        &--weight-note{
+            grid-area: weight-note;
+        }
+        &--purchase-order{
+            grid-area: purchase-order;
+        }
+    }
+    &__button{
+        width: 160px;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--tr-base-color-white);
+        background-color: var(--tr-base-color-blue);
+    }
+}

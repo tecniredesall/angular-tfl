@@ -1,0 +1,39 @@
+<div class="feature-container" *blockUI="'match-feature'; template: templateBlockModalUiComponent">
+    <div class="feature-container__instructions">
+        <div class="icon-div">¡</div>
+        <div class="text-label">
+            {{'match-feature-instructions' | i18n}}
+        </div>
+    </div>
+    <div class="feature-container__related-container">
+        <section class="feature-container__related-container__title-row">
+            <span>Trumodity</span>
+            <span> {{'transformations' | i18n}}</span>
+        </section>
+    </div>
+    <div class="feature-container__related-container__match-row" *ngIf="contractFeatures">
+        <ng-container *ngFor="let feature of contractFeatures.features">
+            <div class="feature-container__related-container__match-row__description">
+                <section>
+                    {{feature.idTrumodityFeature}}
+                </section>
+                <section class="feature-select">
+                    <ng-select class="custom-ng-select" [items]="feature.availableFeatures" [multiple]="false"
+                        [closeOnSelect]="true" [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                        [(ngModel)]="feature.selected" [loading]="false" bindLabel="name"
+                        [placeholder]="'placeholder-characteristic' | i18n"
+                        loadingText="{{ 'loading' | i18n }}"
+                        (change)="setFeature($event, feature)">
+                        [virtualScroll]="true"
+                    </ng-select>
+                </section>
+            </div>
+        </ng-container>
+    </div>
+    <div class="feature-container__related-container__action-footer">
+        <app-action-footer [isButtonSubmitDisabled]="!isComplete" (onActionSelected)="onEventMathFeature($event)"
+        [buttonSubmitText]="'accept'">
+        </app-action-footer>
+    </div>
+
+</div>

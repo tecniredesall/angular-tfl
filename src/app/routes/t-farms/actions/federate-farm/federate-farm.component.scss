@@ -1,0 +1,8 @@
+.federate-farm {
+    display: grid;
+    padding: 5px 15px;
+    color: var(--tr-panel-body-color);
+    &__producer {
+        display: grid;
+    }
+}

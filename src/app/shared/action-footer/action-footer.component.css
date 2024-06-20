@@ -1,0 +1,131 @@
+.action-footer {
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.action-footer-container-button {
+  display: inline-block;
+  height: 40px;
+}
+
+.action-footer-container-button button {
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: center;
+
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 5px;
+  height: 40px !important;
+  width: 100%;
+}
+
+.action-footer-btn-delete {
+  background-color: transparent !important;
+  width: auto;
+  color: #d63649 !important;
+}
+
+.action-footer-btn-delete img {
+  padding-bottom: 5px;
+}
+
+.action-footer-btn-delete-mobile {
+  width: 40px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(214, 54, 73, 0.2) !important;
+  padding-left: 13px;
+  padding-bottom: 4px;
+}
+
+.action-footer-btn-delete:not(.action-footer-btn-delete-mobile) {
+  padding-left: 0 !important;
+}
+
+.action-footer-btn-submit:disabled {
+  color: #344057 !important;
+  background-color: #dbdfe7 !important;
+  cursor: not-allowed;
+}
+
+:not(.dark) :host .action-footer-btn-submit:enabled {
+  color: white !important;
+  background-color: #0068d1 !important;
+}
+
+.dark :host .action-footer-btn-submit:enabled {
+  color: white !important;
+  background-color: #1f8efa !important;
+}
+
+.action-footer-btn-cancel {
+  background-color: transparent !important;
+}
+
+:not(.dark) :host .action-footer-btn-cancel {
+  color: #0068d1 !important;
+}
+
+.dark :host .action-footer-btn-cancel {
+  color: white !important;
+}
+
+.action-footer-xs .action-footer-container-btn-delete,
+.action-footer-xs .action-footer-container-btn-submit,
+.action-footer-sm .action-footer-container-btn-delete,
+.action-footer-sm .action-footer-container-btn-submit {
+  width: 100%;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.action-footer-xs .action-footer-container-btn-cancel,
+.action-footer-sm .action-footer-container-btn-cancel {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.action-footer-md .action-footer-container-btn-delete {
+  width: 40px;
+  padding: 0;
+  margin: 0;
+}
+
+.action-footer-md .action-footer-container-btn-submit {
+  width: 160px;
+  padding: 0;
+  margin: 0;
+}
+
+.action-footer-md .action-footer-container-btn-cancel {
+  width: 192px;
+  padding: 0 16px;
+  margin: 0;
+}
+
+.action-footer-lg .action-footer-container-btn-delete {
+  width: auto;
+  padding: 0 16px 0 0;
+  margin: 0;
+}
+
+.action-footer-lg .action-footer-container-btn-submit {
+  width: 160px;
+  padding: 0;
+  margin: 0;
+}
+
+.action-footer-lg .action-footer-container-btn-cancel {
+  width: 176px;
+  padding: 0 16px 0 0;
+  margin: 0;
+}

@@ -1,0 +1,78 @@
+@at-root {
+    :not(.dark) :host {
+        --header-background-color: #ffffff;
+        --header-text-color: #3f495f;
+    }
+
+    .dark :host {
+        --header-background-color: #182030;
+        --header-text-color: #ffffff;
+    }
+
+    .warehouse-transfer {
+        position: relative;
+        top: -70px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 70px 0 0 0;
+
+        &__wrapper {
+            display: block;
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+            &__container {
+                display: grid;
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 8px 0 0 0;
+                max-height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                grid-template-columns: 100%;
+                grid-template-rows: max-content 1fr;
+
+                .warehouse-transfer__header {
+                    width: 100%;
+                    height: auto;
+                    padding: 30px 40px 32px 40px;
+                    background-color: var(--header-background-color);
+                    font-size: 26px;
+                    font-weight: 600;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.36;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: var(--header-text-color);
+                }
+
+                .sil-tab-group {
+                    ::ng-deep mat-tab-header {
+                        background-color: var(--header-background-color);
+                    }
+
+                    ::ng-deep.mat-tab-body-wrapper {
+                        height: 100%;
+                    }
+
+                    ::ng-deep .mat-tab-body-content {
+                        background-color: transparent;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+}

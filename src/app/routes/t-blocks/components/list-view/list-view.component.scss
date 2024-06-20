@@ -1,0 +1,199 @@
+.sil-table {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    .sil-table__header-row {
+        display: none;
+        .sil-table__header-cell {
+            font-size: 12px;
+        }
+    }
+    .sil-table__row {
+        padding: 8px;
+        cursor: pointer;
+        grid-template-columns: 1fr 0.8fr 0.8fr 0.3fr;
+        grid-template-areas:
+            "name farm extension actions"
+            "height seals seals federated";
+        row-gap: 4px;
+        column-gap: 4px;
+        font-weight: 600;
+        font-size: 14px;
+        .sil-table__cell {
+            font-weight: 600;
+            font-size: 14px;
+            justify-content: flex-start;
+            &.cell__name {
+                word-break: break-word;
+                grid-area: name;
+                div {
+                    display: inline-flex;
+                    align-items: center;
+                    i {
+                        font-size: 20px;
+                        color: #869aab;
+                    }
+                    span:nth-child(2) {
+                        display: inline-block;
+                    }
+                }
+            }
+            &.cell__extension {
+                grid-area: extension;
+            }
+            &.cell__height {
+                grid-area: height;
+            }
+            &.cell__farm {
+                grid-area: farm;
+            }
+            &.cell__seals {
+                grid-area: seals;
+                div {
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-left: 18px;
+                    span {
+                        z-index: 5;
+                        margin-left: -18px;
+                        img {
+                            width: 24px;
+                            top: 3px;
+                            position: initial;
+                            height: 24px;
+                            border-radius: 50%;
+                            border: 0.5px solid lightgray;
+                        }
+                    }
+                }
+            }
+            &.cell__federated {
+                grid-area: federated;
+                padding: 0;
+                justify-content: flex-end;
+                align-items: flex-end;
+            }
+        }
+    }
+    .cell__actions {
+        display: inline-flex;
+        grid-area: actions;
+        justify-content: center;
+    }
+}
+
+/* Tooltip class */
+::ng-deep .sil-table__tooltip {
+    white-space: pre-line;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.42;
+    letter-spacing: normal;
+    text-align: left;
+    padding: 10px;
+}
+
+/* Responsive*/
+/* tablet */
+@media (min-width: 768px) {
+    .sil-table {
+        .sil-table__header-row {
+            padding: 8px;
+            display: grid;
+            column-gap: 4px;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr 1.3fr 0.8fr;
+            .sil-table__header-cell {
+                &.header__extension,
+                &.header__height,
+                &.header__farm,
+                &.header__seals {
+                    display: inline-flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    text-align: center;
+                }
+                &.header__seals {
+                    justify-content: flex-start;
+                }
+                &.header__actions {
+                    display: inline-flex;
+                    justify-content: flex-end;
+                }
+            }
+        }
+        .sil-table__row {
+            grid-template-columns: 1.5fr 1fr 1fr 1fr 1.3fr 0.4fr 0.4fr;
+            grid-template-areas: "name farm height extension seals federated actions";
+            .sil-table__cell {
+                justify-content: center;
+                &.cell__extension,
+                &.cell__height,
+                &.cell__farm,
+                &.cell__federated,
+                &.cell__seals {
+                    display: inline-flex;
+                    align-items: center;
+                }
+                &.cell__seals {
+                    padding: 0;
+                    div {
+                        span {
+                            margin-left: -18px;
+                            img {
+                                width: 28px;
+                                height: 28px;
+                            }
+                        }
+                    }
+                }
+                &.cell__federated {
+                    i {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*desktop*/
+@media (min-width: 1200px) {
+    .sil-table {
+        .sil-table__header-row {
+            .sil-table__header-cell {
+                &.header__extension,
+                &.header__height,
+                &.header__farm,
+                &.header__seals {
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                }
+                &.header__actions {
+                    justify-content: flex-end;
+                    align-items: flex-end;
+                }
+            }
+        }
+        .sil-table__row {
+            .sil-table__cell {
+                justify-content: flex-start;
+                align-items: flex-start;
+                &.cell__seals {
+                    div {
+                        span {
+                            margin-left: -20px;
+                            img {
+                                width: 35px;
+                                height: 35px;
+                            }
+                        }
+                        span:first-child {
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

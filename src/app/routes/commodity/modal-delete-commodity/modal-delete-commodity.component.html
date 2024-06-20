@@ -1,0 +1,64 @@
+<div class="modal-delete-commodity-container">
+
+    <div class="modal-content modal-delete" *blockUI="'block-delete';template: templateBlockModalUi">
+  
+      <div class="modal-header border-pad-5">
+  
+        <div class="col-xs-12 text-left p0">
+  
+          <div class="col-xs-12 text-left p0 text-center">
+  
+            <img class="modal-delete-commodity-icon" src="assets/img/svg/menu/materia-prima.svg">
+  
+          </div>
+  
+          <div class="col-xs-12 text-left p0 text-center delete-modal-title">
+            <span class="modal-delete-commodity-confirmation">
+              {{'delete-commodity-msg'  | i18n }}
+            </span>
+            <span class="form-label-ss">
+              {{data.name}} ({{data.generalCommodity.name}})
+            </span>
+            <span class="modal-delete-commodity-confirmation">?</span>
+          </div>
+  
+          <div class="col-xs-12 p0 text-center delete-modal-info">
+            {{'delete-msg-info' | i18n}}
+          </div>
+  
+          <div class="col-xs-12 pad-20 p0">
+  
+            <div class="col-xs-12 text-left text-center col-lg-2 col-md-2 col-sm-2">
+              &nbsp;
+            </div>
+  
+            <div class="col-xs-6 text-left  text-center col-lg-4 col-sm-4 col-md-4">
+  
+              <button (click)="onClose()" class="btn btn-default btn-sm pull-center delete-modal-btn">
+                {{'cancel' | i18n | uppercase }}
+              </button>
+  
+            </div>
+  
+            <div class="col-xs-6 col-sm-4 col-lg-4 col-md-4 text-left text-center">
+  
+              <button (click)="onSumbitDelete()" [disabled]="isSubmitButtonDisabled"
+                class="btn btn-danger btn-sm pull-center delete-modal-btn">
+                {{'delete' | i18n | uppercase }}
+              </button>
+  
+            </div>
+  
+            <div class="col-xs-12 col-lg-2 col-md-2 col-sm-2 text-left  text-center">
+              &nbsp;
+            </div>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  </div>

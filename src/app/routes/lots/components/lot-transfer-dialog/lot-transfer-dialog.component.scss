@@ -1,0 +1,131 @@
+@import "src/scss/breakpoints.scss";
+
+.lot-transfer-container {
+    padding: 30px;
+    display: grid;
+
+    &__title {
+        font-size: 28px;
+        font-weight: 600;
+        height: 60px;
+        border-bottom: solid 1px var(--tr-border-color);
+        color: var(--tr-base-color-blue);
+        padding: 0px 15px;
+        width: 50%;
+    }
+    &__content {
+        display: grid;
+        margin-top: 20px;
+        &-lot-info {
+            display: grid;
+            grid-template-columns: 1fr;
+            padding: 0px 15px;
+            &__date {
+                display: grid;
+                font-weight: 600;
+                &-info {
+                    font-size: 26px;
+                    color: var(--tr-dialog-confirmation-color);
+                }
+                &-label {
+                    font-size: 14px;
+                    color: var(--tr-labe-columns-list-color);
+                    i {
+                        margin-right: 10px;
+                    }
+                }
+            }
+            &__totals {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 0 7px 0 var(--tr-panel-shadown-color);
+                align-items: center;
+                &-label {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: var(--tr-data-grid-color);
+                }
+                &-quantity {
+                    font-size: 22px;
+                    font-weight: bold;
+                    color: var(--tr-mat-icons-documents-color);
+                    text-align: end;
+                }
+            }
+        }
+        &-lot-label {
+            padding: 0px 15px;
+            font-size: 14px;
+            color: var(--tr-labe-columns-list-color);
+            margin-top: 15px;
+            align-content: center;
+            i {
+                color: var(--tr-base-color-yellow);
+                margin-right: 10px;
+            }
+        }
+        &-summary {
+            margin-top: 20px;
+            display: grid;
+            margin-bottom: 30px;
+            &__title {
+                font-size: 16px;
+                font-weight: 600;
+                background-color: var(--tr-panel-background-color);
+                border-radius: 5px;
+                padding: 5px 15px;
+            }
+        }
+        &-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            font-size: 14px;
+            padding: 10px 15px;
+            column-gap: 25px;
+            &-info {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                &__label {
+                    font-weight: 600;
+                    i {
+                        margin-right: 10px;
+                    }
+                    .rotate-icon {
+                        transform: rotateY(160deg);
+                        width: 15px;
+                        display: inline-block;
+                        margin-right: 10px;
+                    }
+                }
+                &__number {
+                    font-weight: bold;
+                    text-align: right;
+                }
+                .green-label {
+                    color: #23a718;
+                }
+                .red-label {
+                    color: #d63649;
+                }
+                .blue-label {
+                    color: #0068ff;
+                }
+            }
+        }
+    }
+    &__footer {
+        margin-top: 10px;
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .lot-transfer-container {
+        &__content {
+            &-lot-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+<div class="workflow">
+  <div class="workflow__wrapper">
+    <div class="workflow__wrapper__container tr__scroll">
+      <div class="workflow__header">
+        <p>{{'production-flows' | i18n}}</p>
+        <mat-tab-group class="tr__tab__group" [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onChangeTab($event)">
+          <mat-tab label="{{'production-flows' | i18n}}">
+            <tr-production-flows *ngIf="0==selectedTabIndex"></tr-production-flows>
+          </mat-tab>
+          <mat-tab label="{{'processes' | i18n}}">
+            <tr-processes *ngIf="1==selectedTabIndex"></tr-processes>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

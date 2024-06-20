@@ -1,0 +1,469 @@
+@import "src/scss/breakpoints.scss";
+
+.purchase-order {
+    padding: 20px 10px;
+    margin-bottom: 115px;
+    &-right-title {
+        float: left;
+        text-align: left;
+    }
+    &-title-commun {
+        font-weight: 600;
+        color: var(--tr-panel-body-color);
+    }
+    &-main-name {
+        font-weight: bold;
+        color: var(--tr-dialog-confirmation-color);
+    }
+    &-description-commun {
+        color: var(--tr-scale-button-tooltip-color);
+    }
+    &__back-list {
+        font-size: 16px;
+        color: var(--tr-mat-icons-documents-color);
+        display: inline;
+        cursor: pointer;
+        i {
+            margin-right: 15px;
+        }
+    }
+    &__title-detail {
+        display: grid;
+        grid-template-columns: 1fr;
+        padding: 0px 0px;
+        &__name {
+            font-size: 26px;
+            font-weight: 600;
+        }
+        &__date {
+            font-size: 14px;
+            font-weight: bold;
+            .information {
+                grid-template-columns: 30% 70%;
+                display: grid;
+                .created {
+                    color: var(--tr-mat-icons-documents-color);
+                }
+            }
+        }
+    }
+    &__container-detail {
+        padding: 0px 0px;
+        margin-top: 5px;
+        &-description {
+            background-color: var(--tr-container-detail-background-color);
+            border-radius: 20px 20px 0px 0px;
+            padding-bottom: 40px;
+            &__company-info {
+                background-color: #0068ff;
+                color: #fff;
+                border-radius: 20px 20px 0px 0px;
+                display: grid;
+                grid-template-columns: 15% 85%;
+                padding: 25px 5px 85px 5px;
+                .icon {
+                    padding: 0px;
+                    img {
+                        width: 50px;
+                    }
+                }
+                .description {
+                    display: grid;
+                    grid-template-columns: 60% 1fr;
+                    &__order-number {
+                        display: grid;
+                        grid-column: 1;
+                        &__folio {
+                            font-size: 28px;
+                            font-weight: bold;
+                            align-self: end;
+                        }
+                        &__title {
+                            font-size: 16px;
+                            font-weight: normal;
+                        }
+                    }
+                    &__order-information {
+                        font-size: 14px;
+                        border-left: 1px solid #fff;
+                        display: grid;
+                        padding-left: 10px;
+                        margin-top: 15px;
+                        .company-title {
+                            font-weight: bold;
+                        }
+                    }
+                    &__order-actions {
+                        grid-row: 1;
+                        grid-column: 2;
+                        div {
+                            width: 35px;
+                            height: 35px;
+                            padding: 8px;
+                            margin: 0 10px;
+                            text-align: center;
+                            border-radius: 5px;
+                            background-color: #4c95ff;
+                            cursor: pointer;
+                            float: right;
+                        }
+                    }
+                }
+            }
+            &__purchase-detail {
+                display: grid;
+                padding: 0px 15px;
+                .purchase-general-information {
+                    margin-top: -65px;
+                    &__container {
+                        background-color: var(--tr-header-background-color);
+                        box-shadow: 0 2px 4px 0 var(--tr-panel-shadown-color);
+                        border-radius: 20px;
+                        color: var(--tr-panel-body-color);
+                        padding: 30px 5px;
+                        &-header {
+                            display: grid;
+                            grid-template-columns: 40% 60%;
+                            .title-info {
+                                display: flex;
+                                gap: 10px;
+                                font-size: 18px;
+                                font-weight: 600;
+                                color: var(--tr-data-grid-color);
+                                border-bottom: 1px solid
+                                    var(--tr-title-detail-order-backgroud-color);
+                                padding-bottom: 10px;
+                                .cell-data {
+                                    display: inline-grid;
+                                    &-title {
+                                        color: var(--tr-labe-columns-list-color);
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                    }
+                                    .notes-cell {
+                                        display: inline;
+                                        i {
+                                            margin-right: 5px;
+                                        }
+                                    }
+                                    .note-status {
+                                        width: 85%;
+                                    }
+                                }
+                            }
+                            .date-purchase-info {
+                                align-self: center;
+                                text-align: end;
+                                span {
+                                    color: #fff;
+                                    background-color: #23a718;
+                                    border-radius: 5px;
+                                    padding: 2px 10px;
+                                }
+                            }
+                        }
+                        &-details {
+                            display: grid;
+                            grid-template-columns: 1fr;
+                            font-size: 14px;
+                            margin-top: 15px;
+                            div {
+                                display: grid;
+                                grid-template-columns: 40% 60%;
+                            }
+                        }
+                    }
+                }
+                .contract-information {
+                    display: grid;
+                    padding: 30px 5px;
+                    margin-top: 15px;
+                    &__title {
+                        color: var(--tr-data-grid-color);
+                        font-size: 18px;
+                        font-weight: 600;
+                        i {
+                            font-size: 18px;
+                            color: var(--tr-panel-header-toggle-icon-color);
+                            margin-right: 5px;
+                        }
+                    }
+                    &__details {
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        font-size: 14px;
+                        margin-top: 15px;
+                        &-description {
+                            display: grid;
+                            grid-template-columns: 40% 60%;
+                            .weight-information {
+                                span {
+                                    float: left;
+                                }
+                                .tr__progress-bar {
+                                    height: 6px;
+                                    border-radius: 5px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .weight-notes-information {
+                    display: grid;
+                    padding: 30px 5px;
+                    margin-top: 15px;
+                    grid-template-columns: 70% 30%;
+                    &__title {
+                        color: var(--tr-data-grid-color);
+                        font-size: 18px;
+                        font-weight: 600;
+                        border-bottom: 1px solid
+                            var(--tr-title-detail-order-backgroud-color);
+                        padding-bottom: 15px;
+                        i {
+                            font-size: 18px;
+                            color: var(--tr-panel-header-toggle-icon-color);
+                            margin-right: 5px;
+                        }
+                        span {
+                            margin-left: 15px;
+                            color: var(--tr-base-color-blue);
+                            background-color: var(--tr-panel-background-color);
+                            padding: 2px 20px;
+                            border-radius: 20px;
+                        }
+                    }
+                    &_notes {
+                        grid-column: 1/3;
+                        margin-top: 15px;
+                        font-size: 14px;
+                        &-table {
+                            &__header {
+                                display: grid;
+                                grid-template-columns: 20px 40px repeat(5, 1fr);
+                                font-weight: 600;
+                                color: var(--tr-data-grid-color);
+                                margin-bottom: 10px;
+                                column-gap: 5px;
+                            }
+                            &__row-body {
+                                display: grid;
+                                grid-template-columns: 20px 40px repeat(5, 1fr);
+                                border-bottom: solid 1px var(--tr-border-color);
+                                padding: 15px 0px;
+                                column-gap: 5px;
+                            }
+                        }
+                    }
+                }
+
+                .purchase-note-inforation {
+                    margin-top: 15px;
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    background-color: var(--tr-header-background-color);
+                    box-shadow: 0 2px 4px 0 var(--tr-panel-shadown-color);
+                    border-radius: 20px;
+                    padding: 30px 5px;
+                    color: var(--tr-panel-body-color);
+                    &__note {
+                        display: grid;
+                        font-size: 12px;
+                        margin-bottom: 15px;
+                        &-title {
+                            font-weight: 600;
+                        }
+                        &-description {
+                            color: var(--tr-scale-button-tooltip-color);
+                        }
+                    }
+                    &__totals {
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: var(--tr-panel-body-color);
+                        .info-total {
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            &-title-total {
+                                font-size: 18px;
+                            }
+                            &-title-color {
+                                font-size: 18px;
+                                color: var(
+                                    --tr-mat-datepicker-toggle-active-color
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .purchase-order {
+        padding: 20px 10px;
+        margin-bottom: 70px;
+        &-right-title {
+            float: right;
+            text-align: end;
+        }
+        padding: 20px;
+        &__title-detail {
+            grid-template-columns: 30% 70%;
+            padding: 0px;
+            &__date {
+                .information {
+                    grid-template-columns: 30% 70%;
+                }
+            }
+        }
+        &__container-detail {
+            padding: 0px 0px;
+            &-description {
+                padding-bottom: 25px;
+                &__company-info {
+                    padding: 30px 10px 85px 10px;
+                    grid-template-columns: 10% 1fr;
+                    .icon {
+                        padding-top: 35px;
+                        img {
+                            width: 60px;
+                        }
+                    }
+                    .description {
+                        grid-template-columns: 25% 1fr 25%;
+                        &__order-number {
+                            display: grid;
+                        }
+                        &__order-information {
+                            margin-top: 5px;
+                        }
+                        &__order-actions {
+                            grid-row: 1;
+                            grid-column: 3;
+                        }
+                    }
+                }
+                &__purchase-detail {
+                    padding: 0px 15px;
+                    .purchase-general-information {
+                        &__container {
+                            padding: 30px 15px;
+                            &-header {
+                                grid-template-columns: 50% 50%;
+                            }
+                            &-details {
+                                grid-template-columns: 1fr 1fr;
+                                div {
+                                    grid-template-columns: 50% 50%;
+                                }
+                            }
+                        }
+                    }
+                    .contract-information {
+                        padding: 30px 15px;
+                        &__details {
+                            grid-template-columns: 1fr 1fr;
+                            &-description {
+                                grid-template-columns: 50% 50%;
+                                .weight-information {
+                                    span {
+                                        float: right;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .weight-notes-information {
+                        padding: 30px 15px;
+                        grid-template-columns: 40% 60%;
+                        &_notes {
+                            grid-column: 1/3;
+                            &-table {
+                                &__header {
+                                    grid-template-columns: 70px 70px repeat(
+                                            5,
+                                            1fr
+                                        );
+                                    column-gap: 25px;
+                                }
+                                &__row-body {
+                                    grid-template-columns: 70px 70px repeat(5, 1fr);
+                                    column-gap: 25px;
+                                }
+                            }
+                        }
+                    }
+                    .purchase-note-inforation {
+                        grid-template-columns: 1fr 1fr;
+                        padding: 30px 15px;
+                        column-gap: 10px;
+                        &__note {
+                            margin-bottom: 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media (min-width: $screen-md-min) {
+    .purchase-order {
+        &__title-detail {
+            grid-template-columns: 55% 45%;
+            padding: 0px 30px;
+        }
+        &__container-detail {
+            padding: 0px 25px;
+            &-description {
+                padding-bottom: 25px;
+                &__company-info {
+                    padding: 35px 35px 85px 25px;
+                    grid-template-columns: 8% 1fr;
+                    .icon {
+                        padding-top: 0px;
+                        img {
+                            width: 100px;
+                        }
+                    }
+                    .description {
+                        grid-template-columns: 11% 1fr 25%;
+                    }
+                }
+                &__purchase-detail {
+                    padding: 0px 110px;
+                    .purchase-general-information {
+                        &__container {
+                            padding: 20px 65px;
+                            &-header {
+                                grid-template-columns: 40% 60%;
+                            }
+                            &-details {
+                                div {
+                                    grid-template-columns: 45% 55%;
+                                }
+                            }
+                        }
+                    }
+                    .contract-information {
+                        padding: 20px 65px;
+                    }
+                    .weight-notes-information {
+                        padding: 20px 65px;
+                    }
+                    .weight-notes-information {
+                        padding: 20px 65px;
+                    }
+                    .purchase-note-inforation {
+                        grid-template-columns: 1fr 1fr;
+                        padding: 20px 65px;
+                    }
+                }
+            }
+        }
+    }
+}

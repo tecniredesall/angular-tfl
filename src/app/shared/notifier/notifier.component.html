@@ -1,0 +1,4 @@
+<div *ngIf="notifyService.showing" class="notifier-body flex" @rightDirection [ngStyle]="{'background-color': notifyService.type === 'success' ? '#23a718' : '#d63649'}" >
+  <p align="center"> {{ notifyService.message | i18n }} </p>
+  <mat-icon style="margin-left: auto" *ngIf="notifyService.type === 'error'" (click)="close()" >close</mat-icon>
+</div>

@@ -1,0 +1,70 @@
+<div class="lot-summary" *blockUI="'merge-lot'; template: templateBlockModalUiComponent">
+    <app-lot-list-summary [lots]="lotsForMerge" 
+                          [configuration]="configuration">
+    </app-lot-list-summary>
+    <div class="lot-summary__subtitle">{{'new-lot-detail' | i18n}}</div>
+    <div class="panel panel-default">
+        <div class="total-quantity-card-column">
+            <div class="total-quantity-card">
+                <div class="total-label font-ss16">
+                    <span>{{'featured-weight-total-quantity' | i18n}} :</span>
+                </div>
+                <div class="quantity-label font-ss20">
+                    <span class="tr--font-green">
+                        {{featuredWeigthTotal |  number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}}
+                        {{configuration.conversionMeasurementUnitAbbreviation}}
+                    </span>
+                </div>
+                <div class="total-label font-ss16">
+                    <span>{{'net-weight-total-quantity' | i18n}} :</span>
+                </div>
+                <div class="quantity-label font-ss20">
+                    <span>
+                          {{netWeigthTotal | number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}}
+                          {{configuration.conversionMeasurementUnitAbbreviation}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="total-label font-ss16 flow-description column-description">
+            <span>{{'production-flow' | i18n}}</span>
+            <span class="label-flow-subtitle font-ss15">{{currentLot.workFlowName}}</span>
+            <span class="w-label" [ngClass]="{'tr__lot__type__nano':LOT_TYPES.NANO_LOTE==currentLot.productionTypeName,
+                                              'tr__lot__type__micro':LOT_TYPES.MICRO_LOTE==currentLot.productionTypeName,
+                                              'tr__lot__type__macro':LOT_TYPES.MACRO_LOTE==currentLot.productionTypeName}">
+                {{currentLot.productionTypeName | i18n}}
+            </span>
+        </div>
+        <div class="total-label flow-description transformation-column">
+            <span class="font-ss16">{{'process' | i18n}}</span>
+            <div class="lot-detail__process__label mrg-btm-15"
+                [ngStyle]="{ 'background-color': currentLot?.processColor }">{{currentLot.process}}</div>
+            <span class="font-ss16">{{'commodity-type' | i18n}}</span>
+            <span class="label-flow-subtitle font-ss15">{{currentLot.commodityType}}</span>
+        </div>
+        <div class="font-ss14 icons-column">
+            <div>
+                <span class="transformation-column__icon">
+                    <i class="icon-almacen-blue"></i>
+                    {{currentLot.warehouse}}
+                </span>
+            </div>
+            <div class="mrg-btm-15 mrg-top-15">
+                <div class="icon-container"><span class="icon-users"></span></div>
+                <span class="label-flow-subtitle">{{sellers.length}} {{'producer' | i18n}} (es)</span>
+            </div>
+            <div>
+                <div class="icon-container"><span class="icon-notas-r"></span></div>
+                <span class="label-flow-subtitle">{{totalWeighNotes}} {{'weight-notes' | i18n}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="lot-summary__footer">
+        <button class="sil-form__header-button btn btn-transparent-blue" (click)="onBackLotsAvailable()">
+        <i class="icon-arrow_icon"></i>
+        {{ "back" | i18n }}
+    </button>
+        <app-action-footer [buttonSubmitText]="'merge'" (onActionSelected)="onActionSelected($event)">
+        </app-action-footer>
+    </div>
+</div>

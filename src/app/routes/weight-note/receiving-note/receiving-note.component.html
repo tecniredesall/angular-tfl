@@ -1,0 +1,70 @@
+<div class="principal-panel panel-receiving-note">
+    <div class="receiving-note-list" [ngClass]="{ 'lot-list--processed-mode': isProductionNote }">
+        <!-- Header -->
+        <div class="receiving-note-list__header">
+            <div class="receiving-note-list__header__filter">
+                <button class="tr__button__filter receiving-note-list__header__filter__button"
+                    [ngClass]="{ 'tr__button__filter--active': (countFilter>0) }" matRipple (click)="onOpenFilter()">
+                    <i class="icon-filter-icon no-select"></i>
+                    &nbsp; &nbsp;
+                    <span>{{ "filter" | i18n }}</span>
+                    &nbsp; &nbsp;
+                    <div *ngIf="countFilter >0" class="tr__button__filter__count">
+                        <span>{{ countFilter }}</span>
+                    </div>
+                </button>
+            </div>
+            <div class="receiving-note-list__header__input">
+                <button class="receiving-note-list__header__input__button"
+                    [ngClass]="isProductionNote ? 'tr__button__second' : 'tr__button__primary'"
+                    (click)="selectNoteList(false)" matRipple>
+                    <span>{{ "receiving-note-view-input" | i18n }}</span>
+                </button>
+            </div>
+            <div class="receiving-note-list__header__production">
+                <button class="receiving-note-list__header__production__button"
+                    [ngClass]="!isProductionNote ? 'tr__button__second' : 'tr__button__primary'"
+                    (click)="selectNoteList(true)" matRipple>
+                    <span>{{ "weight-notes" | i18n }}</span>
+                </button>
+            </div>
+            <div class="receiving-note-list__header__search">
+                <input type="text"
+                    class="form-control search-tck search-loca-input receiving-note-list__header__input__serach"
+                    [placeholder]="'placeholder-search-purchase-order' | i18n" [(ngModel)]="searchText" />
+            </div>
+
+            <div class="receiving-note-list__header__new__lot">
+                <button *permission="{tag: PERMISSIONS.LOTS, type: PERMISSION_TYPES.UPDATE}" class="tr__button__primary   receiving-note-list__header__new__lot__button" matRipple
+                    [routerLink]="['lots/create']"
+                    [queryParams]="{ isFromNoteList: true , production: this.isProductionNote }">
+                    <span> + {{ "create-lot" | i18n }}</span>
+                </button>
+            </div>
+
+            <div class="receiving-note-list__header__new">
+                <button class="tr__button__new-item receiving-note-list__header__new__button" matRipple
+                    [routerLink]="['receiving-ticket']"
+                    [queryParams]="{ isFromNoteList: true , production: this.isProductionNote }" *permission="{
+                    tag: PERMISSIONS.WEIGHT_NOTE,
+                    type: PERMISSION_TYPES.CREATE
+                }">
+                    <span>+ {{ "new-note" | i18n }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="!this.isProductionNote; else productionTemplate">
+        <app-receiving-note-list [isOpenFilter]="isOpenFilter" [searchText]="this.searchText"
+            (closeFilter)="onCloseFilter($event)" (countSelectedFilters)="onCountSelectedFilters($event)">
+        </app-receiving-note-list>
+    </ng-container>
+
+    <ng-template #productionTemplate>
+        <app-receiving-note-list-production [isOpenFilter]="isOpenFilter" [searchProductionNoteText]="this.searchText"
+            (closeFilter)="onCloseFilter($event)" (countSelectedFilters)="onCountSelectedFilters($event)">
+        </app-receiving-note-list-production>
+    </ng-template>
+
+</div>

@@ -1,0 +1,81 @@
+<header class="sil-form__header">
+    <h1 class="sil-form__title">
+        {{ "new-c" | i18n }}
+        {{ "block" | i18n | lowercase }}
+    </h1>
+</header>
+<section class="sil-form__section producer__name" *ngIf="producer">
+    <label>{{ "producer" | i18n }}</label>
+    <p class="sil-form__profile-text sil-form__profile-text-bold">
+        {{ producer.fullName }}
+    </p>
+</section>
+<section class="found-federated">
+    <p class="found-federated__message">
+        <i class="icon-alert_icon"></i>
+        {{ "found-federated-blocks" | i18n }}
+    </p>
+    <p class="found-federated__select-items">
+        {{ "select-blocks-to-sync" | i18n }}
+    </p>
+    <button class="btn btn-success btn-xs pull-right found-federated__new" (click)="onNewBlock()">
+        <span>+ {{ "new-c" | i18n }}</span>
+    </button>
+</section>
+<section class="search-block">
+    <app-search-input [searchValue]="blockSearchInput.value" (clearEvent)="onClearBlockSearch()">
+        <input type="text" class="elipsis" [placeholder]="'search-name' | i18n" autocomplete="not"
+            [formControl]="blockSearchInput" />
+    </app-search-input>
+    <button class="btn btn-resize blue-btn button-lg" (click)="onSearchClick()">
+        {{ "search" | i18n }}
+    </button>
+</section>
+<section class="sil-table sil-table--scrollable">
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__name">
+            {{ "name" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortBlocks('name')"
+                [ngClass]="{ 'sort-icon-invert': !orderStatusAsc.name }"></i>
+        </span>
+        <span class="sil-table__header-cell header__farm">
+            {{ "farm" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortBlocks('farmName')" [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.farmName
+                }"></i>
+        </span>
+        <span class="sil-table__header-cell header__platform">
+            {{ "platform" | i18n | uppercase }}
+        </span>
+
+    </header>
+    <article class="sil-table__checkbox-row" *ngFor="let block of filteredBlocks; let i = index">
+        <mat-checkbox class="sil-table__checkbox" color="primary" (change)="onCheckChanged($event, block)"
+            [checked]="block.isSelected"></mat-checkbox>
+        <article class="sil-table__row sil-table__row--bordered">
+            <span class="sil-table__cell cell__name">
+                <i class="icon-icon-parcela light"></i>
+                <span>{{ block.name }}</span>
+            </span>
+            <span class="sil-table__cell cell__farm">
+                {{ block.farmName ? block.farmName : "-" }}
+            </span>
+            <span class="sil-table__cell sil-table__row__platform">
+                <img [src]="'assets/img/svg/' + block.code + '-icon.svg'">
+                <span> {{block.code | i18n}}</span>
+            </span>
+        </article>
+    </article>
+</section>
+<section class="sil-form__section-form-action-buttons form-actions">
+    <span class="block__counter">
+        {{ selectedBlocks?.length }}
+        {{ selectedBlocks?.length === 1 ? "seleccionada" : "seleccionadas" }}
+    </span>
+    <button class="btn btn-resize gray-btn button-lg" (click)="onCancelClick()">
+        {{ "cancel" | i18n }}
+    </button>
+    <button class="btn btn-resize blue-btn button-lg" [disabled]="selectedBlocks?.length === 0" (click)="onAddClick()">
+        {{ "add" | i18n }}
+    </button>
+</section>

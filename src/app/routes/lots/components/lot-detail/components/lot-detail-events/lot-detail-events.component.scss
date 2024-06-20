@@ -1,0 +1,25 @@
+:host {
+    display: block;
+    width: 100%;
+    .sil-tab-group ::ng-deep {
+        height: 100%;
+        .mat-tab-header {
+            padding: 0;
+            margin-top: 16px;
+            .mat-tab-label-content {
+                font-size: 18px;
+            }
+            .mat-tab-label-active .mat-tab-label-content {
+                font-weight: 600;
+            }
+        }
+        .mat-tab-body-wrapper{
+            position: relative;
+            height: 100%;
+            .mat-tab-body-content {
+                padding: 0;
+                overflow: hidden;
+            }
+        }
+    }
+}

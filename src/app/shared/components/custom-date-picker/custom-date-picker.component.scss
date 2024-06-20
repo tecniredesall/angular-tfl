@@ -1,0 +1,96 @@
+.custom-date-picker-field {
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+    min-height: 36px;
+    padding: 0 2px 0 10px;
+
+    .mat-datepicker-toggle button {
+        top: -8px;
+    }
+}
+
+.custom-date-picker-field-input {
+    cursor: pointer;
+}
+
+.custom-date-picker-field-input::selection {
+    background-color: transparent;
+}
+
+.custom-date-picker-field-input::placeholder {
+    color: #999 !important;
+}
+
+::ng-deep :not(.dark) .custom-date-picker-field-input {
+    color: #333333 !important;
+}
+
+::ng-deep .dark .custom-date-picker-field-input {
+    color: #ffffff !important;
+}
+
+:not(.dark) :host .custom-date-picker-field-disabled,
+:not(.dark) :host .custom-date-picker-field-input:disabled,
+:not(.dark) :host .custom-date-picker-field-disabled ::ng-deep .mat-button[disabled],
+:not(.dark) :host .custom-date-picker-field-disabled ::ng-deep .mat-icon-button[disabled],
+:not(.dark) :host .custom-date-picker-field-disabled ::ng-deep .mat-stroked-button[disabled],
+:not(.dark) :host .custom-date-picker-field- ::ng-deep .mat-flat-button[disabled] {
+    cursor: not-allowed !important;
+    background-color: #EEEEEE !important;
+}
+
+.dark :host .custom-date-picker-field-disabled,
+.dark :host .custom-date-picker-field-input:disabled,
+.dark :host .custom-date-picker-field-disabled ::ng-deep .mat-button[disabled],
+.dark :host .custom-date-picker-field-disabled ::ng-deep .mat-icon-button[disabled],
+.dark :host .custom-date-picker-field-disabled ::ng-deep .mat-stroked-button[disabled],
+.dark :host .custom-date-picker-field- ::ng-deep .mat-flat-button[disabled] {
+    cursor: not-allowed !important;
+    background-color: #3e4e6c !important;
+}
+
+:host ::ng-deep .mat-form-field-wrapper,
+:host ::ng-deep .mat-form-field-flex {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+    border: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+}
+
+:host ::ng-deep .mat-form-field-suffix button {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+:host ::ng-deep .mat-form-field-outline {
+    color: transparent;
+}
+
+:host ::ng-deep .mat-form-field-outline .mat-form-field-outline-start,
+:host ::ng-deep .mat-form-field-outline .mat-form-field-outline-gap,
+:host ::ng-deep .mat-form-field-outline .mat-form-field-outline-end {
+    border: none;
+}
+
+.dark :host ::ng-deep .mat-form-field-suffix :not(.mat-datepicker-toggle-active) button svg {
+    color: white;
+}
+
+.custom-date-picker-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+:host.ng-invalid.ng-dirty .create-input {
+    border: 1px solid #df0000 !important;
+    box-shadow: 0 1px 5px rgba(255, 0, 0, 0.2) !important;
+}

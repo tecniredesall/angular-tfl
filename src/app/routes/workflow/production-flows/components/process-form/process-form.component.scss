@@ -1,0 +1,120 @@
+p{
+    margin-bottom: 0;
+}
+
+.process-form{
+    hr {
+        border-color: var(--separator-border);
+    }
+    &__container{
+        position: relative;
+    }
+    &__group{
+        margin-bottom: 30px;
+    }
+    &__color{
+        &__container{
+            align-items: center;
+        }
+        &__selector {
+            width: 95px;
+            height: 32px;
+            display: grid;
+            margin-left: auto;
+            border-radius: 5px;
+            grid-template-columns: 70% 30%;
+            border: solid 1px var(--tr-title-detail-order-backgroud-color);
+        }
+        &__selected{
+            background-color: var(--tr-foreground-color);
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        &__grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+        }
+        &__element{
+            height: 20px;
+            width: 20px;
+        }
+        &__button{
+            color: var(--tr-data-grid-color);
+            width: 16px;
+            height: 16px;
+            margin: auto;
+        }
+    }
+    &__commodity-state{
+        background-color: var(--tr-panel-background-color);
+        padding: 16px 12px;
+        &__title{
+            margin-bottom: 24px;
+        }
+        &__group{
+            margin-bottom: 24px;
+        }
+    }
+    &__delete {
+        margin-bottom: 40px;
+    }
+}
+.dropdown-menu {
+    left: auto;
+    right: 0;
+    padding: 10px;
+}
+.btn-action,
+.btn-theme {
+    width: 48%;
+}
+
+.btn-theme {
+    margin-right: 2%;
+}
+
+.btn-action {
+    margin-left: 2%;
+}
+
+.create-input:disabled{
+    cursor: not-allowed !important;
+    background-color: var(--tr-background-input-disabled);
+}
+
+.create-input:focus-visible{
+    border: 1px solid #e1e7f5 !important;
+}
+
+:root .dark .create-input{
+    color: #ffffff !important;
+}
+
+:root .dark .title-body-modal {
+    color: #ffffff !important;
+}
+
+@media (min-width: 500px) {
+    .right {
+        justify-content: flex-end;
+    }
+
+    .btn-action,
+    .btn-theme {
+        width: 164px;
+    }
+
+    .btn-theme {
+        margin-right: 10px;
+    }
+}
+
+@media (min-width: 800px) {
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10%;
+    }
+}
+

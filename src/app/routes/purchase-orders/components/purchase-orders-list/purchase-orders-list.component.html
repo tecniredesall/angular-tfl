@@ -1,0 +1,213 @@
+<div class="purchase-order-container__data-table">
+    <div class="purchase-order-container__data-table__body">
+        <div class="purchase-order-container__data-table__title">
+            <div></div>
+            <div>
+                {{ "creation" | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('creation_date')" [ngClass]="{
+                        'sort-icon-invert': columnAscState['creation_date']
+                    }"></i>
+            </div>
+            <div>
+                {{ "id" | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('folio')"
+                    [ngClass]="{ 'sort-icon-invert': columnAscState['folio'] }"></i>
+            </div>
+            <div>
+                {{ "producer" | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('producer')" [ngClass]="{
+                        'sort-icon-invert': columnAscState['producer']
+                    }"></i>
+            </div>
+            <div>
+                {{ "num-notes" | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('total_notes')" [ngClass]="{
+                        'sort-icon-invert': columnAscState['total_notes']
+                    }"></i>
+            </div>
+            <div>
+                {{ "contract" | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('contract_id')" [ngClass]="{
+                    'sort-icon-invert': columnAscState['contract_id']
+                }"></i>
+            </div>
+            <div class="total-pay">
+                {{ "total-to-pay" | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('total_payment')" [ngClass]="{
+                        'sort-icon-invert': columnAscState['total_payment']
+                    }"></i>
+            </div>
+            <div class="total-weight">
+                {{ configuration.conversionMeasurementUnitName | lowercase | i18n | uppercase }}
+                <i class="icon-arrow_down pointer" (click)="sortData('total_qq')" [ngClass]="{
+                        'sort-icon-invert': columnAscState['total_qq']
+                    }"></i>
+            </div>
+            <div>
+                {{ "status" | i18n | uppercase }}
+            </div>
+            <div></div>
+        </div>
+        <ng-container *ngIf="purchaseOrders.length > 0; else notResult">
+            <div *ngFor="let purchaseOrder of purchaseOrders" class="purchase-order-container__data-table__body-row">
+                <div class="cell-icon">
+                    <i class="icon-purchase-order"></i>
+                </div>
+                <div class="cell-date">
+                    <span class="cell-date-title">{{
+                        "creation" | i18n | uppercase
+                        }}</span>
+                    <div>
+                        <span>{{
+                            purchaseOrder.creationDate | formatMoment: "MMM DD, YYYY HH:mm"
+                            }}</span>
+                        <span class="name-label">{{ purchaseOrder.creationEmail }}</span>
+                    </div>
+                </div>
+                <div class="cell-data">
+                    <span class="cell-data-title">{{
+                        "id" | i18n | uppercase
+                        }}</span>
+                    <span>{{ purchaseOrder.folio }}</span>
+                </div>
+                <div class="cell-data">
+                    <span class="cell-data-title">{{
+                        "producer" | i18n | uppercase
+                        }}</span>
+                    <span>{{ purchaseOrder.producer | ellipsis: 21 }}</span>
+                </div>
+                <div class="cell-data">
+                    <span class="cell-data-title">{{
+                        "num-notes" | i18n | uppercase
+                        }}</span>
+                    <span class="notes-cell">
+                        <i class="icon-icon-menu-notas"></i>
+                        {{ purchaseOrder.totalNotes }}
+                    </span>
+                </div>
+                <div class="cell-options pointer">
+                    <span [matMenuTriggerFor]="actionsMenu"
+                        *ngIf="!userHasEmptyPermissions && !(userCanOnlyRead && purchaseOrder.status !== PURCHASE_STATUS.LIQUIDATE)">
+                        <i class="icon-options-vertical"></i>
+                    </span>
+                    <mat-menu #actionsMenu="matMenu">
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.READ}">
+                            <button mat-menu-item *ngIf="purchaseOrder.status === PURCHASE_STATUS.LIQUIDATE"
+                                (click)="onActionClicked(ACTIONS.DOWNLOAD, purchaseOrder)">
+                                {{ "dowload" | i18n }}
+                            </button>
+                        </ng-container>
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.PRINT}">
+                            <button mat-menu-item *ngIf="purchaseOrder.status === PURCHASE_STATUS.LIQUIDATE"
+                                (click)="onActionClicked(ACTIONS.PRINT, purchaseOrder)">
+                                {{ "print" | i18n }}
+                            </button>
+                        </ng-container>
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.READ}">
+                            <button mat-menu-item
+                                (click)="onActionClicked(ACTIONS.READ, purchaseOrder)">
+                                {{ "view" | i18n }}
+                            </button>
+                        </ng-container>
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.UPDATE}">
+                            <button mat-menu-item *ngIf="purchaseOrder.status === PURCHASE_STATUS.CREATED"
+                                (click)="onActionClicked(ACTIONS.UPDATE, purchaseOrder)"
+                                [disabled]="purchaseOrder.settling === PURCHASER_SETLED.IN_SETTLED_PROCESS">
+                                {{ "edit" | i18n }}
+                            </button>
+                        </ng-container>
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.UPDATE}">
+                            <button mat-menu-item *ngIf="purchaseOrder.status !== PURCHASE_STATUS.LIQUIDATE && purchaseOrder.totalNotes > 0"
+                                (click)="onShowLiquidatePurchseOrder(purchaseOrder)"
+                                [disabled]="!(purchaseOrder.settling === PURCHASER_SETLED.OPEN) || !purchaseOrder.contract">
+                                {{ "liquidate" | i18n }}
+                            </button>
+                        </ng-container>
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.DELETE}">
+                            <button mat-menu-item *ngIf="purchaseOrder.status === PURCHASE_STATUS.CREATED"
+                                (click)="onActionClicked(ACTIONS.DELETE, purchaseOrder)"
+                                [disabled]="purchaseOrder.settling === PURCHASER_SETLED.IN_SETTLED_PROCESS">
+                                {{ "delete" | i18n }}
+                            </button>
+                        </ng-container>
+                        <ng-container *permission="{tag: PERMISSION_TAG, type: PERMISSION_TYPES.UPDATE}">
+                            <button mat-menu-item
+                                (click)="onActionClicked(ACTIONS.RESEND, purchaseOrder)"
+                                [disabled]="!purchaseOrder.canToResent()">
+                                {{ "resend" | i18n }}
+                            </button>
+                        </ng-container>
+                    </mat-menu>
+                </div>
+                <div class="cell-empty"></div>
+                <div class="cell-data cell-contract" [matTooltip]="purchaseOrder.contract">
+                    <span class="cell-data-title">{{
+                        "contract" | i18n | uppercase
+                        }}</span>
+                    <span>{{ purchaseOrder.contract ? (purchaseOrder.contract | ellipsis:'8') : '-' }}</span>
+                </div>
+                <div class="cell-data cell-price">
+                    <span class="cell-data-title">{{
+                        "total-to-pay" | i18n | uppercase
+                        }}</span>
+                    <span>{{companyInfo.currency.symbol}}
+                        {{
+                        purchaseOrder.totalPayment
+                        | number
+                        : "1." +
+                        DECIMAL_DIGITS +
+                        "-" +
+                        DECIMAL_DIGITS
+                        : "en"
+                        }} {{companyInfo.currency.isoCode}}</span>
+                </div>
+                <div class="cell-data cell-weight">
+                    <span class="cell-data-title">{{
+                        configuration.conversionMeasurementUnitName | lowercase | i18n | uppercase
+                        }}</span>
+                    <span>{{
+                        purchaseOrder.totalWeightQQ
+                        | number
+                        : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                        : "en"
+                        }}</span>
+                </div>
+                <div class="cell-data cell-status">
+                    <div class="note-status" *ngIf="currentStatus !== PURCHASE_STATUS.LIQUIDATE; else settledPurchase"
+                        [ngClass]="purchaseOrder.settlingStatus?.getStyleForSettlingStatus()">
+                        <p>
+                            <i
+                                [ngClass]="purchaseOrder.settling === PURCHASER_SETLED.IN_SETTLED_PROCESS ?'icon-clock' :'icon-note-open'">
+                            </i>
+                            <span class="hidden-xs">
+                                {{(purchaseOrder.settlingStatus?.getLabelForSettlingStatus() ) | i18n }}
+                            </span>
+                        </p>
+                    </div>
+                    <ng-template #settledPurchase>
+                        <div class="note-status note-close">
+                            <p>
+                                <i class="icon-note-open"></i> {{'purchase-order-liquidated' | i18n}}
+                            </p>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #notResult>
+            <app-not-results-found></app-not-results-found>
+        </ng-template>
+    </div>
+    <div class="purchase-order-container__data-table__paginator">
+        <mat-paginator  [hidden]="0 == purchaseOrders.length"
+                        class="custom-paginator"
+                        [length]="paginator.totalItems"
+                        [pageIndex]="paginator.currentPage - 1"
+                        [pageSize]="paginator.itemsPerPage"
+                        [pageSizeOptions]="[paginator.itemsPerPage]"
+                        (page)="eventPaginator($event)"
+                        showFirstLastButtons
+                        #matPaginator>
+        </mat-paginator>
+    </div>
+</div>

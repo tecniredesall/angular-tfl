@@ -1,0 +1,46 @@
+:host {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+
+    img {
+        width: 100%;
+        height: auto;
+        max-width: 380px;
+    }
+
+    h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--no-items-message-title-color);
+        text-align: center;
+    }
+
+    h4 {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--no-items-message-title-color);
+        text-align: center;
+    }
+}
+
+@media (min-width: 768px) {
+    :host {
+        padding: 50px;
+
+        img {
+            width: fit-content;
+        }
+
+        h3 {
+            font-size: 26px;
+            margin: 20px 0;
+        }
+
+        h4 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    }
+}

@@ -1,0 +1,195 @@
+<div class="purchase-order-weigh-notes"
+    *blockUI="'purchase-order-weight-note'; template: templateBlockModalUiComponent">
+    <div class="purchase-order-weigh-notes__title">
+        {{'weight-notes' | i18n}}
+    </div>
+    <div class="purchase-order-weigh-notes__header-actions">
+        <div class="instructions">
+            <div class="icon-div">i</div>
+            <div class="description">{{'notes-select-instruction' | i18n}}</div>
+        </div>
+        <div class="search-container">
+            <div>
+                <input type="text" class="form-control search-tck search-loca-input search-input"
+                    [placeholder]="'search' | i18n" [(ngModel)]="searchText" (keydown)="searchNotes($event)">
+            </div>
+            <span>{{selectedWeightNotes.length}} {{'selected-notes' | i18n}}</span>
+        </div>
+    </div>
+    <div class="purchase-order-weigh-notes__body-table">
+        <div class="purchase-order-weigh-notes__body-table__title-table">
+            <div class="purchase-order-weigh-notes__body-table__title-table-first-column">
+                <mat-checkbox color="primary" class="weight-note__checkbox" (change)="toggleSelectAll()"
+                    [checked]="currentPage?.isSelected"
+                    [indeterminate]="currentPage?.isIndeterminated">
+                </mat-checkbox>
+                <span></span>
+                <span class="diplay-title">{{'creation' |i18n |uppercase}}
+                    <i class="icon-arrow_down pointer" (click)="sortData('start_date')"
+                        [ngClass]="{ 'sort-icon-invert': columnOrder.start_date }"></i>
+                </span>
+            </div>
+            <div class="diplay-title">ID <i class="icon-arrow_down pointer" (click)="sortData('folio')"
+                    [ngClass]="{ 'sort-icon-invert': columnOrder.folio }"></i>
+            </div>
+            <div class="diplay-title">{{'sacks' | i18n |uppercase}}
+                <i class="icon-arrow_down pointer" (click)="sortData('totalSacks')"
+                    [ngClass]="{ 'sort-icon-invert': columnOrder.totalSacks }"></i>
+            </div>
+            <div class="diplay-title">{{'type'|i18n|uppercase}}</div>
+            <div class="purchase-order-weigh-notes__body-table__title-table-net-column diplay-title">
+                {{'net-weight'|i18n|uppercase}}
+                <i class="icon-arrow_down pointer" (click)="sortData('weight')"
+                    [ngClass]="{ 'sort-icon-invert': columnOrder.weight }"></i>
+            </div>
+        </div>
+        <ng-container *ngIf="receptionNotes && receptionNotes.length > 0; else notResultFound">
+            <div class="purchase-order-weigh-notes__body-table__content-table scroll-view-app">
+                <ng-container *ngFor="let wn of receptionNotes; let index = index">
+                    <ng-container *ngIf="wn.weightNotes.length > 0">
+                        <div class="purchase-order-weigh-notes__body-table__content-table__row-table">
+                            <div class="row-table-first-column">
+                                <mat-checkbox color="primary" class="weight-note__checkbox"
+                                    (change)="selectWeightGroup(wn)" [checked]="wn.selected"
+                                    [indeterminate]="wn.indeterminated">
+                                </mat-checkbox>
+                                <div class="pointer row-style-border chevron-column collapse-chevron">
+                                    <img class="menu-arrow" [@rotate]="wn.collapsed ? 'idle' : 'rotated'"
+                                        src="assets/img/svg/arrow_right.svg" (click)="openCollapse(wn)">
+                                </div>
+                                <div
+                                    class="row-table-first-column__date-labels row-style-border creation-column display-content">
+                                    <span>{{wn.startDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}</span>
+                                    <span class="font-12-normal-normal">{{wn.creationEmail}}</span>
+                                </div>
+                            </div>
+                            <div class="row-style-border folio-column">
+                                <span class="hidden-md hidden-xl hidden-lg  hidden-sm font-12-normal-normal">
+                                    {{'id' | i18n|uppercase}}
+                                </span>
+                                {{wn.folio}}
+                            </div>
+                            <div class="row-style-border folio-column">
+                                <span class="hidden-md hidden-xl hidden-lg hidden-sm font-12-normal-normal">
+                                    {{'sacks' | i18n |uppercase}}
+                                </span>
+                                {{wn.totalSacks}}
+                            </div>
+                            <div class="row-style-border type-column ">
+                                <span class="hidden-md hidden-xl hidden-lg hidden-sm font-12-normal-normal">
+                                    {{'type' | i18n |uppercase}}
+                                </span>
+                            </div>
+                            <div class="hidden-md hidden-xl hidden-lg hidden-sm row-table-first-column">
+                                <div></div>
+                                <div class="row-style-border empty-left"></div>
+                            </div>
+                            <div class="row-table-net-column row-style-border">
+                                <span class="hidden-md hidden-xl hidden-sm hidden-lg font-12-normal-normal">
+                                    {{'weight' | i18n |uppercase}}
+                                </span>
+                                {{wn.netQQ | number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}} {{configuration.conversionMeasurementUnitAbbreviation}}
+                            </div>
+                        </div>
+                        <ng-container *ngFor="let note of wn.weightNotes; let index = index">
+                            <div [hidden]="wn.collapsed" @collapse>
+                                <div class="purchase-order-weigh-notes__body-table__content-table__row-table row-child">
+                                    <div class="row-table-first-column">
+                                        <mat-checkbox color="primary" class="weight-note__checkbox"
+                                            (change)="toggleSelectWeightNote(note)" [checked]="note.selected">
+                                        </mat-checkbox>
+                                        <div class="pointer row-child-style row-style-border">
+                                            <img src="assets/img/svg/icon-menu-notas.svg">
+                                        </div>
+                                        <div
+                                            class="row-table-first-column__date-labels row-child-style row-style-border display-content">
+                                            <span>{{note.startDate | formatMoment : 'MMM DD, YYYY HH:mm'}}</span>
+                                            <span class="font-12-normal-normal">{{note.creationEmail}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row-style-border row-child-style">
+                                        <span class="hidden-md hidden-xl hidden-sm hidden-lg font-12-normal-normal">
+                                            {{'id' | i18n|uppercase}}
+                                        </span>
+                                        {{note.transactionInId}}
+                                    </div>
+                                    <div class="row-child-style row-style-border">
+                                        <span class="hidden-md hidden-xl hidden-sm  hidden-lg font-12-normal-normal">
+                                            {{'sacks' | i18n |uppercase}}
+                                        </span>
+                                        {{note.totalSacks}}
+                                    </div>
+                                    <div class="row-child-style row-style-border">
+                                        <span class="hidden-md hidden-xl hidden-sm hidden-lg font-12-normal-normal">
+                                            {{'type' | i18n |uppercase}}
+                                        </span>
+                                        {{note.commodityTypename}}
+                                    </div>
+                                    <div class="hidden-md hidden-xl hidden-lg hidden-sm row-table-first-column">
+                                        <div></div>
+                                        <div class="row-style-border empty-left row-child-style row-child-net"></div>
+                                    </div>
+                                    <div class="row-table-net-column row-child-style row-style-border row-child-net">
+                                        <span class="hidden-md hidden-xl hidden-lg hidden-sm font-12-normal-normal">
+                                            {{'weight' | i18n |uppercase}}
+                                        </span>
+                                        {{note.netDryWeightOut | number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}}
+                                        {{configuration.conversionMeasurementUnitAbbreviation}}
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-template #notResultFound>
+            <app-not-results-found></app-not-results-found>
+        </ng-template>
+        <div class="purchase-order-weigh-notes__body-table__paginator">
+            <mat-paginator
+                        class="custom-paginator"
+                        [length]="paginator?.totalItems"
+                        [pageIndex]="paginator?.currentPage - 1"
+                        [pageSize]="paginator?.itemsPerPage"
+                        [pageSizeOptions]="[paginator?.itemsPerPage]"
+                        (page)="eventPaginator($event)"
+                        showFirstLastButtons
+                        #matPaginator>
+            </mat-paginator>
+        </div>
+    </div>
+    <div class="purchase-order-weigh-notes__footer-info">
+        <div class="purchase-order-weigh-notes__footer-info-amounts">
+            <div class="info">
+                <span class="info__desc-label">{{'contract-amount' |i18n}} ({{configuration.conversionMeasurementUnitAbbreviation}}):</span>
+                <span class="info__number-label sil-form__section__excedent-label">
+                    {{
+                        contract.contractId ?
+                    ( contract.weightQQ | number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en')
+                    : '-'
+                    }}
+                </span>
+            </div>
+            <div class="info">
+                <span class="info__desc-label">{{'selected-amount' |i18n}} ({{configuration.conversionMeasurementUnitAbbreviation}}):</span>
+                <span class="info__number-label">{{totalQQSelected|
+                    number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}}</span>
+            </div>
+            <div class="info">
+                <span class="info__desc-label">{{'remaining-amount' |i18n}} ({{configuration.conversionMeasurementUnitAbbreviation}}):</span>
+                <span class="info__number-label amount-selected">
+                    {{ contract.contractId ?
+                    (remainingContractQQ| number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en')
+                    : '-'
+                   }}
+                </span>
+            </div>
+        </div>
+        <div class="purchase-order-weigh-notes__footer-info-actions">
+            <app-action-footer (onActionSelected)="onEventAddNote($event)" [buttonSubmitText]="'add'"
+            [isButtonSubmitDisabled]="!isValidNotes">
+            </app-action-footer>
+        </div>
+    </div>
+</div>

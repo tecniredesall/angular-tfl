@@ -1,0 +1,76 @@
+<div class="lot-results-filter" *blockUI="'results-filter-layout'; template: templateBlockModalUiComponent">
+
+  <!-- Body -->
+  <div class="lot-results-filter__body">
+    <!-- Filter inputs -->
+    <form [formGroup]="formControls" novalidate>
+      <div class="row row-full-width">
+        <!-- Commodity -->
+        <div class="lot-results-filter__input-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+          <label class="lot-results-filter__label-input">
+            {{ 'commodity' | i18n }} *
+          </label>
+          <ng-select formControlName="commodity" class="lot-results-filter__control custom-ng-select"
+            [items]="commodities" [multiple]="false" [closeOnSelect]="true" [clearable]="true"
+            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingCommodities" bindLabel="name"
+            placeholder="{{'select-commodity' | i18n}}" loadingText="{{'loading' | i18n}}"
+            (change)="setCommodity($event)"></ng-select>
+          <label *ngIf="formControls.get('commodity').dirty && formControls.get('commodity').hasError('required')"
+            class="error-msg-form">
+            {{'is-required-msg' | i18n}}
+          </label>
+        </div>
+        <!-- Commodity type-->
+        <div class="lot-results-filter__input-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+          <label class="lot-results-filter__label-input">
+            {{ 'commodity-type' | i18n }} *
+          </label>
+          <ng-select formControlName="commodityType" class="lot-results-filter__control custom-ng-select"
+            [items]="commodityTypes" [multiple]="false" [closeOnSelect]="true" [clearable]="true"
+            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingCommodityTypes" bindLabel="name"
+            placeholder="{{'select-commodity-type' | i18n}}" loadingText="{{'loading' | i18n}}"
+            (change)="setCommodityType($event)"></ng-select>
+          <label
+            *ngIf="formControls.get('commodityType').dirty && formControls.get('commodityType').hasError('required')"
+            class="error-msg-form">
+            {{'is-required-msg' | i18n}}
+          </label>
+        </div>
+        <!-- Warehouse-->
+        <div class="lot-results-filter__input-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+          <label class="lot-results-filter__label-input">
+            {{ 'warehouse' | i18n }}
+          </label>
+          <ng-select formControlName="warehouse"
+            class="lot-results-filter__control custom-ng-select lot-results-filter__control--warehouse"
+            [items]="warehouses" [multiple]="true" [closeOnSelect]="true" [clearable]="true"
+            [notFoundText]="'not-items-found' | i18n" [loading]="isLoadingWarehouses" bindLabel="name"
+            placeholder="{{'lot-select-warehouse' | i18n}}" loadingText="{{'loading' | i18n}}"
+            (change)="setWarehouse($event)"></ng-select>
+          <label *ngIf="formControls.get('warehouse').dirty && formControls.get('warehouse').hasError('required')"
+            class="error-msg-form">
+            {{'is-required-msg' | i18n}}
+          </label>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="row mrg-top-25">
+        <div class="col-lg-12 mrg-btm-10 p0">
+          <span class="lot-results-filter__label-subtitle">
+            {{'select-weight-notes' | i18n}}
+          </span>
+        </div>
+        <app-lot-list-receiving-note *ngIf="isCompleteFilters; else emptyFilters" [filters]="filters" [selectedNotes]="selectedNotes" (eventSetSelectedNotes)="onEventSetSelectedNotes($event)">
+        </app-lot-list-receiving-note>
+        <ng-template #emptyFilters>
+          <div class="lot-results-filter__production-flows__empty no-select">
+            <img class="lot-results-filter__production-flows__empty__image" src="assets/img/svg/empty_nota_de_peso.svg" alt="">
+            <div class="lot-results-filter__production-flows__empty__main-description pad-row-empty-description">
+              {{'lot-empty-filters-description' | i18n}}
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="scale-dialog" *blockUI="'block-scale-dialog';template: templateBlockModalUi">
+
+  <!-- Header -->
+  <div class="scale-dialog__header">
+    <div class="scale-dialog__header__title">
+      {{'scale' | i18n}}
+    </div>
+    <div class="scale-dialog__header__line"></div>
+  </div>
+
+  <div class="scale-dialog__body">
+
+    <!-- Select scale -->
+    <div class="scale-dialog__body__label">
+      {{'scale' | i18n}} *
+    </div>
+    <ng-select
+      class="scale-dialog__body__select tr__ng-select__custom-scroll"
+      [items]="socketScales"
+      [multiple]="false"
+      [closeOnSelect]="true"
+      [clearable]="false"
+      [loading]="isLoadingiotdevices"
+      loadingText="{{ 'loading' | i18n }}"
+      [notFoundText]="'not-items-found' | i18n"
+      placeholder="{{'scale-dialog-select-placeholder' | i18n}}"
+      (change)="onChangeScale($event)"
+      (open)="onOpenSelectScale($event)"
+      [(ngModel)]="selectedScale"
+      [searchable]="true"
+      [searchFn]="customScaleSearchFn">
+      <ng-template ng-label-tmp let-item="item">
+        <ng-container [ngTemplateOutlet]="scaleInformation" [ngTemplateOutletContext]="{item: item.scale}"></ng-container>
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+        <ng-container [ngTemplateOutlet]="scaleInformation" [ngTemplateOutletContext]="{item: item.scale}"></ng-container>
+      </ng-template>
+    </ng-select>
+
+    <!-- Slide toggle default scale -->
+    <section *ngIf="null != selectedScale" class="scale-dialog__body__toggle">
+      <label class="scale-dialog__body__toggle__label scale-dialog__body__label">
+        {{'scale-default-label' | i18n}}
+      </label>
+      <div class="scale-dialog__body__toggle__slide">
+        <mat-slide-toggle [checked]="selectedScale.scale?.isDefault" (change)="changeDefaultScale($event)"></mat-slide-toggle>
+      </div>
+    </section>
+
+    <!-- Main icon -->
+    <div class="scale-dialog__body__main-icon">
+      <i class="icon-bascula no-select"></i>
+    </div>
+
+    <!-- Scale listener -->
+    <tr-scale-listener  [status]="status" (actions)="onActionScaleListener($event)" ></tr-scale-listener>
+  </div>
+
+  <!-- footer -->
+  <div class="scale-dialog__footer">
+    <button type="button" class="tr__button__second" (click)="cancel()" matRipple>
+      {{'cancel' | i18n}}
+    </button>
+    <button type="button" class="tr__button__primary" [disabled]="isSubmitButtonDisabled" (click)="sumbit()" matRipple>
+      {{'accept' | i18n}}
+    </button>
+  </div>
+
+</div>
+
+<ng-template #scaleInformation let-item="item">
+  <div [ngClass]="{'scale-dialog__text-opacity':!item.isActive}" class="scale-dialog__text-overflow">
+    <span class="scale-dialog__model-label">
+      {{item.model}}
+    </span>
+    <span *ngIf="item.isDefault" class="scale-dialog__default-label">
+      ({{'scale-default' | i18n}})
+    </span>
+    <span *ngIf="!item.loader" class="scale-dialog__connection-label" [ngClass]="{'scale-dialog__connection-label--connected': item.isConnected}">
+        {{ (item.isConnected ? 'iot-device-online' : 'iot-device-offline') | i18n }}
+    </span>
+    <span *ngIf="item.loader" class="fa fa-circle-o-notch fa-spin "></span>
+  </div>
+  <div [ngClass]="{'scale-dialog__text-opacity':!item.isActive}" class="scale-dialog__description-label scale-dialog__text-overflow">
+    {{'brand' | i18n}} <span class="scale-dialog__text-value"> {{item.brand}}</span>, {{'location' | i18n}} <span class="scale-dialog__text-value"> {{item.location}}</span>
+  </div>
+
+</ng-template>

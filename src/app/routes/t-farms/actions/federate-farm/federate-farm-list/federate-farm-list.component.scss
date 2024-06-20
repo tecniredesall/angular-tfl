@@ -1,0 +1,155 @@
+.f-federate-list {
+    display: grid;
+    margin-top: 10px;
+    &__instructions {
+        display: grid;
+        grid-template-columns: 1fr 150px;
+        &-found {
+            display: grid;
+            grid-template-columns: 25px 1fr;
+            i {
+                color: var(--tr-base-color-yellow);
+                padding-top: 3px;
+            }
+            p {
+                font-size: 14px;
+                font-weight: normal;
+                color: var(--tr-info-text-color);
+            }
+        }
+    }
+    &__search {
+        display: grid;
+        &-inst {
+            color: var(--tr-panel-body-color);
+            font-size: 14px;
+            font-weight: normal;
+        }
+        &-input {
+            display: inline;
+            margin-top: 10px;
+        }
+    }
+    &__content {
+        display: grid;
+        margin-bottom: 20px;
+        &__header{
+            display: grid;
+            margin-bottom: 8px;
+            grid-template-columns: 30px 1fr 1fr;
+            grid-template-areas: ". name platform";
+            &__cell{
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 1.42;
+                letter-spacing: 1.12px;
+                text-align: left;
+                color: var(--tr-labe-columns-list-color);
+                align-items: center;
+                &.header__name{
+                    grid-area: name;
+                }
+                &.header__platform{
+                    grid-area: platform;
+                }
+                .icon-arrow_down{
+                    cursor: pointer;
+                }
+                .sort-icon-invert {
+                    display: inline-block;
+                    transform: rotate(180deg);
+                }
+            }
+        }
+        &-item {
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            margin-bottom: 5px;
+            .checkbox-item {
+                align-self: center;
+            }
+            .description {
+                border: solid 1px #eff2ff;
+                padding: 5px 44px 4px 10.8px;
+                border-radius: 5px;
+                display: grid;
+                grid-template-columns: 35px 1fr 1fr;
+                i {
+                    color: var(--tr-labe-columns-list-color);
+                    font-size: 22px;
+                }
+                span {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: var(--tr-panel-body-color);
+                }
+            }
+            &__platform{
+                gap: 8px;
+                display: flex;
+                font-size: 14px;
+                line-height: 1.57;
+                img{
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+    }
+    &__footer {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        align-items: center;
+        span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--tr-panel-body-color);
+            background-color: var(--tr-card-background-color-disabled);
+            border-radius: 50px;
+            height: 30px;
+            padding: 6.5px 15px 6.5px 20px;
+        }
+    }
+}
+:host {
+    ::ng-deep {
+        .mat-checkbox-frame {
+            border-radius: 70% !important;
+            border-color: var(--tr-checkbox-border-color);
+            background-color: var(--tr-checkbox-background-color);
+        }
+        .mat-checkbox-background {
+            border-radius: 70%;
+        }
+        .weight-note__checkbox.mat-checkbox-checked .mat-checkbox-background,
+        .mat-checkbox-indeterminate .mat-checkbox-background {
+            background-color: #0068ff !important;
+        }
+        .weight-note__checkbox.mat-checkbox:not(.mat-checkbox-disabled)
+            .mat-checkbox-ripple
+            .mat-ripple-element {
+            background-color: #0068ff !important;
+        }
+        .weight-note__checkbox.mat-checkbox-disabled {
+            cursor: not-allowed;
+        }
+        .weight-note__checkbox.mat-checkbox-disabled
+            .mat-checkbox-inner-container {
+            opacity: 0.75;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .f-federate-list {
+        &__content{
+            &-item {
+                &__platform{
+                    p{
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="SiloSys-match" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="SS_Tickets-match" transform="translate(-297.000000, -245.000000)" fill="#F7C137">
+            <path d="M308,256 L306,256 L306,250 L308,250 M308,260 L306,260 L306,258 L308,258 M307,245 C301.477153,245 297,249.477153 297,255 C297,257.652165 298.053568,260.195704 299.928932,262.071068 C301.804296,263.946432 304.347835,265 307,265 C309.652165,265 312.195704,263.946432 314.071068,262.071068 C315.946432,260.195704 317,257.652165 317,255 C317,252.347835 315.946432,249.804296 314.071068,247.928932 C312.195704,246.053568 309.652165,245 307,245 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

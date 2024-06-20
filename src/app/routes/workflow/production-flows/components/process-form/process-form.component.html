@@ -1,0 +1,94 @@
+<div class="process-form__container">
+  <div style="position: static" *blockUI="'workflow-process-form'; template: templateBlockModalUiComponent">
+    <mat-card [ngStyle]="{'padding': shape ? '' : '40px'  } " class="mb-75">
+      <form [formGroup]="shapeForm" (ngSubmit)="submit()" class="process-form__form">
+        <p class="font-blue font-20-500-normal"> 
+          <i class="icon-gear"></i>
+          {{ 'configuration' | i18n }}
+        </p>
+        <hr>
+        <div class="process-form-container">
+          <div class="process-form__group process-form__name">
+            <p class="font-14-normal-normal font-secondary-color"> {{ 'name' | i18n }}</p>
+            <p class="font-14-normal-normal font-secondary-color"> {{shape.name}}</p>
+          </div>
+          <div class="process-form__group process-form__color">
+            <p class="font-14-normal-normal font-secondary-color"> {{ 'color' | titlecase }} </p>
+            <div class="flex process-form__color__container">
+              <p class="font-16-500-normal font-main-color"> {{ 'select-color' | i18n }} </p>
+              <div class="process-form__color__selector">
+                <div class="process-form__color__selected"
+                  [ngStyle]=" {'background-color': selectedColor } ">
+                </div>
+                <div class="flex totally-center pointer dropdown dropdown-toggle">
+                  <i class="icon-arrow-blue-drop-down process-form__color__button" data-toggle="dropdown"></i>
+                  <div class="dropdown-menu">
+                    <div class="process-form__color__grid">
+                      <div *ngFor="let color of colors" class="process-form__color__element" [ngStyle]="{'background-color': color }"
+                        (click)="selectColor(color)"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="process-form__group process-form__commodity-state">
+            <p class="process-form__commodity-state__title title-body-modal"> {{ 'commodity-state' | i18n }}</p>
+            <div class="process-form__commodity-state__group">
+              <p class="font-14-normal-normal font-secondary-color"> {{ 'transformation-type-in' | i18n }}</p>
+              <ng-select 
+                class="tr__ng-select__custom-scroll"
+                [items]="transformationTypes"
+                [multiple]="true" 
+                [closeOnSelect]="false" 
+                [clearable]="false"
+                [loading]="isLoadingTransformationTypes" 
+                loadingText="{{ 'loading' | i18n }}"
+                [notFoundText]="'not-items-found' | i18n" 
+                bindLabel="name" 
+                placeholder="{{'transformation-type-in' | i18n}}" 
+                [searchable]="true"
+                [virtualScroll]="true"
+                [typeahead]="searchTransformationTypeTerm$"
+                (scrollToEnd)="onTransformationTypesScrollToEnd()"
+                formControlName="transformationTypesIn">
+              </ng-select>
+            </div>
+            <div class="process-form__commodity-state__group">
+              <p class="font-14-normal-normal font-secondary-color"> {{ 'transformation-type-out' | i18n }}</p>
+              <ng-select 
+                class="tr__ng-select__custom-scroll"
+                [items]="transformationTypes"
+                [multiple]="true" 
+                [closeOnSelect]="false" 
+                [clearable]="false"
+                [loading]="isLoadingTransformationTypes" 
+                loadingText="{{ 'loading' | i18n }}"
+                [notFoundText]="'not-items-found' | i18n" 
+                bindLabel="name" 
+                placeholder="{{'transformation-type-out' | i18n}}" 
+                [searchable]="true"
+                [virtualScroll]="true"
+                [typeahead]="searchTransformationTypeTerm$"
+                (scrollToEnd)="onTransformationTypesScrollToEnd()"
+                formControlName="transformationTypesOut">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="delete-container">
+          <p class="text-red font-16-500-normal vertical-center process-form__delete pointer"
+            (click)="deleteShapeToDiagram()">
+            <i class="icon-trash-gray"></i>
+            {{'delete-workflow-process' | i18n  }}
+          </p>
+        </div>
+        <div class="flex right">
+          <button type="button" class="btn btn-theme no-border" (click)="cancel()"> {{ 'cancel' | i18n }} </button>
+          <button type="submit" [disabled]="shapeForm.invalid || shapeForm.pending || !dataWasMadeModified" class="btn btn-action">
+            {{ ('save' | i18n) }} </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

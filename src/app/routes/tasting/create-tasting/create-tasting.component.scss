@@ -1,0 +1,139 @@
+:host {
+
+    .btn-agree {
+        background-color: var(--tr-base-color-blue);
+        width: 160px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--tr-base-color-white);
+
+        &:disabled {
+            cursor: not-allowed;
+            background-color: var(--button-capture-weight-disabled-background-color) !important;
+        }
+    }
+
+    .error {
+        font-size: 11px;
+        color: var(--tr-base-color-red);
+        display: inline-flex;
+    }
+
+    .col-md-4.roast {
+        width: 50%;
+        max-width: 50% !important;
+
+        .select-field {
+            display: flex;
+            gap: 30px;
+        }
+
+        .select-field section {
+            width: 50%;
+        }
+    }
+
+    .content-datepicker {
+        display: flex;
+        position: relative;
+
+        .mat-datepicker-toggle {
+            position: absolute;
+            right: 0px;
+            top: -3px;
+        }
+    }
+
+
+    .container-tasting {
+        padding: 20px 37px 20px 20px;
+        min-height: 100vh;
+    }
+
+    .col-md-4 {
+        margin-bottom: 20px;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .background-tasting {
+        margin-top: 20px;
+        border-radius: 5px;
+        padding: 32px 32px 24px 32px;
+        background-color: var(--container-background);
+        margin-bottom: 90px;
+        max-height: calc(100vh - 150px);
+        overflow: auto;
+    }
+
+    .btn-footer {
+        display: flex;
+        gap: 24px;
+        padding: 20px 0;
+        justify-content: flex-end;
+        position: sticky;
+        bottom: -20px;
+        background: #fff;
+    }
+
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    textarea.sil-form__input {
+        height: auto;
+        resize: none;
+    }
+
+    ::ng-deep {
+        ng-select.ng-invalid.ng-touched .ng-select-container {
+            border: 1px solid var(--tr-base-color-red) !important;
+        }
+    }
+
+}
+
+::ng-deep {
+
+
+    .cdk-global-scrollblock {
+        overflow: auto;
+        top: 0 !important;
+    }
+}
+
+.col-md-12 {
+    min-width: 100%;
+}
+
+@media (max-width: 720px) {
+
+    .row>div {
+        width: 100%;
+    }
+}
+
+@media (min-width: 720px) and (max-width: 960px) {
+    .row>div {
+        min-width: 50%;
+    }
+}
+
+@media (min-width: 960px) and (max-width: 1200px) {
+    .row>div {
+        max-width: 33.33%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .row>div {
+        max-width: 25%;
+    }
+
+    .col-md-12 {
+        min-width: 100%;
+    }
+}

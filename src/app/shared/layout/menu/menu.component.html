@@ -1,0 +1,80 @@
+<div [ngClass]="{
+        'menu-overlay':
+            layoutSvc.isMobile &&
+            layoutSvc.showIconMenu &&
+            layoutSvc.showDescMenu
+    }" menuDirective>
+    <div #sidebar class="wrapper fix-menu anima-menu scroll-view-app" [ngClass]="{
+            'mobile-active': layoutSvc.isMobile,
+            silosysmenu: availableApp.Silosys === currentApp.name,
+            transMenu: availableApp.Transformaciones === currentApp.name
+        }">
+    </div>
+
+    <aside class="menu-lateral menu-lateral-{{menuVisualization}}">
+        <div>
+            <section class="welcome">
+                <figure>
+                    <img class="logo" src="./assets/img/svg/menu/logo-icon.svg" alt="logo" />
+                </figure>
+                <div>
+                    <label>
+                        <span class="text-desktop">{{'welcome-to' | i18n}}</span>
+                        SiloSys</label>
+                </div>
+
+            </section>
+            <section class="nick-name">
+                <div class="cycle-nick">
+                    <span class="text-two-letters">{{ initials }}</span>
+                </div>
+                <span class="user-name text-desktop">{{ userName }}</span>
+            </section>
+            <section class="menu-options">
+                <nav class="menu list scroll-view-app">
+                    <ul>
+                        <li *ngFor="let mainSections of menuOptionsMain;" routerLinkActive="expanded"
+                            [ngClass]="{'expanded' :menuOptions[mainSections]['active'] }">
+
+                            <a class="main-option" (click)="setActiveMain(mainSections)" id="sst-menu-{{mainSections}}">
+                                <div class="icon-text">
+                                    <i class="icon-{{mainSections}}"></i>
+                                    <span class="text-desktop">{{mainSections| i18n}}</span>
+                                </div>
+                                <i class="icon-arrow_right"></i>
+                            </a>
+
+                            <ul class="submenu">
+                                <ng-container>
+                                    <ng-container *ngFor="let subMenu of menuOptions[mainSections]; let i = index">
+                                        <ng-container *featureFlags="subMenu.id">
+                                            <li routerLinkActive="sub-active">
+                                                <a *permission="{ tag:subMenu.tag, type:PERMISSION_TYPES.SHOWMENU }"
+                                                    [routerLink]="subMenu.link"
+                                                    (click)="setSubMenuActive(mainSections, i)"
+                                                    id="sst-submenu-{{subMenu.tag}}">
+                                                    <div class="icon-submenu">
+                                                        <span>
+                                                            <i class="{{subMenu.icon}}"></i>
+                                                        </span>
+                                                    </div>
+                                                    <span class="text-desktop">{{subMenu.name | i18n}}</span>
+                                                </a>
+                                            </li>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </section>
+        </div>
+
+        <div class="end-session">
+            <a (click)="logOut()">
+                <i class="icon-logout1"></i><span class="text-desktop">{{'close-session' | i18n}}</span>
+            </a>
+        </div>
+    </aside>
+</div>

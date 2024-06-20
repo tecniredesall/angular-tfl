@@ -1,0 +1,226 @@
+:host {
+    &.profile {
+        padding-top: 20px;
+    }
+}
+.sil-container {
+    &.edit {
+        margin-bottom: 30px;
+    }
+}
+.producer-form__related-data {
+    margin-bottom: 140px;
+}
+
+#backToList {
+    width: fit-content;
+    margin: 20px 0 20px 10px;
+}
+
+.sil-form {
+    margin-top: 0;
+    &__title{
+        .icon-logo-grain{
+            color: white !important;
+            padding: 3px;
+            font-size: 26px;
+            margin-left: 16px;
+            border-radius: 6px;
+            background-color: var(--base-green);
+        }
+    }
+    &__input{
+        &--date{
+            height: 34px !important;
+            padding: 0;
+        }
+    }
+    .sil-form__content__reference {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "identity"
+            "email"
+            "phone";
+        .producer-edit-form__identity {
+            grid-area: identity;
+        }
+        .producer-edit-form__email {
+            grid-area: email;
+        }
+        .producer-edit-form__phone {
+            grid-area: phone;
+            .sil-form__input--phone.ng-touched.ng-invalid {
+                border: 1px solid var(--tr-base-color-red);
+            }
+        }
+    }
+    .sil-form__content__personal {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "name"
+            "lastnames"
+            "birthdate"
+            "association"
+            "type"
+            "number"
+            "identifier"
+            "ihcafe";
+        margin-bottom: 16px;
+        .producer-edit-form__name {
+            grid-area: name;
+        }
+        .producer-edit-form__lastnames {
+            grid-area: lastnames;
+        }
+        .producer-edit-form__birthdate {
+            grid-area: birthdate;
+        }
+        .producer-edit-form_association {
+            grid-area: association;
+        }
+        .producer-edit-form__identifier {
+            grid-area: identifier;
+        }
+        .producer-edit-form__type {
+            grid-area: type;
+        }
+        .producer-edit-form__number {
+            grid-area: number;
+        }
+        .producer-edit-form__ihcafe {
+            grid-area: ihcafe;
+        }
+        .producer-edit-form__address {
+            grid-area: address;
+        }
+        .sil-form__action-button {
+            grid-area: remove;
+        }
+        + .sil-form__content__personal {
+            margin-top: 10px;
+        }
+    }
+    .sil-form__action-button {
+        &.btn-transparent-delete {
+            padding: 10px 0;
+        }
+        &.btn-transparent-blue {
+            margin: 30px auto 0;
+        }
+    }
+}
+
+.sil-form:not(.profile) {
+    .sil-form__phone-input {
+        background-color: var(--form-input-background-color);
+    }
+}
+
+.profile {
+    .sil-form__phone-input {
+        background-color: transparent;
+    }
+}
+
+.producer-edit{
+    &__section{
+        &__header{
+            padding: 1px 8px;
+            border-left: 4px solid var(--tr-base-color-blue);
+            margin: 16px 0 8px 0;
+            background-color: var(--tr-panel-background-color);
+            font-size: 16px;
+            font-weight: 600;
+        }
+        mat-divider{
+            padding: 8px;
+            background-color: 1px solid #92a2b647;
+        }
+        &__subtitle{
+            font-size: 14px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.33;
+            letter-spacing: normal;
+            margin: 8px 0;
+        }
+    }
+    &__view{
+        margin: 0;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: right;
+        font-weight: 600;
+        color: var(--tr-base-color-blue);
+        i{
+            margin-left: 8px;
+            font-size: 12px;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .producer-form__related-data {
+        margin-bottom: 70px;
+    }
+    .sil-form {
+        .sil-form__content__reference {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas:
+                "identity email"
+                "phone .";
+            column-gap: 10px;
+            row-gap: 8px;
+        }
+        .sil-form__content__personal {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas:
+                "name lastnames"
+                "birthdate association"
+                "type identifier"
+                "ihcafe number";
+            column-gap: 10px;
+            row-gap: 8px;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .sil-form {
+        .sil-form__content__reference {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-areas:
+                "identity email phone";
+            row-gap: 16px;
+            &.columns--two{
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-areas:
+                    "identity email"
+                    "phone .";
+                column-gap: 24px;
+                row-gap: 24px;
+            }
+        }
+        .sil-form__content__personal {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-areas:
+                "name lastnames birthdate"
+                "association  type number"
+                "identifier ihcafe number";
+            row-gap: 16px;
+            &.columns--two{
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-areas:
+                    "name lastnames"
+                    "birthdate association"
+                    "type identifier"
+                    "ihcafe number";
+                column-gap: 24px;
+                row-gap: 24px;
+            }
+        }
+    }
+}

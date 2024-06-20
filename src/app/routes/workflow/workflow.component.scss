@@ -1,0 +1,57 @@
+@import 'src/scss/breakpoints.scss';
+
+:host ::ng-deep.workflow .mat-tab-header {
+  padding: 0 24px;
+}
+:host ::ng-deep.mat-tab-label {
+  padding: 0 0px !important;
+  margin-right: 16px;
+}
+:host ::ng-deep.mat-tab-body-wrapper {
+  background-color: var(--tr-background-color);
+}
+
+.workflow{
+    position: relative;
+    top: -70px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 70px 0 0 0;
+    &__wrapper{
+      display: block;
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      &__container{
+        display: grid;
+        grid-template-rows: max-content 1fr;
+        grid-template-columns: 100%;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        max-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+    }
+    &__header{
+      color: var(--tr-header-text-color);
+      margin-top: 8px;
+      background-color: var(--tr-header-background-color);
+      p{
+        padding: 20px 24px;
+        font-size: 26px;
+        font-weight: 600;
+      }
+    }
+}

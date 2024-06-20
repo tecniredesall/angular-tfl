@@ -1,0 +1,136 @@
+/* Mobile first*/
+.sil-form {
+    grid-template-columns: 100%;
+    grid-template-areas:
+        "name"
+        "abb"
+        "sub-header"
+        "convertions"
+        "action"
+        "form-actions";
+    .unit-edit-form__section-name {
+        grid-area: name;
+    }
+
+    .unit-edit-form__section-abb {
+        grid-area: abb;
+    }
+    .unit-edit-form__sub-header {
+        grid-area: sub-header;
+        margin: 40px 0 20px 0;
+    }
+    .unit-edit-form__section-convertions {
+        grid-area: convertions;
+        display: flex;
+        flex-direction: column;
+        .unit-edit-form__convertion {
+            display: grid;
+            grid-template-columns: 66.66% 26.66% 6.66%;
+            grid-template-areas:
+                "base base equal"
+                "eqv eqv delete";
+        }
+    }
+    .unit-edit-form__section-base {
+        grid-area: base;
+        padding: 4px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .unit-edit-form__icon-equals {
+        grid-area: equal;
+        margin: auto auto 0 auto;
+        line-height: 1;
+        padding: 4px;
+        padding-bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .unit-edit-form__section-equivalence {
+        grid-area: eqv;
+        padding: 4px;
+        margin-top: 10px;
+        #equivalence {
+            display: flex;
+            .equivalence__name-input {
+                min-width: 40%;
+            }
+        }
+    }
+    .unit-edit-form__icon-delete {
+        grid-area: delete;
+        margin: 33px auto 0 auto;
+        padding: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        .btn-delete{
+            background-color: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            margin: 0;
+            i{
+                color: var(--tr-base-color-red);
+
+            }
+        }
+    }
+    .sil-form__action-button {
+        grid-area: action;
+    }
+    .sil-form__section-form-action-buttons {
+        grid-area: form-actions;
+    }
+}
+
+/* Responsive*/
+@media (min-width: 768px) {
+    .sil-form {
+        grid-template-columns: 50% 50%;
+        grid-template-areas:
+            "name abb"
+            "sub-header ."
+            "convertions convertions"
+            "action action"
+            "form-actions form-actions";
+        .unit-edit-form__section-equivalence {
+            margin-top: 0px;
+            .equivalence__name-input {
+                min-width: 50%;
+            }
+        }
+        .unit-edit-form__icon-delete {
+            margin: auto;
+            padding: 0;
+            padding-top: 20px;
+        }
+        .unit-edit-form__icon-equals {
+            padding: 0;
+            margin: auto;
+            padding-top: 20px;
+        }
+        .unit-edit-form__section-convertions {
+            .unit-edit-form__convertion {
+                // grid-template-columns: 41.66% 8.34% 41.66% 8.34% 8%;
+                grid-template-columns:  40.66% 4.34% 40.66% 8.34% 4%;
+                grid-template-areas: "base equal eqv eqv delete";
+                + .unit-edit-form__convertion {
+                    margin-top: 8px;
+                    .unit-edit-form__icon-delete,
+                    .unit-edit-form__icon-equals {
+                        padding-top: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*desktop*/
+@media (min-width: 1200px) {
+}

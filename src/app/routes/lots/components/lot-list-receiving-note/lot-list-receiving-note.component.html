@@ -1,0 +1,207 @@
+<div class="d-inline-grid" *blockUI="'weight-note'; template: templateBlockModalUiComponent">
+    <div class="container-grid">
+        <div>
+            <button class="tr__button__filter"
+            matRipple
+            [ngClass]="{'tr__button__filter--active': hasFilter}"
+            (click)="openFilter($event)">
+            <span>{{'filter' | i18n}}</span>
+            <i class="icon-filter-icon no-select"></i>
+            <div *ngIf="hasFilter" class="tr__button__filter__count">
+                <span>{{countFilter}}</span>
+              </div>
+            </button>
+        </div>
+
+        <input type="text" class="form-control search-tck search-loca-input" [placeholder]="'placeholder-search-lots' | i18n"
+            [(ngModel)]="searchText"  (ngModelChange)="searchNotes($event)">
+    </div>
+
+    <app-tags [tags]="paramTags" [keyStorageFilter]="KEY_TAGS" (eventOnDeleteTag)="onDeleteTag($event)"></app-tags>
+    <div class="table-headers">
+        <div class="label-table">
+            <mat-checkbox (change)="selectAll($event)" [checked]="currenPage ? currenPage.selected : false"
+                [indeterminate]="currenPage ? currenPage.indeterminated : false" color="primary"
+                class="weight-note__checkbox">
+                <span class="hidden-lg hidden-md"> {{'select-all' | i18n}}</span>
+                <span class="fa fa-sort pointer sort-left hidden-sm hidden-xs"></span>
+            </mat-checkbox>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'creation'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('start_date')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.start_date }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'id'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('reception_code')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.reception_code }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs">{{'producer'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('seller')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.seller }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'type'| i18n | uppercase}}
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'warehouse'| i18n | uppercase}}
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'net-weight'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('net_weight')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.net_weight }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'seals'| i18n | uppercase}}
+        </div>
+    </div>
+    <div *ngIf="weightNotes.length > 0; else notReultFound">
+        <div class="table-body">
+            <ng-container *ngFor="let wn of weightNotes; let index = index">
+                <div class="notes-grid" *ngIf="wn.weightNotes.length > 0">
+                    <div class="first-column-table">
+                        <mat-checkbox (change)="selectWeightGroup(wn)" [checked]="wn.selected" color="primary"
+                            class="weight-note__checkbox" [indeterminate]="wn.indeterminated">
+                        </mat-checkbox>
+                        <div class="arrow-container pointer notes-item border-left img-note border-mobile-top"
+                            (click)="openCollapse(wn)">
+                            <img class="menu-arrow" [@rotate]="wn.collapsed ? 'idle' : 'rotated'"
+                                src="assets/img/svg/arrow_right.svg">
+                        </div>
+                    </div>
+                    <div class="notes-item hidden-xs border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'creation' | i18n}}</span>
+                        <span>{{wn.startDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}</span>
+                        <span class="font-12-normal-normal">{{wn.creationName}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'ID' | i18n}}</span>
+                        <span>{{wn.folio}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'producer' | i18n}}</span>
+                        <span>{{wn.weightNotes.length > 0 ? wn.weightNotes[0].producerName : 'N/A' |
+                            ellipsis:21}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-right border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'type ' | i18n}}</span>
+                        <span>{{filters.commodityType.name}}</span>
+                    </div>
+                    <div class="notes-item hidden-md hidden-lg">
+                        <div class="first-column-table">
+                            <div class="empty"></div>
+                            <div class="border-left border-mobile-bottom"></div>
+                        </div>
+                    </div>
+                    <div class="notes-item border-mobile-bottom">
+                        <span class="hidden-md hidden-xl  hidden-lg font-12-normal-normal">{{'warehouse' | i18n}}</span>
+                        <span>{{wn.weightNotes.length > 0 ? wn.weightNotes[0].virtualTank: filters.warehouses.length > 0
+                            ?
+                            filters.warehouses[0].name : ''}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-bottom">
+                        <span class="hidden-md hidden-xl  hidden-lg font-12-normal-normal">{{'net-weight' |
+                            i18n}}</span>
+                        <span>{{wn.netWeightQQ| number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}}
+                            {{unitAbbreviation}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-right seals-column border-mobile-bottom">
+                        <span class="hidden-md hidden-xl  hidden-lg font-12-normal-normal">{{'seals' | i18n}}</span>
+                        <div>
+                            <ng-container *ngIf="wn.weightNotes.length> 0">
+                                <div *ngFor="let certification of wn.weightNotes[0].certifications"
+                                    class="img-cont-seal-note" style="z-index: 5;">
+                                    <img [src]="certification.image" [alt]="certification.name">
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="notes-item border-mobile-bottom hidden-lg hidden-md hidden-xs border-mobile-right">
+                    </div>
+                </div>
+                <ng-container *ngFor="let note of wn.weightNotes; let index = index">
+                    <div [hidden]="wn.collapsed" @collapse>
+                        <div class="row">
+                            <div class="notes-grid">
+                                <div class="first-column-table">
+                                    <mat-checkbox (change)="selectOneNote(note)" [checked]="note.selected"
+                                        color="primary" class="weight-note__checkbox">
+                                    </mat-checkbox>
+                                    <div class="arrow-container pointer container-subnote-card img-note ">
+                                        <img src="assets/img/svg/icon-menu-notas.svg">
+                                    </div>
+                                </div>
+                                <div class="container-subnote-card  hidden-xs">
+                                    <span>{{note.startDate | formatMoment: 'MMM DD, YYYY HH:mm' : true}}</span>
+                                    <span class="font-12-normal-normal">{{note.creationName}}</span>
+                                </div>
+                                <div class="container-subnote-card ">
+                                    <span class="hidden-md hidden-xl  hidden-lg font-12-normal-normal">{{'ID' |
+                                        i18n}}</span>
+                                    <span>{{note.transactionInId}}</span>
+                                </div>
+                                <div class="container-subnote-card ">
+                                    <span class="hidden-md hidden-xl  hidden-lg font-12-normal-normal">{{'producer' |
+                                        i18n}}</span>
+                                    <span>{{note.producerName | ellipsis:21}}</span>
+                                </div>
+                                <div class="container-subnote-card ">
+                                    <span class="hidden-md hidden-xl font-12-normal-normal hidden-lg">{{'type ' |
+                                        i18n}}</span>
+                                    <span>{{note.commodityType}}</span>
+                                </div>
+                                <div class="first-column-table hidden-lg hidden-md">
+                                    <div class="empty">
+                                    </div>
+                                    <div class="arrow-container pointer container-subnote-card img-note ">
+                                    </div>
+                                </div>
+                                <div class="container-subnote-card ">
+                                    <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'warehouse' |
+                                        i18n}}</span>
+                                    <span>{{note.virtualTank}}</span>
+                                </div>
+                                <div class="container-subnote-card ">
+                                    <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'net-weight' |
+                                        i18n}}</span>
+                                    <span>{{note.netQQ | number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}} {{unitAbbreviation |
+                                        i18n}}</span>
+                                </div>
+                                <div class="container-subnote-card  seals-column">
+                                    <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'seals' |
+                                        i18n}}</span>
+                                    <div>
+                                        <ng-container *ngFor="let certification of note.certifications">
+                                            <div class="img-cont-seal-note" style="z-index: 5;">
+                                                <img [src]="certification.image" [alt]="certification.name">
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="container-subnote-card hidden-xs hidden-lg hidden-md">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+    <ng-template #notReultFound>
+        <app-not-results-found *ngIf="weightNotes.length === 0"></app-not-results-found>
+    </ng-template>
+    <!-- Paginator -->
+    <div class="pl-container-paginator">
+        <div class="weigth-notes-selected">
+            <span>
+                {{selectedNotes.length}} {{'selected-notes' | i18n}}
+            </span>
+        </div>
+
+        <mat-paginator
+            class="custom-paginator"
+            [length]="paginator?.totalItems"
+            [pageIndex]="paginator?.currentPage - 1"
+            [pageSize]="paginator?.itemsPerPage"
+            [pageSizeOptions]="[paginator?.itemsPerPage]"
+            (page)="eventPaginator($event)"
+            showFirstLastButtons
+             #matPaginator>
+        </mat-paginator>
+    </div>
+</div>

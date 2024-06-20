@@ -1,0 +1,302 @@
+.warehouse-create-page {
+  position: static;
+  padding: 0;
+}
+
+.warehouse-link {
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  padding: 2px 10px 10px 2px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+.header-separator {
+  margin: 16px 0 58px 0;
+}
+
+.panel {
+  padding: 40px;
+}
+
+button {
+  height: 40px;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile + label {
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: center;
+  color: white;
+  background-color: #23a718;
+  display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  background-color: #23a718;
+}
+
+.mt-25 {
+  margin-top: 25px;
+}
+
+.pl-35 {
+  padding-left: 35px;
+}
+
+
+.warehouse-create-select {
+  height: 32px;
+}
+
+.warehouse-create-select select {
+  height: 100%;
+}
+
+.inputfile + label {
+  cursor: pointer;
+}
+
+.csv-label {
+  width: 100%;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.pl-15 {
+  margin-bottom: 20px;
+}
+
+.select-commodity-label {
+  margin-top: 27px;
+}
+
+
+
+.tank-container {
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.middle-align {
+  margin-bottom: 0;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+app-warehouse-input .app-warehouse-input{
+  border: none;
+  box-shadow: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.ng-select.warehouse-ng-select.ng-select-single ::ng-deep .ng-select-container {
+  height: 32px;
+}
+
+.ng-select.warehouse-ng-select ::ng-deep .ng-select-container{
+  min-height: 32px;
+  border: 1px solid #e1e7f5;
+  outline: none;
+  box-shadow: none;
+
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius:  5px;
+}
+
+.btn-remove-subtank-control{
+  padding-left: 0;
+}
+
+.btn-add-subtank-control{
+  padding-left: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+.wrapper-title{
+  padding: 0;
+}
+
+.warehouse-action-title{
+  margin: 0;
+}
+
+.warehouse-title{
+  margin: 0;
+  font-size: 24px;
+}
+
+.wrapper-upload-csv{
+  padding: 0;
+}
+
+.wrapper-footer-btns {
+  width: 100%;
+  height: auto;
+  margin: 69px 0 0 0;
+  display: inline-block;
+}
+
+.btn-delete{
+  margin: 0 12px 0 0;
+  padding-left: 0;
+  text-align: left;
+  width: auto;
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-cancel{
+  margin: 0 12px;
+}
+
+.wrapper-footer-btns .btn-footer{
+  width: 160px;
+}
+
+.text-delete-btn{
+  display: inline-block;
+}
+
+.continuos-spaces{
+  white-space: pre-wrap
+}
+
+
+@media (min-width: 800px) {
+  .green-btn {
+    width: 160px;
+  }
+
+  .btn-action {
+    width: 160px;
+  }
+}
+
+@media (min-width: 500px) {
+
+  .pl-15 {
+    padding-left: 15px;
+    margin-bottom: auto;
+  }
+
+  .pr-50 {
+    padding-right: 55px !important;
+    padding-left: 55px !important;
+  }
+
+  .pt-22 {
+    padding-top: 22px;
+  }
+
+  .csv-label {
+    width: auto;
+  }
+
+  .mt-25 {
+    margin-top: 25px;
+  }
+
+  .warehouse-link {
+    margin-top: 30px;
+  }
+
+}
+
+.warehouse-type {
+    top: 10px;
+  }
+
+@media (max-width: 671px) {
+
+  .btn-delete {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgba(214, 54, 73, 0.2);
+    padding-left: 13px;
+    padding-bottom: 4px;
+  }
+
+  .text-delete-btn{
+    display: none;
+  }
+
+}
+
+@media (max-width: 628px) {
+  .wrapper-footer-btns .btn-footer,
+  .wrapper-footer-btns .btn-cancel{
+    width: auto;
+  }
+}
+
+@media (max-width: 575px) {
+
+  .warehouse-min-storage{
+    padding-right: 0;
+  }
+
+  .warehouse-max-storage{
+    padding-left: 0;
+  }
+
+  .warehouse-container-storage-range .col-xs-6,
+  .warehouse-header .col-xs-6 {
+    width: 100%;
+  }
+
+  .warehouse-header .btn-upload-csv:not(.pt-22) {
+    padding-top: 22px;
+  }
+
+}
+
+@media (max-width: 324px) {
+  .wrapper-footer-btns .btn-cancel{
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+

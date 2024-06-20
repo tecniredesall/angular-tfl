@@ -1,0 +1,18 @@
+<div class="app-component">
+    <div class="wrapper">
+
+        <div id="content" class="flex">
+            <app-menu class="bg-menu" [menuVisualization]="menuCount"></app-menu>
+            <div class="wrapper-header-content">
+                <app-header *ngIf="headerHide" (hideMenu)="hideMenu()" class="fix-header header-sticky"
+                    (success)="showNoty()" (showInfo)="openModalCompanyInfo()"></app-header>
+                <div id="maincontainer" class="main-container main-container-transform">
+                    <app-notifications></app-notifications>
+                    <router-outlet *blockUI="'loader-main'; template: templateBlockModalUiComponent"></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-company-info *ngIf="showCompanyInfo" (success)="closeModalCompanyInfo()" (close)="closeModalCompanyInfo()">
+    </app-company-info>
+</div>

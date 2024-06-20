@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 25 25">
+    <defs>
+        <filter id="prefix__a">
+            <feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/>
+        </filter>
+        <path id="prefix__b" d="M0.434 0.601L8.555 0.601 8.555 8.722 0.434 8.722z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd" filter="url(#prefix__a)">
+        <g>
+            <g transform="matrix(-1 0 0 1 24 4) translate(12 .4)">
+                <mask id="prefix__c" fill="#fff">
+                    <use xlink:href="#prefix__b"/>
+                </mask>
+                <path fill="#000" d="M4.494.6C2.256.6.434 2.424.434 4.663c0 2.238 1.822 4.06 4.06 4.06 2.24 0 4.061-1.822 4.061-4.06C8.555 2.422 6.733.6 4.495.6" mask="url(#prefix__c)"/>
+            </g>
+            <path fill="#000" d="M23.187 12.991c-1.214-1.821-3.246-2.908-5.434-2.908h-2.516c-2.188 0-4.22 1.087-5.434 2.908l-.075.114v3.294h13.534v-3.294l-.075-.114zM.748 14.976h2.79v.858c-.008.432.517.744.91.45l2.94-2.26c.315-.23.358-.786.006-1.055L4.39 10.601c-.32-.27-.89-.03-.884.43v.803H.741c-.402 0-.73.328-.733.731L0 14.225c-.009.374.326.757.748.751" transform="matrix(-1 0 0 1 24 4)"/>
+        </g>
+    </g>
+</svg>

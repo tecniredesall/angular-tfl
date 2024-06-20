@@ -1,0 +1,123 @@
+<!-- Loader -->
+
+<!-- Title -->
+<div class="sil-container">
+    <silosys-main-header [title]="'t-producers'" [showSearchInput]="true" [searchValue]="producerToSearch"
+        [searchInputPlaceholder]="'placeholder-search-producers'" [showExportCSVButton]="true"
+        [permissionTag]="PERMISSIONS.PRODUCERS" [permissionType]="PERMISSION_TYPES.CREATE"
+        [isDisabledSearchInput]="blockUI.isActive" (eventNew)="onActionClicked(ACTIONS.CREATE)"
+        (eventExportCSV)="onDownloadCsv()">
+    </silosys-main-header>
+    <!-- Content -->
+    <section class="sil-table">
+        <header class="sil-table__header-row">
+            <span class="sil-table__header-cell header__name">
+                {{ "producer" | i18n | uppercase }}
+                <i class="icon-arrow_down show-on-mobile" (click)="sortData('producer')"
+                    [ngClass]="{ 'sort-icon-invert': columnAscState.producer }"></i>
+            </span>
+            <span class="sil-table__header-cell header__farms">
+                {{ "t-farms" | i18n | uppercase }}
+                <i class="icon-arrow_down show-on-mobile" (click)="sortData('farms')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.farms
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__blocks">
+                {{ "blocks" | i18n | uppercase }}
+                <i class="icon-arrow_down" (click)="sortData('blocks')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.blocks
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__associates">
+                {{ "associates" | i18n | uppercase }}
+                <i class="icon-arrow_down" (click)="sortData('associates')" [ngClass]="{
+                        'sort-icon-invert': columnAscState.associates
+                    }"></i>
+            </span>
+            <span class="sil-table__header-cell header__seals">
+                {{ "seals" | i18n | uppercase }}
+            </span>
+            <span class="sil-table__header-cell header__actions">
+                {{ "ACTIONS" | i18n }}
+            </span>
+        </header>
+        <article class="sil-table__row" *ngFor="let producer of listProducers">
+            <span class="sil-table__cell cell__name" (click)="onRowSelected(producer)">
+                <p class="sil-table__cell-label">{{ "producer" | i18n }}</p>
+                <div>
+                    <span class="sil-table__initials-icon">
+                        {{ producer.initialsName }}
+                    </span>
+                    <span class="">
+                        {{ producer.fullName }}
+                    </span>
+                </div>
+            </span>
+            <span class="sil-table__cell cell__farms" (click)="onRowSelected(producer)">
+                <p class="sil-table__cell-label">{{ "t-farms" | i18n }}</p>
+                <span [matTooltip]="producer.farmsName" matTooltipPosition="below" matTooltipClass="sil-table__tooltip">
+                    {{ producer.totalRelatedFarms | number: "2.0" }}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__blocks" (click)="onRowSelected(producer)">
+                <p class="sil-table__cell-label">{{ "blocks" | i18n }}</p>
+                <span [matTooltip]="producer.blocksName" matTooltipPosition="below"
+                    matTooltipClass="sil-table__tooltip">
+                    {{ producer.totalRelatedBlocks | number: "2.0" }}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__associates" (click)="onRowSelected(producer)">
+                <p class="sil-table__cell-label">{{ "associates" | i18n }}</p>
+                <span [matTooltip]="producer.associatesName" matTooltipPosition="below"
+                    matTooltipClass="sil-table__tooltip">
+                    {{ producer.totalAssociates | number: "2.0" }}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__seals" (click)="onRowSelected(producer)">
+                <p class="sil-table__cell-label">{{ "seals" | i18n }}</p>
+                <div>
+                    <ng-container *ngFor="let seal of producer.seals">
+                        <span [matTooltip]="seal.name" matTooltipPosition="below" matTooltipClass="sil-table__tooltip">
+                            <img [src]="seal.image" />
+                        </span>
+                    </ng-container>
+                </div>
+            </span>
+            <span class="sil-table__cell cell__federated" (click)="onRowSelected(producer)">
+                <i *ngIf="producer.federated" class="icon-logo-grain sil-table__federated-icon"></i>
+            </span>
+            <span class="cell__actions">
+                <app-table-action-button-group [disableDelete]="false" [permissionTag]="PERMISSIONS.PRODUCERS"
+                    (actionClicked)="onActionClicked($event, producer.id)"></app-table-action-button-group>
+            </span>
+        </article>
+        <ng-container *ngIf="listProducers.length === 0">
+            <app-not-results-found *ngIf="producerToSearch != ''; else emptyProducers">
+            </app-not-results-found>
+            <ng-template #emptyProducers>
+                <div class="producers__empty">
+                    <img src="/assets/img/empty/producer_empty.png">
+                    <p>
+                        {{'producers-empty-text' | i18n}}
+                        <span (click)="onActionClicked(ACTIONS.CREATE)">{{'new' | i18n}} </span>.
+                    </p>
+                </div>
+            </ng-template>
+        </ng-container>
+
+        <div class="sil-table__footer">
+            <app-update-worker-data [action]="workerSyncAction" [isSyncStarted]="isSyncStarted">
+            </app-update-worker-data>
+            <mat-paginator class="sil-table__paginator" [length]="pagination?.total"
+                [pageIndex]="pagination?.current_page - 1" [pageSize]="pagination?.per_page"
+                (page)="onPaginatorEvent($event)" showFirstLastButtons *ngIf="listProducers.length > 0">
+            </mat-paginator>
+        </div>
+
+
+
+    </section>
+    <app-producer-delete-modal *ngIf="producerToDelete" [producer]="producerToDelete"
+        (cancelClicked)="onActionClicked(ACTIONS.CANCEL)" (deleteClicked)="onDeleteProducer($event)">
+    </app-producer-delete-modal>
+</div>

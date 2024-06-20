@@ -1,0 +1,93 @@
+:root {
+    --tab-group-background-color: #ffffff;
+    --tab-label-content-color: #344057;
+    --pagination-chevron-border-color: rgba(0, 0, 0, 0.87);
+    --pagination-chevron-disabled-border-color: rgba(0, 0, 0, 0.38);
+    --elevation-z4-box-shadow-color-1: rgba(0, 0, 0, 0.2);
+    --elevation-z4-box-shadow-color-2: rgba(0, 0, 0, 0.14);
+    --elevation-z4-box-shadow-color-3: rgba(0, 0, 0, 0.12);
+
+    .dark {
+        --tab-group-background-color: #2f3b52;
+        --tab-label-content-color: #ffffff;
+        --pagination-chevron-border-color: rgba(255, 255, 255, 0.87);
+        --pagination-chevron-disabled-border-color: rgba(255, 255, 255, 0.38);
+        --elevation-z4-box-shadow-color-1: rgba(255, 255, 255, 0.2);
+        --elevation-z4-box-shadow-color-2: rgba(255, 255, 255, 0.14);
+        --elevation-z4-box-shadow-color-3: rgba(255, 255, 255, 0.12);
+    }
+}
+
+.sil-tab-group {
+    font-family: inherit;
+
+    mat-tab-header {
+        background-color: var(--tab-group-background-color);
+        padding: 0 40px;
+        border-bottom: none;
+
+        :not(.mat-tab-header-pagination-disabled).mat-elevation-z4 {
+            box-shadow: 0px 2px 4px -1px var(--elevation-z4-box-shadow-color-1),
+                0px 4px 5px 0px var(--elevation-z4-box-shadow-color-2),
+                0px 1px 10px 0px var(--elevation-z4-box-shadow-color-3);
+        }
+
+        .mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
+            border-color: var(--pagination-chevron-disabled-border-color);
+        }
+
+        .mat-tab-header-pagination-chevron {
+            border-color: var(--pagination-chevron-border-color);
+        }
+
+        .mat-tab-label-container {
+            padding: 0;
+            border-bottom: 1px solid rgba(146, 162, 182, 0.3);
+
+            .mat-tab-label {
+                margin-right: 24px;
+                padding: 0;
+
+                .mat-tab-label-content {
+                    font-size: 20px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    text-align: center;
+                    font-weight: 100;
+                    -webkit-touch-callout: none;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    color: var(--tab-label-content-color);
+                }
+            }
+
+            .mat-tab-label.mat-tab-label-active {
+                opacity: 1;
+
+                .mat-tab-label-content {
+                    font-weight: 500;
+                }
+            }
+
+            .mat-tab-disabled{
+                cursor: not-allowed;
+            }
+
+            .mat-ink-bar {
+                background-color: #0068ff;
+                height: 4px;
+            }
+        }
+    }
+
+    .mat-tab-body-content {
+        background-color: var(--tab-group-background-color);
+        padding: 40px;
+    }
+}

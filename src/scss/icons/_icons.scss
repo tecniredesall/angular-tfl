@@ -1,0 +1,749 @@
+@import "variables";
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?yl3qnc');
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?yl3qnc#iefix') format('embedded-opentype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?yl3qnc') format('truetype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?yl3qnc') format('woff'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?yl3qnc##{$icomoon-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: '#{$icomoon-font-family}' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-eye-look {
+    &:before {
+      content: $icon-eye-look;
+    }
+  }
+  .icon-retention {
+    &:before {
+      content: $icon-retention;
+    }
+  }
+  .icon-eye-look-off {
+    &:before {
+      content: $icon-eye-look-off;
+    }
+  }
+  .icon-wharehouse-transfer-out {
+    &:before {
+      content: $icon-wharehouse-transfer-out;
+    }
+  }
+  .icon-unprocessed {
+    &:before {
+      content: $icon-unprocessed;
+    }
+  }
+  .icon-unsettled {
+    &:before {
+      content: $icon-unsettled;
+    }
+  }
+  .icon-reception {
+    &:before {
+      content: $icon-reception;
+    }
+  }
+  .icon-admin {
+    &:before {
+      content: $icon-admin;
+    }
+  }
+  .icon-administration {
+    &:before {
+      content: $icon-administration;
+    }
+  }
+  .icon-inventrio {
+    &:before {
+      content: $icon-inventrio;
+    }
+  }
+  .icon-inventory-movements {
+    &:before {
+      content: $icon-inventory-movements;
+    }
+  }
+  .icon-vehiculo-empty {
+    &:before {
+      content: $icon-vehiculo-empty;
+    }
+  }
+  .icon-cup {
+    &:before {
+      content: $icon-cup;
+    }
+  }
+  .icon-merge {
+    &:before {
+      content: $icon-merge;
+    }
+  }
+  .icon-buyers {
+    &:before {
+      content: $icon-buyers;
+    }
+  }
+  .icon-buyer-outline {
+    &:before {
+      content: $icon-buyer-outline;
+    }
+  }
+  .icon-shipping-ticket {
+    &:before {
+      content: $icon-shipping-ticket;
+    }
+  }
+  .icon-fill-shipping-ticket {
+    &:before {
+      content: $icon-fill-shipping-ticket;
+    }
+  }
+  .icon-in-process {
+    &:before {
+      content: $icon-in-process;
+    }
+  }
+  .icon-processed {
+    &:before {
+      content: $icon-processed;
+    }
+  }
+  .icon-arrow-in {
+    &:before {
+      content: $icon-arrow-in;
+    }
+  }
+  .icon-process {
+    &:before {
+      content: $icon-process;
+    }
+  }
+  .icon-divide {
+    &:before {
+      content: $icon-divide;
+    }
+  }
+  .icon-io-t {
+    &:before {
+      content: $icon-io-t;
+    }
+  }
+  .icon-barcode {
+    &:before {
+      content: $icon-barcode;
+    }
+  }
+  .icon-selection-machine {
+    &:before {
+      content: $icon-selection-machine;
+    }
+  }
+  .icon-user {
+    &:before {
+      content: $icon-user;
+    }
+  }
+  .icon-purchase-order {
+    &:before {
+      content: $icon-purchase-order;
+    }
+  }
+  .icon-close-circle {
+    &:before {
+      content: $icon-close-circle;
+    }
+  }
+  .icon-alert-outline {
+    &:before {
+      content: $icon-alert-outline;
+    }
+  }
+  .icon-reprocess {
+    &:before {
+      content: $icon-reprocess;
+    }
+  }
+  .icon-finished {
+    &:before {
+      content: $icon-finished;
+    }
+  }
+  .icon-lote {
+    &:before {
+      content: $icon-lote;
+    }
+  }
+  .icon-transition {
+    &:before {
+      content: $icon-transition;
+    }
+  }
+  .icon-problem {
+    &:before {
+      content: $icon-problem;
+    }
+  }
+  .icon-calendar-edit {
+    &:before {
+      content: $icon-calendar-edit;
+    }
+  }
+  .icon-bascula {
+    &:before {
+      content: $icon-bascula;
+    }
+  }
+  .icon-empty_users_link {
+    &:before {
+      content: $icon-empty_users_link;
+    }
+  }
+  .icon-weight {
+    &:before {
+      content: $icon-weight;
+    }
+  }
+  .icon-loading {
+    &:before {
+      content: $icon-loading;
+    }
+  }
+  .icon-clock {
+    &:before {
+      content: $icon-clock;
+    }
+  }
+  .icon-check {
+    &:before {
+      content: $icon-check;
+    }
+  }
+  .icon-collapse {
+    &:before {
+      content: $icon-collapse;
+    }
+  }
+  .icon-caret-down {
+    &:before {
+      content: $icon-caret-down;
+    }
+  }
+  .icon-caret-up {
+    &:before {
+      content: $icon-caret-up;
+    }
+  }
+  .icon-logo-grain {
+    &:before {
+      content: $icon-logo-grain;
+    }
+  }
+  .icon-arrow_right {
+    &:before {
+      content: $icon-arrow_right;
+    }
+  }
+  .icon-cent {
+    &:before {
+      content: $icon-cent;
+    }
+  }
+  .icon-gear {
+    &:before {
+      content: $icon-gear;
+    }
+  }
+  .icon-plus {
+    &:before {
+      content: $icon-plus;
+    }
+  }
+  .icon-almacen {
+    &:before {
+      content: $icon-almacen;
+    }
+  }
+  .icon-buyer {
+    &:before {
+      content: $icon-buyer;
+    }
+  }
+  .icon-characteristics_white_icon {
+    &:before {
+      content: $icon-characteristics_white_icon;
+    }
+  }
+  .icon-company {
+    &:before {
+      content: $icon-company;
+    }
+  }
+  .icon-conductores {
+    &:before {
+      content: $icon-conductores;
+    }
+  }
+  .icon-contracts {
+    &:before {
+      content: $icon-contracts;
+    }
+  }
+  .icon-dashboard {
+    &:before {
+      content: $icon-dashboard;
+    }
+  }
+  .icon-inventory {
+    &:before {
+      content: $icon-inventory;
+    }
+  }
+  .icon-kanban {
+    &:before {
+      content: $icon-kanban;
+    }
+  }
+  .icon-location1 {
+    &:before {
+      content: $icon-location1;
+    }
+  }
+  .icon-logo-type {
+    &:before {
+      content: $icon-logo-type;
+    }
+  }
+  .icon-logout {
+    &:before {
+      content: $icon-logout;
+    }
+  }
+  .icon-materia-prima {
+    &:before {
+      content: $icon-materia-prima;
+    }
+  }
+  .icon-materia-prima-ss {
+    &:before {
+      content: $icon-materia-prima-ss;
+    }
+  }
+  .icon-notas-r {
+    &:before {
+      content: $icon-notas-r;
+    }
+  }
+  .icon-procesos {
+    &:before {
+      content: $icon-procesos;
+    }
+  }
+  .icon-producer {
+    &:before {
+      content: $icon-producer;
+    }
+  }
+  .icon-quality {
+    &:before {
+      content: $icon-quality;
+    }
+  }
+  .icon-receive {
+    &:before {
+      content: $icon-receive;
+    }
+  }
+  .icon-reports {
+    &:before {
+      content: $icon-reports;
+    }
+  }
+  .icon-revert {
+    &:before {
+      content: $icon-revert;
+    }
+  }
+  .icon-seller1 {
+    &:before {
+      content: $icon-seller1;
+    }
+  }
+  .icon-sellos1 {
+    &:before {
+      content: $icon-sellos1;
+    }
+  }
+  .icon-send {
+    &:before {
+      content: $icon-send;
+    }
+  }
+  .icon-tanks {
+    &:before {
+      content: $icon-tanks;
+    }
+  }
+  .icon-tranformaciones {
+    &:before {
+      content: $icon-tranformaciones;
+    }
+  }
+  .icon-transportistas {
+    &:before {
+      content: $icon-transportistas;
+    }
+  }
+  .icon-unidad {
+    &:before {
+      content: $icon-unidad;
+    }
+  }
+  .icon-users {
+    &:before {
+      content: $icon-users;
+    }
+  }
+  .icon-alert_icon {
+    &:before {
+      content: $icon-alert_icon;
+    }
+  }
+  .icon-almacen-blue {
+    &:before {
+      content: $icon-almacen-blue;
+    }
+  }
+  .icon-arrow-blue-drop-down {
+    &:before {
+      content: $icon-arrow-blue-drop-down;
+    }
+  }
+  .icon-arrow_down {
+    &:before {
+      content: $icon-arrow_down;
+    }
+  }
+  .icon-arrow_icon {
+    &:before {
+      content: $icon-arrow_icon;
+    }
+  }
+  .icon-bell-outline {
+    &:before {
+      content: $icon-bell-outline;
+    }
+  }
+  .icon-cafe {
+    &:before {
+      content: $icon-cafe;
+    }
+  }
+  .icon-conductor {
+    &:before {
+      content: $icon-conductor;
+    }
+  }
+  .icon-contract_icon {
+    &:before {
+      content: $icon-contract_icon;
+    }
+  }
+  .icon-download {
+    &:before {
+      content: $icon-download;
+    }
+  }
+  .icon-edit {
+    &:before {
+      content: $icon-edit;
+    }
+  }
+  .icon-email {
+    &:before {
+      content: $icon-email;
+    }
+  }
+  .icon-empty-driver {
+    &:before {
+      content: $icon-empty-driver;
+    }
+  }
+  .icon-empty-finca {
+    &:before {
+      content: $icon-empty-finca;
+    }
+  }
+  .icon-empty-producer {
+    &:before {
+      content: $icon-empty-producer;
+    }
+  }
+  .icon-erase {
+    &:before {
+      content: $icon-erase;
+    }
+  }
+  .icon-farm {
+    &:before {
+      content: $icon-farm;
+    }
+  }
+  .icon-filter-icon {
+    &:before {
+      content: $icon-filter-icon;
+    }
+  }
+  .icon-icon-menu-notas {
+    &:before {
+      content: $icon-icon-menu-notas;
+    }
+  }
+  .icon-icon-parcela {
+    &:before {
+      content: $icon-icon-parcela;
+    }
+  }
+  .icon-kebab-menu {
+    &:before {
+      content: $icon-kebab-menu;
+    }
+  }
+  .icon-light-icon {
+    &:before {
+      content: $icon-light-icon;
+    }
+  }
+  .icon-link {
+    &:before {
+      content: $icon-link;
+    }
+  }
+  .icon-load-carriage {
+    &:before {
+      content: $icon-load-carriage;
+    }
+  }
+  .icon-location {
+    &:before {
+      content: $icon-location;
+    }
+  }
+  .icon-logo-xls {
+    &:before {
+      content: $icon-logo-xls;
+    }
+  }
+  .icon-menu-icon {
+    &:before {
+      content: $icon-menu-icon;
+    }
+  }
+  .icon-moon {
+    &:before {
+      content: $icon-moon;
+    }
+  }
+  .icon-multimedia {
+    &:before {
+      content: $icon-multimedia;
+    }
+  }
+  .icon-notas {
+    &:before {
+      content: $icon-notas;
+    }
+  }
+  .icon-note-canceled {
+    &:before {
+      content: $icon-note-canceled;
+    }
+  }
+  .icon-note-close {
+    &:before {
+      content: $icon-note-close;
+    }
+  }
+  .icon-note-open {
+    &:before {
+      content: $icon-note-open;
+    }
+  }
+  .icon-options-vertical {
+    &:before {
+      content: $icon-options-vertical;
+    }
+  }
+  .icon-print {
+    &:before {
+      content: $icon-print;
+    }
+  }
+  .icon-receive_icon {
+    &:before {
+      content: $icon-receive_icon;
+    }
+  }
+  .icon-refresh {
+    &:before {
+      content: $icon-refresh;
+    }
+  }
+  .icon-report {
+    &:before {
+      content: $icon-report;
+    }
+  }
+  .icon-report-pdf {
+    &:before {
+      content: $icon-report-pdf;
+    }
+  }
+  .icon-report-print {
+    &:before {
+      content: $icon-report-print;
+    }
+  }
+  .icon-report-xls {
+    &:before {
+      content: $icon-report-xls;
+    }
+  }
+  .icon-search {
+    &:before {
+      content: $icon-search;
+    }
+  }
+  .icon-seller {
+    &:before {
+      content: $icon-seller;
+    }
+  }
+  .icon-sellos {
+    &:before {
+      content: $icon-sellos;
+    }
+  }
+  .icon-shape {
+    &:before {
+      content: $icon-shape;
+    }
+  }
+  .icon-shapes {
+    &:before {
+      content: $icon-shapes;
+    }
+  }
+  .icon-shipping_icon {
+    &:before {
+      content: $icon-shipping_icon;
+    }
+  }
+  .icon-silo {
+    &:before {
+      content: $icon-silo;
+    }
+  }
+  .icon-stamper {
+    &:before {
+      content: $icon-stamper;
+    }
+  }
+  .icon-status_approved_icon {
+    &:before {
+      content: $icon-status_approved_icon;
+    }
+  }
+  .icon-status_complete_icon {
+    &:before {
+      content: $icon-status_complete_icon;
+    }
+  }
+  .icon-status_incomplete_icon {
+    &:before {
+      content: $icon-status_incomplete_icon;
+    }
+  }
+  .icon-status_rejected_icon {
+    &:before {
+      content: $icon-status_rejected_icon;
+    }
+  }
+  .icon-status_sent_icon {
+    &:before {
+      content: $icon-status_sent_icon;
+    }
+  }
+  .icon-ticket-outline {
+    &:before {
+      content: $icon-ticket-outline;
+    }
+  }
+  .icon-transformation_icon_blue {
+    &:before {
+      content: $icon-transformation_icon_blue;
+    }
+  }
+  .icon-trash-gray {
+    &:before {
+      content: $icon-trash-gray;
+    }
+  }
+  .icon-unit-gray {
+    &:before {
+      content: $icon-unit-gray;
+    }
+  }
+  .icon-unlink {
+    &:before {
+      content: $icon-unlink;
+    }
+  }
+  .icon-logout1 {
+    &:before {
+      content: $icon-logout1;
+    }
+  }
+  .icon-Producers-2 {
+    &:before {
+      content: $icon-Producers-2;
+    }
+  }
+  .icon-unit-2 {
+    &:before {
+      content: $icon-unit-2;
+    }
+  }
+  .icon-wharehouse-transfer {
+    &:before {
+      content: $icon-wharehouse-transfer;
+    }
+  }
+  .icon-copy-clipboard {
+    &:before {
+      content: $icon-copy-clipboard;
+    }
+  }
+  .icon-information {
+    &:before {
+      content: $icon-information;
+    }
+  }

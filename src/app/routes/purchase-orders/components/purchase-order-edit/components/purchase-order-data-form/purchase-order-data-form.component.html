@@ -1,0 +1,77 @@
+<form *ngIf="form" class="sil-form" [formGroup]="form">
+    <section class="sil-form__section date">
+        <label>{{ "date" | i18n }}</label>
+        <mat-form-field
+            class="sil-form__date-input tr__date-picker"
+            color="red"
+            appearance="outline"
+            floatLabel="never"
+        >
+            <input
+                formControlName="date"
+                matInput
+                [matDatepicker]="picker1"
+                placeholder="{{ 'filter-format-date' | i18n }}"
+                autocomplete="not"
+            />
+            <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+            ></mat-datepicker-toggle>
+            <mat-datepicker
+                panelClass="tr__date-picker__panel"
+                #picker1
+            ></mat-datepicker>
+        </mat-form-field>
+    </section>
+    <section class="sil-form__section producer">
+        <custom-select
+                    formControlName="producerDataCompleted"
+                    [label]="'producer' | i18n"
+                    [placeholder]="'select-producer' | i18n"
+                    [items]="producers"
+                    [clearable]="true"
+                    [bindLabel]="'fullName'"
+                    [emptyLabel]="'producers-empty-label' | i18n"
+                    [emptyImage]="'assets/img/svg/empty-producer.svg'"
+                    [isLoading]="loadingProducers"
+                    [searchPlaceholder]="'search-producer' | i18n"
+                    (onSearch)="onDropdownSearch($event)"
+                    (onNextPage)="onDropdownReachedEnd()"
+                    (onSelect)="setSeller($event)"
+                    (clear)="setSeller(null)"
+                >
+        </custom-select>
+        <ng-container
+            *ngIf="form.get('producer').dirty || form.get('producer').touched"
+        >
+            <span
+                *ngIf="form.get('producer').hasError('required')"
+                class="sil-form__section__error-message"
+            >
+                {{ "is-required-msg" | i18n }}</span
+            >
+        </ng-container>
+    </section>
+    <section class="sil-form__section type">
+        <label
+            >{{ "t-producer-type" | i18n }}</label
+        >
+        <input
+            type="text"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="type"
+            maxlength="100"
+        />
+    </section>
+    <section class="sil-form__section address">
+        <label>{{ "address" | i18n }}</label>
+        <input
+            type="text"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="address"
+        />
+    </section>
+</form>

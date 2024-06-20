@@ -1,0 +1,138 @@
+@import "src/scss/breakpoints.scss";
+@at-root {
+    :not(.dark) :host {
+        --header-background-color: #ffffff;
+        --header-text-color: #0068d1;
+        --tr-footer-actions-backgroud-color: #ffffff;
+    }
+
+    .dark :host {
+        --header-background-color: #2f3b52;
+        --header-text-color: #ffffff;
+        --tr-footer-actions-backgroud-color: #182030;
+    }
+
+    .footer-color {
+        background: var(--tr-footer-actions-backgroud-color);
+        margin-top: 25px;
+        padding: 20px 25px 55px 20px;
+        display: grid;
+        grid-template-columns: 1fr;
+        button {
+            width: 120px;
+            padding: 5px;
+            text-align: start;
+        }
+    }
+    .overflow-c {
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0px 10px;
+    }
+    .lot-create {
+        position: relative;
+        top: -70px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 70px 0 0 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        &__wrapper {
+            display: block;
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+            &__container {
+                display: grid;
+                grid-template-columns: 100%;
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                max-height: 100%;
+
+                .lot-create__button-back {
+                    padding: 12px 0;
+                    margin-bottom: 4px;
+                    background-color: transparent;
+                }
+
+                .lot-create__header {
+                    width: 100%;
+                    height: auto;
+                    padding: 30px 20px 16px 15px;
+                    background-color: var(--header-background-color);
+                    font-size: 28px;
+                    font-weight: 600;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.36;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: var(--header-text-color);
+
+                    &__line {
+                        width: 100%;
+                        border-top: 1px solid rgba(146, 162, 182, 0.3);
+                        margin: 16px 0 0 0;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        .sil-tab-group mat-tab-header {
+            padding: 0px 0px;
+        }
+        .sil-tab-group .mat-tab-body-content {
+            padding: 20px 20px !important;
+            min-height: 520px;
+        }
+    }
+}
+
+@media (max-width: 812px) {
+    .lot-create__wrapper__container {
+        grid-template-rows: max-content max-content;
+    }
+}
+@media (min-width: 813px) {
+    .lot-create__wrapper__container {
+        grid-template-rows: 1fr max-content;
+    }
+}
+@media (min-width: $screen-sm-min) {
+    .lot-create__wrapper__container .lot-create__header {
+        padding: 30px 40px 16px 40px;
+    }
+    .footer-color {
+        grid-template-columns: 10% 90%;
+        padding: 20px 25px 10px;
+    }
+    ::ng-deep {
+        .sil-tab-group mat-tab-header {
+            padding: 0px 40px;
+        }
+        .sil-tab-group .mat-tab-body-content {
+            padding: 20px 40px !important;
+            min-height: 520px;
+        }
+    }
+}
+@media (min-width: $screen-md-min) {
+    .footer-color {
+        grid-template-columns: 1fr 1fr;
+        padding: 20px 25px 10px;
+    }
+}

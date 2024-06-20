@@ -1,0 +1,69 @@
+<div class="select-result">
+    <ng-container *ngIf="isLoading">
+        <div class="blockui-content-select" *blockUI="'select-results'; template: templateBlockModalUiComponent;"></div>
+    </ng-container>
+    <section class="select-result__title">
+        {{'select' | i18n}} {{data.label}}
+        <span (click)="dialogRef.close()">{{'exit' | i18n}}</span>
+        <mat-divider></mat-divider>
+    </section>
+    <section class="select-result__search">
+        <app-search-input [isDisabledSearchInput]="false" [searchValue]="searchText" [isFocused]="isFocusOnInputSearch"
+            (clearEvent)="clearSearchInput()">
+            <input searchInput type="text" class="elipsis" (input)="onSearchEvent()"
+                [placeholder]="(data.searchPlaceholder || 'search')| i18n" [(ngModel)]="searchText"
+                (focus)="isFocusOnInputSearch = true" (blur)="isFocusOnInputSearch = false" autocomplete="not" />
+        </app-search-input>
+    </section>
+    <ng-container *ngIf="data.isEnableNewItem">
+        <div *permission="{tag: data.permissionTag, type: PERMISSIONS_TYPE.CREATE}"
+            class="select-result__new" (click)="addItem()">
+            <p>+ {{data.addLabel}}</p>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="items.length > 0; else notResults">
+        <ng-container *ngIf="!data.isBlockItems; else isBlock">
+            <section class="select-result__content scroll-view-app" (scroll)="onScrollEvent($event)">
+                <ng-container *ngIf="data.groupBy == null; else isGrouper">
+                    <div class="select-result__content-item" *ngFor="let item of items" (click)="onSelectItem(item)">
+                        {{ data.bindLabel ? item[data.bindLabel] : item}}
+                    </div>
+                </ng-container>
+                <ng-template #isGrouper>
+                    <ng-container *ngFor="let item of data.groupByItems | keyvalue">
+                        <span class="select-result__content-grouper">{{item.key}}</span>
+                        <div *ngFor="let value of item.value"
+                                     class="select-result__content-item grouper-padding"
+                                     (click)="onSelectItem(value)">
+                                     {{ data.bindLabel ? (value[data.bindLabel] | i18n) : value}}
+                                </div>
+                     </ng-container>
+
+                </ng-template>
+
+            </section>
+        </ng-container>
+        <ng-template #isBlock>
+            <section class="select-result__content scroll-view-app" (scroll)="onScrollEvent($event)">
+                <p *ngIf="associateBlocks.length > 0" class="custom-select-item font-blue">{{'associated-farm' |i18n}}
+                </p>
+                <div class="select-result__content-item" *ngFor="let item of associateBlocks"
+                    (click)="onSelectItem(item)">
+                    {{item[data.bindLabel]}}
+                </div>
+                <p *ngIf="dissociatedBlocks.length > 0" class="custom-select-item font-blue">{{'not-associated' |i18n}}
+                </p>
+                <div class="select-result__content-item" *ngFor="let item of dissociatedBlocks"
+                    (click)="onSelectItem(item)">
+                    {{item[data.bindLabel]}}
+                </div>
+            </section>
+        </ng-template>
+    </ng-container>
+    <ng-template #notResults>
+        <section class="select-result__empty">
+            <img [src]="data.emptyImage || 'assets/img/empty/search-empty.png'">
+            <p>{{data.emptyLabel}}</p>
+        </section>
+    </ng-template>
+</div>

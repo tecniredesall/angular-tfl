@@ -1,0 +1,198 @@
+<div class="t-drivers">
+
+  <div class="t-drivers-container" *blockUI="'action-driver-container'; template: templateBlockModalUiComponent">
+
+    <div class="t-drivers-content scroll-view-app">
+
+      <ng-container [ngSwitch]="selectedView">
+
+        <ng-container *ngSwitchCase="CONSTANTS.VIEW_MODE.LIST" [ngTemplateOutlet]="driverList"></ng-container>
+
+        <ng-container *ngSwitchCase="CONSTANTS.VIEW_MODE.ACTION" [ngTemplateOutlet]="driverActions"></ng-container>
+
+      </ng-container>
+
+
+      <ng-template #driverList>
+
+        <div class="t-drivers-list-view {{responsiveClass}}"
+          [ngClass]="0 == driverPaginator.drivers.length ? 't-drivers-list-view--empty' : 't-drivers-list-view--fill'"
+          (resized)="onEventViewResized($event)">
+
+          <silosys-main-header
+            class="t-drivers-main-header"
+            [title]="'drivers'"
+            [isDisabledSearchInput]="isGettingDriversList"
+            [searchValue]="searchText"
+            [searchInputPlaceholder]="'search-driver'"
+            [showExportCSVButton]="false"
+            [permissionTag]="PERMISSIONS.DRIVERS"
+            [permissionType]="PERMISSION_TYPES.CREATE"
+            (eventSearchInput)="searchDrivers($event)"
+            (eventNew)="newDriver()">
+          </silosys-main-header>
+
+          <div class="t-drivers-data-grid" *blockUI="'data-grid-container'; template: templateBlockModalUiDataGrid">
+
+            <ng-container
+              *ngIf="driverPaginator.drivers.length > 0 || (0 == driverPaginator.drivers.length && 0 == searchText.length) || (0 == driverPaginator.drivers.length && isRunningSearch); else emptySearchResults">
+
+              <div class="t-drivers-data-grid-header">
+
+                <div class="t-drivers-data-grid-header__column t-drivers-data-grid-header__column--name">
+                  <span class="t-drivers-data-grid-header__text no-select pointer" (click)="sortData('name')">
+                    {{ "DRIVER" | i18n }}
+                    <img class="pointer sort-icon"
+                      [src]="orderStatusAsc['name']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                  </span>
+                </div>
+
+                <div class="t-drivers-data-grid-header__column t-drivers-data-grid-header__column--license">
+                  <span class="t-drivers-data-grid-header__text no-select pointer" (click)="sortData('license')">
+                    {{ "LICENCE" | i18n }}
+                    <img class="pointer sort-icon"
+                      [src]="orderStatusAsc['license']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                  </span>
+                </div>
+
+                <div class="t-drivers-data-grid-header__column t-drivers-data-grid-header__column--identity">
+                  <span class="t-drivers-data-grid-header__text no-select pointer" (click)="sortData('identity')">
+                    {{ "producer-identity" | i18n | uppercase }}
+                    <img class="pointer sort-icon"
+                      [src]="orderStatusAsc['identity']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                  </span>
+                </div>
+
+                <div class="t-drivers-data-grid-header__column t-drivers-data-grid-header__column--type">
+                  <span class="t-drivers-data-grid-header__text no-select pointer">
+                    {{ "driver-type" | i18n | uppercase }}
+                  </span>
+                </div>
+
+                <div class="t-drivers-data-grid-header__column t-drivers-data-grid-header__column--actions">
+                  <span class="t-drivers-data-grid-header__text t-drivers-data-grid-header__text-actions no-select">
+                    {{ "ACTIONS" | i18n }}
+                  </span>
+                </div>
+
+              </div>
+
+              <div class="t-drivers-data-grid-row" *ngFor="let driver of driverPaginator.drivers; let index = index">
+
+                <div class="t-drivers-initials-name-container">
+                  <span class="t-drivers-initials-name-text">
+                    {{driver.name[0]?.toUpperCase()}}{{driver.paternalLast[0]?.toUpperCase()}}
+                  </span>
+                </div>
+
+                <span class="t-drivers-data-grid-row-header__text t-drivers-header-name no-select">
+                  {{ "DRIVER" | i18n }}
+                </span>
+                <div class="t-drivers-data t-drivers-name">
+                  {{driver.name | titlecase}} {{driver.paternalLast | titlecase}} {{driver.maternalLast | titlecase}}
+                </div>
+
+                <span class="t-drivers-data-grid-row-header__text t-drivers-header-license no-select">
+                  {{ "LICENCE" | i18n }}
+                </span>
+                <div class="t-drivers-data t-drivers-license">
+                  {{driver.license}}
+                </div>
+
+                <span class="t-drivers-data-grid-row-header__text t-drivers-header-identity no-select">
+                  {{ "producer-identity" | i18n | uppercase }}
+                </span>
+                <div class="t-drivers-data t-drivers-identity">
+                  {{driver.identity}}
+                </div>
+
+                <span class="t-drivers-data-grid-row-header__text t-drivers-header-type no-select">
+                  {{ "driver-type" | i18n | uppercase }}
+                </span>
+                <div class="t-drivers-data t-drivers-type">
+                  {{driver.typeId == DRIVER_TYPE.OWNER ?
+                    ('drive-type-owner' | i18n) :
+                    driver.typeId == DRIVER_TYPE.THIRD ?
+                    ('drive-type-third' | i18n) : ''}}
+                </div>
+
+                <div class="t-drivers-actions-container">
+
+                  <button
+                    type="button"
+                    class="btn btn-default t-drivers-action-button t-drivers-action-button-edit"
+                    (click)="editDrivers(driver)"
+                    *permission="{tag: PERMISSIONS.DRIVERS, type: PERMISSION_TYPES.UPDATE}">
+                    <img src="assets/img/svg/edith-shape.svg">
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-default t-drivers-action-button t-drivers-action-button-remove"
+                    (click)="deleteDriver(driver)"
+                    *permission="{tag: PERMISSIONS.DRIVERS, type: PERMISSION_TYPES.DELETE}">
+                    <img src="assets/img/svg/remove_icon.svg" />
+                  </button>
+
+                  <div class="dropdown t-drivers-action-button-options"
+                    *permission="{tag: PERMISSIONS.DRIVERS, type: PERMISSION_TYPES.UPDATE}">
+
+                    <button type="button" class="btn btn-default t-drivers-action-button dropdown-toggle"
+                      data-toggle="dropdown">
+
+                      <img src="assets/img/svg/options-vertical.svg" alt="">
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-actions-left">
+                      <li class="pointer" (click)="deleteDriver(driver)"
+                        *permission="{tag: PERMISSIONS.DRIVERS, type: PERMISSION_TYPES.DELETE}">
+                        <a>
+                          {{'delete' | i18n}}
+                        </a>
+                      </li>
+                      <li class="pointer" (click)="editDrivers(driver)"
+                        *permission="{tag: PERMISSIONS.DRIVERS, type: PERMISSION_TYPES.UPDATE}">
+                        <a>
+                          {{'edit' | i18n}}
+                        </a>
+                      </li>
+                    </ul>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </ng-container>
+
+          </div>
+
+        </div>
+
+      </ng-template>
+
+      <ng-template #driverActions>
+        <div class="t-drivers-actions-component">
+          <app-actions-driver [data]="actionDriver" (eventActionSelected)="onEventActionSelected($event)">
+          </app-actions-driver>
+        </div>
+      </ng-template>
+
+      <ng-template #emptySearchResults>
+        <div class="t-driver-empty-search-results">
+          <app-not-results-found></app-not-results-found>
+        </div>
+      </ng-template>
+
+      <mat-paginator [hidden]="0 == driverPaginator.drivers.length || selectedView == CONSTANTS.VIEW_MODE.ACTION"
+        class="custom-paginator" [length]="driverPaginator.totalItems" [pageSize]="driverPaginator.itemsPerPage"
+        [pageSizeOptions]="driverPaginator.itemsPerPageOptions" (page)="eventPaginator($event)" showFirstLastButtons
+        #paginator></mat-paginator>
+
+    </div>
+
+  </div>
+
+</div>

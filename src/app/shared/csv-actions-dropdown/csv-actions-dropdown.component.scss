@@ -1,0 +1,37 @@
+:host {
+    button {
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        span {
+            margin: 0 10px;
+            display: none;
+        }
+        i {
+            font-size: 20px;
+        }
+    }
+    .dropdown-menu {
+        font-size: 12px;
+        min-width: fit-content;
+        right: 0;
+        left: auto;
+    }
+}
+
+@media (min-width: 768px) {
+    :host {
+        button {
+            font-size: 14px;
+            span {
+                display: inline-flex;
+            }
+            i {
+                font-size: 16px;
+            }
+        }
+        .dropdown-menu {
+            font-size: 14px;
+        }
+    }
+}

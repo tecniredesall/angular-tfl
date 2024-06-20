@@ -1,0 +1,427 @@
+<div
+    class="actions-driver-container {{ responsiveClass }}"
+    [ngClass]="{
+        'actions-driver-from-external': data.isFromExternalModule,
+        'actions-driver-hidden-header-button':
+            data.isFromExternalModule || isEdit
+    }"
+    (resized)="onEventContainerResized($event)"
+>
+    <!-- header -->
+    <div class="row actions-driver-header-container">
+        <div class="actions-driver-header">
+            <div class="actions-driver-title">
+                {{ isEdit ? ("edit-driver" | i18n) : ("new-driver" | i18n) }}
+            </div>
+
+            <div
+                *ngIf="!data.isFromExternalModule && !isEdit"
+                class="actions-driver-header-button-container"
+            >
+                <div class="dropdown pull-right actions-driver-header-dropdown">
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="
+                            btn
+                            green-btn
+                            dropdown-toggle
+                            pull-right
+                            actions-driver-header-button
+                        "
+                        data-toggle="dropdown"
+                    >
+                        <img src="assets/img/svg/logo-xls.svg" alt="" />
+
+                        {{ "upload-csv" | i18n }}
+                    </button>
+
+                    <input
+                        type="file"
+                        #csvReader
+                        name="Upload CSV"
+                        (change)="uploadFile($event)"
+                        accept=".csv"
+                        hidden
+                    />
+
+                    <ul class="dropdown-menu">
+                        <li class="pointer" (click)="openFileExplorer()">
+                            <a> {{ "upload-csv" | i18n }}</a>
+                        </li>
+
+                        <li class="pointer" (click)="downloadLayout()">
+                            <a> {{ "dowload-layout" | i18n }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- body -->
+    <form class="actions-driver-form" [formGroup]="drivers" novalidate>
+        <div
+            class="row actions-driver-item"
+            *ngFor="let item of drivers.controls; let indexItem = index"
+            [ngClass]="{ 'multiple-actions-driver-item': drivers.length > 1 }"
+        >
+            <div [formGroup]="item" class="row">
+
+                <p class="actions-driver-form__subtitle">{{'general-information' | i18n}}</p>
+
+                <!-- IDENTITY -->
+                <div
+                    class="
+                        actions-driver-input-container
+                        ad-ic-odd
+                        col-lg-6 col-md-6 col-sm-6 col-xs-12
+                    "
+                >
+                    <label class="actions-driver-label-input">
+                        {{ "producer-identity" | i18n }} *
+                    </label>
+
+                    <input
+                        formControlName="identity"
+                        type="text"
+                        class="create-input"
+                        autocomplete="off"
+                        [name]="'ad-maternal-last-' + indexItem"
+                        [placeholder]="'producer-identity-placeholder' | i18n"
+                        [textMask]="{
+                            mask: CONSTANTS.IDENTITY_MASK,
+                            guide: false
+                        }"
+                    />
+
+                    <label
+                        *ngIf="item.get('identity').dirty || isEdit"
+                        class="error-msg-form"
+                    >
+                        <label
+                            *ngIf="item.get('identity').hasError('required')"
+                        >
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+
+                        <label
+                            *ngIf="item.get('identity').hasError('pattern')"
+                        >
+                            {{ "numeric-pattern-error" | i18n }}
+                        </label>
+
+                        <label
+                            *ngIf="item.get('identity').hasError('minlength')"
+                        >
+                            {{
+                                "min-length-value-error"
+                                    | i18n
+                                    | stringReplace
+                                        : "[value]"
+                                        : CONSTANTS.MIN_LENGTH_DRIVER_IDENTITY
+                            }}
+                        </label>
+                        <label
+                            *ngIf="item.get('identity').hasError('duplicate')"
+                        >
+                            {{ "t-drivers-identity-duplicate" | i18n }}
+                        </label>
+                    </label>
+                </div>
+                <!-- NAME -->
+                <div
+                    class="
+                        actions-driver-input-container
+                        ad-ic-even
+                        col-lg-6 col-md-6 col-sm-6 col-xs-12
+                    "
+                >
+                    <label class="actions-driver-label-input">
+                        {{ "name" | i18n }} *
+                    </label>
+
+                    <input
+                        formControlName="name"
+                        type="text"
+                        class="create-input"
+                        autocomplete="off"
+                        [name]="'ad-name-' + indexItem"
+                        [placeholder]="'placeholder-driver-name' | i18n"
+                        [value]="item.get('name').value | titlecase"
+                    />
+
+                    <label
+                        *ngIf="item.get('name').dirty || isEdit"
+                        class="error-msg-form"
+                    >
+                        <label *ngIf="item.get('name').hasError('required')">
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+
+                        <label *ngIf="item.get('name').hasError('pattern')">
+                            {{ "alphabet-pattern-error" | i18n }}
+                        </label>
+
+                        <label *ngIf="item.get('name').hasError('maxlength')">
+                            {{
+                                "input-max-length-value"
+                                    | i18n
+                                    | stringReplace
+                                        : "[value]"
+                                        : CONSTANTS.MAX_LENGTH_DRIVER_NAME
+                            }}
+                        </label>
+                    </label>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <!-- LASTNAMES -->
+                <div
+                    class="
+                        actions-driver-input-container
+                        ad-ic-odd
+                        col-lg-6 col-md-6 col-sm-6 col-xs-12
+                    "
+                >
+                    <label class="actions-driver-label-input">
+                        {{ "last-names" | i18n }} *
+                    </label>
+                    <input
+                        formControlName="paternalLast"
+                        type="text"
+                        class="create-input"
+                        autocomplete="off"
+                        [name]="'ad-paternal-last-' + indexItem"
+                        [placeholder]="
+                            'drivers-placeholder-last-names' | i18n
+                        "
+                        [value]="item.get('paternalLast').value | titlecase"
+                    />
+                    <label
+                        *ngIf="item.get('paternalLast').dirty || isEdit"
+                        class="error-msg-form"
+                    >
+                        <label
+                            *ngIf="
+                                item.get('paternalLast').hasError('required')
+                            "
+                        >
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+
+                        <label
+                            *ngIf="item.get('paternalLast').hasError('pattern')"
+                        >
+                            {{ "alphabet-pattern-error" | i18n }}
+                        </label>
+
+                        <label
+                            *ngIf="
+                                item.get('paternalLast').hasError('maxlength')
+                            "
+                        >
+                            {{
+                                "input-max-length-value"
+                                    | i18n
+                                    | stringReplace
+                                        : "[value]"
+                                        : CONSTANTS.MAX_LENGTH_DRIVER_PATERNAL_LAST
+                            }}
+                        </label>
+                    </label>
+                </div>
+                <!-- LICENSE -->
+                <div
+                    class="
+                        actions-driver-input-container
+                        ad-ic-even
+                        col-lg-6 col-md-6 col-sm-6 col-xs-12
+                    "
+                >
+                    <label class="actions-driver-label-input">
+                        {{ "license" | i18n }} *
+                    </label>
+
+                    <input
+                        formControlName="license"
+                        type="text"
+                        class="create-input"
+                        autocomplete="off"
+                        [name]="'ad-license-' + indexItem"
+                        [placeholder]="'placeholde-driver-license' | i18n"
+                    />
+
+                    <label
+                        *ngIf="item.get('license').dirty || isEdit"
+                        class="error-msg-form"
+                    >
+                        <label *ngIf="item.get('license').hasError('required')">
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+
+                        <label *ngIf="item.get('license').hasError('pattern')">
+                            {{ "license-pattern-error" | i18n }}
+                        </label>
+
+                        <label
+                            *ngIf="item.get('license').hasError('maxlength')"
+                        >
+                            {{
+                                "input-max-length-value"
+                                    | i18n
+                                    | stringReplace
+                                        : "[value]"
+                                        : CONSTANTS.MAX_LENGTH_DRIVER_LICENSE
+                            }}
+                        </label>
+
+                        <label
+                            *ngIf="item.get('license').hasError('duplicate')"
+                        >
+                            {{ "t-drivers-license-duplicate" | i18n }}
+                        </label>
+                    </label>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <!-- TYPE -->
+                <div
+                    class="
+                        actions-driver-input-container
+                        ad-ic-odd
+                        col-lg-6 col-md-6 col-sm-6 col-xs-12
+                    "
+                >
+                    <label class="actions-driver-label-input">
+                        {{ "driver-type" | i18n }} *
+                    </label>
+                    <ng-select
+                        formControlName="typeId"
+                        class="custom-ng-select"
+                        [items]="types"
+                        [multiple]="false"
+                        [clearable]="false"
+                        [closeOnSelect]="true"
+                        [notFoundText]="'not-items-found' | i18n"
+                        bindLabel="name"
+                        bindValue="id"
+                        placeholder="{{'driver-type-placeholder' | i18n}}"
+                        loadingText="{{'loading' | i18n}}">
+                        <ng-template ng-label-tmp let-item="item">
+                            {{ item.name | i18n }}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item" let-index="index">
+                            {{ item.name | i18n }}
+                        </ng-template>
+                    </ng-select>
+                    <label
+                        *ngIf="item.get('typeId').dirty || isEdit"
+                        class="error-msg-form"
+                    >
+                        <label *ngIf="item.get('typeId').hasError('required')">
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+                    </label>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <ng-container *ngIf="item.get('typeId').value == DRIVER_TYPE.THIRD">
+                    <div class="actions-driver-form__company">
+                        <mat-divider></mat-divider>
+                        <p class="actions-driver-form__subtitle">
+                            {{'transport-company' | i18n}}
+                        </p>
+                        <!-- COMPANY NAME -->
+                        <div
+                            class="
+                                actions-driver-input-container
+                                ad-ic-odd
+                                col-lg-6 col-md-6 col-sm-6 col-xs-12
+                            "
+                        >
+                            <custom-select
+                                bindLabel="name"
+                                bindValue="id"
+                                (onNew)="onNewCompany(indexItem)"
+                                [clearable]="false"
+                                class="custom-ng-select"
+                                [isEnableNewItem]="true"
+                                [items]="transportCompanies"
+                                formControlName="transportCompanyId"
+                                [isVisibleRequiredMark]="true"
+                                label="{{ 'company-name' | i18n }}"
+                                addLabel="{{'new-company' | i18n}}"
+                                (onNextPage)="paginationDrivers()"
+                                placeholder="{{'company-placeholder' | i18n}}">
+                            </custom-select>
+                            <label
+                                *ngIf="item.get('transportCompanyId').dirty || isEdit"
+                                class="error-msg-form"
+                            >
+                                <label *ngIf="item.get('transportCompanyId').hasError('required')">
+                                    {{ "is-required-msg" | i18n }}
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                </ng-container>
+
+
+                <div
+                    class="row driver-fullname-duplicate-container"
+                    *ngIf="item.get('fullName').hasError('duplicate')"
+                >
+                    <label class="error-msg-form">
+                        {{ "t-drivers-fullname-duplicate" | i18n }}
+                    </label>
+                </div>
+            </div>
+
+            <!-- Button remove item -->
+            <div class="row" *ngIf="!isEdit && drivers.length > 1">
+                <button
+                    type="button"
+                    class="btn btn-default action-driver-btn-remove-item"
+                    (click)="removeItem(indexItem)"
+                >
+                    <img src="assets/img/svg/trash-red.svg" alt="" />
+                    <span>
+                        &nbsp;
+                        {{ "delete" | i18n }}
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Button add item -->
+        <div *ngIf="!isEdit && !data.isFromExternalModule" class="row">
+            <button
+                type="button"
+                class="btn btn-default actions-driver-btn-add-item"
+                (click)="addItem()"
+            >
+                <i class="icon-plus"></i>
+                {{ "add-driver" | i18n }}
+            </button>
+        </div>
+    </form>
+
+    <mat-divider></mat-divider>
+
+    <!-- Footer -->
+    <app-action-footer
+        [isEdit]="isEdit"
+        [isButtonSubmitDisabled]="
+            drivers.invalid ||
+            drivers.pending ||
+            (isEdit && !dataWasMadeModified)
+        "
+        (onActionSelected)="onActionFooterSelected($event)"
+    ></app-action-footer>
+</div>

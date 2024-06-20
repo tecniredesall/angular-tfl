@@ -1,0 +1,68 @@
+.company__dialog{
+    padding: 24px;
+    max-width: 714px;
+    &__header{
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.36;
+        color: var(--tr-base-color-blue);
+        margin-bottom: 24px;
+    }
+    &__subheader{
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.38;
+        text-align: left;
+        color: var(--tr-panel-body-color);
+        margin: 16px 0;
+    }
+    &__form{
+        margin: 24px 0;
+        &__container{
+            display: flex;
+            flex-direction: column;
+        }
+        &__input{
+            width: 100%;
+            max-width: 288px;
+            padding-bottom: 16px;
+            label{
+                font-size: 14px;
+                line-height: 1.14;
+                text-align: left;
+                color: var(--tr-panel-body-color);
+            }
+            input{
+                border-radius: 5px;
+                border: solid 1px var(--tr-ng-select-border-color);
+                height: 32px;
+                padding: 2px 12px 6px 10px;
+                &.ng-invalid.ng-dirty{
+                    border: 1px solid var(--tr-input-error-color);
+                    box-shadow: 0 1px 5px rgb(255 0 0 / 20%)
+                }
+            }
+            span{
+                color: red;
+                font-size: 11px;
+            }
+        }
+    }
+}
+
+@media (min-width: 1024px) {
+    .company__dialog{
+        padding: 40px;
+        &__form{
+            &__container{
+                gap: 16px;
+                display: flex;
+                flex-direction: row;
+            }
+            &__input{
+                width: 50%;
+                min-width: 288px;
+            }
+        }
+    }
+}

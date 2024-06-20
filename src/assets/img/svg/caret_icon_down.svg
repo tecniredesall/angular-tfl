@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="6px" version="1.1" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Icon/Caret</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+ <title>Icon/Caret</title>
+ <desc>Created with Sketch.</desc>
+ <g id="SiloSys-match" transform="rotate(180 5 2.9365)" fill="none" fill-rule="evenodd">
+  <g id="SS_Tickets-match" transform="translate(-1044,-447)" fill="#69707f">
+   <g id="Icon/Caret" transform="translate(1041,442)">
+    <path id="🎨-Icon-color" transform="matrix(1 0 0 -1 0 15.873)" d="m12.85 9.6385-4.4883-4.4888c-.19983-.19964-.52349-.19964-.7231 0l-4.4888 4.4888c-.19961.1997-.19961.52333 0 .72303l.36153.36153c.19961.19984.52356.19984.72329 0l3.7655-3.7657 3.7656 3.7657c.19957.19984.52336.19984.72303 0l.36153-.36153c.19983-.19993.19983-.52333-.000261-.72303z"/>
+   </g>
+  </g>
+ </g>
+</svg>

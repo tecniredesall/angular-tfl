@@ -1,0 +1,162 @@
+<div class="relative" style="overflow-y: hidden;" *blockUI="'producers-modal'; template: blockTemplateModal">
+
+  <div class="seals-dialog-container">
+
+    <div class="row title-container">
+
+      <span class="title-seals-modal">
+        {{ 'providers-list' | i18n }}
+      </span>
+
+    </div>
+
+    <div class="seal-search-control" [ngClass]="{'input-search-control-focus': searchControl.isFocus}">
+
+      <table class="input-search-control">
+        <tr>
+
+          <td *ngIf="0 === searchControl.value.length" class="container-icon-search-input"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}">
+            <img class="center-flex"
+              [src]="isDarkTheme ? 'assets/img/svg/search-dark.svg' : 'assets/img/svg/search.svg'" alt="">
+          </td>
+
+          <td *ngIf="searchControl.value.length>0" class="padding-left-input-search-notempty"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}">
+          </td>
+
+          <td class="container-input-search">
+            <input type="text" class="elipsis" name="searchProvider" [(ngModel)]="searchControl.value"
+              [placeholder]="'placeholder-search-provider' | i18n" autocomplete="off" #searchProvider="ngModel"
+              [disabled]="searchControl.isDisabled" (focus)="searchControl.isFocus=true;"
+              (blur)="searchControl.isFocus=false;" (keydown.enter)="submitSearch()" (input)="submitSearch(true)">
+          </td>
+
+          <td *ngIf="searchControl.value.length>0" class="separator-input-search"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}"></td>
+
+          <td *ngIf="searchControl.value.length>0" class="container-button-clear-input"
+            [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled, 'button-clear-input-enabled': !searchControl.isDisabled}"
+            (click)="clearSearch()">
+            <img [src]="isDarkTheme ? 'assets/img/svg/erase-dark.svg' : 'assets/img/svg/erase.svg'" alt="" />
+          </td>
+
+          <td class="separator-input-search" [ngClass]="{'button-clear-input-disabled': searchControl.isDisabled}"></td>
+        </tr>
+      </table>
+
+      <div class="button-search-container">
+        <button class="btn button-search" matRipple [matRippleCentered]="true"
+        [matRippleDisabled]="searchControl.isDisabled" [disabled]="searchControl.isDisabled" (click)="submitSearch()">
+        {{ 'search' | i18n }}
+      </button>
+      </div>
+
+    </div>
+
+    <div class="body-container-seals-modal" *blockUI="'producers-list'; template: blockTemplateModal">
+
+      <p *ngIf="sellers.length > 0" class="no-select">
+        <span class="productor-toggler" (click)="toggleSellers()">
+          {{ 'productor' | i18n | titlecase }}
+          <mat-icon [@rotateUp]="isSellersListOrderReversed ? 'rotated' : 'idle'">
+            expand_more
+          </mat-icon>
+        </span>
+      </p>
+
+      <div class="container-producers-data scroll-view-app" (scroll)="onScroll($event)">
+
+        <div *ngIf="0 == sellers.length && searchControl.isSubmit && !searchControl.isLoading">
+          <app-not-results-found></app-not-results-found>
+        </div>
+
+        <div *ngFor="let s of sellers">
+          <div class="sellers-grid">
+            <div class="selector-container" [ngClass]="{'selector-disabled': s.isDisabled || 0 == s.farms.length, 'pointer': !s.isDisabled && s.farms.length>0}">
+              
+              <ng-container *ngIf="s.farms.length>0">
+                <div *ngIf="0 == s.numberSelectedFarms" (click)="selectAllFarmsFromSeller(s)">
+                  <img class="no-select" [src]="isDarkTheme ? 'assets/img/svg/check-dark.svg' : 'assets/img/svg/check.svg'">
+                </div>
+                
+                <div *ngIf="s.numberSelectedFarms > 0 && s.numberSelectedFarms < s.farms.length" (click)="unselectAllFarms(s)">
+                  <img class="no-select" [src]="s.isDisabled ? 'assets/img/svg/check-partial-select-disabled.svg' : 'assets/img/svg/check-partial-select.svg'">
+                </div>
+
+                <div *ngIf="s.numberSelectedFarms > 0 && s.numberSelectedFarms == s.farms.length" (click)="unselectAllFarms(s)">
+                  <img class="no-select" [src]="s.isDisabled ? 'assets/img/svg/check-active-disabled.svg' : 'assets/img/svg/check-active.svg'">
+                </div>
+              </ng-container>
+              
+              <ng-container *ngIf="0==s.farms.length">
+                <div>
+                  <img class="no-select" [src]="isDarkTheme ? 'assets/img/svg/check-empty-disabled-dark.svg' : 'assets/img/svg/check-empty-disabled.svg'">
+                </div>
+              </ng-container>
+
+            </div>
+            
+            <p class="modal-default-paragraph seller-grid-name no-select" [ngClass]="{'pointer':s.farms.length>0, 'seller-grid-name-disabled':0==s.farms.length}" (click)="showFincas(s)"> 
+              <span>{{s.name}}</span>
+              <span *ngIf="s.farms.length>0">
+                <mat-icon [ngStyle]="{'color': '#00a4fa'}" [@rotate]="s.isShowing ? 'rotated' : 'idle'">
+                  chevron_right
+                </mat-icon>
+              </span>
+            </p>
+            <div></div>
+          </div>
+          <span *ngIf="s.isShowing">
+            <div *ngFor="let f of s.farms" class="fincas-grid" (click)="toggleFarm(s, f)">
+              <div class="selector-container" [ngClass]="{'selector-disabled': f.isDisabled, 'pointer': !f.isDisabled}">
+
+                <div *ngIf="!f.isSelected">
+                  <img class="no-select" [src]="isDarkTheme ? 'assets/img/svg/check-dark.svg' : 'assets/img/svg/check.svg'">
+                </div>
+
+                <div *ngIf="f.isSelected">
+                  <img class="no-select"
+                    [src]="f.isDisabled ? 'assets/img/svg/check-active-disabled.svg' : 'assets/img/svg/check-active.svg'">
+                </div>
+
+              </div>
+              <p class="modal-default-farm farms-grid-name" [ngClass]="{'selector-disabled': f.isDisabled, 'pointer': !f.isDisabled}">
+                <img class="no-select" src="assets/img/svg/silo.svg" width="20px" height="20px" />
+                <span class="no-select">{{f.name}}</span>
+              </p>
+              <div></div>
+            </div>
+          </span>
+        </div>
+
+        <div *ngIf="isLoadingMore" class="center-image">
+          <div class="spinner"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="row wrapper-footer-btns">
+      <div class="farms-selected-counter float-left">
+        <span>{{ 0 == totalSelectedFarms ? (totalSelectedFarms | number:'2.0') : totalSelectedFarms}} {{ 'selecteds' | i18n }}</span>
+      </div>
+      <div class="footer-separator"></div>
+      <button type="submit" [disabled]="isButtonSubmitDisabled" (click)="submitData()"
+        class="btn blue-btn create-btn button-lg float-right btn-footer">{{ 'relate' | i18n}}</button>
+      <button type="button" class="btn btn-theme no-border btn-cancel btn-footer float-right" (click)="cancel()">
+        {{ 'cancel' | i18n }} </button>
+    </div>
+
+    <div *ngIf="totalSelectedFarms == maxNumberSelectedFarms" class="seals-modal-alert-container">
+      <div class="seals-modal-alert-icon-container">
+        <img class="seals-modal-alert-icon" src="assets/img/svg/alert-icon.svg" />
+      </div>
+      <div class="seals-modal-alert-text"> {{ 'seals-max-limit-farms-related' | i18n }}</div>
+    </div>
+
+  </div>
+
+</div>

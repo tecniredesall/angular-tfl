@@ -1,0 +1,65 @@
+.modal-confirm{
+    padding: 24px;
+    width: 559px;
+    height: 298px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-evenly;
+}
+
+.modal-confirm-title{
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.modal-confirm-footer{
+    display: flex;
+    justify-content: center;
+}
+
+.modal-confirm-footer button {
+    font-size: 15px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: normal;
+    text-align: center;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 5px;
+    height: 40px !important;
+    width: 100%;
+    margin: 12px;
+}
+
+
+:not(.dark) :host .action-footer-btn-submit:enabled {
+    color: white !important;
+    background-color: #0068d1 !important;
+}
+
+.dark :host .action-footer-btn-submit:enabled {
+    color: white !important;
+    background-color: #1f8efa !important;
+}
+
+.action-footer-btn-cancel {
+    background-color: transparent !important;
+}
+
+:not(.dark) :host .action-footer-btn-cancel {
+    color: #0068d1 !important;
+}
+
+.dark :host .action-footer-btn-cancel {
+    color: white !important;
+}
+
+.dark :host p {
+    color: white;
+}

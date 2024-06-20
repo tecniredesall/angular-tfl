@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+:host .mat-form-field {
+  line-height: 0.72;
+}
+
+:host .sil-form {
+  grid-template-columns: 1fr;
+  grid-template-areas: "date" "producer" "type" "address";
+  row-gap: 16px;
+}
+
+:host .sil-form .date {
+  grid-area: date;
+}
+
+:host .sil-form .date mat-form-field {
+  display: block;
+}
+
+:host .sil-form .producer {
+  grid-area: producer;
+}
+
+:host .sil-form .type {
+  grid-area: type;
+}
+
+:host .sil-form .address {
+  grid-area: address;
+}
+
+:host .sil-form .address label {
+  padding: 5px 0px 8px;
+}
+
+:host ::ng-deep.ng-select.ng-select-single.ng-select-filtered .ng-select-container .ng-value-container .ng-value {
+  visibility: initial;
+}
+
+@media (min-width: 768px) {
+  :host .sil-form {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "date producer" "type address";
+    row-gap: 16px;
+    column-gap: 16px;
+  }
+}

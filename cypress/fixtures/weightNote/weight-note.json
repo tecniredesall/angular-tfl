@@ -1,0 +1,19 @@
+{
+    "season":"season",
+    "producer":"producer",
+    "fieldTicket":"fieldTicket",
+    "contractId":"contractId",
+    "btnCaptureWeight":".t-receiving-note__body__general-information__capture-weight > .btn",
+    "btnAddWeight":".t-receiving-note__weights-section__add-item__button",
+    "inputSacks":".t-receiving-note__weights-section__value__item__sacks",
+    "inputGrossWeight":".t-receiving-note__weights-section__value__item__weight"
+    ,"farm":"farm"
+    ,"commodityType":"commodityType"
+    ,"container":"container"
+    ,"choiceDeduction":"choiceDeduction"
+    ,"driver":"driver"
+    ,"truck":"truck"
+    ,"btnClosWeightNote":".t-receiving-note__body__description__footer__buttons > .btn-default"
+    ,"btnAddWeightNote":".t-receiving-note__body__description__add-note > .btn"
+    ,"btnCloseReceivingNote":".t-receiving-note__footer__button--close"
+}

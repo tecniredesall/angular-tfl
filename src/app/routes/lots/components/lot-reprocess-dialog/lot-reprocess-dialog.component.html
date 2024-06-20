@@ -1,0 +1,75 @@
+<div class="lot-reprocess-dialog" *blockUI="'block-reprocess';template: templateBlockModalUi">
+  <div class="lot-reprocess-dialog__header">
+    <div class="lot-reprocess-dialog__header__title">
+      {{'lot-reprocess' | i18n}}
+    </div>
+    <div class="lot-reprocess-dialog__header__line"></div>
+  </div>
+  <div class="lot-reprocess-dialog__body">
+    <ng-container *ngIf="workflows.length>0 || isLoadingWorkflows; then itemsWorkflows else emptyResults">
+    </ng-container>
+  </div>
+  <div class="lot-reprocess-dialog__footer">
+    <button type="button" class="tr__button__second" (click)="cancel()" matRipple>
+      {{'cancel' | i18n}}
+    </button>
+    <button type="button" class="tr__button__primary" [disabled]="null == selectedWorkflow || isSubmitButtonDisabled" (click)="sumbit()"
+      matRipple>
+      {{'reprocess' | i18n}}
+    </button>
+  </div>
+</div>
+
+<!-- workflows -->
+<ng-template #itemsWorkflows>
+  <div *ngIf="workflows.length>0" class="lot-reprocess-dialog__body__instruction">
+    {{'lot-select-production-flow' | i18n}}
+  </div>
+  <div class="lot-reprocess-dialog__body__items">
+    <div *ngFor="let flow of workflows" class="lot-reprocess-dialog__workflow">
+      <div class="lot-reprocess-dialog__workflow__card no-select"
+        [ngClass]="{'lot-reprocess-dialog__workflow__card--selected': selectedWorkflow?.id == flow.id, 'tr__cursor-pointer': flow?.totalProcess>0, 'lot-reprocess-dialog__workflow__card--disabled': flow?.totalProcess<1}"
+        [matTooltip]="flow.totalProcess < 1 ? ('not-flow-availabe' | i18n) : null" matTooltipPosition="below"
+        (click)="selectWorklow(flow)">
+
+        <div class="lot-reprocess-dialog__workflow__card__name">
+          {{flow.name}}
+        </div>
+
+        <div class="lot-reprocess-dialog__workflow__card__process">
+          <div class="lot-reprocess-dialog__workflow__card__process__label">
+            {{'no-of-process' | i18n}}
+          </div>
+          <div class="lot-reprocess-dialog__workflow__card__process__data">
+            {{flow.totalProcess | number: "2.0-0":"en" }}
+          </div>
+        </div>
+
+        <div class="lot-reprocess-dialog__workflow__card__type">
+          <span class="lot-reprocess-dialog__workflow__card__type__name"
+            [ngClass]="{tr__lot__type__nano: LOT_TYPES.NANO_LOTE == flow.productionTypeName, tr__lot__type__micro: LOT_TYPES.MICRO_LOTE == flow.productionTypeName, tr__lot__type__macro: LOT_TYPES.MACRO_LOTE == flow.productionTypeName}">
+            {{ flow.productionTypeName | i18n }}
+          </span>
+        </div>
+
+        <span *ngIf="selectedWorkflow?.id == flow.id" class="lot-reprocess-dialog__workflow__card__badge-selected">
+          <i class="icon-check" aria-hidden="true"></i>
+        </span>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Empty results template -->
+<ng-template #emptyResults>
+  <div class="lot-reprocess-dialog__workflows-empty no-select">
+    <img class="lot-reprocess-dialog__workflows-empty__image" src="assets/img/svg/empty-flow.svg" alt="">
+    <div class="lot-reprocess-dialog__workflows-empty__main-description">
+      {{'lot-reprocess-empty-flow-main-description' | i18n}}
+    </div>
+    <div class="lot-reprocess-dialog__workflows-empty__sub-description">
+      {{'lot-reprocess-empty-flow-sub-description' | i18n}}
+    </div>
+  </div>
+</ng-template>

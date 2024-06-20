@@ -1,0 +1,178 @@
+  <div *blockUI="'users-form'; template:blockTemplate" class="p0 custom-modal-ss height-cstm-modal"
+       [ngClass]="option == 'edit' ? 'col-md-6' : 'col-lg-12'">
+    <div class="modal-header border-pad-5">
+      <form name='validForm' >
+        <div class="col-xs-12 text-left p0">
+          <div class="col-xs-12 mrg-btt-15">
+            <img class="img-modal-title" src="./../../../../assets/img/icons/icon_selleres_black.png">
+            <span class="font-ss15"> {{option | i18n}} {{'user' | i18n}}</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'name' | i18n}} *</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <input name="name" [(ngModel)]="userData.name" #name="ngModel" maxlength="255"
+                   [placeholder]="'name' | i18n" class="form-control" type="text" required autocomplete="nope"
+                   [pattern]="alphanumericPattern" (keyup)="removeWhite('name')">
+            <label *ngIf="name.dirty" class="error-msg-form">
+              <label [hidden]="!name.hasError('required')">{{'is-required-msg' | i18n }}</label>
+              <label [hidden]="!name.hasError('pattern')">{{'alphanumeric-msg' | i18n}}</label>
+            </label>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'last-name' | i18n}} *</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <input name="lastname" id="lasName" [placeholder]="'last-name' | i18n" class="form-control" type="text"
+                   required [(ngModel)]="userData.lastname" #lastname="ngModel" maxlength="255" autocomplete="nope"
+                   [pattern]="alphanumericPattern" (keyup)="removeWhite('lastname')">
+            <label *ngIf="lastname.dirty" class="error-msg-form">
+              <label [hidden]="!lastname.hasError('required')">{{'is-required-msg' | i18n }}</label>
+              <label [hidden]="!lastname.hasError('pattern')">{{'alphanumeric-msg' | i18n}}</label>
+            </label>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'email' | i18n}} *</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <input name="email" [placeholder]="'email' | i18n" class="form-control" type="email" autocomplete="nope"
+                   required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="userData.email"
+                   autocomplete="off" #email="ngModel">
+            <label *ngIf="email.dirty" class="error-msg-form">
+              <label [hidden]="!email.hasError('required')">{{'is-required-msg' | i18n }}</label>
+              <label [hidden]="!email.hasError('pattern')">{{'not-email-valid-msg' | i18n}}</label>
+            </label>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'password' | i18n}} <ng-container *ngIf="option === 'new'">*</ng-container> </span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <input name="password" [placeholder]="'password' | i18n" class="form-control" type="password"
+                   autocomplete="new-password" [(ngModel)]="userData.password" #password="ngModel" minlength="4" [required]="option === 'new'">
+            <label *ngIf="password.dirty" class="error-msg-form">
+              <label [hidden]="!password.hasError('minlength')">{{'password-4-characters-msg' | i18n}}</label>
+              <label *ngIf="option === 'new'" [hidden]="!password.hasError('required')">{{'is-required-msg' | i18n}}</label>
+            </label>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'status' | i18n}}</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <div class="checkbox2 checkbox-slider--b-flat pding-left-10">
+              <label><input type="checkbox" [(ngModel)]="status" (ngModelChange)="statusChanged($event)" name="status"><span></span>
+              </label>
+            </div>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'address' |i18n}}</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <textarea class="form-control non-border" [(ngModel)]="userData.address" name="address"></textarea>
+          </div>
+
+          <div class="col-xs-6 form-label-blue">
+            <span>{{'state' | i18n}}</span>
+          </div>
+          <div class="col-xs-6 form-label-blue">
+            <span>{{'city' |i18n}}</span>
+          </div>
+          <div class="col-xs-6 form-label-blue">
+            <input name="state" [(ngModel)]="userData.state" [placeholder]="'state' | i18n" class="form-control"
+                   type="text">
+          </div>
+          <div class="col-xs-6 form-label-blue">
+            <input name="city" [(ngModel)]="userData.city" [placeholder]="'city' | i18n" class="form-control" type="text">
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <span>{{'phone' | i18n}}</span>
+          </div>
+          <div class="col-xs-12 form-label-blue">
+            <input name="phone" class="form-control" type="tel" placeholder="(000) 000-0000"
+                   [textMask]="{mask: phoneMask}" [(ngModel)]="userData.phone" #phone="ngModel"
+                   pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$">
+            <label *ngIf="phone.dirty" class="error-msg-form">
+              <label [hidden]="!phone.hasError('pattern')">{{'invalid-phone-number' | i18n}}</label>
+            </label>
+          </div>
+
+          <div class="col-xs-12 form-label-blue mrg-top-20">
+            <button (click)="cancel()" class="btn btn-default btn-sm pull-right"
+                    [disabled]="perInProcess !== 0">{{'close' | i18n}}
+            </button>
+            <button (click)="newUserSave();" *ngIf="option == 'new'; else editButton"
+                    [disabled]="!name.valid || !phone.valid || !lastname.valid || !email.valid || !password.valid"
+                    class="btn btn-success btn-sm pull-right mrg-right-5">
+              {{'create' | i18n}}
+            </button>
+            <ng-template #editButton>
+              <button (click)="editUser();"
+                      [disabled]="!name.valid || !phone.valid || !lastname.valid || !email.valid || (userData.password && !password.valid) || perInProcess !== 0"
+                      class="btn btn-warning btn-sm pull-right mrg-right-5">
+                {{'save' | i18n}}
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="waiting-text" *ngIf="pendings.length > 0 && option == 'edit'">
+      <label class="waiting-appr-text" *ngIf="showMsg('pending')">{{'fields-waiting-approval' | i18n}}</label>
+      <label class="waiting-appr-text-error" *ngIf="showMsg('error')">{{'fields-error-approval' | i18n}}</label>
+    </div>
+  </div>
+  <div class="col-md-6 permission-panel" *ngIf="option == 'edit'" style="padding-right: 10px;">
+    <div *ngFor="let per of permissions">
+      <ng-container *ngIf="hasPermission(per.id) && !hasPermissionInProcess(per.id); else hasGrant">
+      <span class="fa fa-circle-o-notch fa-spin p-white pull-left" *ngIf="per.id == perInProcess"
+            style="margin: 5px 0px 0px 7px;"></span>
+        <div class="checkbox checkbox-circle mrg-frm-6 checkbox-success"  (click)="setPermision(per.id)"
+             *ngIf="per.id != perInProcess">
+          <input class="styled" type="checkbox" [disabled]="perInProcess !== 0" [id]="per.id" checked="checked">
+          <label class="per-desc">
+            {{per.description}}
+          </label>
+        </div>
+        <label class="per-desc desc-in-progress" *ngIf="per.id == perInProcess">
+          {{per.description}}
+        </label>
+      </ng-container>
+      <ng-template #hasGrant>
+        <div class="pointer">
+          <ng-container *ngIf="hasPermissionInProcess(per.id); else isFree">
+            <ng-container *ngIf="hasError(per.id); else isWaiting">
+            <span class="fa fa-circle-o-notch fa-spin p-white pull-left" *ngIf="per.id == perInProcess"
+                  style="margin: 5px 0px 0px 7px;"></span>
+              <img src="./../../../../assets/img/icons/icon-select-error.png" class="img-pending pull-left c-default"
+                   *ngIf="per.id != perInProcess">
+              <label class="per-desc pen-desc-info-error" *ngIf="per.id != perInProcess">
+                {{per.description}}
+              </label>
+              <label class="per-desc desc-in-progress" *ngIf="per.id == perInProcess">
+                {{per.description}}
+              </label>
+            </ng-container>
+            <ng-template #isWaiting>
+              <img src="./../../../../assets/img/icons/icon-processing.png" class="img-pending pull-left c-default">
+              <label class="per-desc pen-desc-info-proce">
+                {{per.description}}
+              </label>
+            </ng-template>
+          </ng-container>
+          <ng-template #isFree>
+          <span class="fa fa-circle-o-notch fa-spin p-white pull-left" *ngIf="per.id == perInProcess"
+                style="margin: 5px 0px 0px 7px;"></span>
+            <div class="checkbox checkbox-circle mrg-frm-6 checkbox-success" (click)="setPermision(per.id)"
+                 *ngIf="per.id !== perInProcess">
+              <input class="styled" type="checkbox" [id]="per.id" [disabled]="perInProcess !== 0">
+              <label class="per-desc pointer">
+                {{per.description}}
+              </label>
+            </div>
+            <label class="per-desc desc-in-progress" *ngIf="per.id == perInProcess">
+              {{per.description}}
+            </label>
+          </ng-template>
+        </div>
+      </ng-template>
+    </div>
+  </div>

@@ -1,0 +1,9 @@
+<div class="center-all">
+  <h3> {{ 'warehouse-delete-confirmation' | i18n }} </h3>
+  <p class="delete-name"> {{view.name}} </p>
+  <mat-dialog-actions align="center" class="space-around">
+    <button class="btn btn-resize btn-theme no-border" mat-dialog-close [autofocus]="false" > {{'cancel' | i18n}} </button>
+
+    <button class="btn btn-resize btn-danger" (click)="submit()" > {{'accept' | i18n}} </button>
+  </mat-dialog-actions>
+</div>

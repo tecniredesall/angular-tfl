@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="12px" viewBox="0 0 15 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>ticket-outline</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="element/row/batches" transform="translate(-370.000000, -21.000000)" fill="#2E384D">
+            <g id="ticket-outline" transform="translate(370.000000, 21.000000)">
+                <path d="M1.44,0 C0.64470996,0 0,0.654783553 0,1.4625 L0,4.3875 C0.79529004,4.3875 1.44,5.04228355 1.44,5.85 C1.44,6.65771645 0.79529004,7.3125 0,7.3125 L0,10.2375 C0,11.0452164 0.64470996,11.7 1.44,11.7 L12.96,11.7 C13.75529,11.7 14.4,11.0452164 14.4,10.2375 L14.4,7.3125 C13.60471,7.3125 12.96,6.65771645 12.96,5.85 C12.96,5.04228355 13.60471,4.3875 14.4,4.3875 L14.4,1.4625 C14.4,0.654783553 13.75529,0 12.96,0 L1.44,0 M1.44,1.4625 L12.96,1.4625 L12.96,3.319875 C12.0672,3.8390625 11.52,4.8043125 11.52,5.85 C11.52,6.8956875 12.0672,7.8609375 12.96,8.380125 L12.96,10.2375 L1.44,10.2375 L1.44,8.380125 C2.3328,7.8609375 2.88,6.8956875 2.88,5.85 C2.88,4.8043125 2.3328,3.8390625 1.44,3.319875 L1.44,1.4625 Z" id="Shape"></path>
+                <g id="Group" transform="translate(6.300000, 2.700000)">
+                    <circle id="Oval" cx="0.9" cy="0.9" r="1"></circle>
+                    <circle id="Oval-Copy" cx="0.9" cy="3.6" r="1"></circle>
+                    <circle id="Oval-Copy-2" cx="0.9" cy="6.3" r="1"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

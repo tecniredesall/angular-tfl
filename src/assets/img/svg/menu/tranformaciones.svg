@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="25" viewBox="0 0 26 25">
+    <defs>
+        <path id="prefix__b" d="M0.083 0.194L4.53 0.194 4.53 11.487 0.083 11.487z"/>
+        <path id="prefix__d" d="M0 0.086L4.448 0.086 4.448 11.379 0 11.379z"/>
+        <path id="prefix__f" d="M0.151 0.808L6.885 0.808 6.885 9.9 0.151 9.9z"/>
+        <path id="prefix__h" d="M0 0.866L6.733 0.866 6.733 9.957 0 9.957z"/>
+        <filter id="prefix__a">
+            <feColorMatrix in="SourceGraphic" values="0 0 0 0 0.000000 0 0 0 0 0.407843 0 0 0 0 1.000000 0 0 0 1.000000 0"/>
+        </filter>
+    </defs>
+    <g fill="none" fill-rule="evenodd" filter="url(#prefix__a)" transform="translate(1)">
+        <g>
+            <path fill="#000" d="M14.1 1.229c-.364-.208-.742-.39-1.131-.547l-.44 1.094c.34.137.67.297.988.478L14.1 1.23z" transform="translate(3 3)"/>
+            <g transform="translate(3 3) translate(14.35 1.728)">
+                <mask id="prefix__c" fill="#fff">
+                    <use xlink:href="#prefix__b"/>
+                </mask>
+                <path fill="#000" d="M.797.194l-.714.939C3.119 3.438 4.184 7.52 2.66 11.015l1.081.472C5.483 7.494 4.266 2.827.797.194" mask="url(#prefix__c)"/>
+            </g>
+            <path fill="#000" d="M4.78 17.649c.365.207.743.39 1.131.547l.442-1.095c-.34-.137-.67-.296-.99-.478L4.78 17.65z" transform="translate(3 3)"/>
+            <g transform="translate(3 3) translate(0 5.578)">
+                <mask id="prefix__e" fill="#fff">
+                    <use xlink:href="#prefix__d"/>
+                </mask>
+                <path fill="#000" d="M1.181 3.861c0-1.137.234-2.261.689-3.303L.788.086C-.954 4.079.263 8.745 3.734 11.379l.714-.94C2.384 8.884 1.173 6.446 1.181 3.861" mask="url(#prefix__e)"/>
+            </g>
+            <path fill="#000" d="M5.31 3.54H3.676C5.208 2.02 7.282 1.17 9.44 1.18c.688 0 1.374.085 2.04.254l.291-1.143c-3.143-.8-6.477.076-8.82 2.32V1.18h-1.18v3.54h3.54V3.54zM13.57 15.338h1.633c-1.533 1.518-3.605 2.367-5.763 2.36-.688 0-1.373-.085-2.04-.254l-.29 1.143c.762.194 1.544.29 2.33.29 2.42.008 4.747-.926 6.49-2.604v1.425h1.18v-3.54h-3.54v1.18z" transform="translate(3 3)"/>
+            <g>
+                <g transform="translate(3 3) rotate(15 -8.192 26.49) translate(1.8 .935)">
+                    <mask id="prefix__g" fill="#fff">
+                        <use xlink:href="#prefix__f"/>
+                    </mask>
+                    <path fill="#000" d="M5.78.808c-.17.087-.34.167-.505.24-.68.303-1.267.564-1.834 1.514-.567.952-.516 1.593-.459 2.335.06.779.129 1.662-.581 2.854C1.69 8.942.883 9.302.17 9.62l-.02.009c1.86.831 4.386-.302 5.796-2.67C7.28 4.72 7.164 2.13 5.78.808" mask="url(#prefix__g)"/>
+                </g>
+                <g transform="translate(3 3) rotate(15 -8.192 26.49) translate(0 .035)">
+                    <mask id="prefix__i" fill="#fff">
+                        <use xlink:href="#prefix__h"/>
+                    </mask>
+                    <path fill="#000" d="M3.905 5.865c-.06-.778-.13-1.661.581-2.853.71-1.191 1.518-1.551 2.231-1.868l.016-.008C4.875.306 2.35 1.439.94 3.806c-1.334 2.24-1.217 4.83.166 6.15.17-.086.34-.167.507-.24.679-.303 1.266-.565 1.833-1.516.567-.952.516-1.593.46-2.335" mask="url(#prefix__i)"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

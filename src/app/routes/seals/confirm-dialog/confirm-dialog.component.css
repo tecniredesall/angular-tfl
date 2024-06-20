@@ -1,0 +1,23 @@
+.center-all {
+  text-align: center;
+  padding: 24px;
+  position: static;
+}
+
+.btn-danger {
+  width: 148px;
+  height: 40px;
+}
+
+.btn-theme {
+  width: 148px;
+}
+
+.space-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-danger {
+  background-color: #d63649;
+}

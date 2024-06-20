@@ -1,0 +1,256 @@
+<div class="actions-truck-container actions-truck-lg"
+    [ngClass]="{'actions-truck-from-external': isFromExternalModule, 'actions-truck-hidden-header-button': isFromExternalModule || isEdit}">
+
+    <!-- header -->
+    <div class="row actions-truck-header-container">
+
+        <div class="actions-truck-header" *ngIf="!isFromExternalModule">
+
+            <div class="actions-truck-title">
+                {{ isEdit ? ('edit-vehicle' | i18n) : ('new-vehicle' | i18n) }}
+            </div>
+
+            <div *ngIf="!isEdit" class="actions-truck-header-button-container">
+
+                <div class="dropdown pull-right actions-truck-header-dropdown">
+
+                    <button type="button" tabindex="-1"
+                        class="btn green-btn dropdown-toggle pull-right actions-truck-header-button"
+                        data-toggle="dropdown">
+
+                        <img src="assets/img/svg/logo-xls.svg" alt="">
+
+                        {{'upload-csv' | i18n}}
+
+                    </button>
+
+                    <input type="file" #csvReader name="Upload CSV" (change)="uploadFile($event)" accept=".csv"
+                        hidden />
+
+                    <ul class="dropdown-menu">
+
+                        <li class="pointer" (click)="openFileExplorer()">
+                            <a> {{'upload-csv' | i18n}}</a>
+                        </li>
+
+                        <li class="pointer" (click)="downloadLayout()">
+                            <a> {{'dowload-layout' | i18n}}</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div *ngIf="!isFromExternalModule" class="actions-truck-header-line"></div>
+
+    </div>
+
+    <!-- body -->
+    <form class="actions-truck-form">
+
+        <div class="row actions-truck-item" *ngFor="let truck of formTrucks.controls; let indexItem = index;"
+            [ngClass]="{'multiple-actions-truck-item': formTrucks.length > 1}">
+
+            <div [formGroup]="truck" class="row" [ngClass]="{'row-external-module': isFromExternalModule}">
+
+                <p class="actions-truck-form__subtitle">{{'general-information' | i18n}}</p>
+
+                <div class="col-xs-12 p0">
+                    <!-- Brand -->
+                    <div class="actions-truck-input-container ad-ic-odd col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                        <label class="actions-truck-label-input">
+                            {{ 'brand' | i18n }} *
+                        </label>
+
+                        <input formControlName="name" type="text" class="create-input" autocomplete="off"
+                            [name]="'ad-name-'+indexItem" [placeholder]="'placeholder-truck-name' | i18n"
+                            [maxlength]="CONSTANTS.MAX_LENGTH_TRUCK_NAME +1">
+
+                        <label *ngIf="truck.get('name').dirty || isEdit" class="error-msg-form">
+
+                            <label *ngIf="truck.get('name').hasError('required')">
+                                {{'is-required-msg' | i18n}}
+                            </label>
+
+                            <label *ngIf="truck.get('name').hasError('pattern')">
+                                {{'only-letters-msg' | i18n}}
+                            </label>
+
+                            <label *ngIf="truck.get('name').hasError('maxlength')">
+                                {{'input-max-length-value' | i18n | stringReplace : '[value]' :
+                                CONSTANTS.MAX_LENGTH_TRUCK_NAME}}
+                            </label>
+
+                        </label>
+
+                    </div>
+                    <!-- Plate -->
+                    <div class="actions-truck-input-container ad-ic-even col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                        <label class="actions-truck-label-input">
+                            {{'plate' | i18n}} *
+                        </label>
+
+                        <input formControlName="license" type="text" class="create-input" autocomplete="off"
+                            [name]="'ad-license-'+indexItem" [placeholder]="'placeholder-truck-plate' | i18n"
+                            [maxlength]="CONSTANTS.MAX_LENGTH_TRUCK_LICENSE +1">
+
+                        <label *ngIf="truck.get('license').dirty || isEdit" class="error-msg-form">
+
+                            <label *ngIf="truck.get('license').hasError('required')">
+                                {{'is-required-msg' | i18n}}
+                            </label>
+
+                            <label *ngIf="truck.get('license').hasError('pattern')">
+                                {{'licence-error-msg' | i18n}}
+                            </label>
+
+                            <label *ngIf="truck.get('license').hasError('maxlength')">
+                                {{'input-max-length-value' | i18n | stringReplace : '[value]' :
+                                CONSTANTS.MAX_LENGTH_TRUCK_LICENSE}}
+                            </label>
+
+                            <label *ngIf="truck.get('license').hasError('duplicate')">
+                                {{'t-trucks-plate-duplicate' | i18n}}
+                            </label>
+
+                        </label>
+
+                    </div>
+                </div>
+
+                <div class="col-xs-12 p0">
+                    <!-- Name -->
+                    <div class="actions-truck-input-container ad-ic-odd col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    
+                        <label class="actions-truck-label-input">
+                            {{'vehicle-type' | i18n}} *
+                        </label>
+    
+                        <ng-select formControlName="vehicleTypeId" [placeholder]="'select-type-vehicle' | i18n"
+                            [searchable]="false" [clearable]="false" class="sil-form__select" [items]="vehicleTypes"
+                            [bindLabel]="'type'" bindValue="id" loadingText="{{ 'loading' | i18n }}"></ng-select>
+    
+                        <label *ngIf="truck.get('vehicleTypeId').dirty || truck.get('vehicleTypeId').touched"
+                            class="error-msg-form">
+    
+                            <label *ngIf="truck.get('vehicleTypeId').hasError('required')">
+                                {{'is-required-msg' | i18n}}
+                            </label>
+    
+                        </label>
+    
+                    </div>
+                    <!-- SERVICE TYPE -->
+                    <div class="actions-truck-input-container ad-ic-even col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                        <label class="actions-truck-label-input">
+                            {{'truck-service-type' | i18n}} *
+                        </label>
+
+                        <ng-select
+                            formControlName="serviceTypeId"
+                            class="custom-ng-select"
+                            [items]="serviceTypes"
+                            [multiple]="false"
+                            [clearable]="false"
+                            [closeOnSelect]="true"
+                            [notFoundText]="'not-items-found' | i18n"
+                            bindLabel="name"
+                            bindValue="id"
+                            placeholder="{{'truck-service-type-placeholder' | i18n}}"
+                            loadingText="{{'loading' | i18n}}">
+                            <ng-template ng-label-tmp let-item="item">
+                                {{ item.name | i18n }}
+                            </ng-template>
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                {{ item.name | i18n }}
+                            </ng-template>
+                        </ng-select>
+                        <label
+                            *ngIf="truck.get('serviceTypeId').dirty || isEdit"
+                            class="error-msg-form"
+                        >
+                            <label *ngIf="truck.get('serviceTypeId').hasError('required')">
+                                {{ "is-required-msg" | i18n }}
+                            </label>
+                        </label>
+
+                    </div>
+                </div>
+
+                <div *ngIf="!isFromExternalModule" class="clearfix"></div>
+
+                <ng-container *ngIf="truck.get('serviceTypeId').value == TRANSPORT_SERVICE_TYPE.THIRD">
+                    <div class="actions-truck-form__company col-xs-12 p0">
+                        <mat-divider></mat-divider>
+                        <p class="actions-truck-form__subtitle">
+                            {{'transport-company' | i18n}}
+                        </p>
+                        <!-- COMPANY NAME -->
+                        <div class="actions-truck-input-container ad-ic-odd col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <custom-select
+                                bindLabel="name"
+                                bindValue="id"
+                                (onNew)="onNewCompany(indexItem)"
+                                [clearable]="false"
+                                class="custom-ng-select"
+                                [isEnableNewItem]="true"
+                                [items]="transportCompanies"
+                                formControlName="transportCompanyId"
+                                [isVisibleRequiredMark]="true"
+                                label="{{ 'company-name' | i18n }}"
+                                addLabel="{{'new-company' | i18n}}"
+                                (onNextPage)="paginationTransportCompanies()"
+                                placeholder="{{'company-placeholder' | i18n}}">
+                            </custom-select>
+                            <label
+                                *ngIf="truck.get('transportCompanyId').dirty || isEdit"
+                                class="error-msg-form"
+                            >
+                                <label *ngIf="truck.get('transportCompanyId').hasError('required')">
+                                    {{ "is-required-msg" | i18n }}
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                </ng-container>
+
+            </div>
+
+            <!-- Button remove item -->
+            <div class="row" *ngIf="!isEdit && formTrucks.length>1">
+                <button type="button" class="btn btn-default action-truck-btn-remove-item"
+                    (click)="removeItem(indexItem)">
+                    <img src="assets/img/svg/trash-red.svg" alt="">
+                    <span>
+                        &nbsp;
+                        {{'delete' | i18n}}
+                    </span>
+                </button>
+            </div>
+
+
+        </div>
+
+        <!-- Button add item -->
+        <div *ngIf="!isEdit && !isFromExternalModule" class="row">
+            <button type="button" class="btn btn-default actions-truck-btn-add-item" (click)="addItem()">
+                <i class="icon-plus"></i>
+                {{'add-vehicle' | i18n}}
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Footer -->
+    <app-action-footer [isEdit]="isEdit"
+        [isButtonSubmitDisabled]="formTrucks.invalid || formTrucks.pending || (isEdit && !dataWasMadeModified)"
+        (onActionSelected)="onActionFooterSelected($event)"></app-action-footer>
+
+</div>

@@ -1,0 +1,62 @@
+<div class="create-process__container">
+    <div *blockUI="'create-process'; template: templateBlockModalUiComponent">
+        <form [formGroup]="processForm" (ngSubmit)="submit()" class="create-process__form">
+            <p class="create-process__form__title">
+                {{ isEdit ? ('edit-process' | i18n) : ('new-process' | i18n) }}
+            </p>
+            <mat-divider></mat-divider>
+            <div class="create-process__form__container">
+                <div class="create-process__group create-process__name">
+                    <p class="create-process__name__title"> {{ 'name' | i18n }}*</p>
+                    <input placeholder="{{ 'write-process-name' | i18n }}" class="create-process__name__input" type="text" formControlName="name">
+                    <label *ngIf="processForm.get('name').dirty || isEdit" class="error-msg-form">
+                        <label *ngIf="processForm.get('name').hasError('required')">
+                            {{'is-required-msg' | i18n}}
+                        </label>
+                        <label *ngIf="processForm.get('name').hasError('pattern')">
+                            {{'alphanumeric-pattern' | i18n}}
+                        </label>
+                        <label *ngIf="processForm.get('name').hasError('maxlength')">
+                            {{'input-max-length-value' | i18n | stringReplace : '[value]' : CONSTANTS.MAX_LENGTH_TEXT_NOTE}}
+                        </label>
+                    </label>
+                </div>
+                <div class="create-process__group create-process__color">
+                    <p class="create-process__color__title"> {{ 'color' | titlecase }}* </p>
+                    <div class="flex create-process__color__container">
+                        <p class="create-process__color__placeholder"> {{ 'select-color' | i18n }} </p>
+                        <div class="create-process__color__selector">
+                            <div class="create-process__color__selected"
+                                [ngStyle]=" {'background-color': selectedColor } ">
+                            </div>
+                            <div class="flex totally-center pointer dropdown dropdown-toggle">
+                                <i class="icon-arrow-blue-drop-down create-process__color__button"
+                                    data-toggle="dropdown"></i>
+                                <div class="dropdown-menu">
+                                    <div class="create-process__color__grid">
+                                        <div *ngFor="let color of colors" class="create-process__color__element"
+                                            [ngStyle]="{'background-color': color }" (click)="selectColor(color)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="create-process__delete" *ngIf="isEdit">
+                <p (click)="deleteShapeToDiagram()">
+                    <i class="icon-trash-gray"></i>
+                    {{'delete-process' | i18n }}
+                </p>
+            </div>
+            <div class="create-process__footer">
+                <button type="button" class="create-process__footer__button--cancel" (click)="cancel()"> {{ 'cancel' | i18n }}
+                </button>
+                <button type="submit" [disabled]="processForm.invalid || (isEdit && !dataWasMadeModified)"
+                    class="create-process__footer__button--submit">
+                    {{ isEdit ? ('save' | i18n) : ('create' | i18n) }} </button>
+            </div>
+        </form>
+    </div>
+</div>

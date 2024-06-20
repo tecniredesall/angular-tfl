@@ -1,0 +1,25 @@
+<div class="warehouse-transfer" *blockUI="'warehouse-transfer-layout'; template: templateBlockModalUiComponent">
+  <div class="warehouse-transfer__wrapper">
+    <div class="warehouse-transfer__wrapper__container scroll-view-app">
+      <!-- Header -->
+      <div class="warehouse-transfer__header">
+        {{'warehouse-transfer' | i18n }} 
+      </div>
+      <!-- Tab group -->
+      <mat-tab-group class="sil-tab-group" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex"
+        (selectedTabChange)="onTabClick($event)">
+        <mat-tab label="{{'transformation-type-out' | i18n}}">
+          <ng-container *ngIf="selectedTabIndex === 0" [ngTemplateOutlet]="listTemplate"></ng-container>
+      </mat-tab>
+      <mat-tab label="{{'transformation-type-in' | i18n}}">
+          <ng-container *ngIf="selectedTabIndex === 1" [ngTemplateOutlet]="listTemplate"></ng-container>
+      </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #listTemplate>
+  <app-warehouse-transfer-header [isListIn]="selectedTabIndex"></app-warehouse-transfer-header>
+</ng-template>

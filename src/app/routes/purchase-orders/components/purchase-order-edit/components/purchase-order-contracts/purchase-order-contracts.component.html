@@ -1,0 +1,146 @@
+<section class="title__input">
+    <h3 class="title-base--black">{{ "contracts" | i18n }}</h3>
+    <app-search-input
+        [searchValue]="searchInput.value"
+        (clearEvent)="onClearSearchInput()"
+    >
+        <input
+            type="text"
+            class="elipsis"
+            [placeholder]="'search' | i18n"
+            autocomplete="not"
+            [formControl]="searchInput"
+        />
+    </app-search-input>
+</section>
+<section class="sil-table">
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__creation">
+            {{ "creation" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortData('creation')"
+                [ngClass]="{ 'sort-icon-invert': columnAscState.creation }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__id">
+            {{ "id" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortData('id')"
+                [ngClass]="{
+                    'sort-icon-invert': columnAscState.id
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__commodity">
+            {{ "commodity" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__participant">
+            {{ "competitor" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__weight">
+            {{ "weight" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__actions">
+            {{ "ACTIONS" | i18n }}
+        </span>
+    </header>
+    <ng-container *ngIf="filteredContracts.length > 0; elseTemplate">
+        <article
+            class="sil-table__row sil-table__row--bordered"
+            *ngFor="let contract of filteredContracts"
+            (click)="onContractSelected(contract)"
+            [ngClass]="{
+                selected:
+                    selectedContract && selectedContract.id === contract.id
+            }"
+        >
+            <span class="sil-table__cell cell__creation">
+                <i class="icon-icon-menu-notas"></i>
+                <p class="sil-table__cell-label show-on-tablet">
+                    {{ "creation" | i18n }}
+                </p>
+                <span>{{
+                    contract.creationDate
+                        | dateStringFormat
+                            : "YYYY-MM-DD HH:mm:ss"
+                            : "MMM DD, YYYY [" + ("at" | i18n) + "] HH:mm"
+                            : true
+                }}</span>
+            </span>
+            <span class="sil-table__cell cell__id">
+                <p class="sil-table__cell-label show-on-tablet">
+                    {{ "ID" | i18n }}
+                </p>
+                <span>
+                    {{ contract.id | uppercase }}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__commodity">
+                <p class="sil-table__cell-label show-on-tablet">
+                    {{ "commodity" | i18n }}
+                </p>
+                <span>
+                    {{ contract.commodityName }}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__participant">
+                <p class="sil-table__cell-label show-on-tablet">
+                    {{ "participant" | i18n }}
+                </p>
+                <span>
+                    <span class="contract-type">
+                        {{ "sold-to" | i18n }}
+                    </span>
+                    {{ contract.companyName }}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__weight">
+                <p class="sil-table__cell-label show-on-tablet">
+                    {{ "weight" | i18n }}
+                </p>
+                <span>
+                    {{
+                        contract.deliveredWeight
+                            | number
+                                : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                                : "en"
+                    }}
+                    /
+                    {{
+                        contract.weightQQ
+                            | number
+                                : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                                : "en"
+                    }}
+                    {{config.conversionMeasurementUnitAbbreviation}}
+                    <mat-progress-bar
+                        class="tr__progress-bar"
+                        mode="determinate"
+                        [value]="
+                            (contract.deliveredWeight / contract.weightQQ) * 100
+                        "
+                    ></mat-progress-bar>
+                </span>
+            </span>
+            <span class="cell__actions">
+                <app-table-action-button-group
+                    [disableDelete]="true"
+                    (actionClicked)="onActionClicked($event, contract)"
+                    [actionLabels]="{ edit: 'edit-characteristic' }"
+                    [permissionTag]="PERMISSION_TAG"
+                ></app-table-action-button-group>
+            </span>
+        </article>
+    </ng-container>
+    <app-not-results-found
+        *ngIf="filteredContracts.length === 0 && producer"
+    ></app-not-results-found>
+    <section *ngIf="!producer" class="contract_empty">
+        <img src="assets/img/svg/contract_empty.svg" alt="" />
+        <p>
+            {{ "select-producer-to-search-contract" | i18n }}
+        </p>
+    </section>
+</section>

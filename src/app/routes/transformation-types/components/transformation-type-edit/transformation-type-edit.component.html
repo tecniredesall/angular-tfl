@@ -1,0 +1,55 @@
+<div class="sil-container sil-container--filled">
+    <header class="sil-form__header">
+        <h1 class="sil-form__title">
+            {{ action === ACTIONS.UPDATE ? ("edit" | i18n) : ("new" | i18n) }}
+            {{ "transformation-type" | i18n | lowercase }}
+        </h1>
+        <app-csv-actions-dropdown (uploadFile)="onUploadCsvFile($event)" (downloadLayout)="onDownloadTemplate()">
+        </app-csv-actions-dropdown>
+    </header>
+    <form class="sil-form" [formGroup]="form" *ngIf="form">
+        <div class="transfor-edit-form__transformations" formArrayName="items"
+            *ngFor="let item of form.get('items').controls; let i = index">
+            <section class="sil-form__section" [formGroupName]="i">
+                <label>{{ "name" | i18n }} *</label>
+                <input type="text" [placeholder]="'placeholder-name' | i18n" autocomplete="off" class="sil-form__input"
+                    formControlName="name" />
+                <span class="sil-form__section__error-message" *ngIf="
+                        form.get('items').at(i).touched &&
+                        form.get('items').at(i).invalid
+                    ">{{
+                    form.get("items").at(i).get("name").hasError("required")
+                    ? ("is-required-msg" | i18n)
+                    : ("duplicated-registry-name" | i18n)
+                    }}</span>
+            </section>
+            <button class="btn btn-transparent-delete sil-form__action-button"
+                (click)="onTransformationAction(ACTIONS.DELETE, i)" *ngIf="
+                    form.get('items').controls.length > 1 ||
+                    action === ACTIONS.UPDATE
+                ">
+                <i class="icon-trash-gray"></i>
+                {{ "delete" | i18n }}
+            </button>
+        </div>
+        <button class="sil-form__action-button btn btn-transparent-blue" (click)="onTransformationAction(action)"
+            *ngIf="action === ACTIONS.CREATE">
+            <i class="icon-plus"></i>
+            {{ "add-transformation-type" | i18n }}
+        </button>
+        <section class="sil-form__section-form-action-buttons">
+            <button class="btn btn-resize gray-btn button-lg" (click)="onActionSelected(ACTIONS.CANCEL)">
+                {{ "cancel" | i18n }}
+            </button>
+            <button class="btn btn-resize blue-btn button-lg" [disabled]="form?.invalid || form?.pristine"
+                (click)="onActionSelected(action)">
+                <ng-container *ngIf="action === ACTIONS.UPDATE; else create">
+                    {{ "save" | i18n }}
+                </ng-container>
+                <ng-template #create>
+                    {{ "create" | i18n }}
+                </ng-template>
+            </button>
+        </section>
+    </form>
+</div>

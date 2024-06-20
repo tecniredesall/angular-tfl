@@ -1,0 +1,837 @@
+<div class="shipping-ticket" *blockUI="'shipping-ticket-layout'; template: templateBlockModalUiComponent">
+    <div class="shipping-ticket__container" *ngIf="shippingTicket">
+        <div class="shipping-ticket__content">
+            <div class="shipping-ticket__header">
+                <div class="shipping-ticket__header__title">
+                    {{'shipping-ticket' |i18n}}
+                </div>
+                <div class="shipping-ticket__header__id shipping-ticket__input">
+                    {{shippingTicket.generalInformation.get('folio').value}}
+                </div>
+            </div>
+            <div class="shipping-ticket__body">
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle [ngClass]="{'replace-overflow': sections.generalInformation.open}"
+                        [expanded]="sections.generalInformation.open" [disabled]="sections.generalInformation.disabled"
+                        (opened)="tooglePanel('generalInformation', true)"
+                        (closed)="tooglePanel('generalInformation', false)" #generalInformationPanel>
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'" [ngClass]="{
+                                expanded: generalInformationPanel.expanded,
+                                disabled: generalInformationPanel.disabled,
+                                enabled: generalInformationPanel.enabled
+                            }">
+                            <ng-container [ngTemplateOutlet]="panelHeader" [ngTemplateOutletContext]="{
+                                    form: shippingTicket.generalInformation,
+                                    panel: generalInformationPanel,
+                                    labelHeader: 'general-information'
+                                }"></ng-container>
+                        </mat-expansion-panel-header>
+                        <ng-container [ngTemplateOutlet]="generalInformation"></ng-container>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel hideToggle [expanded]="sections.driverInformation.open"
+                        [disabled]="sections.driverInformation.disabled"
+                        (opened)="tooglePanel('driverInformation', true)"
+                        (closed)="tooglePanel('driverInformation', false)" #driverInformationPanel>
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'" [ngClass]="{
+                                expanded: driverInformationPanel.expanded,
+                                disabled: driverInformationPanel.disabled,
+                                enabled: driverInformationPanel.enabled
+                            }">
+                            <ng-container [ngTemplateOutlet]="panelHeader" [ngTemplateOutletContext]="{
+                                    form: shippingTicket.driverInformation,
+                                    panel: driverInformationPanel,
+                                    labelHeader: 'driver-information'
+                                }"></ng-container>
+                        </mat-expansion-panel-header>
+                        <ng-container [ngTemplateOutlet]="driverInformation"></ng-container>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel hideToggle [expanded]="sections.weightCapture.open"
+                        [disabled]="sections.weightCapture.disabled" (opened)="tooglePanel('weightCapture', true)"
+                        (closed)="tooglePanel('weightCapture', false)" #weightCapturePanel>
+                        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'" [ngClass]="{
+                                expanded: weightCapturePanel.expanded,
+                                disabled: weightCapturePanel.disabled,
+                                enabled: weightCapturePanel.enabled
+                            }">
+                            <ng-container [ngTemplateOutlet]="panelHeader" [ngTemplateOutletContext]="{
+                                    form: shippingTicket.weightCapture,
+                                    panel: weightCapturePanel,
+                                    labelHeader: 'weight-capture'
+                                }"></ng-container>
+                        </mat-expansion-panel-header>
+                        <ng-container [ngTemplateOutlet]="weightCapture"></ng-container>
+                    </mat-expansion-panel>
+
+                </mat-accordion>
+            </div>
+            <div class="shipping-ticket__footer">
+                <ng-container [ngTemplateOutlet]="footerShippingNote"></ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #panelHeader let-form="form" let-panel="panel" let-labelHeader="labelHeader">
+    <div class="shipping-ticket__body__panel__header">
+        <div class="shipping-ticket__body__panel__header__toggle">
+            <i class="shipping-ticket__body__panel__header__toggle__icon icon-arrow_right no-select"
+                [ngClass]="{ rotated: panel.expanded }"></i>
+        </div>
+        <div class="shipping-ticket__body__panel__header__title no-select">
+            {{ labelHeader | i18n }}
+        </div>
+        <div class="shipping-ticket__body__panel__header__check" [ngClass]="{ active: form.valid }">
+            <i class="icon-check"></i>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #generalInformation>
+    <form [formGroup]="shippingTicket.generalInformation" novalidate>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- Date -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "date" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <app-custom-date-picker formControlName="ticketDate" [dateFormat]="'dddd, LL'"
+                            [maxDate]="maxDate">
+                        </app-custom-date-picker>
+                        <label *ngIf="shippingTicket.generalInformation.get('ticketDate').dirty
+                            && shippingTicket.generalInformation.get('ticketDate').hasError('required')"
+                            class="error-msg-form">
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+                    </div>
+                </div>
+                <!-- Reason Transfer -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-reason-transfer" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <ng-select formControlName="reasonTransferId" class="custom-ng-select" [items]="reasonsTransfer"
+                            [multiple]="false" [closeOnSelect]="true" [clearable]="false"
+                            [loading]="isReasonsTransferLoading" loadingText="{{ 'loading' | i18n }}"
+                            [notFoundText]="'not-items-found' | i18n" bindValue="id" bindLabel="name" appendTo="body"
+                            placeholder="{{'shipping-ticket-reason-transfer-placeholder' |i18n}}">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- Company Branches -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "delivered-by" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <ng-select formControlName="companyBranchId" class="custom-ng-select"
+                            [items]="companyBranchesPaginator.items" [multiple]="false" [closeOnSelect]="true"
+                            [clearable]="false" [loading]="companyBranchesPaginator.isLoading"
+                            loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n"
+                            bindValue="id" bindLabel="name" appendTo="body"
+                            placeholder="{{'shipping-ticket-company-branch-placeholder' |i18n}}"
+                            (change)="setCompanyBranch()" (scrollToEnd)="onCompanyBranchScrollToEnd()"
+                            (search)="onSearchCompanyBranch($event)" (clear)="onSearchCompanyBranch(null)">
+                        </ng-select>
+
+                    </div>
+                </div>
+                <!-- Company Branches Point -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-company-branch-point" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <ng-select formControlName="companyBranchPointId" class="custom-ng-select"
+                            [items]="companyBranchesPointPaginator.items" [multiple]="false" [closeOnSelect]="true"
+                            [clearable]="false" [loading]="companyBranchesPointPaginator.isLoading"
+                            loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n"
+                            bindValue="id" bindLabel="completeAddress" appendTo="body"
+                            placeholder="{{'shipping-ticket-company-branch-point-placeholder' |i18n}}"
+                            (scrollToEnd)="onCompanyBranchPointScrollToEnd()"
+                            (search)="onSearchCompanyBranchPoint($event)" (clear)="onSearchCompanyBranchPoint(null)">
+                        </ng-select>
+                        <!--<custom-select  formControlName="companyBranchPointId"
+                                        [label]="'shipping-ticket-company-branch-point' | i18n"
+                                        [placeholder]="'shipping-ticket-company-branch-point-placeholder' |i18n"
+                                        [items]="companyBranchesPointPaginator.items"
+                                        [bindLabel]="'completeAddress'"
+                                        [bindValue]="'id'"
+                                        [emptyLabel]="'not-items-found' | i18n"
+                                        [isLoading]="companyBranchesPointPaginator.isLoading"
+                                        [searchPlaceholder]="'shipping-ticket-company-branch-point-placeholder' | i18n"
+                                        (onNextPage)="onCompanyBranchPointScrollToEnd($event)"
+                                        (onSearch)="onSearchCompanyBranchPoint($event)">
+                        </custom-select>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- Buyers -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-buyer" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <ng-select formControlName="buyerId" class="custom-ng-select" [items]="buyersPaginator.items"
+                            [multiple]="false" [closeOnSelect]="true" [clearable]="false"
+                            [loading]="buyersPaginator.isLoading" loadingText="{{ 'loading' | i18n }}"
+                            [notFoundText]="'not-items-found' | i18n" bindValue="id" bindLabel="companyName"
+                            appendTo="body" placeholder="{{'shipping-ticket-buyer-placeholder' |i18n}}"
+                            (change)="setBuyer()" (scrollToEnd)="onBuyersScrollToEnd()"
+                            (search)="onSearchBuyers($event)" (clear)="onSearchBuyers(null)">
+                        </ng-select>
+
+                        <!--<custom-select  formControlName="buyerId"
+                                        [label]="'shipping-ticket-buyer' | i18n"
+                                        [placeholder]="'shipping-ticket-buyer-placeholder' |i18n"
+                                        [items]="buyersPaginator.items"
+                                        [bindLabel]="'companyName'"
+                                        [bindValue]="'id'"
+                                        [emptyLabel]="'not-items-found' | i18n"
+                                        [isLoading]="buyersPaginator.isLoading"
+                                        [searchPlaceholder]="'shipping-ticket-buyer-placeholder' | i18n"
+                                        (onNextPage)="onBuyersScrollToEnd($event)"
+                                        (onSelect)="setBuyer()"
+                                        (onSearch)="onSearchBuyers($event)">
+                        </custom-select>-->
+                    </div>
+                </div>
+                <!-- Buyer Location -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-buyer-location" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <ng-select formControlName="buyerLocationId" class="custom-ng-select"
+                            [items]="buyersLocationPaginator.items" [multiple]="false" [closeOnSelect]="true"
+                            [clearable]="false" [loading]="buyersLocationPaginator.isLoading"
+                            loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n"
+                            bindValue="id" bindLabel="address" appendTo="body"
+                            placeholder="{{'shipping-ticket-buyer-location-placeholder' |i18n}}"
+                            (scrollToEnd)="onBuyersLocationsScrollToEnd()" (search)="onSearchBuyerLocation($event)"
+                            (clear)="onSearchBuyerLocation(null)">
+                        </ng-select>
+                        <!--<custom-select formControlName="buyerLocationId"
+                                       [label]="'shipping-ticket-buyer-location' | i18n"
+                                       [placeholder]="'shipping-ticket-buyer-location-placeholder' |i18n"
+                                       [items]="buyersLocationPaginator.items"
+                                       [bindLabel]="'address'"
+                                       [bindValue]="'id'"
+                                       [emptyLabel]="'not-items-found' | i18n"
+                                       [isLoading]="buyersLocationPaginator.isLoading"
+                                       [searchPlaceholder]="'shipping-ticket-buyer-location-placeholder' | i18n"
+                                       (onNextPage)="onBuyersLocationsScrollToEnd($event)"
+                                       (onSearch)="onSearchBuyerLocation($event)">
+                        </custom-select>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row shipping-ticket__body__general-information__capture-weight">
+        <button class="btn btn-default
+            shipping-ticket__body__general-information__capture-weight__button
+            shipping-ticket__footer__button" [disabled]="
+                buyersLocationPaginator.isLoading ||
+                shippingTicket.generalInformation.invalid ||
+                shippingTicket.generalInformation.pending
+            " (click)="nextSection()">
+            {{"next"| i18n }}
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #driverInformation>
+    <form [formGroup]="shippingTicket.driverInformation" novalidate>
+        <div class="row">
+
+            <div class="col-xs-12 mb-5">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "delivered-by" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <mat-radio-group aria-labelledby="example-radio-group-label" class="type-radio-group">
+                            <mat-radio-button [checked]="deliveredBy==1" class="type-radio-button" value="1"
+                                (click)="setOwnerType(1)">
+                                {{ "drive-type-owner" | i18n}}
+                            </mat-radio-button>
+                            <mat-radio-button [checked]="deliveredBy==2" class="type-radio-button" value="2"
+                                (click)="setOwnerType(2)">
+                                {{ "drive-type-third" | i18n}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <custom-select formControlName="transportCompanyId" [label]="'drive-type-third' | i18n"
+                        [placeholder]="'company-placeholder' |i18n" [items]="transportCompanies" [bindLabel]="'name'"
+                        [bindValue]="'id'" [emptyLabel]="'not-items-found' | i18n"
+                        [isLoading]="transportCompaniesLoading"
+                        [searchPlaceholder]="'search-container-placeholder' | i18n"
+                        (onSelect)="setCompanyDelivered($event)" (onNextPage)="paginationTransport()">
+                    </custom-select>
+                </div>
+            </div>
+
+
+
+            <div class="col-xs-12">
+                <!-- Driver -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <custom-select formControlName="driverId" [label]="'driver' | i18n"
+                            [placeholder]="'shipping-ticket-driver-placeholder' |i18n" [items]="driversPaginator.items"
+                            [bindLabel]="'fullName'" [bindValue]="'id'" [isLoading]="driversPaginator.isLoading"
+                            [searchPlaceholder]="'not-items-found' | i18n"
+                            [emptyLabel]="'shipping-ticket-driver-empty-result' | i18n"
+                            [emptyImage]="'assets/img/empty/empty-conductor.png'" (onSelect)="setDriver($event)"
+                            (onNextPage)="onDriverScrollToEnd()" (onSearch)="onSearchDriver($event)">
+                        </custom-select>
+                    </div>
+                </div>
+                <!-- Driver Identity -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-driver-identity" | i18n }}</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <input formControlName="driverIdentity" class="shipping-ticket__input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- Vehicle -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <custom-select formControlName="vehicleLicense"
+                            [label]="'shipping-ticket-vehicle-license' | i18n"
+                            [placeholder]="'shipping-ticket-vehicle-placeholder' |i18n"
+                            [items]="vehiclesPaginator.items" [bindLabel]="'license'" [bindValue]="'truckId'"
+                            [emptyLabel]="'shipping-ticket-vehicle-empty-result' | i18n"
+                            [emptyImage]="'assets/img/empty/empty-truck.png'" [isLoading]="vehiclesPaginator.isLoading"
+                            [searchPlaceholder]="'not-items-found' | i18n" (onSelect)="setVehicle($event)"
+                            (onNextPage)="onVehicleScrollToEnd()" (onSearch)="onSearchVehicle($event)">
+                        </custom-select>
+                    </div>
+                </div>
+                <!-- Vehicle Type -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "vehicle-type" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <input formControlName="vehicleType" class="shipping-ticket__input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- Vehicle license -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-vehicle" | i18n }} *</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <input formControlName="vehicleModel" class="shipping-ticket__input">
+                    </div>
+                </div>
+                <!-- Label Number -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-xs-12 shipping-ticket__label">
+                        <span>{{ "shipping-ticket-label-number" | i18n }}</span>
+                    </div>
+                    <div class="col-xs-12 shipping-ticket__control">
+                        <input formControlName="labelNumber" class="shipping-ticket__input"
+                            [placeholder]="'shipping-ticket-label-number-placeholder' | i18n">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row shipping-ticket__body__general-information__capture-weight">
+            <button class="btn btn-default
+                    shipping-ticket__body__general-information__capture-weight__button
+                    shipping-ticket__footer__button" [disabled]="
+                        buyersLocationPaginator.isLoading ||
+                        shippingTicket.driverInformation.invalid ||
+                        shippingTicket.driverInformation.pending
+                    " (click)="captureWeight()">
+                {{ "next" | i18n }}
+            </button>
+        </div>
+
+    </form>
+</ng-template>
+
+<!-- ARRAY  MULTIPLES NOTAS DE REMISION -->
+<ng-template #weightCapture>
+
+    <section class="__note-weight-section">
+        <div class="weight-number">
+            <div *ngFor="let item of shippingTicket.weightCapture.controls; let i = index">
+                <button [ngClass]="{'active-tab': showTabWeigthNotes == i}"
+                    (click)="showTabWeigthNotes = i; calculateWeightTotals(i)"
+                    class="weight-note-name-item blue-content">{{'note-of-weight'|
+                    i18n}} <span
+                        *ngIf="tabsWeigthArray[i]?.noteFolio">#{{tabsWeigthArray[i]?.noteFolio}}</span></button>
+            </div>
+        </div>
+
+        <button class="btn btn-default" (click)="addNewNoteWeigth()">+ {{ 'add-note' | i18n}}</button>
+
+    </section>
+
+    <div *ngFor="let wn of shippingTicket.weightCapture.controls; let i = index">
+
+        <form [hidden]="showTabWeigthNotes != i" [formGroup]="wn" novalidate>
+            <div class="text-note-weigth">{{'weight-note-num' | i18n}} <span
+                    *ngIf="tabsWeigthArray[i]?.noteFolio">#{{tabsWeigthArray[i]?.noteFolio}}</span></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="shipping-ticket__body__subtitle col-xs-12">
+                        <span>
+                            {{"commodity-information" | i18n}}
+                        </span>
+                    </div>
+                    <!-- Commodity -->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 shipping-ticket__label">
+                            <span>{{ "commodity" | i18n }} *</span>
+                        </div>
+                        <div class="col-xs-12 shipping-ticket__control">
+                            <ng-select formControlName="commodityId" [readonly]="i > 0" class="custom-ng-select"
+                                [items]="commodities" [multiple]="false" [closeOnSelect]="true" [clearable]="false"
+                                [loading]="isCommoditiesLoading" loadingText="{{ 'loading' | i18n }}"
+                                [notFoundText]="'not-items-found' | i18n" bindValue="id" bindLabel="name"
+                                placeholder="{{'select-commodity' |i18n}}" (change)="setCommodity(true, i)"
+                                mat-raised-button matTooltip="{{'same-commodity' | i18n}}"
+                                [matTooltipPosition]="'above'">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <!-- Commodity Type -->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 shipping-ticket__label">
+                            <span>{{ "commodity-type" | i18n }} *</span>
+                        </div>
+                        <div class="col-xs-12 shipping-ticket__control">
+                            <ng-select formControlName="commodityTypeId" class="custom-ng-select"
+                                [readonly]="tabsWeigthArray[i].disable" [items]="commodityTypes" [multiple]="false"
+                                [closeOnSelect]="true" [clearable]="false" [loading]="isCommodityTypesLoading"
+                                loadingText="{{ 'loading' | i18n }}" [notFoundText]="'not-items-found' | i18n"
+                                bindValue="id" bindLabel="name" placeholder="{{'select-commodity-type' |i18n}}"
+                                (change)="setCommodityType($event, i)">
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 shipping-ticket__label">
+                            <span>{{ "commodity-state" | i18n }}</span>
+                        </div>
+                        <div class="col-xs-12 shipping-ticket__control">
+                            <div class="shipping-ticket__input disabled">
+                                {{wn.get("commodityTransformationName").value}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" [ngClass]="{'st-warning-container': wn.get('isWarningContainer').value}">
+                    <!-- Warehouse -->
+                    <div class="shipping-ticket__body__subtitle col-xs-12">
+                        <span>
+                            {{"warehouse-information" | i18n}}
+                        </span>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 shipping-ticket__control" *ngIf="warehouses[i]"
+                            [ngClass]="{'disabled': tabsWeigthArray[i].disable}">
+                            <custom-select formControlName="warehouseId" [label]="'container' | i18n"
+                                [placeholder]="'warehouse-placeholder' |i18n" [items]="warehouses[i]"
+                                [bindLabel]="'name'" [bindValue]="'id'" [emptyLabel]="'not-items-found' | i18n"
+                                [isLoading]="isWarehousesLoading"
+                                [searchPlaceholder]="'search-container-placeholder' | i18n" [groupBy]="'tankName'"
+                                (onSelect)="setWarehouse($event, i)" class="custom-select"
+                                [ngClass]="{'not-valid-value': wn.get('isWarningContainer').value}">
+                            </custom-select>
+                            <label *ngIf="wn.get('isWarningContainer').value" class="st-warning-container-message">
+                                {{ "shipping-ticket-warning-container-message" | i18n }}
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Warehouse card -->
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-xs-12 shipping-ticket__body__warehouse">
+                            <app-shipping-ticket-warehouse [warehouseId]="wn.get('warehouseId').value"
+                                [configuration]="configuration" (warehouseEvent)="onWarehouseEvent($event, i)">
+                            </app-shipping-ticket-warehouse>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Weighings information -->
+            <div class="shipping-ticket__weights-section__container">
+                <app-weighing-table *ngIf="!isLoadConfiguration" [configuration]="configuration" [weights]="weights[i]"
+                    [readOnly]="tabsWeigthArray[i].disable" [placeholderContainerColumn]="'sacks' | i18n"
+                    [tableBodySubtitle]="'weighings-information' | i18n"
+                    [component]="PARAM_WEIGHING_TABLE.SHIPPING_TICKET" [isContainer]="false"
+                    (formWeightCaptureReady)="formWeightCaptureReady($event, i)">
+                </app-weighing-table>
+            </div>
+
+            <!-- Characteristics information -->
+            <div class="row shipping-ticket__characteristics-section__container" [ngClass]="{ 'with-right-space':
+                (wn.get('penalties').controls.length > 0 ||
+                deductionsTradingStatus.isBeingCalculated)
+            }">
+                <div class="shipping-ticket__characteristics-section__title">
+                    {{ "characteristics-information" | i18n }}
+                </div>
+
+                <div class="shipping-ticket__characteristics-section">
+                    <ng-container [formGroup]="penalty" *ngFor="let penalty of wn.get('penalties').controls;
+                        let penaltyIndex = index;
+                        let lastPenalty = last">
+                        <div class="shipping-ticket__characteristics-section__controls">
+                            <!-- Characteristic -->
+                            <div class="shipping-ticket__characteristics-section__controls__characteristic">
+                                <div class="shipping-ticket__label">
+                                    <span>
+                                        {{ "commodity-feature" | i18n}}
+                                    </span>
+                                </div>
+                                <ng-select formControlName="characteristic" class="custom-ng-select"
+                                    [items]="penalty.get('characteristicsEnabled').value" [multiple]="false"
+                                    [closeOnSelect]="true" [clearable]="false" [notFoundText]="'not-items-found' | i18n"
+                                    [loading]="isCharacteristicsLoading" bindLabel="name" [placeholder]="penalty.get('characteristic').enabled?
+                                        ('placeholder-characteristic'| i18n)
+                                        : ''" loadingText="{{ 'loading' | i18n }}"
+                                    (change)="setCharacteristic(penaltyIndex, i)">
+                                </ng-select>
+                            </div>
+                            <!-- Selection -->
+                            <div class="shipping-ticket__characteristics-section__controls__selection">
+                                <div class="shipping-ticket__label">
+                                    <span>
+                                        {{ "deduction-selection" | i18n }} *
+                                    </span>
+                                </div>
+                                <div class="shipping-ticket__control"
+                                    [ngSwitch]="penalty.get('characteristic').value?.deduction?.type">
+                                    <span *ngSwitchCase="DEDUCTION_TYPE.TABLE"
+                                        class="rn-deduction__container-empty-selection">
+                                        N/A
+                                    </span>
+                                    <span *ngSwitchCase="DEDUCTION_TYPE.INPUT"
+                                        class="rn-deduction__container-empty-selection">
+                                        N/A
+                                    </span>
+                                    <ng-select *ngSwitchCase="DEDUCTION_TYPE.CHOICE" formControlName="choiceDeduction"
+                                        class="custom-ng-select"
+                                        [items]="penalty.get('characteristic').value?.deduction?.options"
+                                        [multiple]="false" [closeOnSelect]="true" [clearable]="false"
+                                        [notFoundText]="'not-items-found' | i18n" bindLabel="name"
+                                        placeholder="{{'select-choice-deduction' | i18n}}"
+                                        (change)="setDeductionSelection(penaltyIndex,$event, i) ">
+                                    </ng-select>
+                                    <span *ngSwitchDefault class="rn-deduction__container-empty-selection">N/A</span>
+                                </div>
+                            </div>
+                            <!-- Value -->
+                            <div class="shipping-ticket__characteristics-section__controls__value">
+                                <div class="shipping-ticket__label">
+                                    <span>{{ "valueM" | i18n }} *</span>
+                                </div>
+                                <ng-container [ngSwitch]="penalty.get('characteristic').value?.deduction?.type">
+                                    <!-- Value for deduction type table -->
+                                    <div *ngSwitchCase="DEDUCTION_TYPE.TABLE">
+                                        <input formControlName="value" class="shipping-ticket__input" type="text"
+                                            (input)="eventChangePenaltyValue(penaltyIndex, i)"
+                                            [placeholder]="'placeholder-value-penalty' | i18n" [textMask]="{
+                                            mask: characteristicDecimalNumberMask,
+                                            guide: false,
+                                            showMask: false
+                                        }" autocomplete="off" />
+                                        <label *ngIf="penalty.get('value').dirty" class="error-msg-form">
+                                            <label *ngIf="penalty.get('value').hasError('required')">
+                                                {{ "is-required-msg" | i18n }}
+                                            </label>
+                                            <label *ngIf="penalty.get('value').hasError('min')">
+                                                {{ "deduction-min-value" | i18n | stringReplace
+                                                : "[min]"
+                                                : penalty.get("characteristic").value?.deduction?.min
+                                                }}
+                                            </label>
+                                            <label *ngIf="penalty.get('value').hasError('max')">
+                                                {{ "deduction-max-value" | i18n | stringReplace
+                                                : "[max]"
+                                                : penalty.get("characteristic").value?.deduction?.max
+                                                }}
+                                            </label>
+                                        </label>
+                                    </div>
+                                    <!-- Value for deduction type input -->
+                                    <div *ngSwitchCase="DEDUCTION_TYPE.INPUT">
+                                        <input formControlName="value" class="shipping-ticket__input" type="text"
+                                            (input)="eventChangePenaltyValue(penaltyIndex, i)"
+                                            [placeholder]="'placeholder-value-penalty' | i18n"
+                                            [textMask]="{
+                                                mask: getDeductionsAllowAction(penalty.get('characteristic').value) ==
+                                                    DEDUCTIONS_ALLOW_ACTIONS.NO_ACTION ?
+                                                        positiveDecimalNumberMask : characteristicDecimalNumberMask,
+                                                guide: false,
+                                                showMask: false
+                                            }"
+                                            autocomplete="off" />
+                                        <label *ngIf="penalty.get('value').dirty" class="error-msg-form">
+                                            <label *ngIf="penalty.get('value').hasError('required')">
+                                                {{ "is-required-msg" | i18n }}
+                                            </label>
+                                            <label *ngIf="penalty.get('value').hasError('min')">
+                                                {{ "deduction-min-value" | i18n | stringReplace
+                                                : "[min]"
+                                                : penalty.get("characteristic").value?.deduction?.min
+                                                }}
+                                            </label>
+                                            <label *ngIf="penalty.get('value').hasError('max')">
+                                                {{ "deduction-max-value" | i18n | stringReplace
+                                                : "[max]"
+                                                : penalty.get("characteristic").value?.deduction?.max
+                                                }}
+                                            </label>
+                                        </label>
+                                    </div>
+                                    <!--Value for deduction type choice  -->
+                                    <div class="shipping-ticket__control" *ngSwitchCase="DEDUCTION_TYPE.CHOICE">
+                                        <div class="shipping-ticket__input disabled">
+                                            <span *ngIf="penalty.get('choiceDeduction').value">
+                                                {{ 100 - penalty.get("choiceDeduction").value?.coefficient | number
+                                                : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"
+                                                }}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="shipping-ticket__control" *ngSwitchDefault>
+                                        <div class="shipping-ticket__input disabled"></div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <!-- Total -->
+                            <div class="shipping-ticket__characteristics-section__controls__total">
+                                <div class="shipping-ticket__label">
+                                    <span>
+                                        {{ "total" | i18n }} ({{ configuration.measurementUnitAbbreviation }})
+                                    </span>
+                                </div>
+                                <div class="shipping-ticket__control">
+                                    <div class="shipping-ticket__input disabled">
+                                        <span *ngIf="penalty.get('total').value != null" appSignedValue
+                                            [value]="penalty.get('total').value"
+                                            [valueType]=" penalty.get('sign').value">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Not allowed, remove or spinner -->
+                            <div class="shipping-ticket__characteristics-section__controls__button" *ngIf="
+                                (wn.get('penalties').controls.length > 0 ||
+                                deductionsTradingStatus.isBeingCalculated) && !tabsWeigthArray[i].disable 
+                            ">
+                                <ng-container *ngIf="!deductionsTradingStatus.isBeingCalculated">
+                                    <img *ngIf="penalty.get('characteristic').mandatory" class="not-allowed"
+                                        src="assets/img/svg/not-allow.svg" />
+                                    <img *ngIf="!penalty.get('characteristic').mandatory" class="pointer"
+                                        (click)="removePenalty(penaltyIndex, i)" src="assets/img/svg/remove.svg" />
+                                </ng-container>
+                                <span *ngIf="deductionsTradingStatus.isBeingCalculated" class="fa fa-circle-o-notch fa-spin
+                                shipping-ticket__characteristics-section__controls__button__spin-icon">
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="!lastPenalty" class="visible-xs col-xs-12 p0">
+                            <div class="rn-penalty-separator"></div>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div class="shipping-ticket__characteristics-section__totals">
+                    <div class="shipping-ticket__characteristics-section__totals__row">
+                        <div class="shipping-ticket__characteristics-section__totals__row__item
+                        shipping-ticket__characteristics-section__totals__row__item__label">
+                            {{ "total" | i18n }}:
+                        </div>
+                        <div *ngIf="wn.get('totalCharacteristicsPercent').value != 0" class="shipping-ticket__characteristics-section__totals__row__item
+                        shipping-ticket__characteristics-section__totals__row__item__value">
+                            {{wn.get('totalCharacteristicsPercent').value | number
+                            : "1." + CHARACTERISTICS_DECIMAL + "-" + CHARACTERISTICS_DECIMAL: "en"}} %
+                        </div>
+                        <div class="shipping-ticket__characteristics-section__totals__row__item
+                        shipping-ticket__characteristics-section__totals__row__item__value" appSignedValue
+                            value="{{wn.get('totalCharacteristics').value }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add penalty record -->
+                <div class="row shipping-ticket__characteristics-section__add-item">
+                    <button class="shipping-ticket__characteristics-section__add-item__button btn btn-transparent-blue"
+                        (click)="addPenalty(i)" [disabled]="!characteristicsWasLoaded || tabsWeigthArray[i].disable">
+                        <i class="icon-plus"></i>
+                        {{ "add-characteristic" | i18n }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Text note and totals weight note-->
+            <div class="shipping-ticket__other-section">
+                <!-- Text note -->
+                <div class="shipping-ticket__other-section__text-note">
+                    <div class="shipping-ticket__other-section__text-note__label shipping-ticket-label">
+                        <span>{{ "note" | i18n }}</span>
+                    </div>
+                    <div class="shipping-ticket__other-section__text-note__control">
+                        <textarea formControlName="noteDescription" class="shipping-ticket__input"
+                            [placeholder]="'write-description' | i18n"></textarea>
+                        <span class="shipping-ticket__other-section__text-note__control__length pull-right"
+                            [ngClass]="{'max-length': wn.get('noteDescription').hasError('maxlength')}">
+                            {{ wn.get("noteDescription").value?.length }} /
+                            {{ CONSTANTS.MAX_LENGTH_TEXT_NOTE }}
+                        </span>
+                    </div>
+                </div>
+                <!-- Totals weight note -->
+                <div class="shipping-ticket__other-section__totals">
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__label">
+                        {{ "total-gross" | i18n }} ({{configuration.measurementUnitAbbreviation}}):
+                    </div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__value">
+                        {{
+                        wn.get("totalGross").value
+                        | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"
+                        }}
+                    </div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__label">
+                        {{ "total-tares" | i18n }} ({{configuration.measurementUnitAbbreviation}}):
+                    </div>
+                    <div class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__value"
+                        appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                        [value]="wn.get('totalTare').value"></div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__label">
+                        {{ "featured-weight" | i18n }} ({{configuration.measurementUnitAbbreviation}}):
+                    </div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__value">
+                        {{
+                        wn.get("totalNet").value
+                        | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"
+                        }}
+                    </div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__label shipping-ticket__other-section__totals__label__discount">
+                        {{ "discountM" | i18n }} ({{configuration.measurementUnitAbbreviation}}):
+                    </div>
+                    <div class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__value"
+                        appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                        [value]="wn.get('totalDiscount').value"></div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__label shipping-ticket__other-section__totals__label__addition">
+                        {{ "addition" | i18n }} ({{configuration.measurementUnitAbbreviation}}):
+                    </div>
+                    <div class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__value"
+                        appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT"
+                        [value]="wn.get('totalAdditionQQ').value"></div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__label shipping-ticket__other-section__totals__net-dry">
+                        {{ "net-weight" | i18n }} ({{configuration.conversionMeasurementUnitAbbreviation}}):
+                    </div>
+                    <div
+                        class="shipping-ticket__other-section__totals__item shipping-ticket__other-section__totals__value shipping-ticket__other-section__totals__net-dry">
+                        {{
+                        wn.get("totalNetDryWtQQ").value
+                        | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"
+                        }}
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div *ngIf="showTabWeigthNotes == i" class="row shipping-ticket__body__general-information__capture-weight">
+
+            <button
+                class="btn btn-transparent-delete pull-left t-receiving-note__body__description__footer__buttons__delete"
+                (click)="deleteWeightNote(showTabWeigthNotes, wn)" [disabled]="disabledDeleteWn(i)">
+                <i class="icon-trash-gray"></i>
+                {{ ("delete-note" | i18n) }}
+            </button>
+
+            <button class="btn btn-default
+                    shipping-ticket__body__general-information__capture-weight__button
+                    shipping-ticket__footer__button" [disabled]="disabledCloseNote(i)" (click)="closeWeightNote(i)">
+                {{ "close-weight-note" | i18n }}
+
+            </button>
+            <br>
+            <hr />
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #actionOptionsWeightsSection let-wIndex="wIndex" let-i="formIndex">
+    <button class="shipping-ticket__weights-section__actions-options btn btn-default"
+        (click)="deleteWeight(wIndex, $event, i)" *ngIf="!tabsWeigthArray[i].disable">
+        <img class="pointer" src="assets/img/svg/remove.svg" alt="" />
+    </button>
+</ng-template>
+
+<ng-template #hightLimitContainerNotification let-notificationData="notification">
+    <div class="st-warning-container-notification">
+        <div class="st-warning-container-notification__icon">
+            <i class="icon-alert-outline"></i>
+        </div>
+        <div>{{ notificationData.message }}</div>
+        <div class="st-warning-container-notification__close" (click)="hideHightLimitNotification(true)">
+            <i class="icon-close-circle"></i>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #footerShippingNote>
+    <button class="btn btn-default shipping-ticket__footer__button--save shipping-ticket__footer__button float-right"
+        (click)="submit(i)" [disabled]="disableSaveExit">
+        {{ "save-exit" | i18n }}
+    </button>
+    <button class="btn btn-default shipping-ticket__footer__button--close shipping-ticket__footer__button float-right"
+        (click)="closeShippingticketDialog(i)" [disabled]="disabledCloseShippingTicket()">
+        {{ "shipping-ticket-close" | i18n }}
+    </button>
+    <button class="btn btn-default shipping-ticket__footer__button--cancel shipping-ticket__footer__button float-right"
+        [routerLink]="['/routes/shipping-ticket']">
+        {{ "cancel" | i18n }}
+    </button>
+</ng-template>

@@ -1,0 +1,50 @@
+.btn-rounded-ss {
+	width: 35px;
+	height: 35px;
+	padding: 6px 7px;
+	border-radius: 50%;
+	font-size: 16px;
+	text-align: center;
+	display: inline-block;
+}
+
+.btn-gray-ss {
+	background-color: #cccccc;
+}
+
+.btn-green-ss {
+	color: #fff;
+	background-color: #3b933b;
+}
+
+.btn-blue-ss {
+	background-color: #0068d1;
+	color: #fff;
+}
+
+.btn-red-ss {
+	color: #fff;
+	background-color: #dc3545;
+	border-color: #dc3545;
+}
+
+.btn-yellow-ss {
+	color: #8a6d3b;
+	background-color: #ffc107;
+	border-color: #ffc107;
+}
+
+.alert {
+	padding: 5px;
+}
+
+.margin-alert-msg {
+	margin-left: 10px;
+	margin-right: 15px;
+	width: 35px;
+}
+
+.pad-noty {
+	padding-left: 15px;
+	margin-right: -2px;
+}

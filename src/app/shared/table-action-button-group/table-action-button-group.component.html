@@ -1,0 +1,38 @@
+<i
+    class="icon-edit action-buttons__icon-button"
+    (click)="onActionClicked(ACTIONS.UPDATE, $event)"
+    *permission="{tag: permissionTag, type: permissionType ? permissionType: PERMISSION_TYPES.UPDATE}"
+>
+</i>
+<ng-container *ngIf="!disableDelete">
+    <i
+        class="icon-trash-gray action-buttons__icon-button"
+        (click)="onActionClicked(ACTIONS.DELETE, $event)"
+        *permission="{tag: permissionTag, type: permissionType ? permissionType : PERMISSION_TYPES.DELETE}"
+    ></i>
+</ng-container>
+
+<i
+    class="icon-options-vertical action-buttons__dropdown-button"
+    [matMenuTriggerFor]="menu"
+    *permission="{tag: permissionTag, type: PERMISSION_TYPES.UPDATE}"
+>
+</i>
+<mat-menu #menu="matMenu" class="action-buttons__dropdown">
+    <button mat-menu-item>
+        <span
+            class="dropdown__option"
+            (click)="onActionClicked(ACTIONS.UPDATE, $event)"
+            *permission="{tag: permissionTag, type: PERMISSION_TYPES.UPDATE}">
+            {{ actionLabels.edit  | i18n}}
+        </span>
+    </button>
+    <button mat-menu-item *ngIf="!disableDelete">
+        <span
+            class="dropdown__option"
+            (click)="onActionClicked(ACTIONS.DELETE, $event)"
+            *permission="{tag: permissionTag, type: PERMISSION_TYPES.DELETE}">
+            {{ actionLabels.delete | i18n }}
+        </span>
+    </button>
+</mat-menu>

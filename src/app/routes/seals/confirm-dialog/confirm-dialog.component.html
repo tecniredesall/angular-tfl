@@ -1,0 +1,27 @@
+<div style="position: relative">
+
+  <ng-template #loaderComponent></ng-template>
+
+  <div class="center-all">
+
+    <h3>
+      {{ 'seal-delete-confirmation' | i18n }}
+    </h3>
+
+    <p class="delete-name">
+      {{data.name}}
+    </p>
+
+    <mat-dialog-actions align="center" class="space-around">
+      <button class="btn btn-resize btn-theme no-border" mat-dialog-close>
+        {{'cancel' | i18n}}
+      </button>
+
+      <button class="btn btn-resize btn-danger" (click)="deleteSeal()">
+        {{'accept' | i18n}}
+      </button>
+    </mat-dialog-actions>
+
+  </div>
+
+</div>

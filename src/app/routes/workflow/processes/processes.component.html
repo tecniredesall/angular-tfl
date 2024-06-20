@@ -1,0 +1,172 @@
+<div class="process-list">
+    <!-- Header -->
+    <div class="process-list__header">
+        <div class="process-list__header__search">
+            <app-search-input
+                [isDisabledSearchInput]="isInputSearchDisabled"
+                [searchValue]="searchText"
+                [isFocused]="isFocusOnInputSearch"
+                (clearEvent)="clearSearchInput()"
+            >
+                <input
+                    searchInput
+                    type="text"
+                    class="elipsis"
+                    (input)="onTypeSearchInput($event)"
+                    [placeholder]="'placeholder-search-provider' | i18n"
+                    [(ngModel)]="searchText"
+                    [disabled]="isInputSearchDisabled"
+                    (focus)="isFocusOnInputSearch = true"
+                    (blur)="isFocusOnInputSearch = false"
+                    autocomplete="not"
+                />
+            </app-search-input>
+        </div>
+        <div class="process-list__header__new">
+            <button
+                class="tr__button__new-item process-list__header__new__button"
+                matRipple
+                [routerLink]="['/routes/workflow/create-process']"
+                *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.CREATE}"
+            >
+                <span>{{ "new" | i18n }}</span>
+            </button>
+        </div>
+    </div>
+    <!-- Body -->
+    <div
+        class="process-list__body"
+        *blockUI="'process-list-layout'; template: templateBlockModalUiComponent"
+    >
+        <ng-container  *ngIf=" processes.length > 0 || isLoadingProcesses; else emptySearchResults ">
+            <!-- Columns -->
+            <div class="process-list__columns">
+                <div
+                    class="tr__list__column__label process-list__area__data__icon"
+                >
+                </div>
+                <div
+                    class="tr__list__column__label process-list__area__data__creation"
+                >
+                    <span
+                        class="no-select process-list__columns__sortable"
+                        (click)="sortData('storage_date')"
+                    >
+                        <span>{{ "creation" | i18n | uppercase }}</span>
+                        <i
+                            [ngClass]="
+                                columnAscState.storage_date
+                                    ? 'icon-caret-down'
+                                    : 'icon-caret-up'
+                            "
+                        ></i>
+                    </span>
+                </div>
+                <div class="tr__list__column__label process-list__area__data__name">
+                    <span
+                        class="no-select process-list__columns__sortable"
+                        (click)="sortData('name')"
+                    >
+                        <span>{{ "name" | i18n | uppercase }}</span>
+                        <i
+                            [ngClass]="
+                                columnAscState.name
+                                    ? 'icon-caret-down'
+                                    : 'icon-caret-up'
+                            "
+                        ></i>
+                    </span>
+                </div>
+                <div
+                    class="tr__list__column__label process-list__area__data__actions"
+                >
+                </div>
+            </div>
+            <!-- Rows -->
+            <ng-container *ngFor="let process of processes; let idx = index">
+                <ng-container
+                    [ngTemplateOutlet]="panelProcess"
+                    [ngTemplateOutletContext]="{
+                        panel: processPanel,
+                        data: process
+                    }"
+                >
+                </ng-container>
+            </ng-container>
+        </ng-container>
+        <!-- Paginator -->
+        <mat-paginator
+            [hidden]="processes.length == 0"
+            class="custom-paginator"
+            [length]="pagination.totalItems"
+            [pageIndex]="pagination.currentPage - 1"
+            [pageSize]="pagination.itemsPerPage"
+            [pageSizeOptions]="[pagination.itemsPerPage]"
+            (page)="eventPaginator($event)"
+            showFirstLastButtons #paginator>
+        </mat-paginator>
+    </div>
+</div>
+
+<!-- Panel header template -->
+<ng-template #panelProcess let-panel="panel" let-data="data">
+    <div class="process-list__panel">
+        <div class="process-list__area__data__icon">
+            <div class="process-list__area__data__icon__value">
+                <i class="icon-process"></i>
+            </div>
+        </div>
+        <div class="process-list__area__label process-list__area__label__creation">
+            <span>{{ "creation" | i18n }}</span>
+        </div>
+        <div class="process-list__area__data__creation">
+            <div class="process-list__area__data__creation__value">
+                <div class="process-list__area__data__creation__value__date">
+                    {{ data.createdDate | formatMoment: 'MMM DD, YYYY HH:mm' : true }}
+                </div>
+                <div class="process-list__area__data__creation__value__creator">
+                    {{ data.creatorUser }}
+                </div>
+            </div>
+        </div>
+        <div class="process-list__area__label process-list__area__label__name">
+            <span>{{ "name" | i18n }}</span>
+        </div>
+        <div class="process-list__area__data__name">
+            <div class="process-list__area__data__name__value">
+                {{ data.name | i18n}}
+            </div>
+        </div>
+        <div class="process-list__area__data__actions">
+            <div class="process-list__area__data__actions__value">
+                <span
+                    class="process-list__area__data__actions__value__icon-wrapper">
+                    <i class="icon-edit" (click)="goToEdit(data)"></i>
+                </span>
+                <span
+                    class="process-list__area__data__actions__value__icon-wrapper">
+                    <i class="icon-trash-gray" (click)="openDeleteDialog(data)"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+<!-- Empty search results template -->
+<ng-template #emptySearchResults>
+    <ng-container *ngIf="searchText != ''; else emptyState">
+        <div class="process-list__not-found">
+            <app-not-results-found></app-not-results-found>
+        </div>
+    </ng-container>
+    <ng-template #emptyState>
+        <div class="process-list__empty">
+            <img
+                src="/assets/img/empty_process.png">
+            <p>{{ 'text-empty-state-process' | i18n}}
+                <span [routerLink]="['/routes/workflow/create-process']"> {{ 'new' |i18n}}</span>.
+            </p>
+        </div>
+    </ng-template>
+</ng-template>

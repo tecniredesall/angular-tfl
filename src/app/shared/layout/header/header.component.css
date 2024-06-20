@@ -1,0 +1,160 @@
+.navbar {
+  align-items: stretch;
+}
+
+.dropdown-menu {
+  min-width: 125px;
+}
+
+.menu-action {
+  padding: 0 24px 0 24px;
+  border: 0;
+  background: transparent;
+  height: 70px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.modules-menu {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modules-menu>div {
+  display: flex;
+}
+
+.header-apps {
+  left: -125px;
+}
+
+@media screen and (orientation: landscape) {
+
+  /* Portrait styles */
+  .wrapper {
+    display: none;
+  }
+}
+
+.mrg-top-15 {
+  margin-top: 15px;
+}
+
+.error-msg-form {
+  display: -webkit-box;
+}
+
+.user-name {
+  font-size: 16px;
+  padding-right: 15px;
+}
+
+.font-size-title {
+  font-size: 24px !important;
+}
+
+@media (max-width: 1648px) {
+  .font-size-title {
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 1399px) {
+  .font-size-title {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 1263px) {
+  .font-size-title {
+    display: none;
+  }
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 0;
+  border-top: 1px solid #fff;
+}
+
+.icon-pendings {
+  float: right;
+  width: 30px;
+}
+
+.icon-pend-container {
+  margin-top: -5px;
+}
+
+/* .ng-tooltip {
+	position: absolute;
+	max-width: 150px;
+	font-size: 14px;
+	text-align: center;
+	color: #f8f8f2;
+	padding: 3px 8px;
+	background: #282a36;
+	border-radius: 4px;
+	opacity: 0;
+	z-index: 99999;
+} */
+
+.waiting-text {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.waiting-appr-text {
+  color: #f08c1e;
+}
+
+.build-icon {
+  width: 26px;
+  margin-top: -5px !important;
+}
+
+.p-header-custom {
+  padding-left: 0px;
+  /* margin-left: -10px; */
+}
+
+.p-header-controls {
+  margin-left: -10px;
+}
+
+.head-pad-content {
+  height: 70px;
+}
+
+.container-fluid {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.non-resize {
+  resize: vertical;
+}
+
+.ng-tooltip {
+  z-index: 999999 !important;
+}
+
+::ng-deep.ng-select.ng-select-disabled>.ng-select-container {
+  background-color: #eee;
+}
+
+.header-align-center {
+  align-items: center;
+}
+
+.header-module:first-child {
+  margin-right: 16px;
+}

@@ -1,0 +1,93 @@
+<div class="lot-split-container" *blockUI="'split-lot'; template: templateBlockModalUiComponent">
+    <div class="lot-split-container__title">
+        {{'split-lot' | i18n}}
+    </div>
+    <div class="lot-split-container__content">
+        <section class="lot-split-container__content-lot-info">
+            <section class="lot-split-container__content-lot-info__date">
+                <span class="lot-split-container__content-lot-info__date-info">
+                    ID {{currentLot.folio}}
+                </span>
+                <p class="lot-split-container__content-lot-info__date-label">
+                    <i class="icon-clock"></i>{{ currentLot.createdDate | formatMoment: "MMM DD, YYYY HH:mm":true }}
+                </p>
+            </section>
+        </section>
+        <section class="lot-split-container__content-lot-label">
+            <p><i class="icon-alert_icon"></i> {{'write-lot-percentage' | i18n}}</p>
+        </section>
+        <section class="lot-split-container__content-lot-origin">
+            <div class="lot-split-container__content-lot-origin__info">
+                <span>{{'lot-origin' | i18n}}</span>
+                <p>{{'lot-description-msj' | i18n}}</p>
+            </div>
+            <div class="lot-split-container__content-lot-origin__percentage">
+                <div class="group-form-input">
+                    <label [ngClass]="remainingPercentage <= 0 ? 'error-percentage-lbl': ''">{{ "percentage" | i18n
+                        }}</label>
+                    <input type="text" class="sil-form__input" disabled
+                        [ngClass]="remainingPercentage <= 0 ? 'error-percentage': ''"
+                        [value]="remainingPercentage | number : '1.' + DECIMAL_DIGITS + '-' + DECIMAL_DIGITS : 'en'" />
+                    <span>%</span>
+                </div>
+                <div>
+                    <label [ngClass]="remainingPercentage <= 0 ? 'error-percentage-lbl': ''">{{ "weight" | i18n
+                        }}</label>
+                    <input type="text" class="sil-form__input" disabled
+                        [ngClass]="remainingPercentage <= 0 ? 'error-percentage': ''"
+                        [value]="(remainingWeight | number : '1.' + DECIMAL_DIGITS + '-' + DECIMAL_DIGITS : 'en') + ' ' + (configuration.conversionMeasurementUnitAbbreviation |i18n)" />
+                </div>
+            </div>
+            <label *ngIf="remainingPercentage <= 0" class="error-msg-form">{{'lot-origin-excess-weight' | i18n}}</label>
+        </section>
+        <section class="lot-split-container__content__split">
+            <div class="lot-split-container__content__split__percentage">
+                <div> <label>{{ "percentage" | i18n }}</label></div>
+                <div> <label>{{ "weight" | i18n }}</label></div>
+                <ng-container *ngFor="let lot of splitLots; let index = index">
+                    <div class="group-form-input">
+                        <input type="text" class="sil-form__input" placeholder="0.00" [(ngModel)]="lot.percentage"
+                            (input)="setLotPercentage(lot)" [textMask]="{
+                                mask: positiveDecimalNumberMask,
+                                guide: false,
+                                showMask: false
+                            }" autocomplete="off" />
+                        <span>%</span>
+                    </div>
+                    <div class="lot-split-container__content__split__percentage__container">
+                        <input type="text" class="sil-form__input form__input-percentage" placeholder="{{'00.00' + ' ' + configuration.conversionMeasurementUnitAbbreviation |i18n}}"
+                            [(ngModel)]="lot.weight" (input)="setLotWeight(lot)" (blur)="onBlurLotWeight(lot)"
+                            [textMask]="{
+                                          mask: positiveWeightNumberMask,
+                                          guide: false,
+                                          showMask: false
+                                        }"
+                            autocomplete="off"/>
+                        <i class="erase-icon icon-erase pointer" (click)="onRemoveSplitLot(index)"
+                            *ngIf="splitLots.length > 1">
+                        </i>
+
+                    </div>
+                </ng-container>
+            </div>
+        </section>
+        <section class="lot-split-container__content__add">
+            <button class="btn btn-transparent-blue" (click)="onAddSplitLot()">
+                <i class="icon-plus"></i> {{'split-lot' | i18n}}
+            </button>
+        </section>
+    </div>
+    <section class="lot-split-container__content-lot-info__totals">
+        <div class="lot-split-container__content-lot-info__totals-label">
+            {{'total-quantity' | i18n}}:
+        </div>
+        <div class="lot-split-container__content-lot-info__totals-quantity">
+            {{this.initialFeaturedWeight | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en"}} {{configuration.conversionMeasurementUnitAbbreviation |i18n}}
+        </div>
+    </section>
+    <div class="lot-split-container__footer">
+        <app-action-footer (onActionSelected)="onEventSplitLot($event)" [buttonSubmitText]="'accept'"
+            [isButtonSubmitDisabled]="isSplitValid">
+        </app-action-footer>
+    </div>
+</div>

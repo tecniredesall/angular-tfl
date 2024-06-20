@@ -1,0 +1,25 @@
+<div class="purchase-delete-container" *blockUI="'block-delete';template: templateBlockModalUi">
+    <div class="purchase-delete-container__question">
+        {{'delete-purchase-order-msg' | i18n}} ["{{purchaseOrder.folio}}"]?
+    </div>
+    <div class="purchase-delete-container__note">
+        <div class="purchase-delete-container__note-title">{{'note' | i18n}}</div>
+        <div class="purchase-delete-container__note-description">
+            {{'delete-purchase-order-description' | i18n }}
+        </div>
+    </div>
+    <div class="purchase-delete-container__buttons">
+        <div class="purchase-delete-container__buttons__wrapper">
+            <button class="tr__button__second purchase-delete-container__buttons__wrapper__cancel" matRipple
+                (click)="onCloseModal()">
+                <span>{{'cancel' | i18n }}</span>
+            </button>
+        </div>
+        <div class="purchase-delete-container__buttons__wrapper">
+            <button class="tr__button__delete purchase-delete-container__buttons__wrapper__delete" matRipple
+                (click)="onDeletePurchase()">
+                <span>{{'delete' | i18n }}</span>
+            </button>
+        </div>
+    </div>
+</div>

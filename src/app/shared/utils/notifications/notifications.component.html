@@ -1,0 +1,26 @@
+
+<div class="row pad-noty" *ngIf="notiStatus">
+  <div class="col-lg-12">
+  <div class="alert fade in" role="alert"
+    [ngClass]="{'alert-success': type == 'success',
+                'alert-info': type == 'info',
+                'alert-warning': type == 'warning',
+                'alert-danger': type =='error'}">
+  
+    <img [src]="'./../../../../assets/img/'+ getIcon()" alt="" class="margin-alert-msg"/>
+    {{message}}
+  </div>
+</div>
+</div>
+
+  <!-- <div class="btn-rounded-ss margin-alert-msg"
+         [ngClass]="{'btn-green-ss': type == 'success',
+                     'btn-blue-ss': type == 'info',
+                     'btn-yellow-ss': type == 'warning',
+                     'btn-red-ss': type =='error'}"> -->
+      <!-- <i class="fa"
+        [ngClass]="{'fa-check': type == 'success',
+                    'fa-info': type == 'info',
+                    'fa-times': type =='error',
+                    'fa-exclamation-triangle': type == 'warning'}"></i> -->
+    <!-- </div> -->

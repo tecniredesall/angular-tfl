@@ -1,0 +1,268 @@
+<div class="actions-farm-container" [ngStyle]="{ padding: arrayForm.length > 1 ? '0 15px' : '0' }">
+    <form *ngFor="let form of arrayForm.controls; let i = index" [formGroup]="form" class="row"
+        [ngClass]="{ 'multiple-actions-farm-item': arrayForm.length > 1 }">
+        <div class="col-xs-12 p0" *ngIf="!fromFederated">
+            <div class="col-xs-12 mrg-top-10 pad-right-0">
+                <div class="col-xs-10 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "producer" | i18n }}</span>
+                </div>
+                <div class="col-xs-2 p0">
+                    <ng-container *ngIf="isReadonly">
+                        <button *permission="{tag: PERMISSION_TAG.FARMS, type: PERMISSION_TYPES.UPDATE}"
+                                class="sil-form__header-button btn btn-transparent-blue btn-close-icon pull-right"
+                                (click)="onEditFormEvent()">
+                            <i class="icon-edit"></i>
+                            {{'edit' | i18n}}
+                        </button>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-xs-12 mrg-btm-5">
+                <span class="producer-name">{{seller.fullName}}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 p0">
+            <div class="farms-actions-content-input col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "name" | i18n }}{{isReadonly ? '' :
+                        '*'}}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0">
+                    <ng-container *ngIf="isReadonly else editName">
+                        <span class="producer-name">{{farm.name}}</span>
+                    </ng-container>
+                    <ng-template #editName>
+                        <input [name]="'af-name-' + form.get('index').value"
+                            [placeholder]="'t-farms-placeholder-name' | i18n" [pattern]="ALPHANUMERIC_REGEXP"
+                            [maxLength]="MAX_LENGTH_SHOW_FARM_NAME" class="create-input" type="text" required
+                            autocomplete="off" formControlName="name" />
+                        <label *ngIf="
+                        form.get('name').errors &&
+                        (form.get('name').dirty || form.get('name').touched)
+                    " class="error-msg-form">
+                            <label *ngIf="form.get('name').errors.required">{{
+                                "is-required-msg" | i18n
+                                }}</label>
+
+                            <label *ngIf="form.get('name').errors.pattern">{{
+                                "farm-name-pattern-error" | i18n
+                                }}</label>
+
+                            <label *ngIf="form.get('name').errors.duplicate">{{
+                                "duplicated-registry-name" | i18n
+                                }}</label>
+                            <label *ngIf="form.get('name').hasError('maxlength')">
+                                {{"max-length-value-error"| i18n
+                                | stringReplace
+                                : "[value]"
+                                : MAX_LENGTH_FARM_NAME }}
+                            </label>
+                        </label>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="division-container">
+                <p>{{'location' | i18n}}</p>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <app-address-component [item]="address" [action]="action"
+                (formReady)="onFormAddressReady($event, i)" class="producer-edit-form__address">
+            </app-address-component>
+        </div>
+        <div class="col-xs-12">
+            <div class="division-container">
+                <p>{{'dimensions' | i18n}}</p>
+            </div>
+        </div>
+
+        <ng-container *ngIf="isReadonly; else editDimensions">
+            <div class="farms-actions-content-input col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "extension" | i18n }}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0 group-input-select">
+                    <span class="producer-name">
+                        {{(farm.extension | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" )|| '000.00'}}
+                        {{farm.extensionUnit}}
+                    </span>
+                </div>
+            </div>
+            <div class="farms-actions-content-input col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "wasteland-area" | i18n }}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0 group-input-select">
+                    <span class="producer-name">
+                        {{(farm.wastelandArea | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" ) ||
+                        '000.00'}} {{farm.extensionUnit}}
+                    </span>
+                </div>
+            </div>
+            <div class="farms-actions-content-input col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "productive-area" | i18n }}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0 group-input-select">
+                    <span class="producer-name">
+                        {{(farm.productiveArea | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" ) ||
+                        '000.00'}} {{farm.extensionUnit}}
+                    </span>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #editDimensions>
+            <div class="farms-actions-content-input col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "extension" | i18n }}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0 group-input-select">
+                    <input [name]="'af-extension-' + form.get('index').value" placeholder="000.00" [textMask]="{
+                        mask: extensionNumberMask,
+                        guide: false,
+                        showMask: false
+                    }" class="create-input" type="text" autocomplete="off" formControlName="extensionArea" />
+                    <ng-select [clearable]="false" [multiple]="false" [placeholder]="''" [items]="measurenmentUnits"
+                        bindLabel="abbreviation" loadingText="{{ 'loading' | i18n }}" formControlName="extensionUnit">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="farms-actions-content-input col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "wasteland-area" | i18n }}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0 group-input-select">
+                    <input [name]="'af-wasteland-' + form.get('index').value" placeholder="000.00" [textMask]="{
+                        mask: extensionNumberMask,
+                        guide: false,
+                        showMask: false
+                    }" class="create-input" type="text" autocomplete="off" formControlName="wastelandArea" />
+                    <ng-select [clearable]="false" [multiple]="false" [placeholder]="''" [items]="measurenmentUnits"
+                        bindLabel="abbreviation" loadingText="{{ 'loading' | i18n }}" formControlName="wastelandUnit">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="farms-actions-content-input col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                    <span [ngClass]="isReadonly ? 'label-readonly-view': ''">{{ "productive-area" | i18n }}</span>
+                </div>
+                <div class="col-xs-12 form-label-h p0 group-input-select">
+                    <input [name]="'af-productive-' + form.get('index').value" placeholder="000.00" [textMask]="{
+                        mask: extensionNumberMask,
+                        guide: false,
+                        showMask: false
+                    }" class="create-input" type="text" autocomplete="off" formControlName="productiveArea" />
+                    <ng-select [clearable]="false" [multiple]="false" [placeholder]="''" [items]="measurenmentUnits"
+                        bindLabel="abbreviation" loadingText="{{ 'loading' | i18n }}" formControlName="productiveUnit">
+                    </ng-select>
+                </div>
+            </div>
+        </ng-template>
+
+
+        <div class="col-xs-12">
+            <div class="division-container">
+                <p>{{'others' | i18n}}</p>
+            </div>
+        </div>
+        <div class="farms-actions-content-input col-xs-12 col-sm-12 {{
+                isFromModal ? 'col-md-6 col-lg-6' : 'col-md-12 col-lg-12'
+            }}">
+            <div class="col-xs-12 mrg-top-10 mrg-btm-5 p0">
+                <span [ngClass]="isReadonly ? 'label-readonly-view': ''">
+                    {{isReadonly ? ("related-blocks" | i18n) : ("relate-block" | i18n) }}
+
+                </span>
+            </div>
+            <div class="col-xs-12 form-label-h p0 ng-select-appent">
+                <ng-container *ngIf="isReadonly; else editRelated">
+                    <span class="block-item" *ngFor="let block of farm.blocks">
+                        {{block.name}}
+                    </span>
+                </ng-container>
+                <ng-template #editRelated>
+                    <ng-select name="af-block" class="farms-actions-ng-select" [items]="allowedBlocks" bindLabel="name"
+                        [multiple]="true" [closeOnSelect]="false" [clearable]="true" appendTo=".ng-select-appent"
+                        [placeholder]="'t-farms-placeholder-block' | i18n" [notFoundText]="'not-items-found' | i18n"
+                        [loading]="isLoadingAllowedBlocks" loadingText="{{ 'loading' | i18n }}"
+                        formControlName="blocks">
+                    </ng-select>
+                </ng-template>
+
+            </div>
+        </div>
+        <div class="col-xs-12 p0" *ngIf="farm.seals.length > 0">
+            <div class="col-xs-12 mrg-btm-5">
+                <span>{{ "seals" | i18n }}</span>
+            </div>
+            <div class="col-xs-12 mrg-btm-5 seals-farms">
+                <ng-container *ngFor="let seal of farm.seals">
+                    <span [matTooltip]="seal.name" matTooltipPosition="below" matTooltipClass="sil-table__tooltip">
+                        <img [src]="seal.image || seal.icon" />
+                    </span>
+                </ng-container>
+            </div>
+        </div>
+        <!-- Button remove item-->
+        <div class="row" *ngIf="!isEdit && arrayForm.length > 1">
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-default action-farm-btn-remove-item" (click)="deleteForm(i)">
+                    <img src="/assets/img/svg/trash-red.svg" alt="" />
+                    <span>
+                        &nbsp;
+                        {{ "delete" | i18n }}
+                    </span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Button add item farm -->
+    <div *ngIf="isMultiple && !isEdit" class="row">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-transparent-blue farms-actions-btn-add-farm" (click)="addNewFarm()">
+                <img [src]="
+                        '/assets/img/svg/' +
+                        (isDarkTheme ? 'add-dark' : 'add') +
+                        '.svg'
+                    " />
+                {{ "t-farms-add-new" | i18n }}
+            </button>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div *ngIf="!isReadonly" class="row action-farm-footer"
+        [ngStyle]="{ padding: arrayForm.length > 1 ? '0' : '0 15px' }" (resized)="onFooterResize($event)">
+        <div *ngIf="isEdit" class="action-farm-container-button-footer float-left"
+            [ngStyle]="style.containerButtonDelete">
+            <button type="button" class="btn btn-default action-farm-btn-delete float-left" [ngClass]="{
+                    'action-farm-btn-delete-mobile': !isVisibletextButtonDelete
+                }" (click)="deleteFarm()">
+                <img src="assets/img/svg/trash-red.svg" alt="" />
+                <span *ngIf="isVisibletextButtonDelete">
+                    &nbsp;
+                    {{ "delete" | i18n }}
+                </span>
+            </button>
+        </div>
+
+        <div class="action-farm-container-button-footer float-right" [ngStyle]="style.containerButtonSubmit">
+            <button type="button" class="btn btn-default action-farm-btn-submit float-right" [disabled]="
+                    arrayForm.invalid  || (isEdit && !dataWasMadeModified)
+                " (click)="submit()">
+                <span>{{ isEdit ? ("save" | i18n) : ("create" | i18n) }}</span>
+            </button>
+        </div>
+
+        <div class="action-farm-container-button-footer float-right" [ngStyle]="style.containerButtonCancel">
+            <button type="button" class="btn btn-default action-farm-btn-cancel float-right" (click)="cancel()">
+                {{ "cancel" | i18n }}
+            </button>
+        </div>
+    </div>
+
+
+</div>

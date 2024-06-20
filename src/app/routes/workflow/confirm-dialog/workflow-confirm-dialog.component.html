@@ -1,0 +1,10 @@
+<div class="center-all">
+  <h3> {{ data.confirmationTitle }} </h3>
+  <p class="delete-name"> {{ data.name}} </p>
+  <mat-dialog-actions align="center" class="space-around">
+    <button *ngIf="data.canDelete" class="btn btn-resize btn-theme no-border" mat-dialog-close [autofocus]="false" >
+      {{'cancel' | i18n}}
+    </button>
+    <button class="btn btn-resize btn-danger" (click)="submit()" > {{'accept' | i18n}} </button>
+  </mat-dialog-actions>
+</div>

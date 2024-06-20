@@ -1,0 +1,18 @@
+.sil-expansion-panel {
+    box-shadow: none !important;
+    border: 1px solid !important;
+    border-color: var(--table-row-border-color) !important;
+    border-radius: 0 !important;
+    margin-bottom: 8px !important;
+    mat-expansion-panel-header {
+        padding: 0 !important;
+    }
+    ::ng-deep.mat-expansion-panel-body {
+        padding: 0 !important;
+    }
+    .sil-expansion-panel-header {
+        &.panel-expanded {
+            background-color: var(--tr-panel-background-color);
+        }
+    }
+}

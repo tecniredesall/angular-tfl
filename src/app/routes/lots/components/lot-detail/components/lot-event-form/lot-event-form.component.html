@@ -1,0 +1,44 @@
+<form class="sil-form lot-event" [formGroup]="form" *ngIf="form">
+    <section class="sil-form__section lot-event__damaged"  *permission="{tag: PERMISSIONS.LOTS, type: PERMISSION_TYPES.UPDATE}">
+        <label class="sil-form__section title-base--black">{{
+            "damaged-lot" | i18n
+            }}</label>
+        <mat-slide-toggle formControlName="damage" class="toggle"></mat-slide-toggle>
+    </section>
+    <section class="sil-form__section lot-event__notes">
+        <div>
+            <label>{{ "comments" | i18n }}</label>
+            <input type="text" [placeholder]="'add-description' | i18n" class="sil-form__input" autocomplete="off"
+                formControlName="note" maxlength="150" />
+            <p class="counter">{{ form.get("note").value.length }}/150</p>
+            <span class="tr__error-msg" *ngIf="form.get('note').errors?.pattern">
+                {{'lots-events-comments-blanks-error'| i18n}}
+            </span>
+        </div>
+        <button [disabled]="form.invalid || !canEdit" class="lot-event__add" type="button" (click)="onPostEvent()">
+            <i class="icon-check"></i>
+        </button>
+    </section>
+    <section appScrollPagination (loadNextPage)="onLoadNextPage($event)" [pagination]="pagination"
+        class="sil-form__section lot-event__notes-container tr__scroll">
+        <article class="note" *ngFor="let note of events">
+            <i class="icon-calendar-edit"></i>
+            <div class="note_time">
+                <p>{{ note.note }}</p>
+                <span>{{
+                    note.created_at
+                    | dateStringFormat
+                    : "YYYY-MM-DD HH:mm:ss"
+                    : "MMM DD, YYYY [" + ("at" | i18n) + "] HH:mm"
+                    : true
+                    }}</span>
+            </div>
+            <i class="icon-trash-gray" (click)="onDeleteEvent(note.id)" *ngIf="canEdit"></i>
+        </article>
+        <article class="note" *ngIf="pageLoading">
+            <i class="icon-placeholder tr__element-placeholder"></i>
+            <div class="note_time tr__element-placeholder"></div>
+            <i *ngIf="canEdit" class="tr__element-placeholder icon-delete-placeholder"></i>
+        </article>
+    </section>
+</form>

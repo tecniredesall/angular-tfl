@@ -1,0 +1,1813 @@
+@at-root {
+    :not(.dark) :host {
+        --process-name-background-color: #f4f6fc;
+        --unselected-mode-button-border-color: #e9ecf0;
+    }
+
+    .dark :host {
+        --process-name-background-color: #242e42;
+        --unselected-mode-button-border-color: var(--tr-base-color-blue);
+    }
+
+    .lot-list {
+        $list-class: &;
+        $area-class: #{$list-class}__area;
+        $header-class: #{$list-class}__header;
+        $columns-class: #{$list-class}__columns;
+        $panel-header-class: #{$list-class}__panel__header;
+        $panel-body-row-class: #{$list-class}__panel__body__row;
+        width: 100%;
+        min-height: 100%;
+        display: grid;
+        grid-template-rows: max-content auto;
+        grid-template-columns: 100%;
+
+        #{$area-class} {
+            height: 100%;
+            font-family: "Open Sans", sans-serif !important;
+            color: var(--tr-data-grid-color);
+
+            &__label {
+                @extend #{$area-class};
+                width: 100%;
+                padding: 0;
+                word-break: break-word;
+
+                font-size: 12px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.42;
+                letter-spacing: 1.12px;
+                text-align: left;
+                color: var(--tr-labe-columns-list-color);
+                text-transform: uppercase;
+
+                &__creation {
+                    grid-area: creation-label;
+                }
+
+                &__id {
+                    grid-area: id-label;
+                }
+
+                &__type {
+                    grid-area: type-label;
+                }
+
+                &__warehouse {
+                    grid-area: warehouse-label;
+                }
+
+                &__net-weight {
+                    grid-area: net-weight-label;
+                }
+
+                &__total-notes {
+                    grid-area: total-notes-label;
+                }
+
+                &__flow {
+                    grid-area: flow-label;
+                }
+
+                &__process {
+                    grid-area: process-label;
+                }
+
+                &__seals {
+                    grid-area: seals-label;
+                }
+            }
+
+            &__data {
+                &__toggle {
+                    @extend #{$area-class};
+                    grid-area: toggle-data;
+                }
+
+                &__creation {
+                    @extend #{$area-class};
+                    grid-area: creation-data;
+
+                    &__value {
+                        height: 100%;
+                        display: grid;
+                        grid-template-columns: 100%;
+                        grid-template-rows: max-content max-content;
+                        word-break: break-word;
+
+                        &__date {
+                            font-size: 14px;
+                            font-weight: normal;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.57;
+                            letter-spacing: normal;
+                            text-align: left;
+                        }
+                        &__creator {
+                            font-size: 12px;
+                            font-weight: normal;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.83;
+                            letter-spacing: normal;
+                            text-align: left;
+                        }
+                    }
+                }
+
+                &__id {
+                    @extend #{$area-class};
+                    grid-area: id-data;
+
+                    &__value {
+                        height: 100%;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1.57;
+                        letter-spacing: normal;
+                        word-break: break-word;
+                    }
+                }
+
+                &__type {
+                    @extend #{$area-class};
+                    grid-area: type-data;
+
+                    &__value {
+                        height: 100%;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1.57;
+                        letter-spacing: normal;
+                        word-break: break-word;
+                    }
+                }
+
+                &__warehouse {
+                    @extend #{$area-class};
+                    grid-area: warehouse-data;
+
+                    &__value {
+                        height: 100%;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1.57;
+                        letter-spacing: normal;
+                        word-break: break-word;
+                    }
+                }
+
+                &__net-weight {
+                    @extend #{$area-class};
+                    grid-area: net-weight-data;
+
+                    &__value {
+                        height: 100%;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1.57;
+                        letter-spacing: normal;
+                        word-break: break-word;
+                    }
+                }
+
+                &__total-notes {
+                    @extend #{$area-class};
+                    grid-area: total-notes-data;
+
+                    &__value {
+                        height: 100%;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1.57;
+                        letter-spacing: normal;
+                        word-break: break-word;
+
+                        i {
+                            font-size: 20px;
+                            color: #8797ad;
+                        }
+                    }
+                }
+
+                &__flow {
+                    @extend #{$area-class};
+                    grid-area: flow-data;
+
+                    &__value {
+                        height: 100%;
+                        word-break: break-word;
+                    }
+                }
+
+                &__process {
+                    @extend #{$area-class};
+                    grid-area: process-data;
+                    &__value {
+                        height: 100%;
+                        word-break: break-word;
+
+                        &__name {
+                            background-color: var(
+                                --process-name-background-color
+                            );
+                            width: auto;
+                            height: auto;
+                            padding: 4px 8px;
+                            border-radius: 9.5px;
+                            font-size: 12px;
+                            font-weight: 600;
+                            display: grid;
+                            grid-template-columns: max-content 1fr;
+                            grid-template-rows: max-content;
+
+                            &__mark {
+                                width: 20px;
+                                height: 100%;
+                                padding-right: 12px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                &__dot {
+                                    height: 8px;
+                                    width: 8px;
+                                    display: inline-block;
+                                    border-radius: 50%;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &__seals {
+                    @extend #{$area-class};
+                    grid-area: seals-data;
+
+                    &__value {
+                        height: 100%;
+                        &__tooltip {
+                            white-space: pre-line;
+                            font-size: 12px;
+                            font-weight: normal;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.42;
+                            letter-spacing: normal;
+                            text-align: left;
+                            padding: 10px;
+                        }
+
+                        div {
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: flex-start;
+                            margin-left: 20px;
+                            span {
+                                z-index: 5;
+                                margin-left: -20px;
+                                img {
+                                    width: 35px;
+                                    height: 35px;
+                                    border-radius: 50%;
+                                    border: 0.5px solid lightgray;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &__actions {
+                    @extend #{$area-class};
+                    grid-area: actions-data;
+
+                    &__value {
+                        height: 100%;
+                        width: 100%;
+
+                        &__icon-wrapper {
+                            padding: 8px 0;
+                            width: 100%;
+                            display: flex !important;
+                            align-items: center;
+                            justify-content: center;
+
+                            i {
+                                color: var(--tr-panel-header-toggle-icon-color);
+                                font-size: 19px;
+                                font-weight: bold;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #{$header-class} {
+            width: 100%;
+            height: auto;
+            padding-bottom: 32px;
+            display: grid;
+
+            .tr__button__second {
+                border: 1px solid var(--unselected-mode-button-border-color);
+            }
+
+            &__filter {
+                grid-area: filter;
+                &__button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                }
+            }
+
+            &__input {
+                grid-area: input;
+                &__button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                }
+            }
+
+            &__processed {
+                grid-area: processed;
+                &__button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                }
+            }
+
+            &__search {
+                grid-area: search;
+                input {
+                    box-shadow: none;
+                    margin: 0;
+                }
+            }
+
+            &__new {
+                grid-area: new;
+                &__button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                }
+            }
+        }
+
+        #{$columns-class} {
+            width: 100%;
+            height: auto;
+            padding: 8px 0 20px 0;
+            display: grid;
+            justify-items: left;
+            align-items: start;
+
+            &__toogle-status {
+                width: 100%;
+                height: 100%;
+                grid-area: toggle-status;
+                color: var(--tr-data-grid-color) !important;
+            }
+
+            &__sortable {
+                display: inline-flex;
+                justify-content: flex-start;
+                align-items: flex-start;
+                cursor: pointer;
+
+                i {
+                    padding-top: 4px;
+                    padding-left: 8px;
+                }
+            }
+
+            #{$area-class}__data__toggle {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                cursor: pointer;
+                padding-top: 4px;
+            }
+        }
+
+        &__body {
+            mat-expansion-panel {
+                border-radius: 0;
+                background-color: var(--tr-panel-background-color);
+                box-shadow: none;
+                margin-bottom: 8px;
+                ::ng-deep .mat-expansion-panel-body {
+                    padding: 0;
+                    color: var(--tr-panel-body-color);
+                    font-family: "Open Sans", sans-serif !important;
+                }
+
+                mat-expansion-panel-header {
+                    padding: 0;
+                    background-color: var(
+                        --tr-panel-header-background-color
+                    ) !important;
+                }
+            }
+        }
+
+        &__panel {
+            &__header {
+                width: 100%;
+                height: auto;
+                padding: 8px 0;
+                display: grid;
+
+                #{$area-class}__data__toggle {
+                    height: 100%;
+
+                    &__icon {
+                        height: auto;
+                        width: auto;
+                        color: var(--tr-panel-header-toggle-icon-color);
+                        font-size: 24px;
+                        transition: all 200ms ease-out !important;
+
+                        &--rotated {
+                            transform: rotate(90deg);
+                        }
+                    }
+                }
+            }
+
+            &__body {
+                $panel-body-class: &;
+                width: 100%;
+                height: auto;
+                padding: 16px 0;
+
+                &__row {
+                    @extend #{$panel-body-class};
+                    padding: 8px 0;
+                    display: grid;
+                    justify-items: left;
+                    align-items: start;
+
+                    #{$area-class}__data__toggle {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;
+
+                        &__icon {
+                            height: auto;
+                            width: auto;
+                            color: var(--tr-panel-header-toggle-icon-color);
+                            font-size: 28px;
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 992px) {
+            & {
+                padding: 30px 10px 10px 10px;
+            }
+        }
+
+        @media (min-width: 993px) {
+            & {
+                padding: 30px 40px 40px 40px;
+            }
+        }
+
+        @media (min-width: 480px) and (max-width: 759px) {
+            &__header {
+                column-gap: 16px;
+                row-gap: 16px;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, max-content);
+                grid-template-areas:
+                    "filter search"
+                    "new new"
+                    "input processed";
+
+                &__filter__button,
+                &__input__button,
+                &__processed__button,
+                &__new__button,
+                &__search {
+                    width: 100%;
+                }
+            }
+        }
+
+        @media (min-width: 760px) and (max-width: 1039px) {
+            &__header {
+                column-gap: 16px;
+                grid-template-columns: max-content 1fr 1fr max-content;
+                grid-template-rows: repeat(2, max-content);
+                row-gap: 16px;
+                grid-template-areas:
+                    "filter search search new"
+                    "input input processed processed";
+
+                &__input {
+                    display: flex !important;
+                    justify-content: flex-end;
+                    align-items: center;
+                }
+
+                &__processed {
+                    display: flex !important;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+
+                &__filter {
+                    text-align: left;
+                    &__button {
+                        width: auto;
+                    }
+                }
+
+                &__input__button,
+                &__processed__button,
+                &__new__button {
+                    width: 124px;
+                }
+
+                &__search {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    app-search-input {
+                        width: 180px !important;
+                    }
+                }
+            }
+        }
+
+        @media (min-width: 1040px) and (max-width: 1199px) {
+            &__header {
+                grid-template-rows: max-content;
+                column-gap: 16px;
+                grid-template-columns: 1fr repeat(2, max-content) 1fr max-content;
+                grid-template-areas: "filter input processed search new";
+                &__search app-search-input {
+                    width: 180px !important;
+                }
+
+                &__filter {
+                    text-align: left;
+                    &__button {
+                        width: auto;
+                    }
+                }
+
+                &__input__button,
+                &__processed__button,
+                &__new__button {
+                    width: 124px;
+                }
+
+                &__search {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                }
+            }
+        }
+
+        @media (max-width: 479px) {
+            --col-toogle-width: 50px;
+            --col-actions-width: 40px;
+            --column-gap: 20px;
+
+            &__header {
+                row-gap: 16px;
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(5, max-content);
+                grid-template-areas:
+                    "filter"
+                    "search"
+                    "new"
+                    "input"
+                    "processed";
+
+                &__filter__button,
+                &__input__button,
+                &__processed__button,
+                &__new__button,
+                &__search {
+                    width: 100%;
+                }
+            }
+
+            @at-root {
+                #{$columns-class} {
+                    grid-template-rows: minmax(30px, max-content);
+                    grid-template-columns: repeat(2, max-content);
+                    column-gap: 0;
+                    grid-template-areas: "toggle-data toggle-status";
+
+                    &__toogle-status {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                    }
+
+                    #{$area-class}__data {
+                        &__toggle {
+                            width: var(--col-toogle-width);
+                            align-items: center !important;
+                        }
+                        &__creation,
+                        &__id,
+                        &__type,
+                        &__warehouse,
+                        &__net-weight,
+                        &__total-notes,
+                        &__flow,
+                        &__process,
+                        &__seals,
+                        &__actions {
+                            display: none;
+                        }
+                    }
+                }
+
+                #{$panel-header-class} {
+                    grid-template-columns: max-content 1fr 1fr max-content;
+                    column-gap: var(--column-gap);
+                    row-gap: 0;
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$panel-header-class} {
+                                grid-template-rows: repeat(8, max-content);
+                                grid-template-areas:
+                                    "toggle-data id-label type-label actions-data"
+                                    "toggle-data id-data type-data actions-data"
+                                    "toggle-data net-weight-label total-notes-label actions-data"
+                                    "toggle-data net-weight-data total-notes-data actions-data"
+                                    "toggle-data flow-label seals-label actions-data"
+                                    "toggle-data flow-data seals-data actions-data";
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$panel-header-class} {
+                                grid-template-rows: repeat(8, max-content);
+                                grid-template-areas:
+                                    "toggle-data id-label type-label actions-data"
+                                    "toggle-data id-data type-data actions-data"
+                                    "toggle-data warehouse-label net-weight-label actions-data"
+                                    "toggle-data warehouse-data net-weight-data actions-data"
+                                    "toggle-data total-notes-label flow-label actions-data"
+                                    "toggle-data total-notes-data flow-data actions-data"
+                                    "toggle-data process-label seals-label actions-data"
+                                    "toggle-data process-data seals-data actions-data";
+                            }
+                        }
+                    }
+
+                    #{$area-class} {
+                        &__label {
+                            width: 100%;
+                            align-items: flex-start;
+                            justify-content: flex-start;
+
+                            &__id,
+                            &__type {
+                                display: flex;
+                            }
+
+                            &__warehouse,
+                            &__net-weight,
+                            &__total-notes,
+                            &__flow,
+                            &__process,
+                            &__seals {
+                                display: flex;
+                                padding: 8px 0 0 0;
+                            }
+
+                            &__creation,
+                            &__actions {
+                                display: none;
+                            }
+                        }
+
+                        &__data {
+                            &__toggle {
+                                width: var(--col-toogle-width);
+                                padding-top: 12px;
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: center;
+                            }
+
+                            &__creation {
+                                display: none;
+                            }
+
+                            &__id {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__type {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__warehouse {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__net-weight {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__total-notes {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__flow {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__process {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__seals {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__actions {
+                                padding-top: 12px;
+                                width: var(--col-actions-width);
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: center;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                #{$panel-body-row-class} {
+                    column-gap: var(--column-gap);
+                    row-gap: 8px;
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$panel-body-row-class} {
+                                grid-template-rows: repeat(2, max-content);
+                                grid-template-columns: max-content 1fr 1fr max-content;
+                                grid-template-areas:
+                                    "toggle-data id-label seals-label actions-data"
+                                    "toggle-data id-data seals-data actions-data";
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$panel-body-row-class} {
+                                grid-template-rows: repeat(2, max-content);
+                                grid-template-columns: max-content 1fr 1fr max-content;
+                                grid-template-areas:
+                                    "toggle-data id-label seals-label actions-data"
+                                    "toggle-data id-data seals-data actions-data";
+                            }
+                        }
+                    }
+
+                    #{$area-class} {
+                        &__label {
+                            width: 100%;
+                            align-items: flex-start;
+                            justify-content: flex-start;
+
+                            &__id,
+                            &__seals {
+                                display: flex;
+                            }
+
+                            &__creation {
+                                display: none;
+                            }
+                        }
+
+                        &__data {
+                            &__toggle {
+                                width: var(--col-toogle-width);
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: center;
+                            }
+
+                            &__id {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__seals {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__actions {
+                                width: var(--col-actions-width);
+                                &__value {
+                                    display: none;
+                                }
+                            }
+
+                            &__creation,
+                            &__net-weight,
+                            &__type,
+                            &__warehouse,
+                            &__total-notes,
+                            &__flow,
+                            &__process {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (min-width: 480px) and (max-width: 767px) {
+            --col-toogle-width: 50px;
+            --col-actions-width: 40px;
+            --column-gap: 20px;
+
+            @at-root {
+                #{$columns-class} {
+                    grid-template-rows: minmax(30px, max-content);
+                    grid-template-columns: repeat(2, max-content);
+                    column-gap: 0;
+                    grid-template-areas: "toggle-data toggle-status";
+
+                    &__toogle-status {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                    }
+
+                    #{$area-class}__data {
+                        &__toggle {
+                            width: var(--col-toogle-width);
+                            align-items: center !important;
+                        }
+                        &__creation,
+                        &__id,
+                        &__type,
+                        &__warehouse,
+                        &__net-weight,
+                        &__total-notes,
+                        &__flow,
+                        &__process,
+                        &__seals,
+                        &__actions {
+                            display: none;
+                        }
+                    }
+                }
+
+                #{$panel-header-class} {
+                    grid-template-columns: max-content 1fr 1fr 1fr max-content;
+                    column-gap: var(--column-gap);
+                    row-gap: 0;
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$panel-header-class} {
+                                grid-template-rows: repeat(4, max-content);
+                                grid-template-areas:
+                                    "toggle-data id-label type-label net-weight-label actions-data"
+                                    "toggle-data id-data type-data net-weight-data actions-data"
+                                    "toggle-data total-notes-label flow-label seals-label actions-data"
+                                    "toggle-data total-notes-data flow-data seals-data actions-data";
+
+                                #{$area-class}__label__net-weight {
+                                    padding: 0;
+                                }
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$panel-header-class} {
+                                grid-template-rows: repeat(6, max-content);
+                                grid-template-areas:
+                                    "toggle-data id-label type-label warehouse-label actions-data"
+                                    "toggle-data id-data type-data warehouse-data actions-data"
+                                    "toggle-data net-weight-label total-notes-label flow-label actions-data"
+                                    "toggle-data net-weight-data total-notes-data flow-data actions-data"
+                                    "toggle-data process-label seals-label seals-label actions-data"
+                                    "toggle-data process-data seals-data seals-data actions-data";
+
+                                #{$area-class}__label__net-weight {
+                                    padding: 8px 0 0 0;
+                                }
+                            }
+                        }
+                    }
+
+                    #{$area-class} {
+                        &__label {
+                            width: 100%;
+                            align-items: flex-start;
+                            justify-content: flex-start;
+
+                            &__id,
+                            &__type,
+                            &__warehouse,
+                            &__net-weight {
+                                display: flex;
+                            }
+
+                            &__total-notes,
+                            &__flow,
+                            &__process,
+                            &__seals {
+                                display: flex;
+                                padding: 8px 0 0 0;
+                            }
+
+                            &__creation,
+                            &__actions {
+                                display: none;
+                            }
+                        }
+
+                        &__data {
+                            &__toggle {
+                                width: var(--col-toogle-width);
+                                padding-top: 12px;
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: center;
+                            }
+
+                            &__creation {
+                                display: none;
+                            }
+
+                            &__id {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__type {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__warehouse {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__net-weight {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__total-notes {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__flow {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__process {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__seals {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__actions {
+                                padding-top: 12px;
+                                width: var(--col-actions-width);
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: center;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                #{$panel-body-row-class} {
+                    column-gap: var(--column-gap);
+                    row-gap: 8px;
+                    grid-template-rows: repeat(2, max-content);
+                    grid-template-columns: max-content 1fr 1fr 1fr max-content;
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$panel-body-row-class} {
+                                grid-template-areas:
+                                    "toggle-data id-label seals-label seals-label actions-data"
+                                    "toggle-data id-data seals-data seals-data actions-data";
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$panel-body-row-class} {
+                                grid-template-areas:
+                                    "toggle-data id-label seals-label seals-label actions-data"
+                                    "toggle-data id-data seals-data seals-data actions-data";
+                            }
+                        }
+                    }
+
+                    #{$area-class} {
+                        &__label {
+                            width: 100%;
+                            align-items: flex-start;
+                            justify-content: flex-start;
+
+                            &__id,
+                            &__seals {
+                                display: flex;
+                            }
+
+                            &__creation {
+                                display: none;
+                            }
+                        }
+                        &__data {
+                            &__toggle {
+                                width: var(--col-toogle-width);
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: center;
+                            }
+
+                            &__id {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__seals {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__actions {
+                                width: var(--col-actions-width);
+                                &__value {
+                                    display: none;
+                                }
+                            }
+
+                            &__creation,
+                            &__type,
+                            &__net-weight,
+                            &__warehouse,
+                            &__total-notes,
+                            &__flow,
+                            &__process {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1199px) {
+            --col-toogle-width: 50px;
+            --col-creation-width: 125px;
+            --col-actions-width: 40px;
+            --column-gap: 20px;
+
+            @at-root {
+                #{$columns-class} {
+                    grid-template-rows: minmax(30px, max-content);
+                    grid-template-columns: repeat(2, max-content);
+                    column-gap: 0;
+                    grid-template-areas: "toggle-data toggle-status";
+
+                    &__toogle-status {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                    }
+
+                    #{$area-class}__data {
+                        &__toggle {
+                            width: var(--col-toogle-width);
+                            align-items: center !important;
+                        }
+                        &__creation,
+                        &__id,
+                        &__type,
+                        &__warehouse,
+                        &__net-weight,
+                        &__total-notes,
+                        &__flow,
+                        &__process,
+                        &__seals,
+                        &__actions {
+                            display: none;
+                        }
+                    }
+                }
+
+                #{$panel-header-class} {
+                    grid-template-rows: repeat(4, max-content);
+                    column-gap: var(--column-gap);
+                    row-gap: 0;
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$panel-header-class} {
+                                grid-template-columns:
+                                    repeat(2, max-content) repeat(3, 1fr)
+                                    max-content;
+                                grid-template-areas:
+                                    "toggle-data creation-label id-label type-label net-weight-label actions-data"
+                                    "toggle-data creation-data id-data type-data net-weight-data actions-data"
+                                    "toggle-data total-notes-label flow-label seals-label seals-label actions-data"
+                                    "toggle-data total-notes-data flow-data seals-data seals-data actions-data";
+
+                                #{$area-class} {
+                                    &__label {
+                                        &__net-weight {
+                                            width: 100%;
+                                        }
+
+                                        &__total-notes {
+                                            width: var(--col-creation-width);
+                                            padding: 8px 0 0 0;
+                                        }
+                                    }
+
+                                    &__data {
+                                        &__net-weight {
+                                            width: 100%;
+                                        }
+
+                                        &__total-notes {
+                                            width: var(--col-creation-width);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$panel-header-class} {
+                                grid-template-columns:
+                                    repeat(2, max-content) repeat(4, 1fr)
+                                    max-content;
+                                grid-template-areas:
+                                    "toggle-data creation-label id-label type-label warehouse-label warehouse-label actions-data"
+                                    "toggle-data creation-data id-data type-data warehouse-data warehouse-data actions-data"
+                                    "toggle-data net-weight-label total-notes-label flow-label process-label seals-label actions-data"
+                                    "toggle-data net-weight-data total-notes-data flow-data process-data seals-data actions-data";
+
+                                #{$area-class} {
+                                    &__label {
+                                        &__net-weight {
+                                            width: var(--col-creation-width);
+                                            padding: 8px 0 0 0;
+                                        }
+
+                                        &__total-notes {
+                                            width: 100%;
+                                            padding: 8px 0 0 0;
+                                        }
+                                    }
+
+                                    &__data {
+                                        &__net-weight {
+                                            width: var(--col-creation-width);
+                                        }
+
+                                        &__total-notes {
+                                            width: 100%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    #{$area-class} {
+                        &__label {
+                            display: flex;
+                            align-items: flex-start;
+                            justify-content: flex-start;
+
+                            &__creation {
+                                width: var(--col-creation-width);
+                            }
+
+                            &__actions {
+                                width: var(--col-actions-width);
+                            }
+
+                            &__flow,
+                            &__process,
+                            &__seals {
+                                width: 100%;
+                                padding: 8px 0 0 0;
+                            }
+                        }
+
+                        &__data {
+                            &__toggle {
+                                width: var(--col-toogle-width);
+                                padding-top: 12px;
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: center;
+                            }
+
+                            &__creation {
+                                width: var(--col-creation-width);
+                                &__value {
+                                    width: 100%;
+                                    justify-items: start;
+                                    align-items: start;
+                                    justify-content: start;
+                                    align-content: start;
+                                }
+                            }
+
+                            &__id {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__type {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__warehouse {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__net-weight {
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__total-notes {
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__flow {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__process {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__seals {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__actions {
+                                padding-top: 12px;
+                                width: var(--col-actions-width);
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: center;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                #{$panel-body-row-class} {
+                    grid-template-rows: repeat(2, max-content);
+                    column-gap: var(--column-gap);
+                    row-gap: 8px;
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$panel-body-row-class} {
+                                grid-template-columns:
+                                    repeat(2, max-content) repeat(3, 1fr)
+                                    max-content;
+                                grid-template-areas:
+                                    "toggle-data creation-label id-label seals-label seals-label actions-label"
+                                    "toggle-data creation-data id-data seals-data seals-data actions-data";
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$panel-body-row-class} {
+                                grid-template-columns:
+                                    repeat(2, max-content) repeat(4, 1fr)
+                                    max-content;
+                                grid-template-areas:
+                                    "toggle-data creation-label id-label seals-label seals-label seals-label actions-data"
+                                    "toggle-data creation-data id-data seals-data seals-data seals-data actions-data";
+                            }
+                        }
+                    }
+
+                    #{$area-class} {
+                        &__label {
+                            display: flex;
+                            align-items: flex-start;
+                            justify-content: flex-start;
+
+                            &__creation {
+                                width: var(--col-creation-width);
+                            }
+
+                            &__id,
+                            &__seals {
+                                width: 100%;
+                            }
+                        }
+                        &__data {
+                            &__toggle {
+                                width: var(--col-toogle-width);
+                                display: flex;
+                                align-items: flex-start;
+                                justify-content: center;
+                            }
+
+                            &__creation {
+                                width: var(--col-creation-width);
+                                &__value {
+                                    width: 100%;
+                                    justify-items: start;
+                                    align-items: start;
+                                    justify-content: start;
+                                    align-content: start;
+                                }
+                            }
+
+                            &__id {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__seals {
+                                width: 100%;
+                                &__value {
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: flex-start;
+                                    justify-content: flex-start;
+                                }
+                            }
+
+                            &__actions {
+                                width: var(--col-actions-width);
+                                &__value {
+                                    display: none;
+                                }
+                            }
+
+                            &__type,
+                            &__net-weight,
+                            &__warehouse,
+                            &__total-notes,
+                            &__flow,
+                            &__process {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (min-width: 1200px) {
+            --col-toogle-width: 50px;
+            --col-creation-width: 125px;
+            --col-warehouse-width: 116px;
+            --col-flow-width: 80px;
+            --col-actions-width: 40px;
+            --column-gap: 16px;
+
+            &__header {
+                grid-template-rows: max-content;
+                column-gap: 16px;
+                grid-template-columns: 1fr repeat(2, max-content) 1fr max-content;
+                grid-template-areas: "filter input processed search new";
+
+                &__filter {
+                    text-align: left;
+                    &__button {
+                        width: auto;
+                    }
+                }
+
+                &__input__button,
+                &__processed__button,
+                &__new__button {
+                    width: 124px;
+                }
+
+                &__search {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    app-search-input {
+                        width: 280px !important;
+                    }
+                }
+            }
+
+            @at-root {
+                #{$columns-class},
+                #{$panel-header-class},
+                #{$panel-body-row-class} {
+                    grid-template-rows: minmax(30px, max-content);
+                    column-gap: var(--column-gap);
+
+                    @at-root #{$list-class} {
+                        &--processed-mode {
+                            #{$columns-class},
+                            #{$panel-header-class},
+                            #{$panel-body-row-class} {
+                                grid-template-columns: repeat(2, max-content) 1fr 1fr 1fr 1fr max-content 1fr max-content;
+                                grid-template-areas: "toggle-data creation-data id-data type-data net-weight-data total-notes-data flow-data seals-data actions-data";
+                            }
+                        }
+
+                        &:not(&--processed-mode) {
+                            #{$columns-class},
+                            #{$panel-header-class},
+                            #{$panel-body-row-class} {
+                                grid-template-columns: repeat(2, max-content) 1fr 1fr max-content 1fr 1fr max-content 1fr 1fr max-content;
+                                grid-template-areas: "toggle-data creation-data id-data type-data warehouse-data net-weight-data total-notes-data flow-data process-data seals-data actions-data";
+                            }
+                        }
+                    }
+
+                    #{$area-class}__data {
+                        &__toggle {
+                            width: var(--col-toogle-width);
+                        }
+
+                        &__creation {
+                            width: var(--col-creation-width);
+                            &__value {
+                                width: 100%;
+                                justify-items: start;
+                                align-items: center;
+                                justify-content: center;
+                                align-content: center;
+                            }
+                        }
+
+                        &__id {
+                            width: 100%;
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                        }
+
+                        &__type {
+                            width: 100%;
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__warehouse {
+                            width: var(--col-warehouse-width);
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__net-weight {
+                            width: 100%;
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__total-notes {
+                            width: 100%;
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__flow {
+                            width: var(--col-flow-width);
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__process {
+                            width: 100%;
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__seals {
+                            width: 100%;
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: flex-start;
+                            }
+                        }
+
+                        &__actions {
+                            width: var(--col-actions-width);
+                            &__value {
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                        }
+                    }
+                }
+
+                #{$columns-class} {
+                    @at-root #{$area-class} {
+                        &__data__id {
+                            text-align: center !important;
+                        }
+                    }
+
+                    &__toogle-status {
+                        display: none;
+                    }
+                }
+
+                #{$panel-header-class} {
+                    justify-items: left;
+                    align-items: center;
+
+                    #{$area-class} {
+                        &__label {
+                            display: none;
+                        }
+                        &__data__toggle {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+
+                #{$panel-body-row-class} {
+                    #{$area-class} {
+                        &__label {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    ::ng-deep .mat-menu-panel {
+        background-color: var(--tr-mat-menu-background-color);
+        button {
+            color: var(--tr-data-grid-color);
+        }
+
+        .mat-menu-item[disabled]{
+            color: var(--tr-mat-menu-button-text-color-disabled);
+            cursor: not-allowed;
+            pointer-events: auto;
+        }
+    }
+}
+
+
+.note-information {
+    width: 16px;
+    height: 16px;
+    background-color: var(--tr-base-color-blue);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    font-size: 10px;
+    cursor: pointer;
+}

@@ -1,0 +1,25 @@
+<button
+    type="button"
+    tabindex="-1"
+    class="btn green-btn dropdown-toggle"
+    data-toggle="dropdown"
+>
+    <i class="icon-logo-xls"></i>
+    <span>{{ "upload-csv" | i18n }}</span>
+</button>
+<input
+    type="file"
+    #csvReader
+    name="Upload CSV"
+    (change)="onFileUpload($event)"
+    accept=".csv"
+    hidden
+/>
+<ul class="dropdown-menu">
+    <li (click)="onOpenFileExplorer()">
+        <a> {{ "upload-csv" | i18n }}</a>
+    </li>
+    <li (click)="onDownloadTemplate()">
+        <a> {{ "dowload-layout" | i18n }}</a>
+    </li>
+</ul>

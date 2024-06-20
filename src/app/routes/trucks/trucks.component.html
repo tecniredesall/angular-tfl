@@ -1,0 +1,181 @@
+<div class="t-trucks">
+
+    <div class="t-trucks-container" *blockUI="'action-truck-container'; template: templateBlockModalUiComponent">
+
+        <div class="t-trucks-content scroll-view-app">
+
+            <ng-container [ngSwitch]="selectedView">
+
+                <ng-container *ngSwitchCase="CONSTANTS.VIEW_MODE.LIST" [ngTemplateOutlet]="trucksList"></ng-container>
+
+                <ng-container *ngSwitchCase="CONSTANTS.VIEW_MODE.ACTION"
+                    [ngTemplateOutlet]="trucksActions"></ng-container>
+
+            </ng-container>
+
+            <ng-template #trucksList>
+
+                <div class="t-trucks-list-view {{responsiveClass}}"
+                    [ngClass]="0 == trucks.length ? 't-trucks-list-view--empty' : 't-trucks-list-view--fill'"
+                    (resized)="onEventViewResized($event)">
+
+                    <silosys-main-header class="t-trucks-main-header" [title]="'vehicles'" [searchValue]="searchText"
+                        [searchInputPlaceholder]="'seach-vehicle-placeholder'" [showExportCSVButton]="false"
+                        [permissionTag]="PERMISSIONS.TRUCKS" [permissionType]="PERMISSION_TYPES.CREATE"
+                        (eventSearchInput)="onTypeSearchInput($event)" (eventNew)="newTruck()">
+                    </silosys-main-header>
+
+                    <div class="t-trucks-data-grid"
+                        *blockUI="'data-grid-container'; template: templateBlockModalUiDataGrid">
+                        <ng-container *ngIf="trucks.length > 0 || isSearching; else emptyState">
+                            <div class="t-trucks-data-grid-header">
+                                <div class="t-trucks-data-grid-header__column t-trucks-data-grid-header__column--brand">
+                                    <span class="t-trucks-data-grid-header__text no-select pointer"
+                                        (click)="sortData('name')">
+                                        {{ "brand" | i18n | uppercase }}
+                                        <img class="pointer sort-icon"
+                                            [src]="columnAscState['name']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                                    </span>
+                                </div>
+                                <div
+                                    class="t-trucks-data-grid-header__column t-trucks-data-grid-header__column--license">
+                                    <span class="t-trucks-data-grid-header__text no-select pointer"
+                                        (click)="sortData('license_plate')">
+                                        {{ "PLATE" | i18n }}
+                                        <img class="pointer sort-icon"
+                                            [src]="columnAscState['license_plate']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                                    </span>
+                                </div>
+                                <div class="t-trucks-data-grid-header__column t-trucks-data-grid-header__column--type">
+                                    <span class="t-trucks-data-grid-header__text no-select pointer"
+                                        (click)="sortData('vehicle_type')">
+                                        {{ "vehicle-type" | i18n | uppercase}}
+                                        <img class="pointer sort-icon"
+                                            [src]="columnAscState['vehicle_type']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                                    </span>
+                                </div>
+                                <div
+                                    class="t-trucks-data-grid-header__column t-trucks-data-grid-header__column--service">
+                                    <span class="t-trucks-data-grid-header__text no-select pointer"
+                                        (click)="sortData('service_type')">
+                                        {{ "truck-service-type" | i18n | uppercase}}
+                                        <img class="pointer sort-icon"
+                                            [src]="columnAscState['service_type']?'assets/img/svg/caret_icon.svg':'assets/img/svg/caret_icon_down.svg'" />
+                                    </span>
+                                </div>
+                                <div
+                                    class="t-trucks-data-grid-header__column t-trucks-data-grid-header__column--actions">
+                                    <span class="t-trucks-data-grid-header__text no-select pointer">
+                                        {{ "ACTIONS" | i18n }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="t-trucks-data-grid-row ng-star-inserted" *ngFor="let truck of trucks">
+                                <span class="t-trucks-icon">
+                                    <img src="assets/img/svg/load-carriage.svg" />
+                                </span>
+
+                                <span class="t-trucks-data-grid-row-header__text t-trucks-header-name no-select">
+                                    {{ "brand" | i18n | titlecase }}
+                                </span>
+                                <div class="t-trucks-data t-trucks-name">
+                                    {{truck.name | titlecase}}
+                                </div>
+
+                                <span class="t-trucks-data-grid-row-header__text t-trucks-header-license no-select">
+                                    {{ "LICENCE" | i18n }}
+                                </span>
+                                <div class="t-trucks-data t-trucks-license">
+                                    {{truck.license}}
+                                </div>
+
+                                <span class="t-trucks-data-grid-row-header__text t-trucks-header-type no-select">
+                                    {{ "type" | i18n }}
+                                </span>
+                                <div class="t-trucks-data t-trucks-type">
+                                    {{truck.vehicleType || '-'}}
+                                </div>
+
+                                <span class="t-trucks-data-grid-row-header__text t-trucks-header-service no-select">
+                                    {{ "truck-transport-service" | i18n }}
+                                </span>
+                                <div class="t-trucks-data t-trucks-service">
+                                    {{ truck.serviceTypeId == TRANSPORT_SERVICE_TYPE.OWNER ?
+                                    ('drive-type-owner' | i18n) :
+                                    truck.serviceTypeId == TRANSPORT_SERVICE_TYPE.THIRD ?
+                                    ('drive-type-third' | i18n) : ''}}
+                                </div>
+
+                                <div class="t-trucks-actions-container">
+
+                                    <button type="button"
+                                        class="btn btn-default t-trucks-action-button t-trucks-action-button-edit"
+                                        (click)="editTrucks(truck)"
+                                        *permission="{tag: PERMISSIONS.TRUCKS, type: PERMISSION_TYPES.UPDATE}">
+                                        <img src="assets/img/svg/edith-shape.svg">
+                                    </button>
+
+                                    <button type="button"
+                                        class="btn btn-default t-trucks-action-button t-trucks-action-button-remove"
+                                        (click)="deleteTruck(truck)"
+                                        *permission="{tag: PERMISSIONS.TRUCKS, type: PERMISSION_TYPES.DELETE}">
+                                        <img src="assets/img/svg/remove_icon.svg" />
+                                    </button>
+
+                                    <div class="dropdown t-trucks-action-button-options"
+                                        *permission="{tag: PERMISSIONS.TRUCKS, type: PERMISSION_TYPES.UPDATE}">
+
+                                        <button type="button"
+                                            class="btn btn-default t-trucks-action-button dropdown-toggle"
+                                            data-toggle="dropdown">
+
+                                            <img src="assets/img/svg/options-vertical.svg" alt="">
+
+                                        </button>
+
+                                        <ul class="dropdown-menu dropdown-actions-left">
+                                            <li class="pointer" (click)="deleteTruck(truck)"
+                                                *permission="{tag: PERMISSIONS.TRUCKS, type: PERMISSION_TYPES.DELETE}">
+                                                <a>
+                                                    {{'delete' | i18n}}
+                                                </a>
+                                            </li>
+                                            <li class="pointer" (click)="editTrucks(truck)"
+                                                *permission="{tag: PERMISSIONS.TRUCKS, type: PERMISSION_TYPES.UPDATE}">
+                                                <a>
+                                                    {{'edit' | i18n}}
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <mat-paginator class="custom-paginator" [length]="paginator?.totalItems"
+                                [pageIndex]="paginator?.currentPage - 1" [pageSize]="paginator?.itemsPerPage"
+                                (page)="eventPaginator($event)" showFirstLastButtons>
+                            </mat-paginator>
+                        </ng-container>
+                    </div>
+
+                    <ng-template #emptyState>
+                        <div class="t-trucks-empty-search-results">
+                            <app-not-results-found></app-not-results-found>
+                        </div>
+                    </ng-template>
+                </div>
+            </ng-template>
+
+            <ng-template #trucksActions>
+                <div class="t-trucks-actions-component">
+                    <app-action-trucks [currentTruck]="trucksData" [isEdit]="isEdit" (closeModal)="closeModal()"
+                        (success)="refreshData($event)">
+                    </app-action-trucks>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

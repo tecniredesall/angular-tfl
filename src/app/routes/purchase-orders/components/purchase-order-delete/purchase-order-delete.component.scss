@@ -1,0 +1,48 @@
+.purchase-delete-container {
+    display: grid;
+    text-align: center;
+    color: var(--tr-dialog-confirmation-color);
+    max-width: 554px;
+    height: auto;
+    padding: 50px 30px 30px 30px;
+    row-gap: 25px;
+    &__question {
+        font-size: 28px;
+        font-weight: 600;
+    }
+    &__note {
+        font-size: 14px;
+        display: grid;
+        &-title {
+            font-weight: 600;
+        }
+        &-description {
+            font-weight: normal;
+        }
+    }
+    &__buttons {
+        display: block;
+        width: 100%;
+        height: auto;
+        text-align: center;
+
+        &__wrapper {
+            display: inline-block;
+            padding: 16px;
+
+            &__cancel,
+            &__delete {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 15px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.4;
+                letter-spacing: normal;
+                padding: 8px 48px !important;
+            }
+        }
+    }
+}

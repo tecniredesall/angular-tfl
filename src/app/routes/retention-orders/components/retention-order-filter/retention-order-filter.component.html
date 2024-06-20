@@ -1,0 +1,137 @@
+<div class="order-results-filter" *blockUI="'results-filter-layout'; template: templateBlockModalUiComponent">
+
+    <!-- Body -->
+    <div class="order-results-filter__body">
+        <div class="title-data">{{'general-information' | i18n}}</div>
+        <!-- Filter inputs -->
+        <form *ngIf="formControls" [formGroup]="formControls" novalidate>
+            <div class="row row-full-width">
+
+                <!-- DATE-->
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 order-results-filter__input-container">
+                    <section class="sil-form__section date">
+                        <label class="order-results-filter__label-input">{{ "date" | i18n }} *</label>
+                        <mat-form-field class="sil-form__date-input tr__date-picker" color="red" appearance="outline"
+                            floatLabel="never">
+                            <input formControlName="retention_date" matInput [matDatepicker]="picker1"
+                                placeholder="{{ 'filter-format-date' | i18n }}" autocomplete="not"
+                                [max]="this.maxDate" />
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker [max]="this.maxDate" [date] panelClass="tr__date-picker__panel"
+                                #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </section>
+                </div>
+                <!-- PRODUCER -->
+                <div class="order-results-filter__input-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <section class="producer">
+                        <custom-select formControlName="producerDataCompleted" [label]="'producer' | i18n"
+                            [placeholder]="'select-producer' | i18n" [items]="producers" [clearable]="true"
+                            [bindLabel]="'fullName'" [emptyLabel]="'producers-empty-label' | i18n"
+                            [emptyImage]="'assets/img/svg/empty-producer.svg'" [isLoading]="loadingProducers"
+                            [searchPlaceholder]="'search-producer' | i18n" (onSearch)="onDropdownSearch($event)"
+                            (onNextPage)="onDropdownReachedEnd()" (onSelect)="setSeller($event)"
+                            (clear)="setSeller(null)">
+                        </custom-select>
+                        <ng-container
+                            *ngIf="formControls.get('sellerId').dirty || formControls.get('sellerId').touched">
+                            <span *ngIf="formControls.get('sellerId').hasError('required')"
+                                class="sil-form__section__error-message"> {{ "is-required-msg" | i18n }}</span>
+                        </ng-container>
+                    </section>
+                </div>
+                <!-- IHCAFE -->
+                <div class="order-results-filter__input-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <section>
+                        <label class="order-results-filter__label-input">{{ "retention-orders-ihcafe-create" | i18n }}
+                        </label>
+                        <input formControlName="ihcafe" class="ihcafe" (blur)="onBlurIhcafe($event)"
+                            [placeholder]="'retention-orders-ihcafe-create-place-holder' | i18n">
+                        <ng-container *ngIf="formControls.get('ihcafe').dirty || formControls.get('ihcafe').touched">
+                            <span *ngIf="formControls.get('ihcafe').hasError('not_valid')"
+                                class="sil-form__section__error-message"> {{ "retention-order-ihcafe-exists" | i18n
+                                }}</span>
+                            <span *ngIf="formControls.get('ihcafe').hasError('pattern')"
+                                class="sil-form__section__error-message">{{"t-alphanumeric-pattern-ihcafe_carnet"| i18n:
+                                formControls.get("ihcafe").value }}</span>
+                            <span *ngIf="formControls.get('ihcafe').hasError('maxlength')"
+                                class="sil-form__section__error-message">{{"max-length-value-error" | i18n |
+                                stringReplace : "[value]" : CONSTANTS.MAX_LENGTH_PRODUCER_CARNET_IHCAFE }}</span>
+                        </ng-container>
+                    </section>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <!-- LIST OF WEIGHT NOTES -->
+            <div class="row mrg-top-20">
+                <div class="col-lg-12 mrg-btm-10 p0">
+                    <span class="order-results-filter__label-subtitle">
+                        {{'select-weight-notes' | i18n}}
+                    </span>
+                </div>
+                <app-tags [tags]="paramTags" (eventOnDeleteTag)="onDeleteTag($event)"></app-tags>
+
+                <sst-retention-order-weight-notes *ngIf="isCompleteFilters; else emptyFilters" [filters]="filters"
+                    [idRetentionOrder]="idRetentionOrder" [selectedNotes]="selectedNotes"
+                    [companyInfo]="this.companyInfo" (eventSetSelectedNotes)="onEventSetSelectedNotes($event)">
+                </sst-retention-order-weight-notes>
+                <ng-template #emptyFilters>
+                    <div class="order-results-filter__production-flows__empty no-select">
+                        <img class="order-results-filter__production-flows__empty__image"
+                            src="assets/img/svg/empty_nota_de_peso.svg" alt="">
+                        <div
+                            class="order-results-filter__production-flows__empty__main-description pad-row-empty-description">
+                            {{'lot-empty-filters-description' | i18n}}
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+            <div class="row mrg-top-25" *ngIf="this.selectedNotes.length > 0">
+                <!-- Text note and totals weight note-->
+                <div class="other-section">
+                    <!-- Text note -->
+                    <div class="other-section__text-note">
+                        <div class="other-section__text-note__label weight-note-label">
+                            <span>{{ "note" | i18n }}</span>
+                        </div>
+                        <div class="other-section__text-note__control">
+                            <textarea formControlName="textNote" class="weight-note-create-input"
+                                [placeholder]="'write-description' | i18n"></textarea> <span
+                                class="other-section__text-note__control__length pull-right" [ngClass]="{
+                                'max-length': formControls.get('textNote').hasError('maxlength')
+                            }">
+                                {{ formControls.get("textNote").value?.length }} /
+                                {{ CONSTANTS.MAX_LENGTH_TEXT_NOTE }}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Totals weight note -->
+                    <div class="other-section__totals">
+                        <div class="other-section__totals__item other-section__totals__label">
+                            {{ "net-weight" | i18n }} ({{ configuration.conversionMeasurementUnitAbbreviation }}):
+                        </div>
+                        <div class="other-section__totals__item other-section__totals__value">
+                            {{currentRetentionOrder?.TotalNet | number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS :
+                            "en" }}
+                        </div>
+                        <div class="other-section__totals__item other-section__totals__label">
+                            {{ "gold_total" | i18n }} ({{ configuration.conversionMeasurementUnitAbbreviation }}):
+                        </div>
+                        <div class="other-section__totals__item other-section__totals__value">
+                            {{currentRetentionOrder?.TotalGoldNet | number : "1." + DECIMAL_DIGITS + "-" +
+                            DECIMAL_DIGITS : "en" }}
+                        </div>
+                        <div class="other-section__totals__item other-section__totals__label__total">
+                            {{ "total" | i18n }}:
+                        </div>
+                        <div class="other-section__totals__item other-section__totals__value__total">
+                            {{ companyInfo?.currency?.symbol}} {{currentRetentionOrder.Total | number : "1." +
+                            DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }} {{ companyInfo?.currency?.isoCode}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

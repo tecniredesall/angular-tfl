@@ -1,0 +1,160 @@
+<header class="sil-form__header">
+    <h1 class="sil-form__title">
+        {{ "new-c" | i18n }}
+        {{ "block" | i18n | lowercase }}
+    </h1>
+</header>
+<div class="sil-form">
+    <section class="sil-form__section producer__name" *ngIf="producer">
+        <label>{{ "producer" | i18n }}</label>
+        <p class="sil-form__profile-text sil-form__profile-text-bold">
+            {{ producer.fullName }}
+        </p>
+    </section>
+</div>
+<section class="sil-table">
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__name">
+            {{ "name" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortBlocks('name')"
+                [ngClass]="{ 'sort-icon-invert': !orderStatusAsc.name }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__farm">
+            {{ "farm" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortBlocks('farmName')"
+                [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.farmName
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__platform">
+            {{ "platform" | i18n | uppercase }}
+
+        </span>
+    </header>
+</section>
+<section class="block__accordion" *blockUI="
+'modal-block-container';
+template: templateBlockModalUiComponent">
+    <mat-accordion multi>
+        <ng-container *ngFor="let block of blocks; let i = index">
+            <mat-expansion-panel
+                hideToggle
+                class="sil-expansion-panel"
+                (opened)="onOpenedPanelEvent(block)"
+                (closed)="onClosedPanelEvent(block)"
+                [expanded]="block.isExpanded"
+                #blockPanel
+            >
+                <mat-expansion-panel-header
+                    [collapsedHeight]="'auto'"
+                    [expandedHeight]="'auto'"
+                    [ngClass]="blockPanel.expanded ? 'mat-expansion-selected': ''"
+                >
+                    <ng-container
+                        [ngTemplateOutlet]="panelHeader"
+                        [ngTemplateOutletContext]="{
+                            data: block,
+                            panel: blockPanel,
+                            idexForm: i
+                        }"
+                    >
+                    </ng-container>
+                </mat-expansion-panel-header>
+                <ng-container
+                    [ngTemplateOutlet]="panelBody"
+                    [ngTemplateOutletContext]="{
+                        data: block,
+                        producer: producer,
+                        idexForm: i
+                    }"
+                >
+                </ng-container>
+            </mat-expansion-panel>
+        </ng-container>
+    </mat-accordion>
+</section>
+<section class="sil-form__alert" *ngIf="showCompletedAlert">
+    <i class="icon-alert_icon"></i>
+    <p>{{'complete-blocks-data-alert' | i18n}}</p>
+</section>
+<section
+    class="sil-form__section-form-action-buttons form-actions"
+    *ngIf="form"
+>
+    <button class="btn btn-transparent-blue btn-back" (click)="onBackClick()">
+        <i class="icon-arrow_icon"></i>
+        {{ "back" | i18n }}
+    </button>
+    <button class="btn btn-resize gray-btn button-lg" (click)="onCancelClick()">
+        {{ "cancel" | i18n }}
+    </button>
+    <button
+        [disabled]="isBlockOnEdition"
+        class="btn btn-resize blue-btn button-lg"
+        (click)="onCreateClick()"
+    >
+        {{ "create" | i18n }}
+    </button>
+</section>
+
+<ng-template #panelHeader let-data="data" let-panel="panel" let-idexForm="idexForm">
+    <div
+        class="block__accordion-header sil-expansion-panel-header"
+        [ngClass]="{ 'panel-expanded': panel.expanded }"
+    >
+        <article class="sil-table__row">
+            <span class="sil-table__cell cell__name">
+                <i
+                    [ngClass]="{
+                        'icon-caret-up': panel.expanded,
+                        'icon-caret-down': !panel.expanded
+                    }"
+                ></i>
+                {{ data.isEditing ? "Edicion de parcela" : data.name }}
+            </span>
+        </article>
+        <article class="sil-table__row">
+            <span class="sil-table__cell cell__farm">
+                {{ data.farmName ? data.farmName : "-" }}
+            </span>
+        </article>
+        <span class="sil-table__cell sil-table__row__platform">
+            <img [src]="'assets/img/svg/' + data.code + '-icon.svg'">
+                <span> {{data.code | i18n}}</span>
+        </span>
+        <span class="cell__actions">
+            <app-table-action-button-group
+                *ngIf="!data.isEditing"
+                [disableDelete]="false"
+                (actionClicked)="onPanelActionClicked($event, data.id, idexForm)"
+                [permissionTag]="permissionTag"
+                [permissionType]="permissionType"
+            ></app-table-action-button-group>
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #panelBody let-data="data" let-producer="producer">
+    <section class="block__accordion-body">
+        <app-block-federated-view
+            *ngIf="!data.isEditing"
+            [block]="data"
+        ></app-block-federated-view>
+        <app-block-edit
+            *ngIf="data.isEditing"
+            [isForFederatedItem]="true"
+            [federatedBlock]="data"
+            [federatedProducer]="producer"
+            (eventCancel)="onPanelActionClicked(actions.UPDATE, data.id)"
+            (removeBlock)="onPanelActionClicked(actions.DELETE, data.id)"
+            (saveFederated)="onSaveBlockEdit($event)"
+        >
+        </app-block-edit>
+    </section>
+</ng-template>

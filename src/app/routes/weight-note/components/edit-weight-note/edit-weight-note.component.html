@@ -1,0 +1,44 @@
+<div class="edit-weight-note">
+    <div class="edit-weight-note__title">
+        {{'edit-weight-note' | i18n }}
+    </div>
+    <p class="edit-weight-note__subtitle">{{'edit-weight-note-comment' | i18n}}</p>
+    <div class="edit-weight-note__reason">
+        <p>{{'edit-weight-note-reason' | i18n}}</p>
+        <textarea
+            rows="4"
+            [formControl]="reasonEdit"
+            [placeholder]="'write-description' | i18n"
+        ></textarea>
+    </div>
+    <div class="edit-weight-note__comments">
+        <div *ngFor="let comment of comments;let i = index" class="edit-weight-note__comments__container">
+            <mat-divider *ngIf="i < comments.length - 1" [vertical]="true"></mat-divider>
+            <div class="edit-weight-note__comments__container__icon">
+                <i class="icon-calendar-edit"></i>
+            </div>
+            <div class="edit-weight-note__comments__container__comment">
+                {{comment.comment | titlecase}}
+                <span>{{comment.date | formatMoment : "MMM DD, YYYY ["+("at" | i18n)+"] HH:mm" : true}}</span>
+            </div>
+        </div>
+        <p *ngIf="data.length > 3 && comments.length == 3" class="edit-weight-note__comments__more" (click)="showMore()">
+            {{"view-more" | i18n}}
+            <i class="icon-caret-down"></i>
+        </p>
+        <p *ngIf="comments.length > 3" class="edit-weight-note__comments__more" (click)="showLess()">
+            {{"view-less" | i18n}}
+            <i class="icon-caret-up"></i>
+        </p>
+    </div>
+    <div class="edit-weight-note__buttons">
+        <button class="edit-weight-note__buttons--cancel" (click)="cancel()">
+            {{ 'cancel' | i18n }}
+        </button>
+        <button class="edit-weight-note__buttons--accept"
+            [disabled]="reasonEdit.invalid"
+            (click)="editWeightNote()">
+            {{'accept' | i18n}}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="reception-notes-modal-filter" *blockUI="'reception-notes-modal-filter'; template: templateBlockModalUiComponent">
+    <div class="reception-notes-modal-filter-header">
+        <div class="modal-loca-title">
+            <span>{{ 'filter' | i18n }}</span>
+        </div>
+        <div class="pointer" (click)="clearFilters()">
+            <p class="font-blue">{{ 'delete-filters' | i18n }}</p>
+        </div> 
+    </div>
+    <div class="reception-notes-modal-filter-dates">
+        <p class="title-body-modal">{{'date' |i18n}}</p>
+        <div class="reception-notes-modal-filter-dates-inputs">
+            <div class="reception-notes-modal-filter-dates-input">
+                <p class="date-note-detail">{{ 'from' | i18n }}</p>
+                <mat-form-field class="filter-date-input" color="red" appearance="outline" floatLabel="never">
+                    <input [formControl]="startDate" matInput [matDatepicker]="picker1" [max]="endDate.value" placeholder="{{'format-date'| i18n }}">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="reception-notes-modal-filter-dates-input">
+                <p class="date-note-detail">{{ 'to' | i18n }}</p>
+                <mat-form-field class="filter-date-input" color="red" appearance="outline" floatLabel="never">
+                    <input [formControl]="endDate" matInput [matDatepicker]="picker2" [min]="startDate.value" placeholder="{{'format-date'| i18n }}">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <label *ngIf="startDate.hasError('matDatepickerMax')" class="error-msg-form">
+            {{ 'max-date-start' | i18n }}
+        </label>
+    </div>
+    <div class="reception-notes-modal-filter-certifications">
+        <p class="title-body-modal">{{'seals' |i18n}}</p>
+        <div class="reception-notes-modal-filter-certifications-container">
+            <div *ngFor="let certification of certificationsKeys"
+            class="reception-notes-modal-filter-certification pointer" (click)="selectCertification(certification)">
+                <div [ngClass]="{'certification-active': selectedCertifications.includes(certifications[certification].id)}">
+                    <img [src]="certifications[certification].image">
+                    <img *ngIf="selectedCertifications.includes(certifications[certification].id)"
+                    class="check-active" src="assets/img/svg/check-active.svg">
+                </div>
+                <p>{{certification}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="reception-notes-modal-filter-status">
+        <p class="title-body-modal">{{'status' |i18n}}</p>
+        <div class="reception-notes-modal-filter-status-row">
+            <div [ngClass]="{'status-active': selectedStatus.includes(RECEIVING_NOTE_STATUS.OPEN)}" class="pointer"
+                (click)="selectStatus(RECEIVING_NOTE_STATUS.OPEN)">
+                <img src="assets/img/svg/note-open.svg">
+                {{'open' | i18n}}
+                <img *ngIf="selectedStatus.includes(RECEIVING_NOTE_STATUS.OPEN)"
+                    class="check-active" src="assets/img/svg/check-active.svg">
+            </div>
+            <div [ngClass]="{'status-active': selectedStatus.includes(RECEIVING_NOTE_STATUS.CLOSED)}" class="pointer"
+                (click)="selectStatus(RECEIVING_NOTE_STATUS.CLOSED)">
+                <img src="assets/img/svg/note-close.svg">
+                {{'closed' | i18n}}
+                <img *ngIf="selectedStatus.includes(RECEIVING_NOTE_STATUS.CLOSED)"
+                    class="check-active" src="assets/img/svg/check-active.svg">
+            </div>
+        </div>
+    </div>
+    <div class="reception-notes-modal-filter-actions">
+        <div class="reception-notes-modal-filter-actions-button">
+            <button (click)="cancel()" class="btn btn-default button-lg">{{ 'cancel' | i18n }}</button>
+        </div>
+        <div class="reception-notes-modal-filter-actions-button">
+            <button class="btn btn-resize blue-btn button-lg" (click)="applyFilter()" [disabled]="startDate.errors || endDate.errors">{{'apply' | i18n}}</button>
+        </div>
+    </div>
+</div>

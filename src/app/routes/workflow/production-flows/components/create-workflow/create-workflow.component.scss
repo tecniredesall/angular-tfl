@@ -1,0 +1,519 @@
+::ng-deep #diagram {
+  height: calc(100% - 36px - 18px);
+  border-color: transparent;
+  .dxdi-canvas {
+    .page {
+      fill: var(--tr-foreground-color);
+    }
+    .connector {
+      path, line {
+        stroke-width: 1;
+        stroke: var(--tr-base-color-blue);
+      }
+      &.not-valid{
+        path, line {
+          stroke-width: 1;
+          stroke: var(--tr-base-color-red);
+        }
+      }
+    }
+  }
+  .dxdi-page-shadow {
+    fill: none;
+  }
+  .shape {
+    rect{
+      stroke: var(--tr-background-color);
+      fill: var(--tr-header-background-color);
+      stroke-width: 2px;
+      rx: 11px;
+      ry: 11px;
+    }
+    text {
+      text-anchor: start;
+    }
+    &:first-child {
+      rect{
+        stroke: var(--tr-workflow-shape-pending-stroke);
+        fill: var(--tr-workflow-shape-pending-fill);
+      }
+    } 
+  }
+  .create-process__shape{
+    &__title{
+      fill: var(--tr-data-grid-color);
+      font-size: 16px;
+      font-weight: bold;
+    }
+    &__labels{
+      fill: var(--tr-data-grid-color);
+      font-size: 12px;
+    }
+    &__elements{
+      fill: var(--tr-data-grid-color);
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+}
+
+
+.create-process{
+  position: relative;
+  top: -70px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 70px 0 0 0;
+  &__wrapper{
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  &__container{
+    display: grid;
+    grid-template-rows: repeat(2, max-content) minmax(max-content, auto);
+    grid-template-columns: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 18px 22px !important;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  &__back{
+    width: 300px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    i{
+      color: var(--tr-base-color-blue);
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    p{
+      color: var(--tr-base-color-blue);
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+  &__configuration{
+    gap: 33px;
+    display: grid;
+    position: relative;
+    padding-top: 8px;
+    align-items: center;
+    grid-template-areas: "title name info";
+    grid-template-columns: 25% 43% 25%;
+    &__select{
+      color: var(--tr-base-color-blue);
+      border: 1px solid var(--tr-card-border-color);
+      display: flex;
+      padding: 16px;
+      position: relative;
+      font-size: 20px;
+      grid-area: title;
+      box-shadow: none;
+      font-weight: 600;
+      align-items: center;
+      justify-content: space-between;
+      i{
+        font-size: 12px;
+      }
+      &__items{
+        top: 75px;
+        width: 25%;
+        height: 150px;
+        border: solid 1px var(--tr-card-border-color);
+        background-color: var(--tr-card-background-color);
+        z-index: 10;
+        overflow: auto;
+        position: absolute;
+        border-radius: 0 0 5px 5px;
+        mat-card{
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+    }
+    &__name{
+      grid-area: name;
+      color: var(--tr-header-text-color);
+      &__workflow{
+        font-size: 20px;
+        font-weight: 600;
+      }
+      &__label{
+        font-size: 14px;
+      }
+    }
+    &__info{
+      display: flex;
+      grid-area: info;
+      color: var(--tr-info-text-color);
+      align-items: flex-end;
+      justify-content: flex-end;
+      &__warning{
+        i{
+          color: var(--tr-base-color-yellow);
+          margin-right: 8px;
+        }
+      }
+      &__block{
+        color: var(--tr-base-color-blue);
+        width: fit-content;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        background-color: var(--tr-info-background-color);
+        i{
+          margin-right: 8px;
+        }
+      }
+    }
+    &__process{
+      display: none;
+      &__container{
+        display: none;
+      }
+    }
+  }
+  &__container{
+    &__workflow{
+      gap: 15px;
+      display: grid;
+      padding-top: 8px;
+      $workflow-class: &;
+      grid-template-areas: "process divider diagram";
+      grid-template-columns: 25% 2px 70%;
+      &__process{
+        z-index: 0;
+        grid-area: process;
+        padding-top: 8px;
+        &__title{
+          color: var(--tr-header-text-color);
+          font-size: 20px;
+          font-weight: 600;
+        }
+        &__items{
+          overflow: auto !important;
+          margin-top: 16px;
+          max-height: 580px;
+          &__item{
+            color: var(--tr-data-grid-color);
+            display: flex;
+            padding: 6px 10px;
+            box-shadow: none;
+            align-items: center;
+            $item-process: &;
+            margin-bottom: 8px;
+            justify-content: space-between;
+            background-color: var(--tr-mat-calendar-background-color);
+            i{
+              color: var(--tr-base-color-red);
+              cursor: pointer;
+            }
+            &--disabled{
+              @extend #{$item-process};
+              cursor: not-allowed;
+              background-color: var(--tr-background-input-disabled);
+            }
+          }
+        }
+      }
+      mat-divider{
+        grid-area: divider;
+        border-right-width: 2px;
+        border-right-color: var(--tr-divider-border-color);
+      }
+      &__diagram{
+        grid-area: diagram;
+        max-width: 100%;
+        &__footer{
+          margin-top: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          &__actions{
+            display: flex;
+            align-items: center;
+            button{
+              font-size: 15px;
+              font-weight: 600;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: 1.4;
+              letter-spacing: normal;
+              text-align: center;
+              outline: none !important;
+              border: none !important;
+              box-shadow: none !important;
+              border-radius: 5px;
+              height: 40px !important;
+              width: 162px;
+            }
+            &--cancel{
+              color: var(--tr-base-color-blue);
+              background-color: transparent;
+              margin-left: 10px;
+            }
+            &--submit{
+              color: var(--tr-base-color-white);
+              background-color: var(--tr-base-color-blue);
+              &:disabled{
+                color: var(--tr-button-disabled-color);
+                cursor: not-allowed;
+                background-color: var(--tr-button-disabled-background-color);
+              }
+            }
+          }
+        }
+        &--tablet{
+          gap: 36px;
+          margin: auto;
+          display: none;
+          max-width: 412px;
+          margin-top: 24px;
+          flex-direction: column;
+          align-items: center;
+          p{
+            color: var(--tr-header-text-color);
+            font-size: 14px;
+            max-width: 286px;
+            text-align: center;
+            span{
+              font-weight: bold;
+            }
+          }
+        }
+      }
+      &__configuration{
+        grid-area: configuration;
+      }
+      &--configuration{
+        @extend #{$workflow-class};
+        grid-template-areas: "process divider diagram configuration";
+        grid-template-columns: 25% 2px 45% 25%;
+      }
+    }
+  }
+}
+
+:host ::ng-deep.custom-select-control{
+  background-color: var(--tr-foreground-color);
+  border-radius: 8px;
+}
+
+.no-padding-right {
+  padding-right: 0 !important;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .create-process{
+    &__configuration{
+      gap: 15px 30px;
+      grid-template-areas:
+          "title name"
+          "process info";
+      grid-template-columns: 30% 65%;
+      &__process{
+        width: 100%;
+        display: flex;
+        grid-area: process;
+        align-items: center;
+        justify-content: space-between;
+        p{
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--tr-header-text-color);
+        }
+        button{
+          color: var(--tr-base-color-white);
+          width: 35px;
+          height: 35px;
+          border: none;
+          display: flex;
+          padding: 12px;
+          align-items: center;
+          border-radius: 5px;
+          justify-content: center;
+          background-color: var(--tr-base-color-blue);
+        }
+      }
+      &__info{
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+    }
+    &__container{
+      &__workflow{
+        gap: 0;
+        grid-template-areas: "diagram";
+        grid-template-columns: 100%;
+        mat-divider{
+          display: none;
+        }
+        &--process{
+          gap: 15px;
+          display: grid;
+          padding-top: 8px;
+          grid-template-areas: "process divider diagram";
+          grid-template-columns: 30% 2px 65%;
+          mat-divider{
+            display: block;
+          }
+        }
+        &--configuration{
+          gap: 15px;
+          grid-template-areas: "diagram configuration";
+          grid-template-columns: 50% 50%;
+        }
+        &__process{
+          &__title{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .create-process{
+    &__configuration{
+      gap: 0;
+      width: 100%;
+      display: flex;
+      position: relative;
+      align-items: flex-start;
+      flex-direction: column;
+      &__select{
+        width: 100%;
+        &__items{
+          top: 68px;
+          width: 100%;
+        }
+      }
+      &__name{
+        width: 100%;
+        margin: 16px 0;
+      }
+      &__process{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        p{
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--tr-header-text-color);
+        }
+        button{
+          color: var(--tr-base-color-white);
+          width: 35px;
+          height: 35px;
+          border: none;
+          display: flex;
+          padding: 12px;
+          align-items: center;
+          border-radius: 5px;
+          justify-content: center;
+          background-color: var(--tr-base-color-blue);
+          &:disabled{
+            cursor: not-allowed;
+            color: var(--tr-button-disabled-color);
+            background-color: var(--tr-button-submit-disabled);
+          }
+        }
+        &__container{
+          width: 100%;
+          display: block;
+          &__items{
+            overflow: auto !important;
+            margin-top: 16px;
+            max-height: 580px;
+            &__item{
+              color: var(--tr-data-grid-color);
+              display: flex;
+              padding: 6px 10px;
+              box-shadow: none;
+              align-items: center;
+              $item-process: &;
+              margin-bottom: 8px;
+              justify-content: space-between;
+              background-color: var(--tr-mat-calendar-background-color);
+              i{
+                color: var(--tr-base-color-red);
+                cursor: pointer;
+              }
+              &--disabled{
+                @extend #{$item-process};
+                cursor: not-allowed;
+                background-color: var(--tr-background-input-disabled);
+              }
+            }
+          }
+        }
+      }
+      &__info{
+        display: none;
+      }
+    }
+    &__container{
+      &__workflow{
+        grid-template-columns: 100%;
+        grid-template-areas: "diagram";
+        &__diagram{
+          &__footer{
+            gap: 12px;
+            display: none;
+            margin-top: 16px;
+            flex-direction: column;
+          }
+          #diagram{
+            display: none;
+          }
+          &--tablet{
+            display: flex;
+          }
+        }
+        &__process{
+          display: none;
+        }
+        &--configuration{
+          display: flex;
+          flex-direction: column;
+        }
+        &--process{
+          gap: 0;
+          grid-template-areas: "diagram";
+          grid-template-columns: 100%;
+          mat-divider{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 540px) {
+  .create-process{
+      padding-bottom: 64px;
+  }
+}

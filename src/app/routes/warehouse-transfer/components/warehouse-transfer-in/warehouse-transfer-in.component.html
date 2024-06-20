@@ -1,0 +1,33 @@
+<div class="confirmation-dialog">
+    <div class="confirmation-dialog__question no-select">
+        {{settings.title}}
+    </div>
+    <ng-container *ngIf="settings.message">
+        <div class="confirmation-dialog__note__info no-select">
+            {{settings.message}}
+        </div>
+    </ng-container>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <custom-select [label]="'id-movement-output' | i18n" [placeholder]="'select-movement-output' | i18n"
+                [items]="warehouseMovementsOut" [clearable]="false" [bindLabel]="'transaction_idx'"
+                [searchPlaceholder]="'search-producer' | i18n" (onSelect)="selectMovement($event)">
+            </custom-select>
+        </div>
+    </div>
+    <div class="confirmation-dialog__buttons">
+        <div class="confirmation-dialog__buttons__wrapper">
+            <button class="tr__button__second confirmation-dialog__buttons__wrapper__cancel" matRipple
+                (click)="onActionFooterSelected(ACTIONS.CANCEL)">
+                <span>{{'cancel' | i18n }}</span>
+            </button>
+        </div>
+        <div class="confirmation-dialog__buttons__wrapper">
+            <button class="tr__button__primary confirmation-dialog__buttons__wrapper__primary" matRipple
+                (click)="onActionFooterSelected(ACTIONS.ACCEPT)" [disabled]="!selectLot">
+                <span>{{'accept' | i18n }}</span>
+            </button>
+        </div>
+    </div>
+</div>

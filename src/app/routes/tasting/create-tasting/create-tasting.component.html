@@ -1,0 +1,162 @@
+<div class="container-tasting" *blockUI="'tasting-frame'; template: templateBlockModalUiComponent">
+
+    <button class="sil-form__header-button btn btn-transparent-blue lot-create__button-back" (click)="backLote()">
+        <i class="icon-arrow_icon"></i>
+        {{ "back-to-list" | i18n }}
+    </button>
+
+    <section class="background-tasting scroll-view-app" *ngIf="!generateDynamic">
+
+        <header class="sil-form__header">
+            <h1 class="sil-form__title">
+                {{"Catation" | i18n }} {{"lot-detail-id" | i18n}} L{{lote}}
+            </h1>
+        </header>
+
+        <section *ngFor="let item of formJson.data">
+            <h3 class="title-base--black">
+                {{item.section.labels | translateDynamic: lang}}
+            </h3>
+            <br>
+
+            <form [formGroup]="generateForm[item.section.name]">
+                <div class="row">
+                    <div class="col-md-4 {{field.styles}} {{field.name}}"
+                        [ngClass]="{'col-md-4': field.type !== 'textarea', 'col-md-12': field.type == 'textarea'}"
+                        *ngFor="let field of item.section.fields">
+                        <div [ngSwitch]="field.type">
+                            <div *ngSwitchCase="'date'">
+                                <label>{{field.labels | translateDynamic: lang}}
+                                    <span *ngIf="findRule(field, 'required')">*</span>
+                                </label>
+
+                                <section class="content-datepicker">
+                                    <input class="sil-form__input" [ngxMatDatetimePicker]="pickerCreate"
+                                        [placeholder]="field.placeholders | translateDynamic: lang"
+                                        [formControlName]="field.name" readonly="true" [max]="this.maxDate">
+                                    <mat-datepicker-toggle [for]="pickerCreate" (click)="setDate()">
+                                    </mat-datepicker-toggle>
+                                    <ngx-mat-datetime-picker #pickerCreate [showSpinners]="false" [showSeconds]="false"
+                                        [stepHour]="1" [stepMinute]="1" [color]="'primary'" [enableMeridian]="false"
+                                        panelClass="tr__date-picker-hours">
+                                    </ngx-mat-datetime-picker>
+                                </section>
+                                <label class="error"
+                                    *ngIf="generateForm[item.section.name].get(field.name).touched || (generateForm[item.section.name].get(field.name).errors && !generateForm[item.section.name].get(field.name).pristine)">
+                                    {{getMeError(item.section.name, field) | translateDynamic: lang}}
+                                </label>
+                            </div>
+                            <div class="select-field" *ngSwitchCase="'select'">
+                                <section>
+                                    <label>{{field.labels | translateDynamic: lang}}
+                                        <span *ngIf="findRule(field, 'required')">*</span>
+                                    </label>
+                                    <ng-select class="tr__ng-select__custom-scroll" [multiple]="false"
+                                        [clearable]="false" [closeOnSelect]="true"
+                                        [notFoundText]="'not-items-found' | i18n"
+                                        [placeholder]="field.placeholders | translateDynamic: lang"
+                                        [formControlName]="field.name">
+                                        <ng-option *ngFor="let option of field.extras?.options" [value]="option.id">
+                                            {{option.labels | translateDynamic: lang}}</ng-option>
+                                    </ng-select>
+                                    <label class="error"
+                                        *ngIf="generateForm[item.section.name].get(field.name).touched && generateForm[item.section.name].get(field.name).errors">
+                                        {{getMeError(item.section.name, field) | translateDynamic: lang}}
+                                    </label>
+                                </section>
+                                <section
+                                    *ngIf="field.name === 'roast'&&this.generateForm[item.section.name].get(field.name).value == 3">
+                                    <label>{{field.extras?.options[2].labels | translateDynamic: lang}}
+                                    </label>
+                                    <input type="text" [formControlName]="'other'" class="sil-form__input"
+                                        autocomplete="off"
+                                        [placeholder]="field.placeholders | translateDynamic: lang" />
+
+                                </section>
+
+
+                            </div>
+                            <div *ngSwitchCase="'text'">
+                                <label>{{field.labels | translateDynamic: lang}}
+                                    <span *ngIf="findRule(field, 'required')">*</span>
+                                </label>
+
+                                <input (keypress)="getMeError(item.section.name, field)" type="text"
+                                    class="sil-form__input" [formControlName]="field.name" autocomplete="off"
+                                    [placeholder]="field.placeholders | translateDynamic: lang" />
+                                <label class="error"
+                                    *ngIf="generateForm[item.section.name].get(field.name).touched || (generateForm[item.section.name].get(field.name).errors && !generateForm[item.section.name].get(field.name).pristine)">
+                                    {{getMeError(item.section.name, field) | translateDynamic: lang}}
+                                </label>
+
+                            </div>
+
+                            <div *ngSwitchCase="'number'">
+                                <label>{{field.labels | translateDynamic: lang}}
+                                    <span *ngIf="findRule(field, 'required')">*</span>
+                                </label>
+                                <input type="text" [textMask]="{ mask: positiveDecimalNumberMask}"
+                                    class="sil-form__input" [formControlName]="field.name" autocomplete="off"
+                                    [disabled]="findRule(field, 'disabled')"
+                                    [placeholder]="field.placeholders | translateDynamic: lang"
+                                    (keydown)="validateTypeNumber($event)"
+                                    (keyup)="item.section.average&&sumAvarage(item.section.name)" />
+                                <label class="error"
+                                    *ngIf="generateForm[item.section.name].get(field.name).touched || (generateForm[item.section.name].get(field.name).errors && !generateForm[item.section.name].get(field.name).pristine)">
+                                    {{getMeError(item.section.name, field) | translateDynamic: lang}}
+                                </label>
+                            </div>
+                            <div *ngSwitchCase="'multiselect'">
+                                <label>{{field.labels | translateDynamic: lang}}
+                                    <span *ngIf="findRule(field, 'required')">*</span>
+                                </label>
+                                <ng-select class="tr__ng-select__custom-scroll" [multiple]="true"
+                                    [closeOnSelect]="false" [clearable]="false"
+                                    [notFoundText]="'not-items-found' | i18n"
+                                    [placeholder]="field.placeholders | translateDynamic: lang" [searchable]="true"
+                                    [virtualScroll]="true" [formControlName]="field.name">
+
+                                    <ng-option *ngFor="let option of field.extras?.options" [value]="option.id">
+                                        {{option.labels | translateDynamic: lang}}</ng-option>
+                                </ng-select>
+                                <label class="error"
+                                    *ngIf="generateForm[item.section.name].get(field.name).touched || (generateForm[item.section.name].get(field.name).errors && !generateForm[item.section.name].get(field.name).pristine)">
+                                    {{getMeError(item.section.name, field) | translateDynamic: lang}}
+                                </label>
+
+                            </div>
+
+                            <div *ngSwitchCase="'textarea'">
+                                <label>{{field.labels | translateDynamic: lang}}
+                                    <span *ngIf="findRule(field,'required')">*</span>
+                                </label>
+                                <br>
+
+                                <textarea rows="4" class="sil-form__input" [formControlName]="field.name"
+                                    [placeholder]="field.placeholders | translateDynamic: lang"></textarea>
+                                <label class="error"
+                                    *ngIf="generateForm[item.section.name].get(field.name).touched || (generateForm[item.section.name].get(field.name).errors && !generateForm[item.section.name].get(field.name).pristine)">
+                                    {{getMeError(item.section.name, field) | translateDynamic: lang}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+
+
+        </section>
+
+
+
+        <div class="form-inputs btn-footer">
+            <button class="btn btn-transparent-blue" (click)="cancelTasting()">{{"cancel" | i18n }}</button>
+            <button class="btn btn-agree" [disabled]="disabledAceptBtn()" (click)="setNewTasting()">{{"accept" |
+                i18n}}</button>
+        </div>
+
+    </section>
+
+</div>

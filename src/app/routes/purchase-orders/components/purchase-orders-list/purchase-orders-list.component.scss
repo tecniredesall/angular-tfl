@@ -1,0 +1,234 @@
+@import "src/scss/breakpoints.scss";
+
+.purchase-order-container {
+
+    &__data-table {
+        margin-top: 10px;
+
+        &__title {
+            display: none;
+
+            .sort-icon-invert {
+                display: inline-block;
+                transform: rotate(180deg);
+            }
+        }
+
+        &__body {
+            display: grid;
+            grid-template-columns: 1fr;
+            font-size: 14px;
+            color: var(--tr-data-grid-color);
+
+            &-row {
+                display: grid;
+                grid-template-columns: 40px 1fr 1fr 1fr 40px;
+                align-items: center;
+                background-color: var(--tr-panel-header-background-color);
+                height: 105px;
+                margin-bottom: 10px;
+
+                .cell-date {
+                    display: none;
+
+                    &-title {
+                        color: var(--tr-labe-columns-list-color);
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+                }
+
+                .cell-icon {
+                    text-align: center;
+                    color: var(--tr-panel-header-toggle-icon-color);
+                    font-size: 20px;
+                }
+
+                .cell-options {
+                    color: var(--tr-base-color-blue);
+                }
+
+                .cell-data {
+                    display: inline-grid;
+
+                    &-title {
+                        color: var(--tr-labe-columns-list-color);
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .notes-cell {
+                        display: inline;
+
+                        i {
+                            margin-right: 5px;
+                        }
+                    }
+
+                    .note-status {
+                        width: 85%;
+                    }
+                }
+
+                .cell-weight,
+                .cell-price {
+                    text-align: left;
+                }
+
+                .disabled-btn {
+                    cursor: not-allowed;
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        &__paginator {
+            display: grid;
+            margin-top: 15px;
+            margin-bottom: 65px;
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .purchase-order-container {
+        &__actions-headers {
+            grid-template-columns: 1fr;
+
+            &__search-button {
+                margin-top: -40px;
+            }
+        }
+
+        &__data-table {
+            &__title {
+                display: none;
+            }
+
+            &__body {
+                &-row {
+                    grid-template-columns: 40px 1fr 1fr 1fr 1fr 40px;
+                    height: 118px;
+
+                    .cell-date {
+                        padding-top: 15px;
+                        padding-bottom: 5px;
+                        display: inline-grid;
+
+                        div {
+                            display: grid;
+
+                            .name-label {
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: $screen-md-min) {
+    .purchase-order-container {
+        &__data-table {
+            &__title {
+                margin-top: 15px;
+                display: grid;
+                font-size: 12px;
+                font-weight: 600;
+                grid-template-columns: 40px 1fr 50px 1fr 85px 100px 125px 105px 90px 30px;
+                margin-bottom: 10px;
+                color: var(--tr-labe-columns-list-color);
+
+                .total-pay,
+                .total-weight {
+                    text-align: right;
+                }
+            }
+
+            &__body {
+                &-row {
+                    grid-template-columns: 40px 1fr 50px 1fr 85px 100px 125px 105px 90px 30px;
+                    height: 55px;
+
+                    .cell-date {
+                        display: inline;
+                        padding-top: 15px;
+                        padding-bottom: 5px;
+
+                        div {
+                            display: grid;
+
+                            .name-label {
+                                font-size: 12px;
+                            }
+                        }
+
+                        &-title {
+                            display: none;
+                        }
+                    }
+
+                    .cell-data {
+                        &-title {
+                            display: none;
+                        }
+                    }
+
+                    .cell-empty {
+                        display: none;
+                    }
+
+                    .cell-options {
+                        grid-column: 10/10;
+                        grid-row: 1;
+                        text-align: center;
+                    }
+
+                    .cell-contract {
+                        grid-column: 6/6;
+                        grid-row: 1;
+                    }
+
+                    .cell-price {
+                        grid-column: 7/7;
+                        grid-row: 1;
+                        padding-right: 10px;
+                        text-align: right;
+                    }
+
+                    .cell-weight {
+                        grid-column: 8/8;
+                        grid-row: 1;
+                        padding-right: 10px;
+                        text-align: right;
+                    }
+
+                    .cell-status {
+                        grid-column: 9/9;
+                        grid-row: 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: $screen-md-max) {
+    .purchase-order-container {
+        &__data-table {
+            &__title {
+                grid-template-columns: 40px 1fr 100px 1fr 100px 90px 150px 150px 110px 40px;
+                column-gap: 6px;
+            }
+
+            &__body {
+                &-row {
+                    grid-template-columns: 40px 1fr 100px 1fr 100px 90px 150px 150px 110px 40px;
+                    column-gap: 6px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,105 @@
+<div class="container-fluid mt-1">
+    <div class="container-body">
+        <div class="row">
+            <div class="scale-dialog__body">
+
+                <!-- Select scale -->
+                <div class="scale-dialog__body__label">
+                    {{'scale' | i18n}} *
+                </div>
+                <ng-select class="scale-dialog__body__select tr__ng-select__custom-scroll" [(ngModel)]="selectedScale"
+                    [items]="scales" [multiple]="false" [closeOnSelect]="true" [clearable]="false"
+                    (ngModelChange)="onChangeScale($event)" loadingText="{{ 'loading' | i18n }}"
+                    [notFoundText]="'not-items-found' | i18n" placeholder="{{'scale-dialog-select-placeholder' | i18n}}"
+                    [searchable]="true">
+                    <ng-template ng-label-tmp let-item="item">
+                        <ng-container [ngTemplateOutlet]="scaleInformation"
+                            [ngTemplateOutletContext]="{item: item}"></ng-container>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <ng-container [ngTemplateOutlet]="scaleInformation"
+                            [ngTemplateOutletContext]="{item: item}"></ng-container>
+                    </ng-template>
+                </ng-select>
+
+                <!-- Main icon -->
+                <div class="scale-dialog__body__main-icon">
+                    <i class="icon-bascula no-select"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form [formGroup]="formSocket" novalidate class="form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="exampleFormControlInput1" class="form-label">Socket ID</label>
+                        <input type="text"  class="form-control" [value]="this.socketId">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="exampleFormControlInput1" class="form-label">Ip</label>
+                        <input type="text" formControlName="ip" placeholder="IP" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="exampleFormControlInput1" class="form-label">Puerto</label>
+                        <input type="text" formControlName="port" placeholder="Puerto" class="form-control">
+                    </div>
+                </div>
+                <div class="row mt-0">
+                    <div class="col-md-6">
+                        <label for="exampleFormControlInput1" class="form-label">Mensajes Enviados</label>
+                        <textarea formControlName="message" id="" cols="30" rows="10" class="form-control"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="exampleFormControlInput1" class="form-label">Mensajes Recibidos</label>
+                        <div class="container-messages">
+                            <span  *ngFor="let item of this.messageList"> {{item | json}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container-buttons">
+                        <button type="button" [disabled]="this.scaleActive" class="btn btn-primary mb-3" (click)="CreateSocketIO()" matRipple>
+                            {{'Conectar' | i18n}}</button>
+
+                        <button type="button" [disabled]="!this.scaleActive" class=" btn btn-success mb-3" (click)="Enviar()" matRipple>
+                            {{'Enviar' | i18n}}</button>
+
+                        <button type="button" class=" btn btn-danger mb-3" [disabled]="!this.scaleActive"  (click)="desconectar()" matRipple>
+                            {{'Desconectar' | i18n}}
+                        </button>
+                        <button type="button" class=" btn btn-info mb-3" [disabled]="!this.scaleActive"  (click)="Simulateweigth()" matRipple>
+                            {{'Simulate Weight' | i18n}}
+                        </button>
+                        <button type="button" class=" btn btn-yellow-ss mb-3" [disabled]="!this.scaleActive"  (click)="ListenAllMessages()" matRipple>
+                            {{'Listen All Events' | i18n}}
+                        </button>
+                        <button type="button" class=" btn btn-success mb-3"   (click)="CreateWebSocket()" matRipple>
+                            {{'Web Socket' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ng-template #scaleInformation let-item="item">
+    <div [ngClass]="{'scale-dialog__text-opacity':!item.isActive}" class="scale-dialog__text-overflow">
+        <span class="scale-dialog__model-label">
+            {{item.model}}
+        </span>
+        <span *ngIf="item.isDefault" class="scale-dialog__default-label">
+            ({{'scale-default' | i18n}})
+        </span>
+        <span class="scale-dialog__connection-label"
+            [ngClass]="{'scale-dialog__connection-label--connected': item.isConnected}">
+            {{ (item.isConnected ? 'iot-device-online' : 'iot-device-offline') | i18n }}
+        </span>
+    </div>
+    <div [ngClass]="{'scale-dialog__text-opacity':!item.isActive}"
+        class="scale-dialog__description-label scale-dialog__text-overflow">
+        {{'brand' | i18n}} <span class="scale-dialog__text-value"> {{item.brand}}</span>, {{'location' | i18n}} <span
+            class="scale-dialog__text-value"> {{item.location}}</span>
+    </div>
+</ng-template>

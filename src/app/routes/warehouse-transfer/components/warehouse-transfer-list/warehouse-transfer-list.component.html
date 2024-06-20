@@ -1,0 +1,353 @@
+<div class="principal-panel panel-warehouse-transfer"
+*blockUI="'notes-reception-production'; template: templateBlockModalUiComponent"
+>
+
+<ng-container *ngIf="warehouseTransferenceList.length > 0 || this.isLoadData; else emptyState">
+    <!-- HEADERS -->
+    <div
+        class="col-xs-12 pad-top-10 p0 mrg-top-25 panel-warehouse-transfer-headers hidden-xs hidden-sm"
+    >
+        <div class="note-column-arrow" (click)="onToggle()">
+            <span class="fa fa-sort pointer sort-left" *ngIf="isListIn"></span>
+        </div>
+        <div class="col-xs-11 col-sm-11 notes-table-headers p0">
+            <div  (click)="sortData('dateAt')"
+                class="col-lg-2 label-table hidden-sm p0 note-column-start"
+            >
+                {{ "creation" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.dateAt ? 'icon-caret-down' : 'icon-caret-up' "></i>
+
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-id" (click)="sortData('id')">
+                {{ "id" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.id ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-producer"  (click)="sortData('origin')">
+                {{ "origin" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.origin ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+            <div class="col-lg-1 label-table p0 note-column-type" (click)="sortData('destination')">
+                {{ "destination" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.destination ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+
+            <div class="col-lg-1 label-table p0 note-column-weight"  (click)="sortData('net')">
+                {{ "net-weight" | i18n | uppercase }}
+                <i [ngClass]="columnAscState.net ? 'icon-caret-down' : 'icon-caret-up' "></i>
+            </div>
+
+            <div class="col-lg-1 label-table p0 note-column-options">
+                {{ "status" | i18n | uppercase }}
+            </div>
+        </div>
+    </div>
+    <!-- TABLE BODY  -->
+
+        <ng-container *ngFor="let transfer of warehouseTransferenceList ">
+            <div class="pad-top-10 panel-warehouse-transfer-notes">
+                <div class="header-titles-table p0">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading row-collapse row-height-c">
+                            <div *ngIf="!isListIn" class="note-column-arrow icon-reception-child"  >
+                                <i class="icon-wharehouse-transfer-out"></i>
+                            </div>
+
+                            <div *ngIf="isListIn" class="note-column-arrow" (click)="openMovement(transfer.id)">
+                                <div *ngIf="transfer.warehouseMovementNotes.length > 0">
+                                    <ng-container *ngIf="
+                                      isOpenedItem(transfer.id)
+                                        else closeIconTemplate
+                                    ">
+                                        <i class="icon icon-caret-down"></i>
+                                    </ng-container>
+                                    <ng-template #closeIconTemplate>
+                                        <i class="icon icon-arrow_right"></i>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                             <div class="note-columns-container">
+                                <div class="note note-column-start hidden-xs " >
+                                    <p class="label-table hidden-xs visible-sm">{{ "creation" | i18n | uppercase }}</p>
+                                    <p>{{ transfer?.dateAt | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm" : true }}</p>
+                                    <p>{{ transfer.user.fullName }}</p>
+                                </div>
+                                <div class="note note-column-id">
+                                    <p class="label-table visible-xs visible-sm"> {{ "id" | i18n | uppercase }}</p>
+                                        {{ transfer.transactionID }}
+                                </div>
+                                <div class="note note-column-producer">
+                                    <p class="label-table visible-xs visible-sm"> {{ "origin" | i18n | uppercase }}</p>
+                                    <span class="note-text-producer">   {{ transfer.originPoint.company.companyName }} </span>
+                                </div>
+                                <div class="note note-column-type">
+                                      <p  class="label-table visible-xs visible-sm">  {{ "destination" | i18n | uppercase }}</p>
+                                      {{transfer.destinyPoint.company.companyName }}
+                                </div>
+                                <div class="note note-column-weight align-right">
+                                    <p class="label-table visible-xs visible-sm"
+                                    > {{ "net-weight" | i18n | uppercase }}
+                                    </p>
+                                    {{ transfer.totalNetWeightOut | number : "1." +  DECIMAL_DIGITS +  "-" +  DECIMAL_DIGITS : "en" }}
+                                    {{ configuration.conversionMeasurementUnitAbbreviation }}
+                                </div>
+                                <div class="note note-column-options notes-production align-right">
+                                    <div class="note-status hidden-xs hidden-sm"
+                                        [ngClass]=" {
+                                                 'notes-production__status--open' : transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN,
+                                                 'notes-production__status--closed' : transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE,
+                                                 'notes-production__status--deleted' : transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED
+                                                }"
+                                    >
+                                        <i class=" no-select font-ss16" [ngClass]="{ 
+                                                'icon-note-open': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN,
+                                                'icon-note-close': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE,
+                                                'icon-note-canceled': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED  
+                                            }">
+                                        </i>
+                                        <p class="hidden-sm">
+                                            {{
+                                                (transfer.status ==
+                                                "open"
+                                                    ? "open"
+                                                    : transfer.status ==
+                                                    "close" ? "closed" : "voided"
+                                                ) | i18n
+                                            }}
+                                        </p>
+                                    </div>
+                                    <span
+                                          mat-icon-button
+                                         [matMenuTriggerFor]="options">
+                                        <i class=" note note-column-menu-options no-select icon-options-vertical" ></i>
+                                    </span>
+                                    <mat-menu #options="matMenu">
+                                        <button mat-menu-item [routerLink]="[
+                                                    'detail-movement',
+                                                    transfer.id
+                                                ]">
+                                            {{ "view" | i18n }}
+                                        </button>
+                                        <button [disabled]="transfer.status != WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN" mat-menu-item [routerLink]="[
+                                                    urlEdition,
+                                                    transfer.id
+                                                ]">
+                                            {{ "edit" | i18n }}
+                                        </button>
+                                        <button
+                                            *permission="{
+                                                tag: PERMISSIONS.WAREHOUSE_TRANSFER,
+                                                type: PERMISSION_TYPES.DELETE
+                                            }"
+                                            [hidden]="transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED 
+                                                        || isVoidable(transfer)"
+                                             mat-menu-item [routerLink]="[
+                                                    urlDelete,
+                                                    transfer.id
+                                                ]">
+                                            {{ "cancel" | i18n }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            [disabled]="!checkAvailabilityPrint(transfer)"
+                                            (click)="onPrint(transfer, FILE_REPORT_ACTIONS.PRINT)"
+                                            *permission="{
+                                                tag: PERMISSIONS.WEIGHT_NOTE,
+                                                type: PERMISSION_TYPES.PRINT
+                                            }"
+                                        >
+                                            {{ "print" | i18n }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            [disabled]="!checkAvailabilityPrint(transfer)"
+                                            (click)="onPrint(transfer, FILE_REPORT_ACTIONS.DOWNLOAD)"
+                                            *permission="{
+                                                tag: PERMISSIONS.WEIGHT_NOTE,
+                                                type: PERMISSION_TYPES.PRINT
+                                            }"
+                                        >
+                                            {{ "download-pdf" | i18n }}
+                                        </button>
+                                    </mat-menu>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isListIn && isOpenedItem(transfer.id)" [id]="transfer.id"
+                            class="panel-collapse collapse in panel-body-c pd-0" role="tabpanel">
+                            <div class="child-row-note panel-body" *ngFor="let warehouseMovement of transfer.warehouseMovementNotes">
+                                <div class="note-column-arrow icon-reception-child ">
+                                    <i class="icon-wharehouse-transfer-out"></i>
+                                </div>
+                                <div class="note-weight-container">
+                                    <div class="note note-column-start hidden-xs ">
+                                        <p class="label-table hidden-xs visible-sm">{{ "creation" | i18n | uppercase }}
+                                        </p>
+                                        <p> {{ warehouseMovement?.createdAt | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM
+                                            DD, YYYY HH:mm" : true }}</p>
+                                        <p>{{ transfer.user.fullName }}</p>
+                                    </div>
+                                    <div class="note note-column-id">
+                                        <p class="label-table visible-xs visible-sm"> {{ "id" | i18n | uppercase }}</p>
+                                        {{ warehouseMovement.id }}
+                                    </div>
+                                    <div class="note note-column-producer">
+                                        <p class="label-table visible-xs visible-sm"> {{ "origin" | i18n | uppercase
+                                            }}</p>
+                                            {{ transfer.originPoint.company.companyName }}
+                                    </div>
+                                    <div class="note note-column-type">
+                                        <p class="label-table visible-xs visible-sm"> {{ "destination" | i18n | uppercase }}
+                                        </p> {{ transfer.destinyPoint.company.companyName }}
+                                    </div>
+                                    
+                                    <div class="note note-column-weight align-right"
+                                        [ngClass]="{'tr--font-red': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED}">
+                                        <p class="label-table visible-xs visible-sm"> {{ "net-weight" | i18n | uppercase
+                                            }}</p>
+                                        {{ (warehouseMovement.netWeight * configuration.baseMeasurementUnitFactor) | number :
+                                        "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }}
+                                        {{ configuration.conversionMeasurementUnitAbbreviation }}
+                                    </div>
+                                    
+                                    <div class="note-column-options align-right">
+                                        <div class="note-status hidden-xs hidden-sm"
+                                        [ngClass]=" {
+                                            'note-open' : transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN,
+                                            'note-close' : transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE,
+                                            'note-cancel' : transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED
+                                           }">
+                                            <i class=" no-select font-ss16"
+                                            [ngClass]="{ 
+                                                'icon-note-open': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN,
+                                                'icon-note-close': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE,
+                                                'icon-note-canceled': transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED  
+                                            }">
+                                            </i>
+                                            <p class="hidden-sm">
+                                                {{
+                                                    (transfer.status ==
+                                                    "open"
+                                                        ? "open"
+                                                        : transfer.status ==
+                                                        "close" ? "closed" : "canceled"
+                                                    ) | i18n
+                                                }}
+                                            </p>
+                                        </div>
+
+                                        <span mat-icon-button [matMenuTriggerFor]="menu">
+                                            <i
+                                                class=" note note-column-menu-options no-select icon-options-vertical"></i>
+                                        </span>
+
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item [routerLink]="[
+                                                        'detail-movement',
+                                                        transfer.id
+                                                    ]">
+                                                {{ "view" | i18n }}
+                                            </button>
+                                            <button [disabled]="transfer.status != WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN" mat-menu-item [routerLink]="[
+                                                        urlEdition,
+                                                        transfer.id
+                                                    ]">
+                                                {{ "edit" | i18n }}
+                                            </button>
+                                            <button
+                                                *permission="{
+                                                    tag: PERMISSIONS.WAREHOUSE_TRANSFER,
+                                                    type: PERMISSION_TYPES.DELETE
+                                                }"
+                                                [hidden]="transfer.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED 
+                                                            || isVoidable(transfer)"
+                                                mat-menu-item [routerLink]="[
+                                                        urlDelete,
+                                                        transfer.id
+                                                    ]">
+                                                {{ "cancel" | i18n }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                [disabled]="!checkAvailabilityPrint(transfer)"
+                                                (click)="onPrint(transfer, FILE_REPORT_ACTIONS.PRINT)"
+                                                *permission="{
+                                                    tag: PERMISSIONS.WEIGHT_NOTE,
+                                                    type: PERMISSION_TYPES.PRINT
+                                                }"
+                                            >
+                                                {{ "print" | i18n }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                [disabled]="!checkAvailabilityPrint(transfer)"
+                                                (click)="onPrint(transfer, FILE_REPORT_ACTIONS.DOWNLOAD)"
+                                                *permission="{
+                                                    tag: PERMISSIONS.WEIGHT_NOTE,
+                                                    type: PERMISSION_TYPES.PRINT
+                                                }"
+                                            >
+                                                {{ "download-pdf" | i18n }}
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+
+                                    <div class="visible-xs note-column-status visible-sm note-column-status">
+                                        <p class="label-table hidden-xs visible-sm "> {{ "status" | i18n | uppercase }}
+                                        </p>
+                                        <div class="note-status"
+                                        [ngClass]=" {
+                                            'note-open' : warehouseMovement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN,
+                                            'note-close' : warehouseMovement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE,
+                                            'note-cancel' : warehouseMovement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED
+                                           }">
+                                           <i class=" no-select font-ss16" [ngClass]="{ 
+                                            'icon-note-open': warehouseMovement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.OPEN,
+                                            'icon-note-close': warehouseMovement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE,
+                                            'icon-note-canceled': warehouseMovement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED  
+                                        }"></i>
+                                            <p class="hidden-xs visible-sm">
+                                                {{
+                                                    (warehouseMovement.status ==
+                                                    "open"
+                                                        ? "open"
+                                                        : warehouseMovement.status ==
+                                                        "close" ? "closed" : "canceled"
+                                                    ) | i18n
+                                                }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </ng-container>
+
+
+    <div class="pl-container-paginator">
+        <mat-paginator
+            class="custom-paginator"
+            [length]="paginator.totalItems"
+            [pageIndex]="paginator.currentPage - 1"
+            [pageSize]="paginator.itemsPerPage"
+            [pageSizeOptions]="[paginator?.itemsPerPage]"
+            (page)="eventPaginator($event)"
+            showFirstLastButtons
+            #matPaginator
+        >
+        </mat-paginator>
+    </div>
+
+</ng-container>
+
+
+<ng-template #emptyState>
+    <app-not-results-found [imgName]="'empty_movimiento_salida'" [customMessage]="'empty_warehouse_transfer_movements'" [buttonLink]="buttonLink"></app-not-results-found>
+</ng-template>
+
+</div>

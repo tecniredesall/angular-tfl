@@ -1,0 +1,146 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 18px;
+    &.is-for-fed-item {
+        padding: 0;
+    }
+}
+.sil-form {
+    margin-top: 0;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "producer edit"
+        "form form";
+    padding: 10px 20px;
+    .sil-form__section__header {
+        padding: 6px 0;
+        margin: 4px 0;
+        p {
+            margin: 0;
+            margin-left: 10px;
+        }
+    }
+    .form-actions {
+        .delete-block,
+        .btn-back {
+            margin-right: auto;
+            font-size: 14px;
+        }
+    }
+    .producer_name {
+        grid-area: producer;
+    }
+    .btn-edit {
+        grid-area: edit;
+        margin-left: auto;
+    }
+    .form_container {
+        grid-area: form;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "name"
+            "farm"
+            "header_location"
+            "location"
+            "latitude"
+            "longitude"
+            "header_dimensions"
+            "height"
+            "extension"
+            "header_characs"
+            "shade"
+            "soil"
+            "coffee"
+            "delete";
+            color: var(--form-label-color);
+        .block__name {
+            grid-area: name;
+        }
+        .block__farm {
+            grid-area: farm;
+        }
+        .header__location {
+            grid-area: header_location;
+        }
+        .location {
+            grid-area: location;
+            margin: 0;
+        }
+        .block__latitude {
+            grid-area: latitude;
+        }
+        .block__longitude {
+            grid-area: longitude;
+        }
+        .header__dimensions {
+            grid-area: header_dimensions;
+        }
+        .block__height {
+            grid-area: height;
+            .height__unit {
+                margin: 0 4px 0 80%;
+            }
+        }
+        .block__extension {
+            grid-area: extension;
+            .measurement-unit-select {
+                min-width: 80px;
+            }
+        }
+        .header__characs {
+            grid-area: header_characs;
+        }
+        .block__shade-variety {
+            grid-area: shade;
+        }
+        .block-soil-type {
+            grid-area: soil;
+        }
+        .block-coffee-variety {
+            grid-area: coffee;
+        }
+        .delete-block {
+            grid-area: delete;
+        }
+
+    }
+    &__header{
+        padding: 20px 0 0px 20px;
+        i{
+            margin-left: 10px;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .sil-form {
+        .form_container {
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+                "name farm"
+                "header_location header_location"
+                "location location"
+                "latitude longitude"
+                "header_dimensions header_dimensions"
+                "height extension"
+                "header_characs header_characs"
+                "shade soil"
+                "coffee ."
+                "delete .";
+            column-gap: 4px;
+            row-gap: 4px;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .sil-form {
+        .form_container {
+            column-gap: 8px;
+            row-gap: 4px;
+        }
+    }
+}

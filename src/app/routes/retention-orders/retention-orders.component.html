@@ -1,0 +1,50 @@
+<div class="retention-orders" *blockUI="'retention-orders-layout'; template: templateBlockModalUiComponent">
+    <div class="retention-orders__wrapper">
+        <div class="retention-orders__wrapper__container scroll-view-app">
+
+            <div class="principal-panel panel-receiving-note">
+                <div class="title-data">
+                    {{'retention-orders' | i18n}}
+                </div>
+                <div class="retention-order-list" [ngClass]="{ 'lot-list--processed-mode': isProductionNote }">
+                    <!-- Header -->
+                    <div class="retention-order-list__header">
+                        <div class="retention-order-list__header__filter">
+                            <button class="tr__button__filter retention-order-list__header__filter__button"
+                                [ngClass]="{'tr__button__filter--active': countFilter > 0 }" matRipple
+                                (click)="onOpenFilter()">
+                                <i class="icon-filter-icon no-select"></i>
+                                &nbsp; &nbsp;
+                                <span>{{ "filter" | i18n }}</span>
+                                &nbsp; &nbsp;
+                                <div *ngIf="countFilter > 0 " class="tr__button__filter__count">
+                                    <span>{{ countFilter }}</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="retention-order-list__header__search">
+                            <input type="text"
+                                class="form-control search-tck search-loca-input retention-order-list__header__input__serach"
+                                [placeholder]="'placeholder-search-purchase-order' | i18n" [(ngModel)]="searchText" />
+                        </div>
+
+                        <div class="retention-order-list__header__new">
+                            <button class="tr__button__new-item retention-order-list__header__new__button" id="retention-btn-new" matRipple
+                                [routerLink]="['create']"
+                                [queryParams]="{ isFromNoteList: true , production: this.isProductionNote }"
+                                *permission="{tag: PERMISSIONS.RETENTION_ORDERS, type: PERMISSION_TYPES.CREATE }">
+                                <span>+ {{ "retention-orders-new-retention" | i18n }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <ng-container>
+                    <sst-retention-order-list (componentReady)="onComponentReady($event)" (countSelectedFilters)="onCountSelectedFilters($event)"  (closeFilter)="onCloseFilter(event)"  [isOpenFilter]="isOpenFilter" [searchProductionNoteText]="this.searchText" ></sst-retention-order-list>
+                </ng-container>
+
+            </div>
+        </div>
+    </div>
+</div>

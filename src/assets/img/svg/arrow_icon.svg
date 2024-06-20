@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>arrow_icon@1.5x</title>
+    <g id="Procesos" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="workflow_view" transform="translate(-81.000000, -90.000000)" fill="#0068FF">
+            <g id="back" transform="translate(81.000000, 87.000000)">
+                <polygon id="arrow_icon" points="16 9.98989899 16 12.010101 3.87878788 12.010101 9.43434343 17.5656566 8 19 0 11 8 3 9.43434343 4.43434343 3.87878788 9.98989899"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

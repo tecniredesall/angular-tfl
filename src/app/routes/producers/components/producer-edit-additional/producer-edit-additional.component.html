@@ -1,0 +1,195 @@
+<form
+    class="sil-form"
+    [formGroup]="form"
+    [ngClass]="{ profile: action === ACTIONS.READ, 'columns--two': action === ACTIONS.CREATE }"
+    *ngIf="form"
+>
+    <!-- AGE -->
+    <section class="sil-form__section producer-edit-form__age">
+        <label>{{ "producer-age" | i18n }}</label>
+        <input
+            type="text"
+            [placeholder]="'-'"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="age"
+        />
+        <p class="sil-form__profile-text">
+            {{ form.get("age").value }}
+        </p>
+    </section>
+    <!-- SCHOOLING -->
+    <section class="sil-form__section producer-edit-form__schooling">
+        <label>{{ "producer-schooling" | i18n }}</label>
+        <ng-select
+            formControlName="scholarshipId"
+            [placeholder]="'producer-schooling-placeholder' | i18n"
+            appearance="outline"
+            [searchable]="true"
+            [clearable]="true"
+            class="sil-form__select"
+            bindLabel="scholarship"
+            bindValue="id"
+            [items]="schoolarships"
+            [loading]="loadingState.schoolarships"
+            loadingText="{{ 'loading' | i18n }}"
+            [notFoundText]="'not-items-found' | i18n"
+            [virtualScroll]="true"
+            (scrollToEnd)="onDropdownReachedEnd('schoolarships')"
+            (search)="onDropdownSearch($event, 'schoolarships')"
+            (close)="onDropdownSearch(null, 'schoolarships')"
+            (clear)="onDropdownSearch(null, 'schoolarships')"
+        >
+            <ng-template let-item="item">{{ item.scholarship }}</ng-template>
+        </ng-select>
+        <p class="sil-form__profile-text" *ngIf="!loadingState.schoolarships">
+            {{ form.get("scholarshipId").value | mapFromArray: schoolarships:"id":"scholarship" }}
+        </p>
+    </section>
+    <!-- PROFESSION -->
+    <section class="sil-form__section producer-edit-form__profession">
+        <label>{{ "producer-profession" | i18n }}</label>
+        <ng-select
+            formControlName="professionId"
+            [placeholder]="'producer-profession-placeholder' | i18n"
+            appearance="outline"
+            [searchable]="true"
+            [clearable]="true"
+            class="sil-form__select"
+            bindLabel="profession"
+            bindValue="id"
+            [items]="professions"
+            [loading]="loadingState.professions"
+            loadingText="{{ 'loading' | i18n }}"
+            [notFoundText]="'not-items-found' | i18n"
+            [virtualScroll]="true"
+            (scrollToEnd)="onDropdownReachedEnd('professions')"
+            (search)="onDropdownSearch($event, 'professions')"
+            (close)="onDropdownSearch(null, 'professions')"
+            (clear)="onDropdownSearch(null, 'professions')"
+        >
+            <ng-template let-item="item">{{ item.profession }}</ng-template>
+        </ng-select>
+        <p class="sil-form__profile-text" *ngIf="!loadingState.professions">
+            {{ form.get("professionId").value | mapFromArray: professions:"id":"profession" }}
+        </p>
+    </section>
+    <!-- CONTACT NAME -->
+    <section class="sil-form__section producer-edit-form__contact_name">
+        <label>{{ "producer-contact-name" | i18n }}</label>
+        <input
+            type="text"
+            [value]="form.get('contactName').value | titlecase"
+            [placeholder]="'producer-contact-name-placeholder' |i18n"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="contactName"
+        />
+        <p class="sil-form__profile-text">
+            {{ form.get("contactName").value }}
+        </p>
+        <span *ngIf="
+            form.get('contactName').dirty ||
+            form.get('contactName').touched
+        ">
+        <span 
+            *ngIf="form.get('contactName').hasError('pattern')"
+            class="sil-form__section__error-message">
+            {{ "alphabet-pattern-error" | i18n }}
+        </span>
+        <span 
+            *ngIf="form.get('contactName').hasError('maxlength')"
+            class="sil-form__section__error-message">
+            {{
+            "max-length-value-error"
+            | i18n
+            | stringReplace
+            : "[value]"
+            : CONSTANTS.MAX_LENGTH_PRODUCER_NAME
+            }}
+        </span>
+    </span>
+    </section>
+    <!-- CONTACT PHONE -->
+    <section class="sil-form__section producer-edit-form__contact_phone">
+        <label>{{ "producer-contact-phone" | i18n }} </label>
+        <div class="sil-form__input-group sil-form__phone-input">
+            <app-phone-code-dropdown (countryChange)="onCountryChanged($event)"
+                [readOnly]="action === ACTIONS.READ" [country]="form.get('contactPhoneCountry').value" 
+                class="sil-form__input--inline"></app-phone-code-dropdown>
+            <input type="text" [textMask]="{
+                    mask:
+                        CONSTANTS.INTERNATIONAL_PHONES[
+                            form.get('contactPhoneCountry').value
+                        ].MASK,
+                    guide: false,
+                    showMask: true
+                }" [placeholder]="'t-producers-placeholder-phone' | i18n"
+                (input)="onPhoneChanged($event)"
+                class="sil-form__input sil-form__input--inline sil-form__input--phone"
+                formControlName="contactPhone" autocomplete="off" />
+            <p class="sil-form__profile-text">
+                {{ form.get("contactPhone").value }}
+            </p>
+        </div>
+        <span *ngIf="
+                form.get('contactPhone').dirty ||
+                form.get('contactPhone').touched
+            ">
+            <span *ngIf="form.get('contactPhone').hasError('pattern')" 
+                class="sil-form__section__error-message">
+                {{
+                "t-alphanumeric-pattern-producer-phone"
+                | i18n
+                : form.get("contactPhone").value
+                | stringReplace
+                : "[length]"
+                : CONSTANTS.INTERNATIONAL_PHONES[
+                form
+                .get("contactPhoneCountry").value
+                ].LENGTH
+                }}
+            </span>
+        </span>
+    </section>
+    <!-- MARITAL STATUS -->
+    <section class="sil-form__section producer-edit-form__marital_status">
+        <label>{{ "producer-marital-status" | i18n }}</label>
+        <ng-select
+            formControlName="maritalStatusId"
+            [placeholder]="'producer-marital-status-placeholder' | i18n"
+            appearance="outline"
+            [searchable]="true"
+            [clearable]="true"
+            class="sil-form__select"
+            bindLabel="status"
+            bindValue="id"
+            [items]="maritalStatuses"
+            [loading]="loadingState.maritalStatuses"
+            loadingText="{{ 'loading' | i18n }}"
+            [notFoundText]="'not-items-found' | i18n"
+            [virtualScroll]="true"
+            (scrollToEnd)="onDropdownReachedEnd('maritalStatus')"
+            (search)="onDropdownSearch($event, 'maritalStatus')"
+            (close)="onDropdownSearch(null, 'maritalStatus')"
+            (clear)="onDropdownSearch(null, 'maritalStatus')"
+        >
+            <ng-template let-item="item">{{ item.status }}</ng-template>
+        </ng-select>
+        <p class="sil-form__profile-text" *ngIf="!loadingState.maritalStatuses">
+            {{ form.get("maritalStatusId").value | mapFromArray: maritalStatuses:"id":"status" }}
+        </p>
+    </section>
+    <!-- GENDER -->
+    <section class="sil-form__section producer-edit-form__gender">
+        <label>{{ "producer-gender" | i18n }}</label>
+        <mat-radio-group formControlName="gender" class="sil-form__radio">
+            <mat-radio-button *ngFor="let gender of genders" [value]="gender.id">
+                {{gender.label |i18n}}
+            </mat-radio-button>
+        </mat-radio-group>
+        <p class="sil-form__profile-text">
+            {{ (form.get("gender").value | mapFromArray: genders:"id":"label") | i18n }}
+        </p>          
+    </section>
+</form>

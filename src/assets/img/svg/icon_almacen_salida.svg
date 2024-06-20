@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+    <defs>
+        <clipPath id="u7zoi1epya">
+            <path data-name="Rectangle 9674" style="fill:none" d="M0 0h25.139v21.967H0z"/>
+        </clipPath>
+    </defs>
+    <path style="fill:none" d="M0 0h32v32H0z"/>
+    <g data-name="Group 46138">
+        <g data-name="Group 46137" style="clip-path:url(#u7zoi1epya)" transform="translate(3.432 5.016)">
+            <path data-name="Path 16554" d="M15.084 0H2.3a1.245 1.245 0 0 0-1.178.861h15.14A1.242 1.242 0 0 0 15.084 0" style="fill:#00a4fa"/>
+            <path data-name="Rectangle 9671" transform="translate(2.947 5.529)" style="fill:#00a4fa" d="M0 0h2.914v2.28H0z"/>
+            <path data-name="Rectangle 9672" transform="translate(2.947 3.037)" style="fill:#00a4fa" d="M0 0h2.914v1.903H0z"/>
+            <path data-name="Path 16555" d="M17.039 1.545H.344a.4.4 0 0 0 0 .8h16.695a.4.4 0 0 0 0-.8" style="fill:#00a4fa"/>
+            <path data-name="Path 16556" d="M6.549 13.128a.342.342 0 1 1-.684 0v-1.669H2.95v1.668a.342.342 0 0 1-.683 0V3.03H1.06v10.752a1.06 1.06 0 0 0 .289.724h14.683a1.046 1.046 0 0 0 .283-.724V3.03H6.549z" style="fill:#00a4fa"/>
+            <path data-name="Rectangle 9673" transform="translate(2.947 8.495)" style="fill:#00a4fa" d="M0 0h2.914v2.28H0z"/>
+            <path data-name="Path 16557" d="m14.02 16.95 1.354 5.02h.9l-.674-6.241z" style="fill:#00a4fa"/>
+            <path data-name="Path 16558" d="M7.512 20.12a.367.367 0 0 0 .367.367H9.5a.368.368 0 0 0 .366-.367v-.3H7.512z" style="fill:#00a4fa"/>
+            <path data-name="Path 16559" d="M1.228 21.967h.9l1.337-4.94-1.57-1.213z" style="fill:#00a4fa"/>
+            <path data-name="Path 16560" d="m2.209 15.19 5.079 3.94h2.8l5.078-3.94z" style="fill:#00a4fa"/>
+            <path data-name="Path 16561" d="m24.845 8.141-1.907-1.906a1.508 1.508 0 0 0-.168-.151.689.689 0 0 0-1.084.435.711.711 0 0 0 .233.659c.272.27.541.541.846.846h-3.734a1.585 1.585 0 0 0-.275.021.678.678 0 0 0-.548.622.69.69 0 0 0 .632.742.885.885 0 0 0 .1 0h3.79l.021.048a1.139 1.139 0 0 0-.129.1c-.25.247-.5.491-.745.747a.689.689 0 0 0 .2 1.125.7.7 0 0 0 .812-.186q.979-.975 1.953-1.953a.718.718 0 0 0 .144-1.005.706.706 0 0 0-.15-.149" style="fill:#d63649"/>
+        </g>
+    </g>
+</svg>

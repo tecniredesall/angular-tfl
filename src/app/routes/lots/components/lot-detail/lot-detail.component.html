@@ -1,0 +1,43 @@
+<button class="sil-form__header-button btn btn-transparent-blue" id="backToList" (click)="onBackToList()">
+    <i class="icon-arrow_icon"></i>
+    <ng-container *ngIf="isFromKanban; else lotList">
+        {{ "back-to-dashboard" | i18n }}
+    </ng-container>
+    <ng-template #lotList>
+        {{ "back-to-list" | i18n }}
+    </ng-template>
+</button>
+<div class="sil-container sil-container--filled"
+    *blockUI="'lot-report-detail';template: templateBlockModalUiComponent">
+    <header class="sil-form__header">
+        <h1 class="sil-form__title">
+            {{ "lot-detail" | i18n }}
+        </h1>
+        <span class="lot__damaged-badge" *ngIf="lot && lot.damage">
+            {{ "kanban-dashboard-lot-damaged" | i18n }}
+        </span>
+        <button [matMenuTriggerFor]="actionsPrintLotReport" class="mrg-left-20 tr__button__primary">
+            <i class="icon-print"></i>
+            {{'text-print-report' | i18n}}
+        </button>
+        <mat-menu #actionsPrintLotReport="matMenu">
+            <button mat-menu-item (click)="onGenerateReportEvent(REPORT_TYPE.GENERAL)">
+                {{ "text-general-report" | i18n }}
+            </button>
+            <button mat-menu-item (click)="onGenerateReportEvent(REPORT_TYPE.DETAILED)">
+                {{ "text-detailed-report" | i18n }}
+            </button>
+        </mat-menu>
+    </header>
+    <app-lot-info *ngIf="configuration && lot" 
+                  [lot]="lot" 
+                  [isFromKanban]="isFromKanban" 
+                  [configuration]="configuration"
+                  [canEdit]="canEdit">
+    </app-lot-info>
+    <app-lot-detail-events *ngIf="lot" 
+                            [lot]="lot" 
+                            [canEdit]="canEdit" 
+                            (reloadLot)="onReloadLot()">
+    </app-lot-detail-events>
+</div>

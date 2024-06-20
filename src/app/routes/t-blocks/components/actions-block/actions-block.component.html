@@ -1,0 +1,307 @@
+<div
+    class="actions-block-container"
+    [ngStyle]="{ padding: actionData.length > 1 ? '0 15px' : '0' }"
+>
+    <form
+        #formActionsBlock="ngForm"
+        novalidate
+        [ngClass]="{ 'actions-block-mode-edit': data.isEdit }"
+    >
+        <div
+            class="row actions-block-item"
+            *ngFor="let item of actionData; let i = index"
+            [ngClass]="{ 'multiple-actions-block-item': actionData.length > 1 }"
+        >
+            <div class="row">
+                <!-- Name -->
+                <div
+                    class="actions-block-input-container col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                >
+                    <label class="actions-block-label-input">
+                        {{ "name" | i18n }}*
+                    </label>
+
+                    <input
+                        class="create-input"
+                        [name]="'ab-name' + item.index"
+                        (input)="eventChangeFormData()"
+                        [(ngModel)]="item.currentBlock.name"
+                        [placeholder]="'t-block-name-placeholder' | i18n"
+                        [pattern]="ALPHANUMERIC_REGEXP"
+                        [maxLength]="MAX_LENGTH_BLOCK_NAME"
+                        required
+                        autocomplete="off"
+                        #name="ngModel"
+                    />
+
+                    <label
+                        *ngIf="name.dirty || data.isEdit"
+                        class="error-msg-form"
+                    >
+                        <label *ngIf="name.hasError('required')">
+                            {{ "is-required-msg" | i18n }}
+                        </label>
+
+                        <label *ngIf="name.hasError('pattern')">
+                            {{ "t-producers-alphanumeric-pattern" | i18n }}
+                        </label>
+
+                        <label *ngIf="duplicates.indexOf(i) !== -1">
+                            {{
+                                ("duplicate-register" | i18n) +
+                                    item.currentBlock.name
+                            }}
+                        </label>
+                    </label>
+                </div>
+
+                <!-- Producer -->
+                <div
+                    *ngIf="this.data.isFromBlockModule"
+                    class="actions-block-input-container col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                >
+                    <label class="actions-block-label-input">
+                        {{ "producer" | i18n }}*
+                    </label>
+
+                    <ng-select
+                        [name]="'ab-producer' + item.index"
+                        class="actions-block-ng-select"
+                        [items]="producers.data"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        [clearable]="false"
+                        bindLabel="fullName"
+                        bindValue="id"
+                        placeholder="{{
+                            't-block-producer-placeholder' | i18n
+                        }}"
+                        (change)="eventChangeFormData()"
+                        [notFoundText]="'not-items-found' | i18n"
+                        [loading]="producers.isLoading"
+                        loadingText="{{ 'loading' | i18n }}"
+                        [(ngModel)]="item.currentBlock.seller"
+                        required
+                    >
+                    </ng-select>
+                </div>
+
+                <div *ngIf="this.data.isFromBlockModule" class="clearfix"></div>
+
+                <!-- Farm -->
+                <div
+                    class="actions-block-input-container col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                >
+                    <label class="actions-block-label-input">
+                        {{ "t-farm" | i18n }}
+                    </label>
+
+                    <ng-select
+                        [name]="'ab-farm' + item.index"
+                        class="actions-block-ng-select"
+                        [items]="farms.data"
+                        [hideSelected]="isFromWeightNote"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        [clearable]="true"
+                        bindLabel="name"
+                        bindValue="id"
+                        placeholder="{{ 't-block-farm-placeholder' | i18n }}"
+                        (change)="eventChangeFormData()"
+                        [notFoundText]="'not-items-found' | i18n"
+                        [loading]="farms.isLoading"
+                        loadingText="{{ 'loading' | i18n }}"
+                        [(ngModel)]="item.currentBlock.farmId"
+                    >
+                    </ng-select>
+                </div>
+
+                <div
+                    *ngIf="!this.data.isFromBlockModule"
+                    class="clearfix"
+                ></div>
+
+                <!-- Variety -->
+                <!-- <div
+                    class="actions-block-input-container col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                >
+                    <label class="actions-block-label-input">
+                        {{ "variety" | i18n }}
+                    </label>
+
+                    <ng-select
+                        [name]="'ab-variety' + item.index"
+                        class="actions-block-ng-select"
+                        [items]="varieties.data"
+                        [multiple]="false"
+                        [closeOnSelect]="true"
+                        [clearable]="true"
+                        bindLabel="name"
+                        bindValue="id"
+                        placeholder="{{ 't-block-variety-placeholder' | i18n }}"
+                        (change)="eventChangeFormData()"
+                        [notFoundText]="'not-items-found' | i18n"
+                        [loading]="varieties.isLoading"
+                        loadingText="{{ 'loading' | i18n }}"
+                        [(ngModel)]="item.currentBlock.varietyId"
+                    >
+                    </ng-select>
+                </div>
+
+                <div *ngIf="this.data.isFromBlockModule" class="clearfix"></div> -->
+
+                <!-- Height -->
+                <div
+                    class="actions-block-input-container col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                >
+                    <label class="actions-block-label-input">
+                        {{ "height" | i18n }}
+                    </label>
+
+                    <input
+                        class="create-input"
+                        [name]="'ab-height' + item.index"
+                        (input)="eventChangeFormData()"
+                        [(ngModel)]="item.currentBlock.height"
+                        [textMask]="{
+                            mask: heightNumberMask,
+                            guide: false,
+                            showMask: false
+                        }"
+                        [placeholder]="'t-block-height-placeholder' | i18n"
+                        autocomplete="off"
+                        #height="ngModel"
+                    />
+                </div>
+
+                <!-- <div
+                    *ngIf="!this.data.isFromBlockModule"
+                    class="clearfix"
+                ></div> -->
+
+                <!-- extension -->
+                <div
+                    class="actions-block-input-container col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                >
+                    <label class="actions-block-label-input">
+                        {{ "extension" | i18n }}
+                    </label>
+
+                    <input
+                        class="create-input"
+                        [name]="'ab-extension' + item.index"
+                        (input)="eventChangeFormData()"
+                        [(ngModel)]="item.currentBlock.extension"
+                        [textMask]="{
+                            mask: extensionNumberMask,
+                            guide: false,
+                            showMask: false
+                        }"
+                        [placeholder]="'t-block-extension-placeholder' | i18n"
+                        autocomplete="off"
+                        #extension="ngModel"
+                    />
+                </div>
+            </div>
+
+            <!-- Button remove item block-->
+            <div class="row" *ngIf="!data.isEdit && actionData.length > 1">
+                <div class="col-xs-12">
+                    <button
+                        type="button"
+                        class="btn btn-default action-block-btn-remove-item"
+                        (click)="removeBlockItem(item)"
+                    >
+                        <img src="assets/img/svg/trash-red.svg" alt="" />
+                        <span>
+                            &nbsp;
+                            {{ "delete" | i18n }}
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button add item block -->
+        <div *ngIf="!data.isEdit && isMultiple" class="row">
+            <div class="col-xs-12">
+                <button
+                    type="button"
+                    class="btn btn-default actions-block-btn-add-block-item"
+                    (click)="addBlockItem()"
+                >
+                    <img
+                        [src]="
+                            'assets/img/svg/' +
+                            (isDarkTheme ? 'add-dark' : 'add') +
+                            '.svg'
+                        "
+                        alt=""
+                    />
+                    {{ "t-add-block" | i18n }}
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- footer -->
+    <div
+        class="row action-block-footer"
+        [ngStyle]="{ padding: actionData.length > 1 ? '0' : '0 15px' }"
+        (resized)="handleResponsive($event)"
+    >
+        <div
+            *ngIf="data.isEdit"
+            class="action-block-container-button-footer float-left"
+            [ngStyle]="style.containerButtonDelete"
+        >
+            <button
+                type="button"
+                class="btn btn-default action-block-btn-delete float-left"
+                [ngClass]="{
+                    'action-block-btn-delete-mobile': !isVisibletextButtonDelete
+                }"
+                (click)="delete()"
+            >
+                <img src="assets/img/svg/trash-red.svg" alt="" />
+                <span *ngIf="isVisibletextButtonDelete">
+                    &nbsp;
+                    {{ "delete" | i18n }}
+                </span>
+            </button>
+        </div>
+
+        <div
+            class="action-block-container-button-footer float-right"
+            [ngStyle]="style.containerButtonSubmit"
+        >
+            <button
+                type="button"
+                class="btn btn-default action-block-btn-submit float-right"
+                [disabled]="
+                    formActionsBlock.invalid ||
+                    (data.isEdit && !dataWasMadeModified) ||
+                    duplicates.length > 0
+                "
+                (click)="submit()"
+            >
+                <span>{{
+                    data.isEdit ? ("save" | i18n) : ("create" | i18n)
+                }}</span>
+            </button>
+        </div>
+
+        <div
+            class="action-block-container-button-footer float-right"
+            [ngStyle]="style.containerButtonCancel"
+        >
+            <button
+                type="button"
+                class="btn btn-default action-block-btn-cancel float-right"
+                (click)="cancel()"
+            >
+                {{ "cancel" | i18n }}
+            </button>
+        </div>
+    </div>
+</div>

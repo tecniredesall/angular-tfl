@@ -1,0 +1,101 @@
+@import "src/scss/breakpoints.scss";
+
+.purchase-order-settle {
+    padding: 15px;
+    &__header {
+        font-size: 28px;
+        font-weight: 600;
+        padding-bottom: 15px;
+        color: var(--tr-primary-color);
+        border-bottom: 1px solid var(--tr-border-color);
+    }
+    &__subtitle {
+        color: var(--tr-subtitle-modal-color);
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 35px;
+    }
+    &__description {
+        font-size: 14px;
+        color: var(--tr-data-grid-color);
+        margin-top: 15px;
+        margin-bottom: 15px;
+        span {
+            font-weight: 600;
+        }
+    }
+    &__notes-info {
+        display: grid;
+        align-content: center;
+        text-align: left;
+        margin-top: 15px;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 10px;
+
+        &__total {
+            font-weight: 600;
+        }
+        &__price {
+            font-weight: 600;
+        }
+        &__payment {
+            font-weight: bold;
+        }
+        &__equals {
+            color: var(--tr-primary-color);
+            font-size: 18px;
+            font-weight: bold;
+            align-self: center;
+            display: none;
+        }
+        section {
+            background-color: #f0f2f5;
+            border-radius: 40px;
+            padding: 15px;
+            width: 100%;
+            margin-top: 5px;
+            text-align: center;
+        }
+        &.title-data {
+            display: none;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--tr-labe-columns-list-color);
+        }
+        .title-color-data {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--tr-labe-columns-list-color);
+            text-align: left;
+        }
+    }
+    &__footer {
+        margin-top: 40px;
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .purchase-order-settle {
+        padding: 35px;
+        &__notes-info {
+            grid-template-columns: 1fr 1fr 10px 1fr;
+            text-align: center;
+            &__equals {
+                display: grid;
+            }
+            section {
+                margin-top: 0px;
+            }
+            &.title-data {
+                display: grid;
+            }
+            .title-color-data {
+                text-align: center;
+                display: none;
+            }
+        }
+        &__description {
+            margin-top: 35px;
+        }
+    }
+}

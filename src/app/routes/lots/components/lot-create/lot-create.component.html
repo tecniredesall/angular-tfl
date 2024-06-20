@@ -1,0 +1,50 @@
+<div class="lot-create">
+  <div class="lot-create__wrapper" *blockUI="'lot-create-wrapper'; template: templateBlockModalUiComponent">
+    <div class="lot-create__wrapper__container">
+      <div class="scroll-view-app overflow-c">
+        <!-- Back to list button -->
+        <button class="sil-form__header-button btn btn-transparent-blue lot-create__button-back"
+          (click)="onBackToList()">
+          <i class="icon-arrow_icon"></i>
+          {{ "back-to-list" | i18n }}
+        </button>
+        <!-- Header -->
+        <div class="lot-create__header">
+          {{'new-lot' | i18n }}
+          <hr class="lot-create__header__line">
+        </div>
+        <!-- Tab group -->
+        <mat-tab-group [hidden]="createNew" class="sil-tab-group" dynamicHeight mat-align-tabs="start"
+          [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabClick($event)">
+          <mat-tab label="01 {{'notes-selection' | i18n}}">
+            <app-lot-create-results-filter [(urlBackToList)]="urlBackToList"
+              (eventFormStatusChange)="onEventFormFilterStatusChange($event)">
+            </app-lot-create-results-filter>
+          </mat-tab>
+          <mat-tab label="02 {{'production-flow' | i18n}}" [disabled]="!isEnabledNotesSelectionTab">
+            <app-lot-production-flows *ngIf="selectedTabIndex === 1"
+              [dataWeightNotes]="filterStatus" (eventCreateNewLot)="onEventCreateNewLot($event)">
+            </app-lot-production-flows>
+          </mat-tab>
+        </mat-tab-group>
+        <app-lot-create-new *ngIf="createNew" (backToList)="onEventbackToList()" [weightNotes]="weighNotes">
+        </app-lot-create-new>
+
+      </div>
+      <div>
+        <div class="footer-color lot-results-filter__footer">
+          <div>
+            <button *ngIf="currentComponet.haveBackButton" class="sil-form__header-button btn btn-transparent-blue lot-create__button-back"
+              (click)="onBackEvent()">
+              <i class="icon-arrow_icon"></i>
+              {{ "back" | i18n }}
+            </button>
+          </div>
+
+          <app-action-footer [isNextMode]="currentComponet.haveNextStep" [isButtonSubmitDisabled]="!isComplete"
+            (onActionSelected)="onEventActionSelected($event)"></app-action-footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="input-group-btn">
+    <button
+        type="button"
+        class="btn btn-default dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+        [disabled]="readOnly"
+    >
+        <img
+            *ngIf="country"
+            [src]="'assets/img/svg/' + country + '-flag.svg'"
+        />
+        <span class="input-group-btn__label">{{INTERNATIONAL_PHONES[country].PREFIX}}</span>
+        <span class="caret" *ngIf="!readOnly"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <ng-container
+            *ngFor="let c of phoneCodes | keyvalue; let last = last"
+        >
+            <li>
+                <a
+                    class="pointer no-select"
+                    (click)="onCountryChanged(c.key)"
+                >
+                    <img
+                        *ngIf="unknownCountry !== c.key"
+                        [src]="'assets/img/svg/' + c.key + '-flag.svg'"
+                        width="20"
+                    />
+                    {{ c.key | i18n }}
+                </a>
+            </li>
+            <li [hidden]="last" role="separator" class="divider"></li>
+        </ng-container>
+    </ul>
+</div>

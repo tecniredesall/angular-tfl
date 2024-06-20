@@ -1,0 +1,131 @@
+.modal-content {
+	background-color: #d2e9fa !important;
+}
+
+.permission-panel {
+	background-color: #003469 !important;
+  overflow-y: auto;
+  height: 100%;
+	padding-top: 16px;
+}
+
+.height-cstm-modal {
+	/*height: 110%;*/
+}
+
+.border-pad-5 {
+	border: none;
+	padding: 18px 5px 18px 5px;
+}
+
+.img-modal-title {
+	margin-top: -2px;
+	width: 22px;
+	height: 15px;
+}
+
+.mrg-btt-15 {
+	margin-bottom: 15px;
+}
+
+.non-border {
+	border: none;
+}
+.img-pending {
+	width: 21px;
+	margin-left: 2px;
+}
+.per-desc {
+	color: #ddd;
+	font-size: 11px;
+}
+
+.desc-in-progress {
+	margin-left: 10px;
+	font-weight: 100;
+	width: 81%;
+}
+
+.pen-desc-info-proce {
+	min-height: 20px;
+	padding-left: 6px;
+	margin-bottom: 0;
+	font-weight: 400;
+	width: 89%;
+}
+
+.pen-desc-info-error {
+	min-height: 20px;
+	padding-left: 7px;
+	margin-bottom: 0;
+	font-weight: 400;
+	width: 89%;
+}
+.waiting-text {
+	bottom: 30px;
+	left: 20px;
+	position: absolute;
+	font-size: 11px;
+	font-weight: 800;
+}
+
+.waiting-appr-text {
+	color: #f08c1e;
+}
+.waiting-appr-text-error {
+	color: red;
+}
+
+.tooltip-example [tooltip] {
+	display: inline-block;
+	margin: 50px 20px;
+	width: 180px;
+	height: 50px;
+	border: 1px solid gray;
+	border-radius: 5px;
+	line-height: 50px;
+	text-align: center;
+}
+.ng-tooltip {
+	position: absolute;
+	max-width: 150px;
+	font-size: 14px;
+	text-align: center;
+	color: #f8f8f2;
+	padding: 3px 8px;
+	background: #282a36;
+	border-radius: 4px;
+	opacity: 0;
+	z-index: 99999;
+}
+.ng-tooltip:after {
+	content: "";
+	position: absolute;
+	border-style: solid;
+}
+.ng-tooltip-top:after {
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-color: black transparent transparent transparent;
+}
+
+.ng-tooltip-left:after {
+	top: 50%;
+	left: 100%;
+	margin-top: -5px;
+	border-width: 5px;
+	border-color: transparent transparent transparent black;
+}
+.ng-tooltip-right:after {
+	top: 50%;
+	right: 100%;
+	margin-top: -5px;
+	border-width: 5px;
+	border-color: transparent black transparent transparent;
+}
+
+.c-default {
+	cursor: default;
+}

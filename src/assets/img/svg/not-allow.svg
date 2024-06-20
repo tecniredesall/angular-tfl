@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+    <defs>
+        <clipPath id="clip-path">
+            <path id="Path_258" d="M12-22a10.029 10.029 0 0 1 10 10A10.029 10.029 0 0 1 12-2 10.029 10.029 0 0 1 2-12a10.029 10.029 0 0 1 10-10m0 2a7.481 7.481 0 0 0-4.9 1.7L18.3-7.1A8.536 8.536 0 0 0 20-12a8.024 8.024 0 0 0-8-8m4.9 14.3L5.7-16.9A7.481 7.481 0 0 0 4-12a8.024 8.024 0 0 0 8 8 7.481 7.481 0 0 0 4.9-1.7z" class="cls-1"/>
+        </clipPath>
+        <clipPath id="clip-path-2">
+            <path id="Path_257" d="M-1327 439H113V-982h-1440z" class="cls-1"/>
+        </clipPath>
+        <style>
+            .cls-1{fill:none}
+        </style>
+    </defs>
+    <g id="icons_block" transform="translate(-2 22)">
+        <g id="Group_309" clip-path="url(#clip-path)">
+            <g id="Group_308" clip-path="url(#clip-path-2)">
+                <path id="Path_256" fill="#8797ad" d="M-3-27h30V3H-3z"/>
+            </g>
+        </g>
+    </g>
+</svg>

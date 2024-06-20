@@ -1,0 +1,212 @@
+<div class="selected-farms" *blockUI="'farm-federation-container'; template: templateBlockModalUiComponent">
+    <div class="selected-farms__header">
+        <span class="selected-farms__header__cell header__name">
+            {{ "name" | i18n | uppercase }}
+        </span>
+        <span class="selected-farms__header__cell header__platform">
+            {{ "platform" | i18n | uppercase }}
+        </span>
+    </div>
+    <mat-accordion multi class="selected-farms__panel" *ngFor="let farm of farms">
+        <mat-expansion-panel hideToggle #mainPanel [expanded]="farm.edit">
+            <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'"
+                [ngClass]="mainPanel.expanded ? 'mat-expansion-selected': ''">
+                <section class="title-panel">
+                    <div class="title-panel__label">
+                        <i class="icon-caret-down"
+                            [ngStyle]="{'transform': mainPanel.expanded ? 'rotateX(180deg)' : 'rotateX(0)' } "></i>
+                        <h3>{{farm.edit && mainPanel.expanded ? ('farm-edition' | i18n) : farm.farm.name}}</h3>
+                    </div>
+                    <div class="title-panel__platform">
+                        <img [src]="'assets/img/svg/' + farm.farm.code + '-icon.svg'" >
+                        <p>{{farm.farm.code | i18n}}</p>
+                    </div>
+                    <div class="title-panel__actions" *ngIf="!farm.edit">
+                        <i class="icon-edit" (click)="onChangeStatusFarm(farm, true, $event)"></i>
+                        <i class="icon-trash-gray" (click)="onRemoveFarmSelected(farm)"></i>
+                    </div>
+
+                </section>
+            </mat-expansion-panel-header>
+            <section class="selected-farms__content" *ngIf="!farm.edit; else showForm">
+                <div class="selected-farms__content-descriptions">
+                    <div class="subtitle-panels">
+                        {{'location' | i18n}}
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'country' | i18n}}:</span>
+                        <span class="data-panels__values">{{ farm.farm.country || '-'}}</span>
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'state-department' | i18n}}:</span>
+                        <span class="data-panels__values">{{ farm.farm.state || '-'}}</span>
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'producer-municipality' | i18n}}:</span>
+                        <span class="data-panels__values">{{ farm.farm.city || '-'}}</span>
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'town' | i18n}}:</span>
+                        <span class="data-panels__values">{{ farm.farm.village || '-'}}</span>
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'domicile' | i18n}}:</span>
+                        <span class="data-panels__values">{{farm.farm.address || '-'}}</span>
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="selected-farms__content-descriptions">
+                    <div class="subtitle-panels">
+                        {{'dimensions' | i18n}}
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'extension' | i18n}}:</span>
+                        <span class="data-panels__values">
+                            {{farm.farm.extension || '-'}} {{farm.farm.extension ? farm.farm.measurementUnit :
+                            ''}}</span>
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'wasteland-area' | i18n}}:</span>
+                        <span class="data-panels__values">
+                            {{farm.farm.wastelandArea || '-'}} {{farm.farm.wastelandArea ? farm.farm.measurementUnit :
+                            ''}}</span>
+                    </div>
+                    <div class="data-panels">
+                        <span class="data-panels__label">{{'productive-area' | i18n}}:</span>
+                        <span class="data-panels__values">
+                            {{farm.farm.productiveArea || '-'}} {{farm.farm.productiveArea ? farm.farm.measurementUnit :
+                            ''}}</span>
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="selected-farms__content-descriptions">
+                    <div class="subtitle-panels">
+                        {{'others' | i18n}}
+                    </div>
+                    <div class="blocks-panels">
+                        <ng-container *ngIf="farm.farm.blocks.length >0">
+                            <span>{{'related-blocks' | i18n}}</span>
+                            <div class="blocks-panels__sections" *ngFor="let block of farm.farm.blocks">
+                                <mat-accordion multi class="blocks-panels__sections-details">
+                                    <mat-expansion-panel hideToggle #blockDetailPanel>
+                                        <mat-expansion-panel-header class="header-panel-section"
+                                            [collapsedHeight]="'auto'" [expandedHeight]="'auto'"
+                                            [ngClass]="blockDetailPanel.expanded ? 'mat-expansion-selected': ''">
+                                            <div class="title-panel__label">
+                                                <i class="icon-caret-down"
+                                                [ngStyle]="{'transform': blockDetailPanel.expanded ? 'rotateX(180deg)' : 'rotateX(0)' } "></i>
+                                                <h3>{{block.name}}</h3>
+                                            </div>
+                                        </mat-expansion-panel-header>
+                                        <section class="blocks-panels__sections-details__data">
+                                            <div class="selected-farms__content-descriptions">
+                                                <div class="subtitle-panels">
+                                                    {{'location' | i18n}}
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'country' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.country || '-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'state-department' |
+                                                        i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.state || '-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'producer-municipality' |
+                                                        i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.city || '-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'town' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.village || '-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'domicile' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.address || '-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'latitude' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.latitude || '-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'longitude' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.longitude || '-'}}</span>
+                                                </div>
+                                            </div>
+                                            <mat-divider></mat-divider>
+                                            <div class="selected-farms__content-descriptions">
+                                                <div class="subtitle-panels">
+                                                    {{'dimensions' | i18n}}
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'height' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.height || '-'}}
+                                                        {{block.height ?'MSNM':''}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'extension' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{block.extension || '-'}}
+                                                        {{block.extension ? block.measuremnetUnitName: ''}}</span>
+                                                </div>
+                                            </div>
+                                            <mat-divider></mat-divider>
+                                            <div class="selected-farms__content-descriptions">
+                                                <div class="subtitle-panels">
+                                                    {{'features' | i18n}}
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'shade-variety' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{'-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'soil-type' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{'-'}}</span>
+                                                </div>
+                                                <div class="data-panels">
+                                                    <span class="data-panels__label">{{'coffee-variety' | i18n}}:</span>
+                                                    <span class="data-panels__values">{{'-'}}</span>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
+                        </ng-container>
+                        <div class="blocks-panels__seals" *ngIf="farm.farm.seals.length >0">
+                            <span>{{'seals' | i18n}}</span>
+                            <div class="seals-farms">
+                                <ng-container *ngFor="let seal of farm.farm.seals">
+                                    <span [matTooltip]="seal.name" matTooltipPosition="below"
+                                        matTooltipClass="sil-table__tooltip">
+                                        <img [src]="seal.image || seal.icon" />
+                                    </span>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <ng-template #showForm>
+                <app-form-data (closeEvent)="onChangeStatusFarm(farm, false)" (emitEvent)="onSetFarmData($event, farm)"
+                    (deleteEvent)="onRemoveFarmSelected(farm)" [seller]="seller" [isReadonly]="false" [isEdit]="true"
+                    [farm]="farm.farm" (emitReadonlyEvent)="onEditFormEvent()" [allowedBlocks]="allowedBlocks"
+                    [isFromModal]="true" [action]="1" [fromFederated]="true">
+                </app-form-data>
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <section class="selected-farms__alert" *ngIf="showCompletedAlert">
+        <i class="icon-alert_icon"></i>
+        <p>{{'complete-farms-data-alert' | i18n}}</p>
+    </section>
+    <section class="selected-farms__footer">
+        <div>
+            <button class="sil-form__header-button btn btn-transparent-blue" (click)="onBackToList()">
+                <i class="icon-arrow_icon"></i> {{'back' | i18n}} </button>
+        </div>
+        <app-action-footer [isButtonSubmitDisabled]="isFarmOnEdition"
+            (onActionSelected)="onActionFooterSelected($event)">
+        </app-action-footer>
+    </section>
+</div>

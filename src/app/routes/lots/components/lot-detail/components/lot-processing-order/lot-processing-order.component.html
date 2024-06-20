@@ -1,0 +1,304 @@
+<ng-container *ngIf="transitions.length > 0">
+    <div *blockUI="
+            'lot-processing-order';
+            template: templateBlockModalUiComponent
+        ">
+        <hr />
+        <mat-accordion multi class="lot-detail__notes-panel">
+            <mat-expansion-panel hideToggle (opened)="onPanelOpened()" (closed)="onPanelOpened()">
+                <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                    <section class="panel__header">
+                        <i class="icon-caret-down" [ngClass]="panelOpened ? '' : 'panel-opened'"></i>
+                        <h3 class="title-base--black">
+                            {{ "processin-order" | i18n }}
+                        </h3>
+                        <span>{{ transitions.length | number: "2.0" }}</span>
+                    </section>
+                </mat-expansion-panel-header>
+                <section class="lot-processing-orders">
+                    <ng-container *ngFor="let transition of transitions">
+                        <mat-accordion multi class="lot-detail__orders-panel">
+                            <mat-expansion-panel hideToggle (opened)="onPanelDetailOpened(transition)"
+                                (closed)="onPanelDetailOpened(transition)">
+                                <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                                    <section class="lot-detail__orders-panel__header">
+                                        <div class="process">
+                                            <div>
+
+                                                <i class="icon-caret-down" [ngClass]="
+                                                    transition.opened
+                                                        ? ''
+                                                        : 'panel-opened'
+                                                "></i>
+                                                <label class="process__label-lot" [ngStyle]="{
+                                                    'background-color':
+                                                        transition.color
+                                                }">
+                                                    {{ transition.process }}</label>
+                                            </div>
+
+                                            <div class="order__label-number">
+                                                {{ "no-order" | i18n }} :
+                                                {{ transition.folio }}
+                                            </div>
+                                        </div>
+
+                                        <div class="order-actions">
+                                            <div class="hidden-lg hidden-md hidden-sm mobile-actions">
+                                                <span (click)="
+                                                        $event.stopPropagation()
+                                                    " [matMenuTriggerFor]="
+                                                        actionsMenu
+                                                    ">
+                                                    <i class="icon-options-vertical no-select"></i>
+                                                </span>
+                                                <mat-menu #actionsMenu="matMenu">
+                                                    <button mat-menu-item (click)="
+                                                            actionPDF(
+                                                                $event,
+                                                                REPORT_ACTIONS
+                                                                    .FORMAT.PDF,
+                                                                REPORT_ACTIONS.PRINT,
+                                                                transition.id
+                                                            )
+                                                        ">
+                                                        {{ "print" | i18n }}
+                                                    </button>
+                                                    <button mat-menu-item (click)="
+                                                            actionPDF(
+                                                                $event,
+                                                                REPORT_ACTIONS.EMAIL,
+                                                                null,
+                                                                transition.id
+                                                            )
+                                                        ">
+                                                        {{ "email" | i18n }}
+                                                    </button>
+                                                    <button mat-menu-item (click)="
+                                                            actionPDF(
+                                                                $event,
+                                                                REPORT_ACTIONS
+                                                                    .FORMAT.PDF,
+                                                                REPORT_ACTIONS.DOWNLOAD,
+                                                                transition.id
+                                                            )
+                                                        ">
+                                                        {{ "dowload" | i18n }}
+                                                    </button>
+                                                </mat-menu>
+                                            </div>
+                                            <div class="hidden-xs">
+                                                <div (click)="
+                                                        actionPDF(
+                                                            $event,
+                                                            REPORT_ACTIONS
+                                                                .FORMAT.PDF,
+                                                            REPORT_ACTIONS.DOWNLOAD,
+                                                            transition.id
+                                                        )
+                                                    " [ngClass]="{
+                                                        'note__print--disabled': isDisabledPrint
+                                                    }" matTooltip="{{
+                                                        'lot-processing-order-detail-cant-download'
+                                                            | i18n
+                                                    }}" [matTooltipDisabled]="
+                                                        !isDisabledPrint
+                                                    " class="note__print pointer pull-right">
+                                                    <i class="icon-download"></i>
+                                                </div>
+                                                <div (click)="
+                                                        actionPDF(
+                                                            $event,
+                                                            REPORT_ACTIONS.EMAIL,
+                                                            null,
+                                                            transition.id
+                                                        )
+                                                    " [ngClass]="{
+                                                        'note__print--disabled': isDisabledPrint
+                                                    }" matTooltip="{{
+                                                        'lot-processing-order-detail-cant-mail'
+                                                            | i18n
+                                                    }}" [matTooltipDisabled]="
+                                                        !isDisabledPrint
+                                                    " class="note__print pointer pull-right">
+                                                    <i class="icon-email"></i>
+                                                </div>
+                                                <div (click)="
+                                                        actionPDF(
+                                                            $event,
+                                                            REPORT_ACTIONS
+                                                                .FORMAT.PDF,
+                                                            REPORT_ACTIONS.PRINT,
+                                                            transition.id
+                                                        )
+                                                    " [ngClass]="{
+                                                        'note__print--disabled': isDisabledPrint
+                                                    }" matTooltip="{{
+                                                        'lot-processing-order-detail-cant-print'
+                                                            | i18n
+                                                    }}" [matTooltipDisabled]="
+                                                        !isDisabledPrint
+                                                    " class="note__print pointer pull-right">
+                                                    <i class="icon-report-print"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </mat-expansion-panel-header>
+                                <section class="lot-detail__orders-panel__details">
+                                    <section class="lot-detail__orders-panel__details-title">
+                                        {{ "origin" | i18n }}:
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-info">
+                                        <div>{{ "warehouse" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.origin.warehouse ||
+                                            "N/A"
+                                            }}
+                                        </div>
+                                        <div>{{ "commodity-type" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.origin.commodityType
+                                            }}
+                                        </div>
+                                        <div>{{ "start-of-date" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.origin.date
+                                            | formatMoment
+                                            : "MMM DD, YYYY [" +
+                                            ("at" | i18n) +
+                                            "] HH:mm"
+                                            : true
+                                            }}
+                                        </div>
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-title">
+                                        {{ "destination" | i18n }}:
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-info">
+                                        <div>{{ "warehouse" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.destination.warehouse
+                                            }}
+                                        </div>
+                                        <div>{{ "commodity-type" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.destination
+                                            .commodityType
+                                            }}
+                                        </div>
+                                        <div>{{ "end-date" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.destination.date
+                                            | formatMoment
+                                            : "MMM DD, YYYY [" +
+                                            ("at" | i18n) +
+                                            "] HH:mm"
+                                            : true
+                                            }}
+                                        </div>
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-title">
+                                        {{ "process" | i18n }}:
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-info">
+                                        <div>{{ "process" | i18n }}:</div>
+                                        <div>{{ transition.process }}</div>
+                                        <div>{{ "means" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.destination.warehouse
+                                            }}
+                                        </div>
+                                        <div>{{ "total-hours" | i18n }}:</div>
+                                        <div>
+                                            {{ transition.hours || "N/A" }}
+                                        </div>
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-title">
+                                        {{ "destination-performance" | i18n }}:
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details-info">
+                                        <div>
+                                            {{ "quantity-origin" | i18n }}:
+                                        </div>
+                                        <div>
+                                            {{
+                                            transition.origin.quantity
+                                            | number
+                                            : "1." +
+                                            DECIMAL_DIGITS +
+                                            "-" +
+                                            DECIMAL_DIGITS
+                                            : "en"
+                                            }}
+                                        </div>
+                                        <div>
+                                            {{ "quantity-destination" | i18n }}:
+                                        </div>
+                                        <div>
+                                            {{
+                                            transition.destination.quantity
+                                            | number
+                                            : "1." +
+                                            DECIMAL_DIGITS +
+                                            "-" +
+                                            DECIMAL_DIGITS
+                                            : "en"
+                                            }}
+                                        </div>
+                                        <div>{{ "performance" | i18n }}:</div>
+                                        <div>
+                                            {{
+                                            transition.efficiency
+                                            | number
+                                            : "1." +
+                                            DECIMAL_DIGITS +
+                                            "-" +
+                                            DECIMAL_DIGITS
+                                            : "en"
+                                            }}
+                                        </div>
+                                        <div>
+                                            {{ "final-moisture" | i18n }}:
+                                        </div>
+                                        <div>
+                                            {{
+                                            transition.moisture
+                                            | number
+                                            : "1." +
+                                            DECIMAL_DIGITS +
+                                            "-" +
+                                            DECIMAL_DIGITS
+                                            : "en"
+                                            }}
+                                        </div>
+                                    </section>
+                                    <section class="lot-detail__orders-panel__details__note">
+                                        <div>
+                                            <p class="font-ssb">
+                                                {{ "notes" | i18n }}
+                                            </p>
+                                            <p class="description">
+                                                {{
+                                                transition.note ||
+                                                ("not-apply" | i18n)
+                                                }}
+                                            </p>
+                                        </div>
+                                    </section>
+                                </section>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </ng-container>
+                </section>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</ng-container>

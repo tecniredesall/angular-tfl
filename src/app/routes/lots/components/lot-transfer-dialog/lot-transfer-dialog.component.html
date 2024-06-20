@@ -1,0 +1,12 @@
+<div *blockUI="'lot-transfer'; template: templateBlockModalUiComponent">
+    <ng-container *ngIf="componentSelected === 0; then summaryComponent; else productionFlowComponent">
+    </ng-container>
+    <ng-template #summaryComponent>
+        <app-lot-transfer-summary [lot]="currentLot" [summary]="transitioWeightSummary" (actionSelected)="onEventActionSummary($event)">
+        </app-lot-transfer-summary>
+    </ng-template>
+    <ng-template #productionFlowComponent>
+        <app-lot-production-flow [lot]="currentLot" (actionSelected)="onEventProductionFlow($event)">
+        </app-lot-production-flow>
+    </ng-template>
+</div>

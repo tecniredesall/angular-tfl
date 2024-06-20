@@ -1,0 +1,247 @@
+<div class="create-process scroll-view-app" *blockUI="'diagram-workflow'; template: templateBlockModalUiComponent">
+  <div class="create-process__wrapper">
+    <div class="create-process__container">
+      <div class="create-process__back" (click)="back()">
+        <i class="icon-arrow_icon"></i>
+        <p> {{ 'back-to-flows' | i18n }} </p>
+      </div>
+      <div class="create-process__configuration">
+        <mat-card class="create-process__configuration__select" (click)="toggleMenu()">
+          <p> {{ selectedWorkflow?.name }} </p>
+          <i class="icon-arrow-blue-drop-down" [ngStyle]="{'transform': menuOpen ? 'rotateX(180deg)' : 'rotateX(0)' } "></i>
+        </mat-card>
+        <div *ngIf="menuOpen" class="create-process__configuration__select__items scroll-view-app">
+          <mat-card *ngFor="let workflow of workflows" (click)="selectWorkflow(workflow)">
+            <p>{{workflow.name }} </p>
+          </mat-card>
+        </div>
+        <div class="create-process__configuration__name">
+          <p class="create-process__configuration__name__workflow"> {{'production-flows-off' | i18n }}
+            {{ selectedWorkflow?.name }} </p>
+          <p class="create-process__configuration__name__label"> {{ 'workflow' | i18n }} </p>
+        </div>
+        <div class="create-process__configuration__process">
+          <p>{{ 'processes' | i18n }}</p>
+          <button (click)="showProcess = !showProcess" [disabled]="disabledButtonProcess">
+            <i [class]="showProcess ? 'icon-caret-up' : 'icon-caret-down'"></i>
+          </button>
+        </div>
+        <div class="create-process__configuration__process__container" *ngIf="showProcess">
+          <custom-select
+            [formControl]="processControl"
+            [label]="'add-process' | i18n"
+            [items]="globalProcesses"
+            bindLabel="name"
+            [addLabel]="'new-process' | i18n"
+            [isLoading]="isGlobalProcessesLoading"
+            [clearable]="true"
+            [emptyImage]="'/assets/img/svg/empty_process.svg'"
+            [emptyLabel]="'process-empty-label' | i18n"
+            [placeholder]="'workflow-select-process' | i18n"
+            [permissionTag]="PERMISSIONS.WORKFLOW"
+            [permissionType]="PERMISSION_TYPES.CREATE"
+            (onNew)="createNewProcess()"
+            (clear)="clearSearchProcess()"
+            (onSearch)="onSearchProcess($event)"
+            (onSelect)="selectProcess($event)"
+            (onNextPage)="onProcessesScroll()"
+            >
+          </custom-select>
+          <div class="create-process__configuration__process__container__items">
+            <mat-card class="create-process__configuration__process__container__items__item" *ngFor="let process of processes"
+              [ngClass]="{'create-process__configuration__process__container__items__item--disabled': process.id == 'pending_process' || diagramReadOnly}">
+              <p>{{process.name | i18n}}</p>
+              <i class="icon-erase" *ngIf="process.id != 'pending_process' && !diagramReadOnly" (click)="deleteProcess(process)"></i>
+            </mat-card>
+          </div>
+        </div>
+        <div class="create-process__configuration__info" *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.UPDATE}">
+            <p class="create-process__configuration__info__warning" *ngIf="!diagramReadOnly"> 
+              <i class="icon-alert_icon"></i>
+              {{'workflow-information' | i18n}}
+            </p>
+            <p class="create-process__configuration__info__block" *ngIf="diagramReadOnly">
+              <i class="icon-alert_icon"></i>
+              {{'workflow-cant-edit-diagram' | i18n}}
+            </p>
+        </div>
+      </div>
+      <div
+        [ngClass]="{
+          'create-process__container__workflow': !isEditShape,
+          'create-process__container__workflow--process': showProcess,
+          'create-process__container__workflow--configuration': isEditShape
+        }">
+        <div class="create-process__container__workflow__process" *ngIf="showProcess">
+          <p class="create-process__container__workflow__process__title">
+            {{ 'processes' | i18n }}
+          </p>
+          <custom-select
+            [formControl]="processControl"
+            [label]="'add-process' | i18n"
+            [items]="globalProcesses"
+            bindLabel="name"
+            [addLabel]="'new-process' | i18n"
+            [isLoading]="isGlobalProcessesLoading"
+            [clearable]="true"
+            [emptyImage]="'/assets/img/svg/empty_process.svg'"
+            [emptyLabel]="'process-empty-label' | i18n"
+            [placeholder]="'workflow-select-process' | i18n"
+            [permissionTag]="PERMISSIONS.WORKFLOW"
+            [permissionType]="PERMISSION_TYPES.CREATE"
+            (onNew)="createNewProcess()"
+            (clear)="clearSearchProcess()"
+            (onSearch)="onSearchProcess($event)"
+            (onSelect)="selectProcess($event)"
+            (onNextPage)="onProcessesScroll()"
+          >
+          </custom-select>
+          <div class="create-process__container__workflow__process__items scroll-view-app">
+            <mat-card class="create-process__container__workflow__process__items__item" *ngFor="let process of processes"
+              [ngClass]="{'create-process__container__workflow__process__items__item--disabled': process.id == 'pending_process' || isSaved}">
+              <p>{{process.name | i18n}}</p>
+              <i class="icon-erase" *ngIf="process.id != 'pending_process' && !diagramReadOnly" (click)="deleteProcess(process)"></i>
+            </mat-card>
+          </div>
+        </div>
+        <mat-divider [vertical]="true"></mat-divider>
+        <div class="create-process__container__workflow__diagram" *ngIf="!isCreateProcess">
+          <div class="create-process__container__workflow__diagram--tablet">
+            <img src="/assets/img/empty_ipad_worfklow.png">
+            <p>
+              {{ 'workflow-diagram-tablet' |i18n }}
+              <span>768px</span>
+              {{ 'workflow-diagram-tablet-experience' |i18n }}
+            </p>
+          </div>
+          <dx-diagram 
+            #diagram 
+            id="diagram"
+            [showGrid]="false"
+            [readOnly]="diagramReadOnly"
+            (onItemDblClick)="editShape($event)"
+            customShapeTemplate="customShapeTemplate"
+            (onRequestEditOperation)="requestEditOperationHandler($event)"
+          >
+            <dxo-context-toolbox [enabled]="false"></dxo-context-toolbox>
+            <dxo-history-toolbar [visible]="false"></dxo-history-toolbar>
+            <dxo-view-toolbar [visible]="false"></dxo-view-toolbar>
+            <dxo-toolbox visibility="disabled"></dxo-toolbox>
+            <dxo-properties-panel visibility="disabled"></dxo-properties-panel>
+            <dxo-context-menu [enabled]="false"></dxo-context-menu>
+            <dxi-custom-shape
+              *ngFor="let shape of shapes"
+              [type]="'shape' + shape.id"
+              baseType="rectangle"
+              [defaultWidth]="1.75"
+              [defaultHeight]="1.15"
+              [allowEditText]="false"
+              [allowResize]="false"
+            >
+            </dxi-custom-shape>
+            <svg *dxTemplate="let item of 'customShapeTemplate'" class="create-process__shape">
+              <rect height="32" width="32" x="13" y="12" [ngStyle]="{'fill': item.dataItem?.color, 'stroke': item.dataItem?.color}">
+              </rect>
+              <image x="20" y="20" href="/assets/img/svg/icon_kanban.svg" height="16" width="16"></image>
+              <text class="create-process__shape__title" x="55" y="35">
+                {{ 
+                  (item.dataItem?.name | i18n)?.length > 9 ? 
+                    (item.dataItem?.name | i18n).slice(0, 9) + '...' 
+                    : (item.dataItem?.name | i18n)
+                }}
+              </text>
+              <!-- transformation-type-in -->
+              <image x="15" y="60" href="/assets/img/svg/arrow-in.svg" height="10" width="10"></image>
+              <text  x="30" y="70" class="create-process__shape__labels">
+                {{ 'transformation-type-in' | i18n }}: 
+              </text>
+              <text x="80" y="70" class="create-process__shape__elements">
+                {{
+                  item.dataItem?.transformationTypes?.in ? 
+                    item.dataItem?.transformationTypes.in.length > 1 ? 
+                      (item.dataItem?.transformationTypes.in.length + ' ' + ('transformations-types' | i18n)) 
+                      :
+                      (item.dataItem?.transformationTypes.in[0] ?
+                        (item.dataItem?.transformationTypes.in[0].name | i18n)?.length > 9 ? 
+                          (item.dataItem?.transformationTypes.in[0].name | i18n).slice(0, 9) + '...' 
+                          : 
+                          (item.dataItem?.transformationTypes.in[0].name | i18n)
+                        :
+                        '--'
+                      )
+                    : 
+                    ''
+                }}
+              </text>
+              <!-- transformation-type-out -->
+              <image x="15" y="85" href="/assets/img/svg/arrow-out.svg" height="10" width="10"></image>
+              <text x="30" y="95" class="create-process__shape__labels">
+                {{ 'transformation-type-out' | i18n }}:
+              </text>
+              <text x="80" y="95" class="create-process__shape__elements">
+                {{
+                  item.dataItem?.transformationTypes?.out ? 
+                    item.dataItem?.transformationTypes.out.length > 1 ? 
+                      (item.dataItem?.transformationTypes.out.length + ' ' + ('transformations-types' | i18n)) 
+                      :
+                      (item.dataItem?.transformationTypes.out[0] ?
+                        (item.dataItem?.transformationTypes.out[0].name | i18n)?.length > 9 ? 
+                          (item.dataItem?.transformationTypes.out[0].name | i18n).slice(0, 9) + '...' 
+                          : 
+                          (item.dataItem?.transformationTypes.out[0].name | i18n)
+                        :
+                        '--'
+                      )
+                    : 
+                    ''
+                }}
+              </text>
+            </svg>
+            <dxo-nodes
+              [dataSource]="dataSourceShapes"
+              keyExpr="id"
+              topExpr="yPosition"
+              leftExpr="xPosition"
+              [typeExpr]="itemTypeExpr"
+            >
+              <dxo-auto-layout type="off"></dxo-auto-layout>
+            </dxo-nodes>
+            <dxo-edges
+              [dataSource]="dataSourceConnectors"
+              keyExpr="id"
+              toExpr="toKey"
+              fromExpr="fromKey"></dxo-edges>
+          </dx-diagram>
+          <div class="create-process__container__workflow__diagram__footer" *ngIf="!diagramReadOnly">
+            <p class="create-process__configuration__info__block">
+              <i class="icon-alert_icon"></i>
+              {{'workflow-information-diagram' | i18n}}
+            </p>
+            <ng-container *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.UPDATE}">
+              <div class="create-process__container__workflow__diagram__footer__actions"
+                *ngIf="!diagramReadOnly && !isEditShape && !isCreateProcess">
+                <button class="create-process__container__workflow__diagram__footer__actions--cancel" (click)="back()">
+                  {{ 'cancel' | i18n }}
+                </button>
+                <button class="create-process__container__workflow__diagram__footer__actions--submit"
+                  [disabled]="shapes.length < 2" (click)="saveData()">
+                  {{ 'save' | i18n }}
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <ng-container *ngIf="isEditShape">
+          <div class="create-process__container__workflow__configuration">
+            <app-process-form 
+              (updateShape)="updateShape($event)"
+              (closeEmit)="this.isEditShape = false"
+              (deletedShape)="deleteProcessFromDiagram($event)"
+              [shape]="shapeToEdit">
+            </app-process-form>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

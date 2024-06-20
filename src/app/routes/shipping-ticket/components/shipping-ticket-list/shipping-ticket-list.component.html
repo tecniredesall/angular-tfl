@@ -1,0 +1,204 @@
+<div class="shipping-tickets__view">
+    <div class="shipping-tickets__view__wrapper">
+        <div class="shipping-tickets__view__wrapper__container scroll-view-app">
+            <div class="shipping-tickets__view__wrapper__container-header">
+                <!-- Header -->
+                <div class="title-data">
+                    {{'shipping-tickets' | i18n}}
+                </div>
+                <div class="actions-data">
+                    <section class="actions-data__filter">
+                        <button class="tr__button__filter" (click)="openFilter()">
+                            <i class="icon-filter-icon no-select"></i>
+                            &nbsp;
+                            &nbsp;
+                            <span>{{'filter' | i18n}}</span>
+                        </button>
+                    </section>
+                    <app-search-input [searchValue]="searchText" (clearEvent)="onClearSearching()">
+                        <input type="text" class="elipsis" autocomplete="not" [placeholder]="('search' | i18n)+' ...'"
+                            (input)="onTypeSearchInput($event)" [(ngModel)]="searchText" />
+                    </app-search-input>
+                    <button class="tr__button__primary">{{'export-csv' | i18n}}</button>
+                    <button class="tr__button__new-item" routerLink="/routes/shipping-ticket/new" *permission="{
+                                        tag: PERMISSION_TAG,
+                                        type: PERMISSION_TYPES.CREATE}">
+                        <i class="icon-plus"></i> {{'new-note' | i18n}}
+                    </button>
+                    <app-tags [tags]="paramTags" [keyStorageFilter]="KEY_TAGS" (eventOnDeleteTag)="onDeleteTag($event)"></app-tags>
+                </div>
+            </div>
+            <div class="shipping-tickets__view__wrapper__container_content"
+                *blockUI="'shipping-tickets-list'; template: templateBlockModalUiComponent">
+                <ng-container *ngIf="shippingTickets.length > 0; else notResultFound">
+                    <section class="table-header">
+                        <span></span>
+                        <span class="sil-table__header-cell">
+                            {{ "creation" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('created_at')"
+                                [ngClass]="{ 'sort-icon-invert': columnAscState.created_at}"></i>
+                        </span>
+                        <span class="sil-table__header-cell">
+                            {{ "id" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('ticket_number')"
+                                [ngClass]="{ 'sort-icon-invert': columnAscState.ticket_number }"></i>
+                        </span>
+                        <span class="sil-table__header-cell">
+                            {{ "delivered-by" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('company_name_origin')"
+                                [ngClass]="{ 'sort-icon-invert': columnAscState.company_name_origin }"></i>
+                        </span>
+                        <span class="sil-table__header-cell">
+                            {{ "destination-by" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('company_name_destination')"
+                                [ngClass]="{ 'sort-icon-invert': columnAscState.company_name_destination }"></i>
+                        </span>
+                        <span class="sil-table__header-cell cell-totals-net">
+                            {{ "net-weight" | i18n | uppercase }}
+                            <i class="icon-arrow_down show-on-mobile" (click)="sortData('net_weight')"
+                                [ngClass]="{ 'sort-icon-invert': columnAscState.net_weight }"></i>
+                        </span>
+                        <span class="sil-table__header-cell">
+                            {{ "status" | i18n | uppercase }}
+                        </span>
+                        <span></span>
+                    </section>
+                    <section class="table-body">
+                        <div class="table-body__data" *ngFor="let ticket of shippingTickets">
+                            <div class="cell-table cell-icon">
+                                <i class="icon-shipping-ticket"></i>
+                            </div>
+                            <div class="cell-table cell-date">
+                                <span class="sil-table__header-cell">
+                                    {{ "creation" | i18n | uppercase }}
+                                </span>
+                                <span>{{ticket.ticketDate | formatMoment: "MMM DD, YYYY HH:mm" : true}}</span>
+                                <span class="font-ss12">{{ticket.createdNameUser}}</span>
+                            </div>
+                            <div class="cell-table cell-folio">
+                                <span class="sil-table__header-cell">
+                                    {{ "id" | i18n | uppercase }}
+                                </span>
+                                {{ticket.folio}}
+                            </div>
+                            <div class="cell-table cell-origin elipsis">
+                                <span class="sil-table__header-cell">
+                                    {{ "delivery-by" | i18n | uppercase }}
+                                </span>
+                                {{ticket.companyOrigin}}
+                            </div>
+                            <div class="cell-table cell-destination elipsis">
+                                <span class="sil-table__header-cell">
+                                    {{ "destination-by" | i18n | uppercase }}
+                                </span>
+                                {{ticket.companyDestination}}
+                            </div>
+                            <div class="cell-table cell-totals-net" [ngClass]="{'tr--font-red': ticket.netWeightQQ  == 0}">
+                                <span class="sil-table__header-cell">
+                                    {{ "net-weight" | i18n | uppercase }}
+                                </span>
+                                {{ticket.netWeightQQ | number
+                                : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                                : "en"}} {{config.conversionMeasurementUnitAbbreviation}}
+                            </div>
+                            <div class="cell-table cell-status">
+                                <span class="sil-table__header-cell">
+                                    {{ "status" | i18n | uppercase }}
+                                </span>
+                                <div class="note-status"
+                                    [ngClass]="ticket.classStatus.css">
+                                    <p>
+                                        <i [ngClass]="ticket.classStatus.icon"></i>
+                                        <span class="hidden-xs"> {{ ticket.classStatus.label | i18n }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="cell-table cell-options">
+                                <span [matMenuTriggerFor]="actionsMenu">
+                                    <i class="icon-options-vertical"></i>
+                                </span>
+                                <mat-menu #actionsMenu="matMenu" [ngSwitch]="ticket.ticketStatus">
+                                    <ng-container *ngSwitchCase="SHIPPING_STATUS.CLOSED" >
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.DOWNLOAD, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.PRINT}">
+                                            {{ "dowload" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.PRINT, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.PRINT}">
+                                            {{ "print" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.READ, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.READ}">
+                                            {{ "view" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.READ, ticket)"
+                                        *permission="{
+                                                tag: PERMISSION_TAG,
+                                                type: PERMISSION_TYPES.VOID}">
+                                        {{ "void" | i18n }}
+                                    </button>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="SHIPPING_STATUS.OPEN">
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.READ, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.READ}">
+                                            {{ "view" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.UPDATE, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.UPDATE}">
+                                            {{ "edit" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onCloseShippingEvent(ticket)" *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.DELETE}" [disabled]="!ticket.options.close">
+                                            {{ "close-note" | i18n }}
+                                        </button>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="SHIPPING_STATUS.VOIDED">
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.READ, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.READ}">
+                                            {{ "view" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.DOWNLOAD, ticket)"
+                                            *permission="{
+                                                tag: PERMISSION_TAG,
+                                                type: PERMISSION_TYPES.PRINT}">
+                                                {{ "dowload" | i18n }}
+                                        </button>
+                                        <button mat-menu-item (click)="onActionClicked(ACTIONS.PRINT, ticket)"
+                                            *permission="{
+                                                    tag: PERMISSION_TAG,
+                                                    type: PERMISSION_TYPES.PRINT}">
+                                            {{ "print" | i18n }}
+                                        </button>
+                                    </ng-container>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Paginator -->
+                    <mat-paginator [hidden]="0 == shippingTickets.length" class="custom-paginator"
+                        [length]="paginator.totalItems" [pageSize]="paginator.itemsPerPage"
+                        [pageSizeOptions]="[paginator.itemsPerPage]" (page)="eventPaginator($event)"
+                        showFirstLastButtons #matPaginator>
+                    </mat-paginator>
+                </ng-container>
+                <ng-template #notResultFound>
+                    <app-not-results-found [imgName]="imgNoData"></app-not-results-found>
+                </ng-template>
+
+            </div>
+        </div>
+    </div>
+</div>

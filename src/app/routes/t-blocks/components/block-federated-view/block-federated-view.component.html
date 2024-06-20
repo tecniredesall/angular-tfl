@@ -1,0 +1,206 @@
+<mat-accordion class="farm__detail" *ngIf="farm">
+    <mat-expansion-panel class="sil-expansion-panel" hideToggle #farmPanel>
+        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'"
+        [ngClass]="farmPanel.expanded ? 'mat-expansion-selected': ''"
+        >
+            <section class="sil-expansion-panel-header farm__accordion-header"
+                [ngClass]="{ 'panel-expanded': farmPanel.expanded }">
+                <article class="sil-table__row">
+                    <span class="sil-table__cell cell__name">
+                        <i [ngClass]="{
+                                'icon-caret-up': farmPanel.expanded,
+                                'icon-caret-down': !farmPanel.expanded
+                            }"></i>
+                        {{ farm.name }}
+                    </span>
+                </article>
+                <article class="sil-table__row">
+                    <span class="sil-table__cell cell__farm">
+                        {{ farm.farmName }}
+                    </span>
+                </article>
+            </section>
+        </mat-expansion-panel-header>
+        <section class="farm__accordion-body">
+            <div class="detail-panel">
+                <div class="detail-panel__title">
+                    {{ "location" | i18n }}
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "country" | i18n }}:</span>
+                    <span class="detail-panel__values">{{
+                        farm.countryId ?  farm.country: '-'
+                        }}</span>
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "state-department" | i18n }}:</span>
+                    <span class="detail-panel__values">{{
+                        farm.state ? farm.state : "-"
+                        }}</span>
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "producer-municipality" | i18n }}:</span>
+                    <span class="detail-panel__values">{{
+                        farm.city ? farm.city : "-"
+                        }}</span>
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "town" | i18n }}:</span>
+                    <span class="detail-panel__values">{{
+                        farm.village ? farm.village : "-"
+                        }}</span>
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "domicile" | i18n }}:</span>
+                    <span class="detail-panel__values">{{
+                        farm.address ? farm.address : "-"
+                        }}</span>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="detail-panel">
+                <div class="detail-panel__title">
+                    {{ "dimensions" | i18n }}
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "extension" | i18n }}:</span>
+                    <span class="detail-panel__values">
+                        {{ farm.extension || "-" }}
+                        {{ farm.extension ? farm.measurementUnit : "" }}</span>
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "wasteland-area" | i18n }}:</span>
+                    <span class="detail-panel__values">
+                        {{ farm.wastelandArea || "-" }}
+                        {{
+                        farm.wastelandArea ? farm.measurementUnit : ""
+                        }}</span>
+                </div>
+                <div class="detail-panel__item">
+                    <span class="detail-panel__label">{{ "productive-area" | i18n }}:</span>
+                    <span class="detail-panel__values">
+                        {{ farm.productiveArea || "-" }}
+                        {{
+                        farm.productiveArea ? farm.measurementUnit : ""
+                        }}</span>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="detail-panel">
+                <div class="detail-panel__title">
+                    {{ "others" | i18n }}
+                </div>
+                <div class="detail-panel item__seals">
+                    <span class="detail-panel__label">{{ "seals" | i18n }}:
+                    </span>
+                    <div class="seals-container">
+                        <ng-container *ngFor="let seal of farm.seals">
+                            <span [matTooltip]="seal.name" matTooltipPosition="below"
+                                matTooltipClass="sil-table__tooltip">
+                                <img [src]="seal.image || seal.icon" />
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </mat-expansion-panel>
+</mat-accordion>
+<section class="detail-panel">
+    <div class="detail-panel__title">
+        {{ "location" | i18n }}
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "country" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.countryId ? block.country : "-"
+            }}</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "state-department" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.stateId ? block.state : "-"
+            }}</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "producer-municipality" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.cityId ? block.city : "-"
+            }}</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "town" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.town ? block.town : "-"
+            }}</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "domicile" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.address ? block.address : "-"
+            }}</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "latitude" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.latitude ? block.latitude : "-"
+            }}</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "longitude" | i18n }}:</span>
+        <span class="detail-panel__values">{{
+            block.longitude ? block.longitude : "-"
+            }}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="detail-panel__title">
+        {{ "dimensions" | i18n }}
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "height" | i18n }}:</span>
+        <span class="detail-panel__values">{{ block.height }} MSNM</span>
+    </div>
+    <div class="detail-panel__item">
+        <span class="detail-panel__label">{{ "extension" | i18n }}:</span>
+        <span class="detail-panel__values">{{ block.extension ? block.extension: '' }} {{block.extension ?
+            block.measuremnetUnitName: ''}}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="detail-panel__title">
+        {{ "characteristics" | i18n }}
+    </div>
+    <div class="detail-panel__item">
+        <label class="detail-panel__label">{{ "shade-variety" | i18n }}</label>
+        <div>
+            <ng-container *ngIf="block.shadeVariety.length > 0; else emptyTemplate">
+                <span class="sil-form__section-select-labels" *ngFor="let s of block.shadeVariety">
+                    {{ s.shadeVarietyName }}
+                </span>
+            </ng-container>
+        </div>
+    </div>
+    <div class="detail-panel__item">
+        <label class="detail-panel__label">{{ "soil-type" | i18n }}</label>
+        <div>
+            <ng-container *ngIf="block.soilType.length > 0; else emptyTemplate">
+                <span class="sil-form__section-select-labels" *ngFor="let so of block.soilType">
+                    {{ so.soilTypeName }}
+                </span>
+            </ng-container>
+        </div>
+    </div>
+    <div class="detail-panel__item">
+        <label class="detail-panel__label">{{ "coffee-variety" | i18n }}</label>
+        <div>
+            <ng-container *ngIf="block.coffeeVariety.length > 0; else emptyTemplate">
+                <span class="sil-form__section-select-labels" *ngFor="let c of block.coffeeVariety">
+                    {{ c.coffeeVarietyName }}
+                </span>
+            </ng-container>
+        </div>
+    </div>
+</section>
+
+<ng-template #emptyTemplate>
+    <span>-</span>
+</ng-template>

@@ -1,0 +1,144 @@
+<div
+    class="list-view-principal"
+    *blockUI="'container-farms-list'; template: blockTemplate"
+>
+    <div class="list-view-container">
+        <!-- Body -->
+        <table class="list-view-table">
+            <tr>
+                <td colspan="2" class="list-view-table-data">
+                    <div
+                        class="list-view-table-header no-select"
+                        (click)="sortRelated('name')"
+                    >
+                        <span class="list-view-table-header-name">
+                            {{ "name" | i18n }}
+                        </span>
+                        <img
+                            class="list-view-table-header-icon"
+                            [src]="
+                                'assets/img/svg/' +
+                                (orderStatusAsc['name']
+                                    ? 'caret_icon'
+                                    : 'caret_icon_down') +
+                                '.svg'
+                            "
+                        />
+                    </div>
+                </td>
+                <td class="list-view-table-actions">
+                    <div class="list-view-table-header no-select">
+                        <span class="list-view-table-header-name">
+                            {{ "ACTIONS" | i18n }}
+                        </span>
+                    </div>
+                </td>
+            </tr>
+
+            <ng-template ngFor let-relation [ngForOf]="producers">
+                <tr class="list-view-table-content">
+                    <td class="list-view-table-icon">
+                        <img
+                            class="blocks-list-view-icon"
+                            src="assets/img/svg/seller.svg"
+                            alt=""
+                        />
+                    </td>
+                    <td class="list-view-table-data">
+                        {{ relation.name }}
+                    </td>
+                    <td class="list-view-table-actions">
+                        <div class="list-view-table-actions-buttons">
+                            <button
+                                class="btn-transparent-blue"
+                                (click)="deleteRelation(relation)"
+                                *permission="{tag: PERMISSIONS.RELATED_PRODUCERS, type: PERMISSION_TYPES.DELETE}"
+                            >
+                                <img src="assets/img/svg/remove_icon.svg" />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="list-view-table-row-separator">
+                    <td></td>
+                </tr>
+            </ng-template>
+            <app-not-results-found
+                *ngIf="producers.length === 0"
+            ></app-not-results-found>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Delete Producer-->
+<div
+    id="deleteRelatedProducerModal"
+    class="modal fade"
+    role="dialog"
+    data-backdrop="static"
+    data-keyboard="false"
+>
+    <div class="modal-dialog modal-lg">
+        <div
+            class="modal-content modal-delete"
+            *blockUI="'delete-related-producers'; template: blockTemplate"
+        >
+            <div class="modal-header border-pad-5">
+                <div
+                    *ngIf="null != deleteRelatedProducer"
+                    class="col-xs-12 text-left p0"
+                >
+                    <div class="col-xs-12 text-left p0 text-center">
+                        <img
+                            class="modal-delete-icon"
+                            src="assets/img/svg/seller-blue.svg"
+                        />
+                    </div>
+                    <div
+                        class="col-xs-12 text-left p0 text-center delete-modal-title"
+                    >
+                        <span>
+                            {{
+                                "t-producer-related-list-delete-confirmation-question"
+                                    | i18n
+                            }}
+                        </span>
+
+                        <span class="form-label-ss">
+                            {{ deleteRelatedProducer.name }}
+                        </span>
+                        ?
+                    </div>
+                    <div class="col-xs-12 pad-20 p0">
+                        <div
+                            class="col-xs-12 text-left text-center col-lg-2 col-md-2 col-sm-2"
+                        ></div>
+                        <div
+                            class="col-xs-6 text-left text-center col-lg-4 col-sm-4 col-md-4"
+                        >
+                            <button
+                                (click)="onCancelDeleteRelation()"
+                                class="btn btn-default btn-sm pull-center delete-modal-btn"
+                            >
+                                {{ "cancel" | i18n | uppercase }}
+                            </button>
+                        </div>
+                        <div
+                            class="col-xs-6 col-sm-4 col-lg-4 col-md-4 text-left text-center"
+                        >
+                            <button
+                                (click)="onConfirmDeleteRelation()"
+                                class="btn btn-danger btn-sm pull-center delete-modal-btn"
+                            >
+                                {{ "delete" | i18n | uppercase }}
+                            </button>
+                        </div>
+                        <div
+                            class="col-xs-12 col-lg-2 col-md-2 col-sm-2 text-left text-center"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

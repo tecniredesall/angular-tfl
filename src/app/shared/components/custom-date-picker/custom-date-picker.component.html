@@ -1,0 +1,14 @@
+<mat-form-field appearance="outline" class="custom-date-picker-field tr__date-picker" [ngClass]="{'custom-date-picker-field-disabled': isDisabled, 'create-input': hasInputClass}" (click)="cdp.open()">
+
+  <input class="custom-date-picker-field-input no-select" matInput [placeholder]="placeholder | i18n"
+    [value]="date ? (date | formatMoment: dateFormat : true) : ''"
+    [disabled]="isDisabled" readonly>
+
+  <input class="custom-date-picker-input-hidden" [matDatepicker]="cdp" [(ngModel)]="date" [disabled]="isDisabled" [min]="minDate" [max]="maxDate" (dateChange)="onChangeDatepicker($event)" />
+
+  <mat-datepicker-toggle matSuffix [for]="cdp">
+  </mat-datepicker-toggle>
+
+  <mat-datepicker panelClass="tr__date-picker__panel" #cdp></mat-datepicker>
+
+</mat-form-field>

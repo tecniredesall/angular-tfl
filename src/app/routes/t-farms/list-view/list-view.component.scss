@@ -1,0 +1,177 @@
+.sil-table {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    .sil-table__header-row {
+        display: none;
+        .sil-table__header-cell {
+            gap: 4px;
+            font-size: 12px;
+            align-items: center;
+            &.header__name{
+                grid-area: name;
+            }
+            &.header__extension{
+                grid-area: extension;
+            }
+            &.header__blocks{
+                grid-area: blocks;
+            }
+            &.header__seals{
+                grid-area: seals;
+            }
+            &.header__actions{
+                grid-area: actions;
+            }
+        }
+    }
+    .sil-table__row {
+        padding: 8px;
+        cursor: pointer;
+        grid-template-columns: 1.5fr 1fr 0.3fr;
+        grid-template-areas:
+            "name extension actions"
+            "blocks seals federated";
+        row-gap: 4px;
+        column-gap: 4px;
+        font-weight: 600;
+        font-size: 14px;
+        .sil-table__cell {
+            font-weight: 600;
+            font-size: 14px;
+            justify-content: flex-start;
+            &.cell__name {
+                word-break: break-word;
+                grid-area: name;
+                div {
+                    display: inline-flex;
+                    align-items: center;
+                    i {
+                        font-size: 20px;
+                        color: #869aab;
+                    }
+                    span:nth-child(2) {
+                        display: inline-block;
+                    }
+                }
+            }
+            &.cell__extension {
+                grid-area: extension;
+            }
+            &.cell__blocks {
+                grid-area: blocks;
+            }
+            &.cell__seals {
+                grid-area: seals;
+                div {
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-left: 18px;
+                    span {
+                        z-index: 5;
+                        margin-left: -18px;
+                        img {
+                            top: 3px;
+                            width: 24px;
+                            height: 24px;
+                            border: 0.5px solid lightgray;
+                            position: initial;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+            }
+
+            &.cell__federated {
+                padding: 0;
+                grid-area: federated;
+                align-items: flex-end;
+                justify-content: flex-end;
+            }
+        }
+    }
+    .cell__actions {
+        display: flex;
+        grid-area: actions;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}
+/* Tooltip class */
+::ng-deep .sil-table__tooltip {
+    white-space: pre-line;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.42;
+    letter-spacing: normal;
+    text-align: left;
+    padding: 10px;
+}
+
+/* Responsive*/
+/* tablet */
+@media (min-width: 768px) {
+    .sil-table {
+        .sil-table__header-row {
+            padding: 8px;
+            display: grid;
+            column-gap: 4px;
+            grid-template-areas: "name extension blocks seals . actions";
+            grid-template-columns: 1fr 0.6fr 0.3fr 0.4fr 0.2fr 0.2fr;
+            .sil-table__header-cell {
+                &.header__actions {
+                    justify-content: flex-end;
+                }
+            }
+        }
+        .sil-table__row {
+            grid-template-columns: 1fr 0.6fr 0.3fr 0.4fr 0.2fr 0.2fr;
+            grid-template-areas: "name extension blocks seals federated actions";
+            .sil-table__cell {
+                &.cell__seals {
+                    padding: 0;
+                    div {
+                        margin-left: 0;
+                        span {
+                            margin-left: -18px;
+                            img {
+                                width: 28px;
+                                height: 28px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*desktop*/
+@media (min-width: 1200px) {
+    .sil-table {
+        .sil-table__header-row {
+            grid-template-columns: 1.5fr 0.4fr 0.3fr 0.4fr 0.2fr 0.2fr;
+        }
+        .sil-table__row {
+            grid-template-columns: 1.5fr 0.4fr 0.3fr 0.4fr 0.2fr 0.2fr;
+            grid-template-areas: "name extension blocks seals federated actions";
+            .sil-table__cell {
+                &.cell__seals {
+                    div {
+                        span {
+                            margin-left: -20px;
+                            img {
+                                width: 35px;
+                                height: 35px;
+                            }
+                        }
+                        span:first-child {
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

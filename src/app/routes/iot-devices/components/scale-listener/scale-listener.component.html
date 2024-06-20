@@ -1,0 +1,92 @@
+<section class="scale-listener" [ngSwitch]="scaleStatus">
+  <div class="scale-listener__area">
+    <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.UNSELECTED" [ngTemplateOutlet]="areaWeightData"></ng-container>
+    <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.DISABLED" [ngTemplateOutlet]="areaWeightData"></ng-container>
+    <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.STABILIZED" [ngTemplateOutlet]="areaWeightData"></ng-container>
+    <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.STABILIZING" [ngTemplateOutlet]="stabilizingStatusMessage">
+    </ng-container>
+    <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.CONNECTING" [ngTemplateOutlet]="connectingStatusMessage">
+    </ng-container>
+    <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.DISCONNECTED" [ngTemplateOutlet]="disconnectedStatusMessage">
+    </ng-container>
+  </div>
+  <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.DISABLED" [ngTemplateOutlet]="disabledStatusMessage">
+  </ng-container>
+  <ng-container *ngSwitchCase="SCALE_LISTENER_STATUS.STABILIZED" [ngTemplateOutlet]="stabilizedStatusMessage">
+  </ng-container>
+  <div *ngSwitchDefault class="scale-listener__default-status"></div>
+</section>
+
+<ng-template #areaWeightData>
+  <div class="scale-listener__weight">
+    <div class="scale-listener__weight__label">
+      {{'weight' | i18n}}:
+    </div>
+    <div class="scale-listener__weight__value">
+      {{weight | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} {{weightUnity}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #disconnectedStatusMessage>
+  <div class="scale-listener__disconnected-status">
+    <div class="scale-listener__disconnected-status__icon">
+      <i class="icon-close-circle"></i>
+    </div>
+    <div class="scale-listener__disconnected-status__text">
+      {{'scale-listener-disconnected-message' | i18n}}
+    </div>
+    <div class="scale-listener__disconnected-status__action no-select" (click)="retryConnectionToScale()">
+      {{'scale-listener-retry-connection' | i18n}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #connectingStatusMessage>
+  <div class="scale-listener__stabilizing-status">
+    <div class="scale-listener__stabilizing-status__icon">
+      <i class="icon-loading"></i>
+    </div>
+    <div class="scale-listener__stabilizing-status__text">
+      {{'scale-listener-connecting-message' | i18n}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #stabilizingStatusMessage>
+  <div class="scale-listener__stabilizing-status">
+    <div class="scale-listener__stabilizing-status__icon">
+      <i class="icon-loading"></i>
+    </div>
+    <div class="scale-listener__stabilizing-status__text">
+      {{'scale-listener-stabilizing-message' | i18n}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #stabilizedStatusMessage>
+  <div class="scale-listener__stabilized-status">
+    <div class="scale-listener__stabilized-status__icon">
+      <i class="icon-check"></i>
+    </div>
+    <div class="scale-listener__stabilized-status__text">
+      {{'scale-listener-stabilized-message' | i18n}}
+    </div>
+    <div class="scale-listener__stabilized-status__weigh-again no-select" (click)="weighAgain()">
+      {{'scale-listener-weigh-again' | i18n}}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #disabledStatusMessage>
+  <div class="scale-listener__disabled-status">
+    <div class="scale-listener__disabled-status__message">
+      <div class="scale-listener__disabled-status__message__icon">
+        <i class="icon-alert-outline"></i>
+      </div>
+      <div class="scale-listener__disabled-status__message__text">
+        {{'scale-listener-disabled-message' | i18n}}
+      </div>
+    </div>
+  </div>
+</ng-template>

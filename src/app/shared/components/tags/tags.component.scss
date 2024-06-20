@@ -1,0 +1,32 @@
+.section__tags {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: inline-block;
+    .tag--items {
+        display: inline-flex;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        span {
+            color: var(--base-blue-press);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .tag--item__label {
+            background-color: var(--tr-info-background-color);
+            padding: 0.2em 0.8em 0.3em;
+            border-top-left-radius: 0.25em;
+            border-bottom-left-radius: 0.25em;
+        }
+        .tag--item__button {
+            background-color: var(--tr-info-background-color);
+            border-top-right-radius: 0.25em;
+            border-bottom-right-radius: 0.25em;
+            margin-left: -5px;
+            padding: 0.2em 0.5em 0.3em;
+            border-left: solid 1px var(--base-blue-press);
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

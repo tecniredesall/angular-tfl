@@ -1,0 +1,84 @@
+@import 'src/scss/breakpoints.scss';
+
+.dialog-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 50px 20px;
+    text-align: center;
+    font-size: 24px;
+    row-gap: 10px;
+    color:  var(--tr-dialog-confirmation-color);
+    .dialog-msg {
+        font-weight: normal;
+        padding: 0px 20px;
+    }
+    .dialog-confirm {
+        font-weight: 600;
+    }
+}
+
+.action-footer-container-button {
+    display: grid;
+    width: 100%;
+    button {
+        font-size: 15px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.4;
+        letter-spacing: normal;
+        text-align: center;
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 5px;
+        height: 40px !important;
+        width: 100%;
+    }
+}
+
+.action-footer-btn-submit:disabled {
+    color: #344057 !important;
+    background-color: #dbdfe7 !important;
+    cursor: not-allowed;
+}
+
+:not(.dark) :host .action-footer-btn-submit:enabled {
+    color: white !important;
+    background-color: #0068d1 !important;
+}
+
+.dark :host .action-footer-btn-submit:enabled {
+    color: white !important;
+    background-color: #1f8efa !important;
+}
+
+@media (min-width: $screen-sm-min) {
+    .dialog-container {
+        .dialog-msg {
+            padding: 0px 100px;
+        }
+        .action-footer-container-button {
+            display: inline-flex;
+            width: auto;
+            button {
+                width: 150px;
+            }
+        }
+    }
+}
+
+@media (min-width: $screen-md-min) {
+    .dialog-container {
+        .dialog-msg {
+            padding: 0px 140px;
+        }
+        .action-footer-container-button {
+            display: inline-flex;
+            width: auto;
+            button {
+                width: 151px;
+            }
+        }
+    }
+}

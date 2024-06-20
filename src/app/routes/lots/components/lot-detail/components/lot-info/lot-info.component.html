@@ -1,0 +1,100 @@
+<section class="lot-detail" *ngIf="lot">
+    <section class="lot-detail__id-date" *ngIf="!isFromTransition">
+        <h3 class="title-base--black">ID L{{ lot.folio }}</h3>
+        <p>
+            <i class="icon-clock"></i>{{ lot.createdDate | formatMoment: "MMM DD, YYYY HH:mm":true }}
+        </p>
+    </section>
+    <section class="lot-detail__quantity" *ngIf="!isFromTransition">
+        <div class="lot-detail__quantity__lots-total-weights">
+            <p class="lot-detail__quantity__title-weight">
+                <span>{{ "estimated-net-weight" | i18n }}:</span>
+                <span class="lot-detail__quantity__title-weight__net-weight">{{ lot.getEstimatedNetWeight() | number : "1." +
+                    DECIMAL_DIGITS + "-" +
+                    DECIMAL_DIGITS : "en" }} {{ configuration.conversionMeasurementUnitAbbreviation }}</span>
+            </p>
+            <p class="lot-detail__quantity__title-weight">
+                {{ "weight-featured-current" | i18n }}:
+                <span class="lot-detail__quantity__title-weight__featured-weight">{{ lot.getCurrentFeaturedWeight() | number :
+                    "1." + DECIMAL_DIGITS + "-" +
+                    DECIMAL_DIGITS : "en"}} {{ configuration.conversionMeasurementUnitAbbreviation }}</span>
+            </p>
+        </div>
+    </section>
+    <section class="lot-detail__process">
+        <label for="" class="sil-form__label">{{
+            isFromTransition
+            ? ("current-process" | i18n)
+            : ("lots-list-process" | i18n)
+            }}</label>
+        <ng-container *ngIf="canEdit && canTransition; else process">
+            <ng-select class="sil-form__process-selector" [ngClass]="{ empty: !lot.processId }" [searchable]="false"
+                [clearable]="false" bindLabel="name" bindValue="id" [items]="processes"
+                (change)="onProcessChange($event)" [(ngModel)]="lot.processId"
+                [ngStyle]="{ 'background-color': lot.processColor }">
+                <ng-template ng-label-tmp let-item="item">
+                    {{ item.name | i18n }}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                    {{ item.name | i18n }}
+                </ng-template>
+            </ng-select>
+        </ng-container>
+        <ng-template #process>
+            <div class="lot-detail__process__label" [ngStyle]="{ 'background-color': lot.processColor }">
+                {{ lot.process | i18n }}
+            </div>
+        </ng-template>
+    </section>
+    <section class="lot-detail__commodity">
+        <label for="" class="sil-form__label">{{
+            "commodity-type" | i18n
+            }}</label>
+        <p>
+            {{ lot.commodityType }}
+        </p>
+    </section>
+    <section class="lot-detail__warehouse" *ngIf="lot.warehouse">
+        <i class="icon-almacen-blue"></i>
+        <span>{{ lot.warehouse }}</span>
+    </section>
+    <section class="lot-detail__producers">
+        <i class="icon-users"></i>
+        <span>{{ lot.sellers.length }}
+            <ng-container *ngIf="lot.sellers.length === 1; else elseTemplate">{{
+                "producer" | i18n
+                }}</ng-container>
+            <ng-template #elseTemplate> {{ "t-producers" | i18n }}</ng-template>
+        </span>
+    </section>
+    <section class="lot-detail__weight-notes">
+        <app-lot-weight-notes [isFromTransition]="isFromTransition" [standAlone]="true" [weightNotes]="lot.weightNotes"
+            [configuration]="configuration" [lot]="lot">
+        </app-lot-weight-notes>
+    </section>
+    <section class="lot-detail__proceseeing-order" *ngIf="!isFromTransition">
+        <app-lot-processing-order-general-view [lot]="lot" [configuration]="configuration">
+        </app-lot-processing-order-general-view>
+    </section>
+
+    <!-- TODO: Comment for release 19, uncomment in release 20 -->
+    <!-- <section class="lot-detail__tasting">
+        <silosys-lot-tasting [lot]="lot"></silosys-lot-tasting>
+    </section> -->
+
+    <ng-container>
+        <div class="lot-detail__tasting" *permission="{tag: PERMISSIONS.CUPPING, type: PERMISSION_TYPES.READ}">
+            <silosys-lot-tasting *ngIf="!isFromTransition" [lot]="lot" [catationList]="catationList"
+                [disabledTasting]="currentProcessId === CONSTANTS.LOT_PENDING_PROCESS">
+            </silosys-lot-tasting>
+        </div>
+    </ng-container>
+
+
+
+    <section class="lot-detail__btn" *ngIf="canEdit && canTransition && processes.length == 1" >
+        <button class="float-right btn blue-btn" (click)="finalizeLot()">
+            {{ "finish" | i18n }}
+        </button>
+    </section>
+</section>

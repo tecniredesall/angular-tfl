@@ -1,0 +1,67 @@
+.delete-weight-note{
+    padding: 30px;
+    max-width: 548px;
+    &__title{
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.36;
+        text-align: center;
+        color: var(--tr-dialog-confirmation-color);
+        margin-bottom: 32px;
+    }
+    &__subtitle{
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.33;
+        text-align: center;
+        color: var(--tr-dialog-confirmation-color);
+        margin-bottom: 24px;
+    }
+    &__reason{
+        p{
+            font-size: 14px;
+            line-height: 1.14;
+            text-align: left;
+            color: var(--tr-panel-body-color);
+        }
+        textarea {
+            resize: none;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100%;
+            border-radius: 5px;
+            outline: none;
+            box-shadow: none;
+            width: 100%;
+            padding: 8px;
+            border: solid 1px var(--tr-ng-select-border-color);
+            background-color: var(--tr-foreground-color);
+        }
+    }
+    &__buttons{
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+        gap: 10px;
+        &--cancel{
+            width: 160px;
+            height: 40px;
+            border-radius: 5px;
+            color: var(--tr-base-color-blue);
+            background-color: var(--tr-background-color-second-button);
+            border: none
+        }
+        &--accept{
+            width: 160px;
+            height: 40px;
+            border-radius: 5px;
+            color: var(--tr-base-color-white);
+            background-color: var(--tr-base-color-red);
+            border: none;
+            &:disabled{
+                color: var(--tr-button-disabled-color);
+                background-color: var(--tr-button-disabled-background-color);
+            }
+        }
+    }
+}

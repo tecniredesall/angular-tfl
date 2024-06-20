@@ -1,0 +1,103 @@
+
+<div class="custom-select-label" #controlLabel *ngIf="label">
+    <span>{{label}}</span>
+    <span [hidden]="!isVisibleRequiredMark"> *</span>
+</div>
+<div class="custom-select-control" [ngClass]="{'disabled': isDisabled}">
+    <mat-form-field appearance="outline" floatLabel="never">
+        <input #inputSelect
+            [disabled]="isDisabled"
+            (click)="openSelect()"
+            matInput
+            [placeholder]="placeholder"
+            [(ngModel)]="searchText"
+            (input)="search()"
+            (focus)="onFocusEvent()"
+            autocomplete="off"
+            [readonly]="innerWidth <= TABLET_WIDTH_SCREEN"
+            (ngModelChange)="onChangeInputSearch($event)"
+            >
+        <div class="no-select custom-select-control__suffix" matSuffix>
+            <div class="custom-select-control__icon" *ngIf="clearable && !isDisabled && searchText?.length>0 && searchText==initialSearchText" (click)="onClearEvent($event)">
+                <div class="custom-select-control__icon__container custom-select-control__icon__container--clearable">
+                    <mat-icon>clear</mat-icon>
+                </div>
+            </div>
+            <div class="custom-select-control__icon" *ngIf="isLoading">
+                <div class="custom-select-control__icon__container">
+                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="custom-select-control__icon" (click)="toogleSelect($event)">
+                <div class="custom-select-control__icon__container">
+                    <mat-icon class="no-select">{{ isOpenSelect ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
+                </div>
+            </div>
+        </div>
+    </mat-form-field>
+    <div class="custom-select-dropdown" *ngIf="isOpenSelect">
+        <ng-container *ngIf="isLoading && 0==items.length; else content">
+            <div class="custom-select-dropdown__loading">
+                {{'loading' | i18n}}
+            </div>
+        </ng-container>
+        <ng-template #content>
+            <ng-container *ngIf="isEnableNewItem">
+                <div *permission="{tag: permissionTag, type: permissionType}"
+                    class="custom-select-new" (click)="addItem()">
+                    <p>+ {{addLabel}}</p>
+                </div>
+            </ng-container>
+            <div class="custom-select-items" *ngIf="items.length > 0; else empty">
+                <ng-container *ngIf="!isBlockItems; else blocks">
+                    <div class="custom-select-items__scroll scroll-view-app" (scroll)="onScroll($event)">
+                       <ng-container *ngIf="groupBy == null; else isGrouper">
+                            <div *ngFor="let item of items"
+                                class="custom-select-item"
+                                [ngClass]="{'custom-select-item--disabled': item.isDisabled || item.disabled}"
+                                (click)="item.isDisabled || item.disabled ? null : select(item)">
+                                {{ bindLabel ? (item[bindLabel] | i18n) : item}}
+                            </div>
+                        </ng-container>
+                        <ng-template #isGrouper>
+                            <ng-container *ngFor="let item of groupByItems | keyvalue">
+                                <span class="custom-select-items__grouper">{{item.key}}</span>
+                                <div *ngFor="let value of item.value"
+                                     class="custom-select-item"
+                                     [ngClass]="{'custom-select-item--disabled': item.isDisabled || item.disabled, 'grouper-padding': groupBy !== null}"
+                                     (click)="item.isDisabled || item.disabled ? null : select(value)">
+                                     {{value[bindLabel] | i18n}}
+                                </div>
+                            </ng-container>
+                        </ng-template>
+                    </div>
+                </ng-container>
+                <ng-template #blocks>
+                    <div class="custom-select-blocks scroll-view-app">
+                        <p *ngIf="associateBlocks.length > 0" class="custom-select-item font-blue">{{'associated-farm' |i18n}}</p>
+                        <div
+                            *ngFor="let item of associateBlocks"
+                            class="custom-select-item"
+                            (click)="select(item)">{{item[bindLabel]}}</div>
+                        <p *ngIf="dissociatedBlocks.length > 0" class="custom-select-item font-blue">{{'not-associated' |i18n}}</p>
+                        <div
+                            *ngFor="let item of dissociatedBlocks"
+                            class="custom-select-item"
+                            (click)="select(item)">{{item[bindLabel]}}</div>
+                    </div>
+                </ng-template>
+            </div>
+            <ng-template #empty>
+                <ng-container *ngIf="searchText == ''; else notFound">
+                    <div class="custom-select-empty">
+                        <img [ngClass]="{'default-img': !emptyImage}" [src]="emptyImage || 'assets/img/empty/search-empty.png'">
+                        <p>{{emptyLabel}}</p>
+                    </div>
+                </ng-container>
+                <ng-template #notFound>
+                    <p class="custom-select_p__not_items_found">{{'not-items-found' |i18n}}</p>
+                </ng-template>
+            </ng-template>
+        </ng-template>
+    </div>
+</div>

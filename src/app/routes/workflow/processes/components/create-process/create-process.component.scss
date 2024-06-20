@@ -1,0 +1,185 @@
+p{
+    margin-bottom: 0;
+}
+
+.mat-divider {
+    margin: 40px 0;
+    opacity: 0.3;
+    border-top-color: var(--tr-border-color);
+}
+.create-process{
+    &__container{
+        position: relative;
+        padding: 61px 24px 0 24px;
+    }
+    &__form{
+        padding: 40px;
+        background-color: var(--tr-foreground-color);
+        &__title{
+            font-size: 28px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.36;
+            letter-spacing: normal;
+            color: var(--tr-base-color-blue);
+        }
+        &__container{
+            gap: 24px;
+            display: flex;
+        }
+    }
+    &__group{
+        width: 50%;
+        margin-bottom: 30px;
+    }
+    &__name{
+        &__title{
+            font-size: 14px;
+            color: var(--tr-panel-body-color);
+        }
+        &__input{
+            height: 32px;
+            width: 100%;
+            border: solid 1px var(--tr-title-detail-order-backgroud-color);
+            padding: 4px 10px;
+            border-radius: 5px;
+            background-color: var(--tr-background-input);
+            &:disabled{
+                background-color: var(--tr-background-input-disabled);
+            }
+            &:focus-visible{
+                outline: none;
+            }
+        }
+    }
+    &__color{
+        &__title{
+            font-size: 14px;
+            color: var(--tr-panel-body-color);
+        }
+        &__placeholder{
+            color: var(--tr-scale-button-tooltip-color);
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        &__container{
+            align-items: center;
+        }
+        &__selector {
+            width: 95px;
+            height: 32px;
+            display: grid;
+            margin-left: auto;
+            border-radius: 5px;
+            grid-template-columns: 70% 30%;
+            border: solid 1px var(--tr-title-detail-order-backgroud-color);
+        }
+        &__selected{
+            background-color: var(--tr-foreground-color);
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        &__grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+        }
+        &__element{
+            height: 20px;
+            width: 20px;
+        }
+        &__button{
+            color: var(--tr-data-grid-color);
+            width: 16px;
+            height: 16px;
+            margin: auto;
+        }
+    }
+    &__delete {
+        margin-bottom: 40px;
+        p{
+            color: var(--tr-base-color-red) !important;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+    &__footer{
+        gap: 16px;
+        width: 100%;
+        display: flex;
+        margin-top: 40px;
+        flex-direction: row;
+        justify-content: flex-end;
+        &__button{
+            $button-class: &;
+            height: 40px;
+            font-size: 15px;
+            font-style: normal;
+            text-align: center;
+            font-weight: 600;
+            line-height: 1.4;
+            font-stretch: normal;
+            letter-spacing: normal;
+            border-radius: 5px;
+            border: none;
+            min-width: 160px;
+            &--cancel{
+                @extend #{$button-class};
+                color: var(--tr-base-color-blue);
+                background-color: var(--tr-foreground-color);
+            }
+            &--submit{
+                @extend #{$button-class};
+                background-color: var(--tr-base-color-blue);
+                color: var(--tr-base-color-white);
+                &:disabled{
+                    color: var(--tr-button-disabled-color);
+                    background-color: var(--tr-button-disabled-background-color);
+                }
+            }
+        }
+    }
+}
+.dropdown-menu {
+    left: auto;
+    right: 0;
+    padding: 10px;
+}
+
+@media (max-width: 425px) {
+    .create-process{
+        &__footer{
+            flex-direction: column;
+            &__button{
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .create-process{
+        &__container{
+            padding: 14px 20px;
+        }
+        &__form{
+            padding: 40px 18px;
+            &__container{
+                flex-direction: column;
+            }
+        }
+        &__group{
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 540px) {
+    .create-process{
+        padding-bottom: 64px;
+    }
+}
+

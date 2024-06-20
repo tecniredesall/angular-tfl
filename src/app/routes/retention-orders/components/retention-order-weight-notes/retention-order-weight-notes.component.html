@@ -1,0 +1,146 @@
+<div class="d-inline-grid" *blockUI="'weight-note'; template: templateBlockModalUiComponent">
+    <div class="container-grid">
+        <div>
+
+            <button class="tr__button__filter" matRipple [ngClass]="{'tr__button__filter--active': hasFilter}"
+                (click)="openFilter($event)">
+                <i class="icon-filter-icon no-select"></i>
+                <span>{{'filter' | i18n}}</span>
+
+                <div *ngIf="countFilter > 0" class="tr__button__filter__count">
+                    <span>{{countFilter}}</span>
+                </div>
+            </button>
+        </div>
+    </div>
+    <app-tags [tags]="paramTags" (eventOnDeleteTag)="onDeleteTag($event)"></app-tags>
+    <div class="table-headers">
+        <div class="label-table">
+            <mat-checkbox (change)="selectAll($event)" [checked]="currenPage ? currenPage.selected : false"
+                [indeterminate]="currenPage ? currenPage.indeterminated : false" color="primary"
+                class="weight-note__checkbox">
+                <span class="hidden-lg hidden-md"> {{'select-all' | i18n}}</span>
+            </mat-checkbox>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'creation'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('created_at')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.created_at }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'id'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('folio')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.folio }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs">{{'type'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('transformation_type')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.transformation_type }"></i>
+        </div>
+        <div class="label-table p0 hidden-sm hidden-xs"> {{'sacks'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('sacks')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.sacks }"></i>
+        </div>
+        <div class="label-table label-table__right p0 hidden-sm hidden-xs"># {{'purchase-order'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('purchase_order_folio')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.purchase_order_folio }"></i>
+        </div>
+        <div class="label-table label-table__right p0 hidden-sm hidden-xs"> {{'net-weight'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('net_weight_out')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.net_weight_out }"></i>
+        </div>
+        <div class="label-table label-table__right p0 hidden-sm hidden-xs"> {{'gold_net_weight'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('gold_weight_out')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.gold_weight_out }"></i>
+        </div>
+        <div class="label-table label-table__right p0 hidden-sm hidden-xs "> {{'price_per_unit'| i18n | uppercase}}
+            <i class="icon-arrow_down" (click)="sortData('price')"
+                [ngClass]="{ 'sort-icon-invert': !columnAscState.price }"></i>
+        </div>
+        <div class="label-table label-table__center p0 hidden-sm hidden-xs"> {{'status'| i18n | uppercase}}
+        </div>
+    </div>
+    <div *ngIf="weightNotes.length > 0; else notReultFound">
+        <div class="table-body">
+            <ng-container *ngFor="let wn of weightNotes; let index = index">
+                <div class="notes-grid" [ngClass]="{'disabled':wn.status == PAYMENT_STATUS.CREATED}" *ngIf="wn">
+                    <!-- CHECK BOX -->
+                    <div class="first-column-table">
+                        <mat-checkbox (change)="selectWeightGroup(wn)" [checked]="wn.selected" color="primary"
+                            class="weight-note__checkbox" [indeterminate]="wn.indeterminated"
+                            [disabled]="wn.status == PAYMENT_STATUS.CREATED">
+                        </mat-checkbox>
+                        <div class="arrow-container pointer notes-item img-note  border-mobile-top"
+                            [ngClass]="{'img-note--disabled': wn.status == PAYMENT_STATUS.CREATED}">
+                            <i class="icon-notas"></i>
+                        </div>
+                    </div>
+                    <!-- CREATION DATE -->
+                    <div class="notes-item hidden-xs border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'creation' | i18n}}</span>
+                        <span>{{wn.createdDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}</span>
+                        <span class="font-12-normal-normal">{{wn.createdBy}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'ID' | i18n}}</span>
+                        <span>{{wn.folio}}</span>
+                    </div>
+                    <div class="notes-item border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'type' | i18n}}</span>
+                        <span>{{wn.transformationType}}</span>
+                    </div>
+                    <div class="notes-item notes-item__center border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'sacks' | i18n}}</span>
+                        <span>{{wn.sacks}}</span>
+                    </div>
+                    <div class="notes-item notes-item__right border-mobile-right border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">#{{'purchase-order' |
+                            i18n}}</span>
+                        <span>{{wn.PurchaseOrder}}</span>
+                    </div>
+                    <div class="notes-item notes-item__right border-mobile-right border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'net_weight' | i18n}}</span>
+                        <span>{{wn.netWeightOut}} {{unitAbbreviation}}</span>
+                    </div>
+                    <div class="notes-item notes-item__right border-mobile-right border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'gold_net_weight' |
+                            i18n}}</span>
+                        <span>{{wn.goldNetWeightOut}} {{unitAbbreviation}}</span>
+                    </div>
+                    <div class="notes-item notes-item__right border-mobile-right border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'price_per_unit' |
+                            i18n}}</span>
+                        <span class="price">
+                            <span *ngIf="wn.existPurchaseOrder">{{ companyInfo?.currency?.symbol}} {{wn.price | number
+                                : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }} {{
+                                companyInfo?.currency?.isoCode}}</span>
+                            <span class="none-price" *ngIf="!wn.existPurchaseOrder">---</span>
+                        </span>
+                    </div>
+                    <div class="notes-item notes-item__status border-mobile-right border-mobile-top">
+                        <span class="hidden-md hidden-xl hidden-lg font-12-normal-normal">{{'status' | i18n}}</span>
+                        <div class='orders-status'>
+                            <div class='orders-status__status' [ngClass]="wn.styles?.css">
+                                <i class=" no-select font-ss16" [ngClass]="wn.styles?.icon"></i>
+                                <p>{{wn.styles?.label | i18n }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <ng-template #notReultFound>
+        <app-not-results-found *ngIf="weightNotes.length === 0"></app-not-results-found>
+    </ng-template>
+    <!-- Paginator -->
+    <div class="pl-container-paginator">
+        <div class="weigth-notes-selected">
+            <span>
+                {{selectedNotes.length}} {{'selected-notes' | i18n}}
+            </span>
+        </div>
+
+        <mat-paginator class="custom-paginator" [length]="paginator?.totalItems"
+            [pageIndex]="paginator?.currentPage - 1" [pageSize]="paginator?.itemsPerPage" [hidePageSize]="false"
+            [pageSizeOptions]="PAGINATOR.PAGE_SIZE" (page)="eventPaginator($event)" showFirstLastButtons #matPaginator>
+        </mat-paginator>
+    </div>
+</div>

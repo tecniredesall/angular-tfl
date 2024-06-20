@@ -1,0 +1,693 @@
+@at-root {
+    :not(.dark) :host {
+        --header-background-color: #fff;
+        --header-title-color: #3f495f;
+        --header-select-background-color: #f6f8fc;
+        --select-disable-item-color: rgba(0, 0, 0, 0.6);
+        --process-total-color: #080b0f;
+        --process-column-background-color: #e1e7f2;
+        --lot-card-date-color: #8798ad;
+        --lot-card-warehouse-name-color: #69707f;
+    }
+
+    .dark :host {
+        --header-background-color: #182030;
+        --header-title-color: #fff;
+        --header-select-background-color: #242e42;
+        --select-disable-item-color: rgba(255, 255, 255, 0.6);
+        --process-total-color: #fff;
+        --process-column-background-color: #3e4e6c;
+        --lot-card-date-color: #fff;
+        --lot-card-warehouse-name-color: #fff;
+    }
+
+    .kanban-dashboard {
+        position: relative;
+        top: -70px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 70px 0 0 0;
+
+        &__wrapper {
+            display: block;
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+            &__container {
+                display: grid;
+                grid-template-rows: repeat(2, max-content) minmax(
+                        max-content,
+                        auto
+                    );
+                grid-template-columns: 100%;
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                max-height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+        }
+
+        &__header {
+            width: 100%;
+            height: auto;
+            padding: 24px;
+            margin: 8px 0 0 0;
+            background-color: var(--header-background-color);
+            display: grid;
+
+            &__title {
+                grid-area: title;
+                font-size: 26px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.38;
+                letter-spacing: normal;
+                text-align: left;
+                padding-left: 10px;
+                color: var(--header-title-color);
+            }
+
+            &__select {
+                grid-area: select;
+
+                ::ng-deep .ng-select {
+                    .ng-select-container {
+                        min-height: 40px;
+                        border: none !important;
+                        background-color: var(--header-select-background-color);
+                        box-shadow: none !important;
+
+                        .ng-value-label {
+                            font-size: 20px;
+                            font-weight: bold;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.35;
+                            letter-spacing: normal;
+                        }
+                    }
+
+                    &:not(.ng-select-opened) .ng-select-container .ng-arrow {
+                        border-color: var(--header-title-color) transparent
+                            transparent;
+                    }
+                    &.ng-select-opened > .ng-select-container .ng-arrow {
+                        border-color: transparent transparent
+                            var(--header-title-color);
+                    }
+
+                    .ng-dropdown-panel {
+                        box-shadow: 1px -2px 7px 0 rgba(0, 0, 0, 0.1);
+
+                        .ng-dropdown-panel-items {
+                            .ng-option.ng-option-disabled {
+                                color: var(--select-disable-item-color);
+                            }
+                        }
+                    }
+
+                    .ng-dropdown-panel,
+                    .ng-dropdown-panel
+                        .ng-dropdown-panel-items
+                        .ng-option:last-child {
+                        border: none !important;
+                        border-radius: 0 !important;
+                    }
+                }
+
+                &__production-type {
+                    border: none !important;
+                    padding: 0 !important;
+                    font-weight: 800 !important;
+                    background-color: transparent !important;
+                }
+            }
+
+            &__production-type {
+                grid-area: production-type;
+
+                &__name {
+                    font-size: 16px !important;
+                    font-weight: bold !important;
+                    padding: 4px 24px !important;
+                    border-radius: 50px !important;
+                }
+            }
+        }
+
+        &__filters {
+            width: 100%;
+            height: auto;
+            padding: 24px 24px 16px 24px;
+            display: grid;
+
+            &__action {
+                grid-area: action;
+                &__button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 40px;
+                }
+            }
+
+            &__search {
+                grid-area: search;
+                app-search-input {
+                    height: 40px;
+                }
+                input {
+                    box-shadow: none;
+                    margin: 0;
+                }
+            }
+        }
+
+        &__processes {
+            width: 100%;
+            min-height: 100%;
+            padding: 0 24px 24px 24px;
+            height: auto;
+            display: grid;
+            grid-template-rows: 100%;
+            column-gap: 24px;
+
+            &__column {
+                height: 100%;
+                display: block;
+
+                &__content {
+                    display: grid;
+                    height: 100%;
+                    width: 100%;
+                    grid-template-rows: max-content 1fr;
+                    grid-template-columns: 100%;
+                    grid-template-areas:
+                        "process-name"
+                        "process-lots";
+
+                    &__header {
+                        grid-area: process-name;
+                        width: 100%;
+                        padding-bottom: 12px;
+                        border-width: 0 0 4px 0;
+                        border-style: solid;
+                        display: grid;
+                        column-gap: 16px;
+                        justify-items: start;
+                        align-items: end;
+                        grid-template-rows: minmax(64px, max-content) repeat(
+                                2,
+                                max-content
+                            );
+                        grid-template-columns: 1fr max-content;
+                        grid-template-areas:
+                            "name-text name-count"
+                            "name-total-label name-total-label"
+                            "name-total-value name-total-value";
+
+                        &__text {
+                            grid-area: name-text;
+                            font-size: 18px;
+                            font-weight: 600;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.33;
+                            letter-spacing: normal;
+                            text-align: left;
+                            white-space: normal;
+                            word-break: break-all;
+                            color: var(--header-title-color);
+                        }
+
+                        &__count {
+                            grid-area: name-count;
+                            span {
+                                padding: 2px 12px;
+                                background-color: #70889e;
+                                color: white;
+                                font-size: 12px;
+                                font-weight: 600;
+                                font-stretch: normal;
+                                font-style: normal;
+                                line-height: 1.83;
+                                letter-spacing: normal;
+                                text-align: center;
+                                border-radius: 12px;
+                            }
+                        }
+
+                        &__total-label {
+                            grid-area: name-total-label;
+                            text-transform: uppercase;
+                            font-size: 12px;
+                            font-weight: 600;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.42;
+                            letter-spacing: 1.12px;
+                            text-align: left;
+                            white-space: normal;
+                            word-break: break-all;
+                            color: var(--process-total-color);
+                            padding: 12px 0 4px 0;
+                        }
+
+                        &__total-value {
+                            grid-area: name-total-value;
+                            font-size: 18px;
+                            font-weight: bold;
+                            font-stretch: normal;
+                            font-style: normal;
+                            line-height: 1.33;
+                            letter-spacing: normal;
+                            text-align: left;
+                            white-space: normal;
+                            word-break: break-all;
+                            color: var(--tr-base-color-blue);
+                        }
+                    }
+
+                    &__drop-list {
+                        grid-area: process-lots;
+                        height: 100%;
+                        width: 100%;
+
+                        &__wrapper-card {
+                            background-color: var(
+                                --process-column-background-color
+                            );
+                            padding: 12px 12px 0 12px;
+                            width: 100%;
+                            height: auto;
+
+                            &:first-child {
+                                padding-top: 16px !important;
+                            }
+    
+                            &:last-child {
+                                padding-bottom: 16px !important;
+                            }
+                        }
+
+                        &__card {
+                            width: 100%;
+                            height: auto;
+                            padding: 8px 0 8px 16px;
+                            border-width: 0 0 0 3px;
+                            border-style: solid;
+                            border-radius: 5px;
+                            background-color: var(
+                                --tr-kanban-dashboard-lot-card-background-color
+                            );
+                            position: relative;
+                            display: grid;
+                            grid-template-rows: max-content;
+                            grid-template-columns: 1fr max-content;
+                            cursor: move;
+
+                            &__actions {
+                                width: 30px;
+
+                                &__icon-wrapper {
+                                    width: 100%;
+                                    cursor: pointer;
+                                    padding: 12px 0;
+                                    display: flex !important;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    i {
+                                        color: var(
+                                            --tr-panel-header-toggle-icon-color
+                                        );
+                                        font-size: 19px;
+                                        font-weight: bold;
+                                    }
+                                }
+                            }
+
+                            &__data {
+                                display: grid;
+                                grid-template-columns: 100%;
+                                grid-template-rows: repeat(6, max-content);
+                                grid-template-areas:
+                                    "lot-name"
+                                    "lot-date"
+                                    "lot-warehouse"
+                                    "lot-weight"
+                                    "lot-producers"
+                                    "lot-seals";
+
+                                &__name {
+                                    grid-area: lot-name;
+                                    font-size: 20px;
+                                    font-weight: 600;
+                                    font-stretch: normal;
+                                    font-style: normal;
+                                    line-height: 1.35;
+                                    letter-spacing: normal;
+                                    text-align: left;
+                                    white-space: normal;
+                                    word-break: break-all;
+                                    color: var(--header-title-color);
+                                }
+
+                                &__date {
+                                    grid-area: lot-date;
+                                    padding-bottom: 16px;
+                                    font-size: 12px;
+                                    font-weight: normal;
+                                    font-stretch: normal;
+                                    font-style: normal;
+                                    line-height: 1.42;
+                                    letter-spacing: normal;
+                                    text-align: left;
+                                    white-space: normal;
+                                    word-break: break-all;
+                                    color: var(--lot-card-date-color);
+                                }
+
+                                &__warehouse {
+                                    grid-area: lot-warehouse;
+                                }
+
+                                &__weight {
+                                    grid-area: lot-weight;
+                                }
+
+                                &__warehouse,
+                                &__weight {
+                                    padding-bottom: 4px;
+                                    display: grid;
+                                    grid-template-rows: max-content;
+                                    grid-template-columns: max-content 1fr;
+                                    column-gap: 8px;
+                                    justify-items: start;
+                                    align-items: center;
+
+                                    i {
+                                        font-size: 16px;
+                                        color: var(--lot-card-date-color);
+                                    }
+
+                                    span {
+                                        font-size: 14px;
+                                        font-weight: normal;
+                                        font-stretch: normal;
+                                        font-style: normal;
+                                        line-height: 1.36;
+                                        letter-spacing: normal;
+                                        text-align: left;
+                                        white-space: normal;
+                                        word-break: break-all;
+                                        color: var(
+                                            --lot-card-warehouse-name-color
+                                        );
+                                    }
+                                }
+
+                                &__producers {
+                                    grid-area: lot-producers;
+                                    padding-top: 2px;
+                                    padding-bottom: 8px;
+                                    display: grid;
+                                    grid-template-rows: max-content;
+                                    grid-template-columns: max-content 1fr;
+                                    column-gap: 8px;
+                                    justify-items: start;
+                                    align-items: center;
+
+                                    &__icon {
+                                        border-radius: 50%;
+                                        background-color: #78bcef;
+                                        height: 20px;
+                                        width: 20px;
+                                        color: white;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+
+                                        span {
+                                            font-size: 11px;
+                                        }
+                                    }
+
+                                    &__value {
+                                        font-size: 14px;
+                                        font-weight: 600;
+                                        font-stretch: normal;
+                                        font-style: normal;
+                                        line-height: 1.57;
+                                        letter-spacing: normal;
+                                        text-align: left;
+                                        white-space: normal;
+                                        word-break: break-all;
+                                        color: var(--header-title-color);
+                                    }
+                                }
+
+                                &__seals {
+                                    grid-area: lot-seals;
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: flex-start;
+
+                                    div {
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        justify-content: flex-end;
+                                        direction: rtl;
+                                        margin-left: 10px;
+
+                                        span {
+                                            margin-left: -10px;
+
+                                            img {
+                                                width: 20px;
+                                                height: 20px;
+                                                border-radius: 50%;
+                                                border: 0.5px solid lightgray;
+                                            }
+                                        }
+                                    }
+
+                                    &__tooltip {
+                                        white-space: pre-line;
+                                        font-size: 12px;
+                                        font-weight: normal;
+                                        font-stretch: normal;
+                                        font-style: normal;
+                                        line-height: 1.42;
+                                        letter-spacing: normal;
+                                        text-align: left;
+                                        padding: 10px;
+                                    }
+                                }
+                            }
+
+                            &__damaged {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-size: 11px;
+                                font-weight: 600;
+                                font-stretch: normal;
+                                font-style: normal;
+                                line-height: 1.36;
+                                letter-spacing: normal;
+                                background-color: #d63649;
+                                color: white;
+                                padding: 4px 4px 4px 14px;
+                                border-radius: 24px 0 0 0;
+                                width: auto;
+                                height: auto;
+                                position: absolute;
+                                right: 0;
+                                bottom: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 539px) {
+            &__processes {
+                padding-bottom: 95px !important;
+            }
+        }
+
+        @media (max-width: 319px) {
+            &__filters {
+                grid-template-columns: 100%;
+                grid-template-rows: repeat(2, max-content);
+                row-gap: 16px;
+                grid-template-areas:
+                    "action"
+                    "search";
+
+                &__action,
+                &__action__button,
+                &__search,
+                &__search app-search-input {
+                    width: 100%;
+                }
+            }
+        }
+
+        @media (min-width: 320px) and (max-width: 689px) {
+            &__filters {
+                grid-template-columns: repeat(2, 1fr);
+                column-gap: 16px;
+                grid-template-rows: max-content;
+                grid-template-areas: "action search";
+
+                &__action,
+                &__action__button,
+                &__search,
+                &__search app-search-input {
+                    width: 100%;
+                }
+            }
+        }
+
+        @media (min-width: 690px) {
+            &__filters {
+                grid-template-columns: 1fr max-content;
+                column-gap: 16px;
+                grid-template-rows: max-content;
+                grid-template-areas: "action search";
+
+                &__action {
+                    text-align: left;
+                    &__button {
+                        width: 149px;;
+                    }
+                }
+
+                &__search {
+                    width: 280px;
+                    app-search-input {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 767px) {
+            &__header {
+                grid-template-columns: 100%;
+                grid-template-rows: repeat(3, max-content);
+                row-gap: 16px;
+                grid-template-areas:
+                    "title"
+                    "select"
+                    "production-type";
+
+                &__select {
+                    width: 100%;
+                }
+
+                &__production-type {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+            }
+        }
+
+        @media (min-width: 768px) {
+            &__header {
+                grid-template-columns: 1fr max-content;
+                column-gap: 16px;
+                grid-template-rows: repeat(2, max-content);
+                row-gap: 16px;
+                grid-template-areas:
+                    "title title"
+                    "select production-type";
+
+                &__select {
+                    width: 364px;
+                }
+
+                &__production-type {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+        }
+
+        app-not-results-found {
+            min-height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: normal;
+        }
+    }
+
+    :host:not(.kanban-dashboard__pointer--outer-list) {
+        .kanban-dashboard__processes__column__content__drop-list.cdk-drop-list-dragging {
+            border-width: 0 2px 2px 2px;
+            border-style: dashed;
+            background-color: var(--process-column-background-color);
+        }
+    }
+
+    .kanban-dashboard__processes__column__content__drop-list__wrapper-card.long-pressing,
+    .cdk-drag-preview {
+        box-sizing: border-box;
+        background-color: transparent !important;
+        padding: 0 !important;
+
+        .kanban-dashboard__processes__column__content__drop-list__card {
+            background-color: var(
+                --tr-kanban-dashboard-lot-card-background-color
+            );
+            box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+        }
+    }
+
+    .cdk-drag-placeholder {
+        visibility: hidden;
+    }
+
+    .cdk-drag-animating {
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .kanban-dashboard__processes__column__content__drop-list.cdk-drop-list-dragging {
+        .kanban-dashboard__processes__column__content__drop-list__card {
+            &:not(.cdk-drag-placeholder) {
+                transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+    }
+
+    ::ng-deep .mat-menu-panel {
+        background-color: var(--tr-mat-menu-background-color);
+        button {
+            color: var(--tr-data-grid-color);
+        }
+    }
+}

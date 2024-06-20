@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="6px" viewBox="0 0 10 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>arrow drop down - blue</title>
+    <defs>
+        <polygon id="path-1" points="7 10.7575758 12 15.7575758 17 10.7575758"></polygon>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="form/dropdown---Filled-_dark" transform="translate(-306.000000, -32.000000)">
+            <g id="Icons/black/arrow-drop-down" transform="translate(299.000000, 22.151515)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Shape" fill="#777777" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <g id="Base/Color/Black-#4" mask="url(#mask-2)" fill="#00A4FA" fill-rule="evenodd">
+                    <rect id="Base/Color/Blue" x="0" y="0" width="24" height="25.4545455"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,260 @@
+<div class="t-container-view scroll-view-app">
+
+  <div class="t-wrapper" *blockUI="'create-warehouse'; template: templateBlockModalUiComponent">
+
+    <div class="warehouse-create-page">
+
+      <div class="panel">
+
+        <!-- Header -->
+        <div class="row warehouse-header">
+
+          <div class="col-xs-12 wrapper-title" [ngClass]="{'col-lg-6 col-md-6 col-sm-6 col-xs-6':!isEditting}">
+            <h1 class="title warehouse-action-title">
+              {{ title | i18n }}
+              <span *ngIf="!isTankOperation">
+                {{ 'in-preposition' | i18n }}
+              </span>
+            </h1>
+            <h2 *ngIf="!isTankOperation && data.tankName" class="title warehouse-title"> {{ data.tankName }} </h2>
+          </div>
+        </div>
+        <hr class="header-separator">
+        <!-- Subtanque -->
+        <div *ngIf="!isTankOperation; else tankControl">
+          <div *ngFor="let control of tanks.controls; let i = index" [ngClass]="{'tank-container': tanks.length > 1}"
+            [formGroup]="control">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <p class="warehouse-label-name mrg-top-10"> {{ 'name' | i18n }}* </p>
+                <input class="w-100 create-input" name="name{{i}} " formControlName="name"
+                  [placeholder]="'warehouse-name-input' | i18n" />
+                <label *ngIf="control.get('name').dirty && control.get('name').hasError('required')"
+                  class="error-msg-form">
+                  {{'is-required-msg' | i18n}}
+                </label>
+                <label *ngIf="control.get('name').dirty && control.get('name').hasError('pattern')"
+                  class="error-msg-form">
+                  {{'alphanumeric-pattern' | i18n}}
+                </label>
+                <label *ngIf="control.get('name').hasError('duplicate')" class="error-msg-form">
+                  {{'warehouse-name-duplicate' | i18n}}
+                </label>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <p class="warehouse-label-name mrg-top-10"> {{ 'transformation-type' | i18n }}* </p>
+                <div class="col-xs-12 p0">
+                  <ng-select class="warehouse-ng-select" [items]="transformationTypes" [multiple]="false"
+                    [closeOnSelect]="true" [clearable]="false" bindLabel="name" bindValue="transformation_type_id"
+                    placeholder="{{'select-transformation-type' | i18n}}" [notFoundText]="'not-items-found' | i18n"
+                    [loading]="transformationTypes.length === 0" loadingText="{{'loading' | i18n}}"
+                    formControlName="transformationTypeId">
+                  </ng-select>
+                </div>
+                <label *ngIf="control.get('transformationTypeId').dirty" class="error-msg-form">
+                  <span *ngIf="control.get('transformationTypeId').hasError('required')">
+                    {{'is-required-msg' | i18n}}
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <p class="warehouse-label-name mrg-top-10"> {{ 'capacity' | i18n }}* </p>
+                <app-warehouse-input tag="({{config.conversionMeasurementUnitAbbreviation | i18n}})"
+                  [class.invalid]="(control.get('capacityQQ').dirty) && control.get('capacityQQ').invalid">
+                  <input type="number" class="app-warehouse-input" formControlName="capacityQQ" name="capacity{{i}}"
+                    [placeholder]="'warehouse-capacity-input' | i18n" />
+                </app-warehouse-input>
+                <label *ngIf="control.get('capacityQQ').dirty" class="error-msg-form">
+                  <label *ngIf="control.get('capacityQQ').hasError('required')">
+                    {{'is-required-msg' | i18n}}
+                  </label>
+                  <label *ngIf="control.get('capacityQQ').hasError('pattern')">
+                    {{'format-number-no-valid' | i18n}}
+                  </label>
+                  <label *ngIf="control.get('capacityQQ').value == 0">
+                    {{'wharehouse-zero-capacity' | i18n}}
+                  </label>
+                  <label *ngIf="control.get('capacityQQ').hasError('invalidCapacity')">
+                    {{'wharehouse-capacity-invalid-stock' | i18n}}
+                  </label>
+                  <label *ngIf="control.get('capacityQQ').hasError('max')">
+                    {{'error-max-safe-integer' | i18n}}
+                  </label>
+                </label>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="row warehouse-container-storage-range">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pding-left-0 warehouse-min-storage">
+                    <p class="warehouse-label-name elipsis mrg-top-10"> {{ 'min-storage' | i18n }}* </p>
+                    <app-warehouse-input tag="%"
+                      [class.invalid]="control.get('lowLimit').dirty && control.get('highLimit').dirty && (control.get('lowLimit').value > control.get('highLimit').value) ">
+                      <input type="number" class="app-warehouse-input" formControlName="lowLimit" name="low_limit{{i}} "
+                        [placeholder]="'warehouse-min-storage-input' | i18n" />
+                    </app-warehouse-input>
+                    <label *ngIf="control.get('lowLimit').dirty" class="error-msg-form">
+                      <label *ngIf="control.get('lowLimit').hasError('required')">
+                        {{'is-required-msg' | i18n}}
+                      </label>
+                      <label *ngIf="control.get('lowLimit').hasError('pattern')">
+                        {{'format-number-no-valid' | i18n}}
+                      </label>
+                      <label *ngIf="control.get('lowLimit').value >= 100">
+                        {{'wharehouse-low-limit-no-valid' | i18n}}
+                      </label>
+                    </label>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pad-right-0 warehouse-max-storage">
+                    <p class="warehouse-label-name elipsis mrg-top-10"> {{ 'max-storage' | i18n }}* </p>
+                    <app-warehouse-input tag="%"
+                      [class.invalid]="control.get('highLimit').dirty && control.get('highLimit').invalid">
+                      <input type="number" class="app-warehouse-input" formControlName="highLimit"
+                        name="hight_limit{{i}} " [placeholder]="'warehouse-max-storage-input' | i18n" />
+                    </app-warehouse-input>
+                    <label *ngIf="control.get('highLimit').dirty" class="error-msg-form">
+                      <label *ngIf="control.get('highLimit').hasError('required')">
+                        {{'is-required-msg' | i18n}}
+                      </label>
+                      <label *ngIf="control.get('highLimit').hasError('pattern')">
+                        {{'format-number-no-valid' | i18n}}
+                      </label>
+                      <label *ngIf="control.get('highLimit').value > 100">
+                        {{'wharehouse-hight-limit-no-valid' | i18n}}
+                      </label>
+                      <label *ngIf="control.get('highLimit').value == 0">
+                        {{'wharehouse-zero-capacity' | i18n}}
+                      </label>
+                    </label>
+                  </div>
+                  <label
+                    *ngIf="(control.get('lowLimit').dirty && control.get('highLimit').dirty) && (control.get('lowLimit').value > control.get('highLimit').value)"
+                    class="error-msg-form">
+                    {{'wharehouse-range-no-valid' | i18n}}
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-12 mt-40" *ngIf="tanks.length > 1 && !isEditting">
+                <button class="btn btn-transparent-delete btn-remove-subtank-control" (click)="removeControl(i)">
+                  <img src="assets/img/svg/trash-red.svg" alt="">
+                  {{'delete' | i18n}}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!isEditting" class="mt-20 col-xs-12">
+            <button class="btn btn-transparent-blue btn-add-subtank-control" (click)="addSubtankControl()">
+              <img [src]="'assets/img/svg/'+ (isDarkTheme ? 'add-dark' : 'add' ) +'.svg'" alt="">
+              {{'add-warehouse' | i18n}}
+            </button>
+          </div>
+        </div>
+
+        <!-- Tanque -->
+        <ng-template #tankControl>
+          <div *ngFor="let control of tanks.controls; let i = index" [ngClass]="{'tank-container': tanks.length > 1}">
+            <div [formGroup]="control" id="formTanks">
+              <div class="row">
+                <div class="col-lg-6">
+                  <p class="warehouse-label-name mrg-top-10"> {{ 'name' | i18n }}* </p>
+                  <input class="w-100 create-input" name="name{{i}}" formControlName="name"
+                    [placeholder]="'warehouse-name-input' | i18n" />
+                  <label *ngIf="control.get('name').dirty && control.get('name').hasError('required')"
+                    class="error-msg-form">
+                    {{'is-required-msg' | i18n}}
+                  </label>
+                  <label *ngIf="control.get('name').dirty && control.get('name').hasError('pattern')"
+                    class="error-msg-form">
+                    {{'alphanumeric-pattern' | i18n}}
+                  </label>
+                  <label *ngIf="control.get('name').hasError('duplicate')" class="error-msg-form">
+                    {{'warehouse-name-duplicate' | i18n}}
+                  </label>
+                </div>
+
+                <div class="col-lg-6">
+                  <p class="warehouse-label-name mrg-top-10"> {{ 'warehouse-type' | i18n }}* </p>
+                  <div class="col-xs-12 p0">
+                    <ng-select class="sil-form__select" [items]="typesTanks" [multiple]="false" [closeOnSelect]="true"
+                      [clearable]="true" bindLabel="name" bindValue="id"
+                      placeholder="{{'warehouse-type-placheholder' | i18n}}" [notFoundText]="'not-items-found' | i18n"
+                      [loading]="typesTanks.length === 0" loadingText="{{'loading' | i18n}}"
+                      formControlName="idTypeTank">
+                    </ng-select>
+                  </div>
+                  <label *ngIf="control.get('idTypeTank').dirty || control.get('idTypeTank').touched"
+                    class="error-msg-form">
+                    <span *ngIf="control.get('idTypeTank').hasError('required')">
+                      {{'is-required-msg' | i18n}}
+                    </span>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 ">
+                  <p class="warehouse-label-name mrg-top-10"> {{ "commodityM" | i18n | titlecase }}* </p>
+                  <div class="col-xs-12 p0">
+                    <ng-select class="sil-form__select" [items]="commodities" [multiple]="false" [closeOnSelect]="true"
+                      [clearable]="true" bindLabel="name" bindValue="id"
+                      placeholder="{{'select-cmodity-general' | i18n}}" [notFoundText]="'not-items-found' | i18n"
+                      [loading]="commodities.length === 0" loadingText="{{'loading' | i18n}}"
+                      formControlName="commodityId">
+                    </ng-select>
+                  </div>
+                  <label *ngIf="control.get('commodityId').dirty || control.get('commodityId').touched"
+                    class="error-msg-form">
+                    <span *ngIf="control.get('commodityId').hasError('required')">
+                      {{'is-required-msg' | i18n}}
+                    </span>
+                  </label>
+                </div>
+
+                <div class="col-lg-6 ">
+                  <p class="warehouse-label-name mrg-top-10"> {{ 'external-id' | i18n | titlecase }}* </p>
+                  <div class="col-xs-12 p0">
+                    <ng-select class="sil-form__select" [items]="externalWarehouses" [multiple]="false"
+                      [closeOnSelect]="true" [clearable]="true" bindLabel="name" bindValue="id"
+                      placeholder="{{'external-id-placeholder' | i18n}}" [notFoundText]="'not-items-found' | i18n"
+                      [loading]="externalWarehouses.length === 0" loadingText="{{'loading' | i18n}}"
+                      formControlName="externalId">
+                    </ng-select>
+                  </div>
+                  <label *ngIf="control.get('externalId').dirty || control.get('externalId').touched"
+                    class="error-msg-form">
+                    <span *ngIf="control.get('externalId').hasError('required')">
+                      {{'is-required-msg' | i18n}}
+                    </span>
+                  </label>
+                </div>
+
+                <div class="col-xs-12 mt-40" *ngIf="tanks.length > 1 && !isEditting">
+                  <button class="btn btn-transparent-delete btn-remove-subtank-control" (click)="removeControl(i)">
+                    <img src="assets/img/svg/trash-red.svg" alt="">
+                    {{'delete' | i18n}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!isEditting" class="mt-20 col-xs-12">
+            <button class="btn btn-transparent-blue btn-add-subtank-control" (click)="addTankControl()">
+              <img [src]="'assets/img/svg/'+ (isDarkTheme ? 'add-dark' : 'add' ) +'.svg'" alt="">
+              {{'add-warehouse' | i18n}}
+            </button>
+          </div>
+        </ng-template>
+
+        <!-- Footer -->
+        <div class="row wrapper-footer-btns">
+          <app-action-footer [isEdit]="isEditting"
+            [isButtonSubmitDisabled]="tanks.invalid || tanks.pending || (isEditting && !dataWasMadeModified)"
+            (onActionSelected)="onActionFooterSelected($event)"></app-action-footer>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

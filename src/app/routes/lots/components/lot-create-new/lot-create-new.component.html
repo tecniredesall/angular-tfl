@@ -1,0 +1,49 @@
+<div class="lot-results-filter" *blockUI="'create-new'; template: templateBlockModalUiComponent">
+    <!-- Body -->
+    <div class="panel panel-default">
+        <div class="total-quantity-card-column">
+            <div class="total-quantity-card">
+                <div class="total-label font-ss16">
+                    <span>{{'total-quantity' | i18n}} :</span>
+                </div>
+                <div class="quantity-label font-ss20">
+                    <span>{{weigthTotal| number:'1.'+DECIMAL_DIGITS+'-'+DECIMAL_DIGITS:'en'}}
+                        {{baseUnitAbbreviation}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="total-label font-ss16 flow-description column-description">
+            <span>{{'production-flow' | i18n}}</span>
+            <span class="label-flow-subtitle font-ss15">{{weightNotes.params.productionFlow.name}}</span>
+            <span class="w-label" [ngClass]="{'tr__lot__type__nano':LOT_TYPES.NANO_LOTE==weightNotes.params.productionFlow.productionTypeName,
+            'tr__lot__type__micro':LOT_TYPES.MICRO_LOTE==weightNotes.params.productionFlow.productionTypeName,
+            'tr__lot__type__macro':LOT_TYPES.MACRO_LOTE==weightNotes.params.productionFlow.productionTypeName}">
+                {{weightNotes.params.productionFlow.productionTypeName | i18n}}
+            </span>
+        </div>
+        <div class="total-label font-ss16 flow-description transformation-column">
+            <span>{{'commodity-type' | i18n}}</span>
+            <span class="label-flow-subtitle font-ss15">{{weightNotes.params.commodityType.name}}</span>
+            <span class="transformation-column__icon">
+                <i class="icon-almacen-blue"></i>
+                {{warehousesSelected.length > 2 ? warehousesSelected.length : ''}}
+                {{warehouses | i18n}}
+            </span>
+        </div>
+        <div class="font-ss14 icons-column">
+            <div class="mrg-btm-15 mrg-top-15">
+                <div class="icon-container"><span class="icon-users"></span></div>
+                <span class="label-flow-subtitle">{{totalProducers.length}} {{'producer' | i18n}} (es)</span>
+            </div>
+            <div>
+                <div class="icon-container"><span class="icon-notas-r"></span></div>
+                <span class="label-flow-subtitle">{{weightNotes.notes.length}} {{'weight-notes' | i18n}}</span>
+            </div>
+        </div>
+        <div class="column-notes">
+            <app-lot-weight-notes [standAlone]="true" [weightNotes]="weightNotesSelected"
+                [configuration]="configuration">
+            </app-lot-weight-notes>
+        </div>
+    </div>
+</div>

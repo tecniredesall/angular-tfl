@@ -1,0 +1,224 @@
+@import "src/scss/breakpoints.scss";
+
+:host ::ng-deep.production-flows .mat-tab-header {
+    padding: 0;
+    max-width: 50%;
+}
+
+:host ::ng-deep.mat-tab-body-content {
+    overflow: hidden !important;
+}
+
+::ng-deep .mat-menu-panel {
+    background-color: var(--tr-mat-menu-background-color);
+    button {
+        color: var(--tr-data-grid-color);
+    }
+}
+
+app-search-input {
+    max-width: 350px;
+    margin-left: auto;
+    margin-bottom: -44px;
+    width: 40%;
+}
+
+.production-flows {
+    padding: 0 24px;
+    position: relative;
+    &__new {
+        max-width: 104px;
+        margin-top: 24px;
+        margin-left: auto;
+        button {
+            width: 100%;
+            color: var(--tr-base-color-white);
+            height: 40px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            box-shadow: none;
+            font-weight: 600;
+            border-radius: 4px;
+            background-color: var(--tr-base-color-green);
+        }
+    }
+    &__container {
+        gap: 50px;
+        display: grid;
+        margin-top: 16px;
+        grid-template-columns: 20% 2px 70%;
+        grid-template-areas: "commodities divider flows";
+        &__subtitle {
+            color: #8798ad;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        &__commodities {
+            max-height: 100%;
+            overflow-y: auto;
+            grid-area: commodities;
+            &__items {
+                &__flows {
+                    display: none;
+                }
+            }
+            &__item {
+                width: 100%;
+                cursor: pointer;
+                display: flex;
+                padding: 8px 16px 8px 20px;
+                box-shadow: none;
+                align-items: center;
+                border-radius: 5px;
+                margin-bottom: 10px;
+                justify-content: space-between;
+                background-color: var(--tr-mat-calendar-background-color);
+                &__description {
+                    width: 80%;
+                    color: var(--tr-data-grid-color);
+                    border-left: 2px solid var(--tr-base-color-yellow);
+                    padding-left: 10px;
+                    &__name {
+                        font-size: 16px;
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                    }
+                    div {
+                        display: flex;
+                        justify-content: space-between;
+                        p:first-child {
+                            font-size: 12px;
+                        }
+                    }
+                    &__flows {
+                        color: var(--tr-base-color-blue);
+                        font-size: 16px;
+                        font-weight: 600;
+                    }
+                }
+                i {
+                    color: var(--tr-panel-header-toggle-icon-color);
+                    font-size: 22px;
+                }
+                &--active {
+                    border: solid 1px var(--tr-base-color-blue);
+                    box-shadow: 0 0 20px 0 rgba(46, 91, 255, 0.1);
+                    .production-flows__container__commodities__item__description {
+                        border-left: 2px solid var(--tr-base-color-blue);
+                    }
+                }
+            }
+        }
+        &__divider {
+            grid-area: divider;
+        }
+        &__flows {
+            grid-area: flows;
+            &__template {
+                &__items {
+                    gap: 24px;
+                    height: 100%;
+                    display: flex;
+                    padding: 16px 0;
+                    overflow: auto;
+                    flex-wrap: wrap;
+                    margin-top: 16px;
+                    .tr__workflow__card {
+                        width: 340px;
+                    }
+                }
+                &__empty {
+                    padding: 12px;
+                    text-align: center;
+                    img {
+                        width: 100%;
+                        max-width: 358px;
+                        margin: 24px auto;
+                    }
+                    p {
+                        color: #869aac;
+                        max-width: 454px;
+                        margin: auto;
+                    }
+                    span {
+                        cursor: pointer;
+                        color: var(--tr-base-color-blue);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .production-flows {
+        &__container {
+            gap: 24px;
+            grid-template-columns: 30% 2px 62%;
+        }
+        .tr__workflow__card {
+            width: 264px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    app-search-input {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-bottom: 12px;
+        margin-top: 16px;
+    }
+    .mat-tab-label {
+        padding: 0 8px !important;
+    }
+    :host ::ng-deep.production-flows .mat-tab-header {
+        max-width: 100%;
+    }
+    .production-flows {
+        &__new {
+            max-width: 100%;
+        }
+        &__container {
+            display: flex;
+            flex-direction: column;
+            &__commodities {
+                max-height: 100%;
+                overflow-y: auto;
+                grid-area: commodities;
+                &__items {
+                    margin-bottom: 16px;
+                    &__flows {
+                        display: block;
+                    }
+                }
+                &__item {
+                    i {
+                        transform: rotateZ(90deg);
+                    }
+                }
+            }
+            &__divider {
+                display: none;
+            }
+            &__flows {
+                display: none;
+                &__template {
+                    &__items {
+                        margin-top: 16px;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 540px) {
+    .production-flows{
+        padding: 0 24px 64px 24px;
+    }
+}

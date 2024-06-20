@@ -1,0 +1,102 @@
+<section class="sil-table">
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__name">
+            {{ "name" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortBlocks('name')"
+                [ngClass]="{ 'sort-icon-invert': !orderStatusAsc.name }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__farm">
+            {{ "farm" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortBlocks('farmName')"
+                [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.farmName
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__height">
+            {{ "height" | i18n | uppercase }} (M.S.N.M)
+            <i
+                class="icon-arrow_down"
+                (click)="sortBlocks('height')"
+                [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.height
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__extension">
+            {{ "extension" | i18n | uppercase }} (MZ)
+            <i
+                class="icon-arrow_down"
+                (click)="sortBlocks('extension')"
+                [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.extension
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__seals">
+            {{ "seals" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__actions">
+            {{ "ACTIONS" | i18n }}
+        </span>
+    </header>
+    <article
+        class="sil-table__row sil-table__row--bordered"
+        *ngFor="let block of blocks"
+        (click)="onViewBlock(block)"
+    >
+        <span class="sil-table__cell cell__name">
+            <p class="sil-table__cell-label">{{ "name" | i18n }}</p>
+            <div>
+                <i class="icon-icon-parcela light"></i>
+                <span>{{ block.name }}</span>
+            </div>
+        </span>
+        <span class="sil-table__cell cell__farm">
+            <p class="sil-table__cell-label">{{ "farm" | i18n }}</p>
+            {{ block.farmName }}
+        </span>
+        <span class="sil-table__cell cell__height">
+            <p class="sil-table__cell-label">{{ "height" | i18n }} (M2)</p>
+            {{ block.height | number: "2.2-2" }}
+        </span>
+        <span class="sil-table__cell cell__extension">
+            <p class="sil-table__cell-label">
+                {{ "extension" | i18n }} (M.S.N.M)
+            </p>
+            {{ block.extension | number: "2.2-2" }}
+        </span>
+        <span class="sil-table__cell cell__seals">
+            <p class="sil-table__cell-label">{{ "seals" | i18n }}</p>
+            <div>
+                <ng-container *ngFor="let seal of block.seals">
+                    <span
+                        [matTooltip]="seal.name"
+                        matTooltipPosition="below"
+                        matTooltipClass="sil-table__tooltip"
+                    >
+                        <img [src]="seal.image" />
+                    </span>
+                </ng-container>
+            </div>
+        </span>
+        <span class="sil-table__cell cell__federated">
+            <i
+                *ngIf="block.federated"
+                class="icon-logo-grain sil-table__federated-icon"
+            ></i>
+        </span>
+        <span class="cell__actions">
+            <app-table-action-button-group
+                [disableDelete]="false"
+                [permissionTag]="PERMISSIONS.BLOCKS"
+                (actionClicked)="onActionClicked($event, block)"
+            ></app-table-action-button-group>
+        </span>
+    </article>
+</section>

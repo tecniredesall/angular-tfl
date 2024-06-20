@@ -1,0 +1,92 @@
+<ng-container>
+    <div *blockUI="'lot-tasting'; template: templateBlockModalUiComponent">
+        <hr />
+        <mat-accordion multi class="lot-detail__notes-panel">
+            <mat-expansion-panel hideToggle (opened)="onPanelOpened()" (closed)="onPanelOpened()">
+                <mat-expansion-panel-header class="mat-expansion-panel" [collapsedHeight]="'auto'"
+                    [expandedHeight]="'auto'">
+                    <section class="panel__header">
+                        <div class="panel__header__notes">
+                            <i class="icon-arrow_right" [ngClass]="{ rotate: panelOpened }"></i>
+                            <h3 class="title-base--black">
+                                {{ "Catation" | i18n }}
+                            </h3>
+                            <span>{{ catationList.length | number: "2.0" }}</span>
+                        </div>
+                        <div>
+
+                            <div [matTooltipDisabled]="!disabledTasting" matTooltipClass="tr__scale__button-tooltip"
+                                [matTooltip]="('tasting-no-transition' | i18n)" matTooltipPosition="below">
+                                <button *permission="{tag: PERMISSIONS.CUPPING, type: PERMISSION_TYPES.CREATE}"
+                                    class="mrg-left-20 tr__button__primary" (click)="newTasting()"
+                                    [disabled]="disabledTasting">
+                                    <i class="icon-cup"></i>
+                                    {{'new-tasting' | i18n}}
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </mat-expansion-panel-header>
+                <section class="lot-processing-orders">
+                    <section class="lot-detail__orders-panel__current-details-info">
+                        <table class="table table-borderless" *ngIf="catationList&&catationList.length > 0">
+                            <thead>
+                                <tr class="tr-mayus">
+                                    <th scope="col">{{"lots-list-id" | i18n }}</th>
+                                    <th scope="col">{{"DATE" | i18n}}</th>
+                                    <th scope="col">{{"name-taister" | i18n}}</th>
+                                    <th scope="col">{{"producer" | i18n }}</th>
+                                    <th scope="col">{{"process" | i18n }}</th>
+                                    <th scope="col">{{"average-rating" | i18n}}</th>
+                                    <th scope="col">{{"ACTIONS" | i18n}}</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let catation of catationList">
+                                <tr>
+                                    <td>{{catation.folio}}</td>
+                                    <td>{{catation.created | formatMoment: "MMM DD, YYYY" : true}}</td>
+                                    <td>{{catation.user}}</td>
+                                    <td>{{catation.producer}}</td>
+                                    <td>{{catation.process_name}}</td>
+                                    <td>{{catation.average}}</td>
+                                    <td class="text-right btn-dw-pr">
+                                        <section class="content-btns"
+                                            *permission="{tag: PERMISSIONS.CUPPING, type: PERMISSION_TYPES.PRINT}">
+                                            <button (click)="
+                                        actionPDF(
+                                            $event,
+                                            REPORT_ACTIONS
+                                                .FORMAT.PDF,
+                                            REPORT_ACTIONS.DOWNLOAD,
+                                            catation.id
+                                        )
+                                        ">
+                                                <i class="icon-download"></i>
+                                            </button>
+                                            <button (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS
+                                                    .FORMAT.PDF,
+                                                REPORT_ACTIONS.PRINT,
+                                                catation.id
+                                            )
+                                            ">
+                                                <i class="icon-print"></i>
+                                            </button>
+                                        </section>
+
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+
+</ng-container>

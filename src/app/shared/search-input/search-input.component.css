@@ -1,0 +1,73 @@
+:host {
+  border: 1px solid #e1e7f5;
+  border-radius: 25px;
+  height: 40px;
+  padding: 8px 12px 6px 10px;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+:host.si-disabled,
+:host.si-disabled .si-icon,
+:host.si-disabled .si-input,
+:host.si-disabled .search-input-erase-icon,
+:host.si-disabled img {
+  cursor: not-allowed !important;
+}
+
+:host .si-icon {
+  width: 50px;
+  max-width: 50px;
+  min-width: 50px;
+  display: inline-block;
+  text-align: center;
+}
+
+:host .si-input {
+  display: inline-block;
+}
+
+:host .si-input:not(.si-input-with-text) {
+  padding: 0;
+  width: calc(100% - 50px);
+}
+
+:host .si-input.si-input-with-text {
+  padding: 0 12px;
+  width: calc(100% - 20px);
+}
+
+:host .search-input-erase-icon {
+  cursor: pointer;
+  width: 20px;
+  max-width: 20px;
+  min-width: 20px;
+  display: inline-block;
+  text-align: left;
+}
+
+:host(.input-focus) {
+  border: 1px solid #66afe9;
+  outline: 0;
+}
+
+.dark :host {
+  background-color: #3e4e6c;
+  border: 1px solid #1f8efa;
+}
+
+.dark :host input {
+  color: #ffffff;
+}
+
+::ng-deep input {
+  outline: none;
+  border: none;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+}

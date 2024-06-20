@@ -1,0 +1,218 @@
+@import "src/scss/breakpoints.scss";
+
+.lot-production-flow-container {
+    padding: 15px;
+    display: grid;
+    width: 340px;
+
+    &__title {
+        font-size: 28px;
+        font-weight: 600;
+        height: 60px;
+        border-bottom: solid 1px var(--tr-border-color);
+        color: var(--tr-base-color-blue);
+        padding: 0px 15px;
+        width: 100%;
+    }
+    &__content {
+        display: grid;
+        .lot-results-filter__production-flows {
+            width: 100%;
+            padding: 16px 0;
+
+            &__section {
+                min-height: 124px;
+            }
+
+            &__title {
+                padding: 16px;
+                font-size: 18px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.33;
+                letter-spacing: normal;
+                text-align: left;
+                color: var(--tr-subtitle-modal-color);
+            }
+
+            &__items {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            &__card__wrapper {
+                padding-bottom: 15px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            &__card {
+                $card-class: &;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px 0 var(--tr-panel-shadown-color);
+                border: solid 2px var(--tr-title-detail-order-backgroud-color);
+                height: 100%;
+                cursor: pointer;
+                background-color: var(--tr-background-input);
+                &--disabled {
+                    @extend .lot-results-filter__production-flows__card;
+                    background-color: var(--tr-card-background-color-disabled);
+                    cursor: not-allowed;
+                }
+                &__name {
+                    width: 100%;
+                    padding-bottom: 16px;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: var(--tr-subtitle-modal-color);
+
+                    &__process {
+                        padding: 0;
+                    }
+                }
+                &__process-number {
+                    font-size: 12px;
+                    color: var(--tr-data-grid-color);
+                }
+                &__type {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    .process-number {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: var(--tr-primary-color);
+                    }
+                }
+
+                &__type-name {
+                    display: inline-block;
+                    width: auto;
+                    height: auto;
+                    padding: 4px 8px;
+                    border-radius: 9.5px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.33;
+                    letter-spacing: normal;
+                    text-align: center;
+                }
+
+                &__badge-selected {
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    background-color: var(--tr-base-color-blue);
+                    display: block;
+                    position: absolute;
+                    right: 11px;
+                    top: -6px;
+                    color: white;
+                    padding-left: 3px;
+                }
+            }
+
+            &__card--selected {
+                border: solid 2px var(--tr-base-color-blue);
+            }
+
+            &__process {
+                padding-top: 0;
+            }
+
+            &__empty {
+                width: 100%;
+                height: auto;
+                text-align: center;
+                padding: 0 16px;
+
+                &__image {
+                    height: auto;
+                    width: 240px;
+                    max-width: 100%;
+                    padding: 16px 0 24px 0;
+                }
+
+                &__main-description {
+                    padding-bottom: 8px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.38;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: var(--tr-panel-body-color);
+                }
+
+                &__instruction,
+                &__sub-description {
+                    font-size: 14px;
+                    font-weight: normal;
+                    text-align: center;
+                    font-stretch: normal;
+                    font-style: normal;
+                    letter-spacing: normal;
+                    color: var(--tr-panel-body-color);
+                }
+
+                &__link {
+                    font-size: 14px;
+                    font-weight: bold;
+                    font-stretch: normal;
+                    font-style: normal;
+                    letter-spacing: normal;
+                    color: var(--tr-base-color-blue);
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    &__footer {
+        margin-top: 10px;
+    }
+    &__nano {
+        color: var(--tr-nano-lot-color);
+        background-color: var(--tr-nano-lot-background-color);
+        border-color: var(--tr-nano-lot-border-color);
+        border-width: var(--tr-lot-type-border-width);
+        border-style: solid;
+    }
+
+    &__micro {
+        color: var(--tr-micro-lot-color);
+        background-color: var(--tr-micro-lot-background-color);
+        border-color: var(--tr-micro-lot-border-color);
+        border-width: var(--tr-lot-type-border-width);
+        border-style: solid;
+    }
+
+    &__macro {
+        color: var(--tr-macro-lot-color);
+        background-color: var(--tr-macro-lot-background-color);
+        border-color: var(--tr-macro-lot-border-color);
+        border-width: var(--tr-lot-type-border-width);
+        border-style: solid;
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .lot-production-flow-container {
+        width: 624px;
+        padding: 30px;
+        &__title {
+            width: 60%;
+        }
+    }
+}

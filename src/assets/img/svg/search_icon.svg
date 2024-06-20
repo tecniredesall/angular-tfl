@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Icon/search</title>
+    <desc>Created with Sketch.</desc>
+    <g id="SiloSys-match" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-1180.000000, -141.000000)" fill="#69707F">
+            <g id="Icon/search" transform="translate(1179.000000, 140.000000)">
+                <path d="M6.2,1 C9.0718807,1 11.4,3.3281193 11.4,6.2 C11.4,7.488 10.928,8.672 10.152,9.584 L10.368,9.8 L11,9.8 L15,13.8 L13.8,15 L9.8,11 L9.8,10.368 L9.584,10.152 C8.672,10.928 7.488,11.4 6.2,11.4 C3.3281193,11.4 1,9.0718807 1,6.2 C1,3.3281193 3.3281193,1 6.2,1 M6.2,2.6 C4.2,2.6 2.6,4.2 2.6,6.2 C2.6,8.2 4.2,9.8 6.2,9.8 C8.2,9.8 9.8,8.2 9.8,6.2 C9.8,4.2 8.2,2.6 6.2,2.6 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

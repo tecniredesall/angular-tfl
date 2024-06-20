@@ -1,0 +1,22 @@
+:host {
+    .input-group-btn {
+        button {
+            margin: 1px 0;
+            border: none;
+            background-color: transparent;
+            opacity: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            img {
+                width: 20px;
+            }
+            &:active, &:focus, &:hover{
+                color: var(--tr-panel-body-color);
+            }
+        }
+        &__label{
+            font-size: 16px;
+        }
+    }
+}

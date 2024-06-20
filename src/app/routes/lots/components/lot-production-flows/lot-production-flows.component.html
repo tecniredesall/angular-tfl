@@ -1,0 +1,67 @@
+<div class="lot-results-filter">
+
+  <!-- Body -->
+  <div class="lot-results-filter__body">
+
+    <!-- Production flows -->
+    <div class="lot-results-filter__production-flows">
+      <div class="lot-results-filter__production-flows__section"
+        *blockUI="'spinner-production-flows'; template: templateBlockModalUiComponent">
+        <div class="lot-results-filter__production-flows__title">
+          {{ 'lot-select-production-flow' | i18n }}
+        </div>
+        <ng-container *ngIf="productionFlows.length>0; then itemsProductionFlows else emptyProductionFlows">
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Items production flows -->
+    <ng-template #itemsProductionFlows>
+      <div class="row lot-results-filter__production-flows__items">
+        <div *ngFor="let flow of productionFlows"
+          class="col-lg-3 col-md-4 col-sm-6 col-xs-12 lot-results-filter__production-flows__card__wrapper">
+          <div class="lot-results-filter__production-flows__card no-select lot-results-filter__production-flows__card--disabled"
+            [ngClass]="{'lot-results-filter__production-flows__card--selected': productionFlow && productionFlow.id === flow.id,
+                        'no-select lot-results-filter__production-flows__card--disabled': flow.totalProcess === 0}"
+            (click)="onClickProductionFlowCard(flow)"
+            [matTooltip]="flow.totalProcess > 0 ? ('select' | i18n):('not-flow-availabe' | i18n)"
+            matTooltipPosition="below">
+            <div class="lot-results-filter__production-flows__card__name">
+              {{flow.name}}
+            </div>
+            <div class="lot-results-filter__production-flows__card__process-number">
+              {{'no-of-process' | i18n}}
+            </div>
+            <div class="lot-results-filter__production-flows__card__type">
+              <div class="process-number">
+                {{flow.totalProcess}}
+              </div>
+              <div class="lot-results-filter__production-flows__card__type-name"
+                [ngClass]="{'lot-results-filter__nano': LOT_TYPES.NANO_LOTE==flow.productionTypeName,'lot-results-filter__micro':LOT_TYPES.MICRO_LOTE==flow.productionTypeName,'lot-results-filter__macro':LOT_TYPES.MACRO_LOTE==flow.productionTypeName}">
+                {{flow.productionTypeName | i18n}}
+              </div>
+            </div>
+
+            <span *ngIf="productionFlow && (productionFlow.id == flow.id)"
+              class="lot-results-filter__production-flows__card__badge-selected">
+              <i class="fa fa-check" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Empty production flows -->
+    <ng-template #emptyProductionFlows>
+      <div class="lot-results-filter__production-flows__empty no-select">
+        <img class="lot-results-filter__production-flows__empty__image" src="assets/img/svg/empty-flow.svg" alt="">
+        <div class="lot-results-filter__production-flows__empty__main-description">
+          {{'lot-empty-flow-main-description' | i18n}}
+        </div>
+        <div class="lot-results-filter__production-flows__empty__sub-description">
+          {{'lot-empty-flow-sub-description' | i18n}}
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

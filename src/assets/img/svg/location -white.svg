@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>icon/menu/location -white</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon/menu/location--white" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M13,7.5 C14.3807119,7.5 15.5,8.61928813 15.5,10 C15.5,10.6630412 15.2366079,11.298926 14.767767,11.767767 C14.298926,12.2366079 13.6630412,12.5 13,12.5 C11.6192881,12.5 10.5,11.3807119 10.5,10 C10.5,9.33695878 10.7633921,8.70107399 11.232233,8.23223305 C11.701074,7.7633921 12.3369588,7.5 13,7.5 M13,3 C16.8659932,3 20,6.13400675 20,10 C20,15.25 13,23 13,23 C13,23 6,15.25 6,10 C6,6.13400675 9.13400675,3 13,3 M13,5 C10.2385763,5 8,7.23857625 8,10 C8,11 8,13 13,19.71 C18,13 18,11 18,10 C18,7.23857625 15.7614237,5 13,5 L13,5 Z" id="Shape" fill="#FFFFFF"></path>
+    </g>
+</svg>

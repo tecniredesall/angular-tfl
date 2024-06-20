@@ -1,0 +1,106 @@
+.confirmation-dialog {
+    display: block;
+    max-width: 554px;
+    height: auto;
+    padding: 50px 30px 30px 30px;
+    margin: 0;
+
+    &__question {
+        width: 100%;
+        height: auto;
+        font-family: "Open Sans", sans-serif !important;
+        font-size: 28px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.36;
+        letter-spacing: normal;
+        text-align: center;
+        color: var(--tr-dialog-confirmation-color);
+        padding-bottom: 30px;
+    }
+
+    &__note {
+        &__title {
+            width: 100%;
+            height: auto;
+            font-family: "Open Sans", sans-serif !important;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--tr-dialog-confirmation-color);
+        }
+
+        &__info {
+            width: 100%;
+            height: auto;
+            font-family: "Open Sans", sans-serif !important;
+            font-size: 16px;
+            font-weight: normal;
+            text-align: center;
+            color: var(--tr-dialog-confirmation-color);
+            padding-bottom: 50px;
+            &--bold{
+                font-weight: 600;
+                padding-bottom: 16px;
+            }
+        }
+    }
+
+    &__reason{
+        p{
+            font-size: 14px;
+            line-height: 1.14;
+            text-align: left;
+            color: var(--tr-panel-body-color);
+        }
+        textarea {
+            resize: none;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100%;
+            border-radius: 5px;
+            outline: none;
+            box-shadow: none;
+            width: 100%;
+            padding: 8px;
+            border: solid 1px var(--tr-ng-select-border-color);
+            background-color: var(--tr-foreground-color);
+        }
+    }
+
+    &__buttons {
+        display: block;
+        width: 100%;
+        height: auto;
+        text-align: center;
+
+        &__wrapper {
+            display: inline-block;
+            padding: 16px;
+
+            &__cancel,
+            &__primary {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 15px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.4;
+                letter-spacing: normal;
+                padding: 8px 48px !important;
+            }
+            &__void{
+                background-color: var(--tr-base-color-red);
+            }
+        }
+    }
+    button:disabled{
+        color: var(--tr-button-disabled-color) !important;
+        background-color: var(--tr-button-disabled-background-color) !important;
+        cursor: not-allowed;
+        opacity: 1 !important;
+    }
+}

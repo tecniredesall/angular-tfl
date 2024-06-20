@@ -1,0 +1,57 @@
+<div class="producers-actions-modal" [ngClass]="finishRequest ? '': 'waiting-respose'" [ngSwitch]="data.action" *blockUI="
+'panel-actions-producer';
+template: templateBlockModalUiComponent
+">
+    <app-producer-action-farm
+        *ngSwitchCase="actionDataTypeEnum.Farms"
+        [data]="data"
+        (closeEvent)="close()"
+        (refreshEvent)="emit()"
+    ></app-producer-action-farm>
+
+    <ng-container *ngSwitchCase="actionDataTypeEnum.Blocks">
+        <ng-container *ngIf="!shouldShowViewMode; else readTemplate">
+            <ng-container *ngIf="shouldShowFederateList">
+                <app-block-federated-list
+                    [blocks]="data.blocks"
+                    [data]="data"
+                    [selectedBlocks]="federatedItems"
+                    (eventCancel)="close()"
+                    (eventRefresh)="emit()"
+                    (newBlock)="onNewItem()"
+                    (showFederatedForm)="onShowFederatedForm($event)"
+                ></app-block-federated-list>
+            </ng-container>
+            <ng-container *ngIf="shouldShowFederateEditMode">
+                <app-block-edit-federated
+                    [blocks]="federatedItems"
+                    [data]="data"
+                    (eventCancel)="close()"
+                    (eventRefresh)="emit()"
+                    (backToList)="onBackToList($event)"
+                >
+                </app-block-edit-federated>
+            </ng-container>
+            <ng-container *ngIf="shouldShowEditMode">
+                <app-block-edit
+                    [data]="data"
+                    (eventCancel)="close()"
+                    (eventRefresh)="emit()"
+                ></app-block-edit>
+            </ng-container>
+        </ng-container>
+        <ng-template #readTemplate>
+            <app-block-view
+                [data]="data"
+                (eventEdit)="shouldShowViewMode = false"
+                (eventCancel)="close()"
+            ></app-block-view>
+        </ng-template>
+    </ng-container>
+    <app-actions-relate-producer
+        *ngSwitchCase="actionDataTypeEnum.Associates"
+        [producerId]="data.producerId"
+        (closeEvent)="close()"
+        (refreshEvent)="emit()"
+    ></app-actions-relate-producer>
+</div>

@@ -1,0 +1,337 @@
+:host {
+    display: flex;
+}
+
+.producers-profile {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 40px 40px 185px 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.producers-profile-back {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0 0 17px 0;
+}
+
+.producers-profile-panels {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.producers-profile-back-btn {
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+}
+
+.panel-producers-profile-title {
+    flex: auto;
+    padding-bottom: 9px;
+}
+
+.producers-profile-edit-btn {
+    font-size: 16px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+}
+
+:not(.dark) :host .producers-profile-back-btn {
+    color: #0068ff !important;
+}
+
+:not(.dark) :host .producers-profile-edit-btn {
+    color: #0068d1;
+}
+
+.dark :host .producers-profile-back-btn,
+.dark :host .producers-profile-edit-btn {
+    color: #ffffff !important;
+}
+
+.producers-profile-edit {
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.producers-profile-edit img {
+    width: 16px;
+    height: 16px;
+    margin: 0 8px 6px 0;
+}
+
+.producers-profile-edit span {
+    font-size: 16px;
+}
+
+.producers-profile-data {
+    margin-bottom: 16px;
+}
+
+.producers-profile-data p {
+    margin-bottom: 8px;
+}
+
+.producers-profile-data p:first-child {
+    font-weight: 600;
+}
+
+.producers-profile-empty {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.producers-profile-relation {
+    margin-top: 24px;
+}
+
+.producers-profile-relation-header-tab {
+    display: flex;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0 0 12px 0;
+}
+
+.producers-profile-relation-header-tab p {
+    margin-bottom: 0px;
+    margin-right: 8px;
+}
+
+.producers-profile-relation-header-search {
+    width: calc(100% - 162px);
+    padding: 0 20px 0 0;
+}
+
+.producers-profile-relation-header-actions {
+    justify-content: space-between;
+}
+
+.btn-success {
+    width: 162px;
+    height: 41px;
+    border-radius: 5px;
+}
+
+.producers-profile-relation-content {
+    margin-top: 20px;
+}
+
+:host .row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.producers-profile-edit-container {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 40px 0;
+}
+
+.producers-profile-footer-edit {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    padding: 0 15px;
+    margin: 0;
+}
+
+.producers-profile-btn-delete,
+.producers-profile-btn-cancel,
+.producers-profile-btn-save {
+    font-size: 15px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: normal;
+
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 5px;
+    height: 40px !important;
+}
+
+.producers-profile-btn-delete,
+.producers-profile-btn-cancel {
+    background-color: transparent !important;
+    margin: 0 16px 0 0;
+}
+
+.producers-profile-btn-cancel,
+.producers-profile-btn-save {
+    width: 160px;
+}
+
+.producers-profile-btn-delete {
+    height: auto;
+    width: auto;
+    color: #d63649 !important;
+}
+
+.producers-profile-btn-cancel {
+    text-align: center;
+}
+
+.producers-profile-btn-save {
+    text-align: center;
+    color: white !important;
+}
+
+.producers-profile-btn-save:disabled {
+    background-color: #dbdfe7 !important;
+    color: #344057 !important;
+    cursor: not-allowed;
+}
+
+:not(.dark) :host .producers-profile-btn-cancel {
+    color: #0068d1 !important;
+}
+
+.dark :host .producers-profile-btn-cancel {
+    color: white !important;
+}
+
+:not(.dark) :host .producers-profile-btn-save:enabled {
+    background-color: #0068d1 !important;
+}
+
+.dark :host .producers-profile-btn-save:enabled {
+    background-color: #1f8efa !important;
+}
+
+.producers-profile-btn-delete img {
+    padding-bottom: 5px;
+}
+
+.producers-profile-footer-edit-mobile .producers-profile-btn-delete {
+    width: 40px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgba(214, 54, 73, 0.2) !important;
+    padding-left: 13px;
+    padding-bottom: 4px;
+}
+
+.producers-profile-footer-edit-mobile .producers-profile-btn-cancel,
+.producers-profile-footer-edit-mobile .producers-profile-btn-save {
+    width: auto;
+}
+
+.producers-profile-flag {
+    width: 30px;
+    margin-right: 8px;
+}
+
+.producers-profile-relation-header-tabs {
+    padding: 0 40px 0 0;
+}
+
+.producers-profile-relation-header-tabs > .row {
+    border-bottom: 1px solid rgba(146, 162, 182, 0.2);
+}
+
+.producer-profile-relation-header-text {
+    flex: auto;
+}
+
+.producer-profile-relation-header-count {
+    min-width: 47px;
+    text-align: center;
+    background-color: #f4f6fc;
+    border-radius: 8px;
+}
+
+.producers-profile-empty-text {
+    margin: 0;
+}
+
+@media (max-width: 390px) {
+    .producers-profile-relation-header-search {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .producers-profile-relation-header-add {
+        width: 100%;
+        padding: 0;
+        margin: 16px 0 0 0;
+    }
+
+    .btn-success {
+        width: 100%;
+    }
+}
+
+:host ::ng-deep app-not-results-found{
+    padding: 16px;
+    margin: auto;
+}
+
+:host ::ng-deep app-not-results-found img{
+    width: 200px !important;
+}
+
+:host ::ng-deep app-not-results-found h3{
+    font-size: 16px !important;
+    margin: 8px 0 !important;
+}
+
+:host ::ng-deep app-not-results-found h4{
+    margin: 0 !important;
+    font-size: 12px !important;
+}
+
+@media (max-width: 565px) {
+    .producers-profile {
+        padding: 20px 20px 165px 20px;
+    }
+}
+
+@media (max-width: 360px) {
+    .producers-profile-footer-edit-mobile .producers-profile-btn-cancel,
+    .producers-profile-footer-edit-mobile .producers-profile-btn-save {
+        width: 100%;
+        margin: 8px 0;
+    }
+}

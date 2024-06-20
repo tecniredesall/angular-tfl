@@ -1,0 +1,325 @@
+@at-root {
+    :not(.dark) :host {
+        --label-instruction-color: #242e42;
+        --card-background-color: #ffffff;
+        --card-border-color: #e1e7f5;
+        --card-box-shadow-color: #e0e8f6;
+        --card-selected-color: #0068d1;
+        --card-disabled-background-color: #f0f2f5;
+        --workflow-empty-description-color: #333333;
+    }
+    
+    .dark :host {
+        --label-instruction-color: #ffffff;
+        --card-background-color: #20293c;
+        --card-border-color: #20293c;
+        --card-box-shadow-color: #1f1709;
+        --card-selected-color: #00a4fa;
+        --card-disabled-background-color: #3a465e;
+        --workflow-empty-description-color: #ffffff;
+    }
+
+    .lot-reprocess-dialog {
+        display: block;
+        max-width: 900px;
+        height: auto;
+        padding: 40px 28px;
+        margin: 0;
+
+        &__header {
+            width: 100%;
+            height: auto;
+            padding: 0 12px 32px 12px;
+
+            &__title {
+                font-size: 28px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.36;
+                letter-spacing: normal;
+                text-align: left;
+                color: var(--tr-base-color-blue);
+                padding-bottom: 12px;
+                word-break: break-word;
+            }
+
+            &__line {
+                width: min(172px, 100%);
+                border-width: 0 0 1px 0;
+                border-style: solid;
+                border-color: #92a2b6;
+            }
+        }
+
+        &__body {
+            width: 100%;
+            height: auto;
+
+            &__instruction {
+                width: 100%;
+                height: auto;
+                font-size: 18px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.33;
+                letter-spacing: normal;
+                text-align: left;
+                color: var(--label-instruction-color);
+                word-break: break-word;
+                padding: 0 12px 12px 12px;
+            }
+
+            &__items {
+                width: 100%;
+                height: auto;
+                min-height: 136px;
+                padding: 0;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                flex-wrap: wrap;
+            }
+        }
+
+        &__workflow {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+
+            &__card {
+                position: relative;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px 0 var(--card-box-shadow-color);
+                border: solid 2px var(--card-border-color);
+                height: 100%;
+                display: grid;
+
+                &:not(&--disabled) {
+                    background-color: var(--card-background-color);
+                }
+
+                &--disabled {
+                    background-color: var(--card-disabled-background-color);
+                    cursor: not-allowed;
+                }
+
+                &--selected {
+                    border: solid 2px var(--card-selected-color);
+                }
+
+                &__badge-selected {
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    background-color: var(--card-selected-color);
+                    display: block;
+                    position: absolute;
+                    right: -6px;
+                    top: -8px;
+                    color: white;
+                    padding: 3px 0 0 4px;
+                    font-size: 12px;
+                }
+
+                &__name {
+                    grid-area: flow-name;
+                    width: 100%;
+                    padding-bottom: 16px;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1;
+                    letter-spacing: normal;
+                    text-align: left;
+                    color: var(--label-instruction-color);
+                    word-break: break-word;
+                }
+
+                &__process {
+                    grid-area: flow-process;
+                    display: grid;
+                    grid-template-rows: max-content max-content;
+                    grid-template-columns: 1fr;
+                    justify-self: start;
+                    align-self: end;
+
+                    &__label {
+                        font-size: 12px;
+                        color: var(--tr-data-grid-color);
+                        word-break: break-word;
+                    }
+                    &__data {
+                        font-size: 18px;
+                        font-weight: 600;
+                        font-stretch: normal;
+                        font-style: normal;
+                        line-height: 1.22;
+                        letter-spacing: normal;
+                        text-align: left;
+                        color: var(--tr-base-color-blue);
+                        word-break: break-word;
+                    }
+                }
+
+                &__type {
+                    grid-area: flow-type;
+                    justify-self: end;
+                    align-self: end;
+                    &__name {
+                        padding: 0 8px !important;
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
+
+        &__footer {
+            width: 100%;
+            height: auto;
+            margin-top: 12px;
+            padding: 12px 12px 0 12px;
+
+            .tr__button__primary[disabled] {
+                cursor: not-allowed;
+                pointer-events: auto;
+                color: var(--tr-button-disabled-color) !important;
+                background-color: var(--tr-button-disabled-background-color) !important;
+            }
+
+            .tr__button__second {
+                background-color: transparent;
+            }
+        }
+
+        &__workflows-empty {
+            width: 100%;
+            height: auto;
+            text-align: center;
+
+            &__image {
+                height: auto;
+                width: 240px;
+                max-width: 100%;
+                padding: 16px 0 24px 0;
+            }
+
+            &__main-description {
+                padding-bottom: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.38;
+                letter-spacing: normal;
+                text-align: center;
+                color: var(--workflow-empty-description-color);
+                padding: 0 10%;
+            }
+
+            &__sub-description {
+                font-size: 14px;
+                font-weight: normal;
+                text-align: center;
+                font-stretch: normal;
+                font-style: normal;
+                letter-spacing: normal;
+                color: var(--workflow-empty-description-color);
+                padding: 12px 10%;
+            }
+        }
+    }
+
+    @media (max-width: 339px) {
+        .lot-reprocess-dialog {
+            &__workflow {
+                &__card {
+                    grid-template-rows: repeat(2, max-content) 1fr;
+                    grid-template-columns: 1fr;
+                    row-gap: 8px;
+                    grid-template-areas:
+                        "flow-name"
+                        "flow-process"
+                        "flow-type";
+                }
+            }
+        }
+    }
+
+    @media (min-width: 340px) {
+        .lot-reprocess-dialog {
+            &__workflow {
+                &__card {
+                    grid-template-rows: max-content 1fr;
+                    grid-template-columns: 1fr 1fr;
+                    column-gap: 12px;
+                    grid-template-areas:
+                        "flow-name flow-name"
+                        "flow-process flow-type";
+                }
+            }
+        }
+    }
+
+    @media (max-width: 599px) {
+        .lot-reprocess-dialog {
+            &__footer {
+                .tr__button__second {
+                    margin-bottom: 16px;
+                }
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    @media (min-width: 600px) {
+        .lot-reprocess-dialog {
+            &__footer {
+                display: inline-block;
+                text-align: right;
+
+                .tr__button__second {
+                    margin-right: 32px;
+                }
+
+                button {
+                    width: 160px;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 627px) {
+        .lot-reprocess-dialog {
+            &__workflow {
+                width: 100%;
+            }
+        }
+    }
+
+    @media (min-width: 628px) and (max-width: 899px) {
+        .lot-reprocess-dialog {
+            min-width: 80vw;
+
+            &__workflow {
+                width: 50%;
+            }
+        }
+    }
+
+    @media (min-width: 900px) {
+        .lot-reprocess-dialog {
+            min-width: min(80vw, 900px);
+
+            &__workflow {
+                width: calc(100% / 3);
+            }
+        }
+    }
+}

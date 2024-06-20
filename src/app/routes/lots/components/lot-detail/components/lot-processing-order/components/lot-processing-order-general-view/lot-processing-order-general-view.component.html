@@ -1,0 +1,226 @@
+<ng-container *ngIf="lot.transitions.length > 0">
+    <div *blockUI="
+            'lot-processing-order';
+            template: templateBlockModalUiComponent
+        ">
+        <hr />
+        <mat-accordion multi class="lot-detail__notes-panel">
+            <mat-expansion-panel hideToggle (opened)="onPanelOpened()" (closed)="onPanelOpened()">
+                <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                    <section class="panel__header">
+                        <div class="order-tile">
+                            <i class="icon-caret-down" [ngClass]="panelOpened ? '' : 'panel-opened'"></i>
+                            <h3 class="title-base--black">
+                                {{ "processin-order" | i18n }}
+                            </h3>
+                        </div>
+                        <div class="order-actions">
+                            <div class="hidden-lg hidden-md hidden-sm mobile-actions">
+                                <span (click)="$event.stopPropagation()"
+                                    [matMenuTriggerFor]="actionsMenu">
+                                    <i class="icon-options-vertical no-select"></i>
+                                </span>
+                                <mat-menu #actionsMenu="matMenu">
+                                    <button mat-menu-item (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS
+                                                    .FORMAT.PDF,
+                                                REPORT_ACTIONS.DOWNLOAD,
+                                                lot.id
+                                            )
+                                        ">
+                                        {{ "download-pdf" | i18n }}
+                                    </button>
+                                    <button mat-menu-item (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS
+                                                    .FORMAT.CSV,
+                                                REPORT_ACTIONS.DOWNLOAD,
+                                                lot.id
+                                            )
+                                        ">
+                                        {{ "download-csv" | i18n }}
+                                    </button>
+                                    <button mat-menu-item (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS.EMAIL,
+                                                null,
+                                                lot.id
+                                            )
+                                        ">
+                                        {{ "email" | i18n }}
+                                    </button>
+                                    <button mat-menu-item (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS
+                                                    .FORMAT.PDF,
+                                                REPORT_ACTIONS.PRINT,
+                                                lot.id
+                                            )
+                                        ">
+                                        {{ "print" | i18n }}
+                                    </button>
+                                </mat-menu>
+                            </div>
+                            <div class="hidden-xs">
+                                <div (click)="actionPDF( $event,REPORT_ACTIONS.FORMAT.PDF,REPORT_ACTIONS.PRINT,lot.id)"
+                                    [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                    matTooltip="{{'lot-processing-order-detail-cant-print' | i18n}}"
+                                    [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                    <i class="icon-report-print"></i>
+                                </div>
+                                <div (click)=" actionPDF( $event, REPORT_ACTIONS.EMAIL,null, lot.id)"
+                                    [ngClass]="{'note__print--disabled': isDisabledPrint }"
+                                    matTooltip="{{'lot-processing-order-detail-cant-mail'| i18n}}"
+                                    [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                    <i class="icon-email"></i>
+                                </div>
+                                <div [matMenuTriggerFor]="menu"
+                                    (click)="$event.stopPropagation()"
+                                    [ngClass]="{ 'note__print--disabled': isDisabledPrint}"
+                                    matTooltip="{{ 'lot-processing-order-detail-cant-download'| i18n }}"
+                                    [matTooltipDisabled]=" !isDisabledPrint" class="note__print pointer pull-right">
+                                    <i class="icon-download"></i>
+                                </div>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS
+                                                    .FORMAT.PDF,
+                                                REPORT_ACTIONS.DOWNLOAD,
+                                                lot.id
+                                            )
+                                        ">
+                                        {{ "download-pdf" | i18n }}
+                                    </button>
+                                    <button mat-menu-item (click)="
+                                            actionPDF(
+                                                $event,
+                                                REPORT_ACTIONS
+                                                    .FORMAT.CSV,
+                                                REPORT_ACTIONS.DOWNLOAD,
+                                                lot.id
+                                            )
+                                        ">
+                                        {{ "download-csv" | i18n }}
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </section>
+                </mat-expansion-panel-header>
+                <section class="lot-detail__orders-panel__origin">
+                    <section class="lot-detail__orders-panel__origin-title">
+                        {{'origin' | i18n}}:
+                    </section>
+                    <section class="lot-detail__orders-panel__origin-info">
+                        <div class="lot-detail__orders-panel__origin-info-subtitle">{{'date' | i18n}}:</div>
+                        <div class="lot-detail__orders-panel__origin-info-description">{{lot.createdDate | formatMoment
+                            : dateFormat
+                            : true}}</div>
+                    </section>
+                    <section class="lot-detail__orders-panel__origin-info">
+                        <div class="lot-detail__orders-panel__origin-info-subtitle">{{'production-type' | i18n}}:</div>
+                        <div class="lot-detail__orders-panel__origin-info-description">{{lot.productionTypeName}}</div>
+                    </section>
+                    <section class="lot-detail__orders-panel__origin-info">
+                        <div class="lot-detail__orders-panel__origin-info-subtitle">{{'commodity-state' | i18n}}:</div>
+                        <div class="lot-detail__orders-panel__origin-info-description">{{lot.commodityType}}</div>
+                    </section>
+                    <section class="lot-detail__orders-panel__origin-info">
+                        <div class="lot-detail__orders-panel__origin-info-subtitle">{{'weight' | i18n}} ({{configuration.conversionMeasurementUnitAbbreviation}}):</div>
+                        <div class="lot-detail__orders-panel__origin-info-description">{{lot.currentWeightQQ  | number
+                            : "1." +
+                            DECIMAL_DIGITS +
+                            "-" +
+                            DECIMAL_DIGITS
+                            : "en"}}</div>
+                    </section>
+                </section>
+
+                <section class="lot-detail__orders-panel__current-details">
+                    <section class="lot-detail__orders-panel__current-details-title">
+                        {{ "process-detail" | i18n }}:
+                    </section>
+                    <section class="lot-detail__orders-panel__current-details-info">
+                        <div class="lot-detail__orders-panel__current-details-info--divider">
+                            <p *ngIf="lot.lotParentId">{{'lot-detail-parent-division-id' |i18n}} {{lot.lotParentFolio}}</p>
+                            <p *ngIf="isLotDivided">{{'lot-detail-division-id' |i18n}} {{lot.folio}}</p>
+                        </div>
+                        <div class="table-header">
+                            <span>{{'user' | i18n |uppercase}}</span>
+                            <span>{{'process' | i18n | uppercase}}</span>
+                            <span>{{'start-date' | i18n | uppercase}}</span>
+                            <span>{{'end-date' | i18n | uppercase}}</span>
+                            <span class="number-data-title">{{'hours' | i18n | uppercase}}</span>
+                            <span class="number-data-title">{{'weight' | i18n |
+                                uppercase}} ({{configuration.conversionMeasurementUnitAbbreviation | uppercase}})</span>
+                            <span class="number-data-title">{{'performance' | i18n | uppercase}}</span>
+                        </div>
+                        <div class="table-body">
+                            <div *ngFor="let trans of lot.transitions">
+                                <div class="table-row">
+                                    <div class="table-row__data">
+                                        <span class="table-row__data-title">{{'user' | i18n |uppercase}}</span>
+                                        <span>{{trans.creatorUser}}</span>
+                                    </div>
+                                    <div class="table-row__data">
+                                        <span class="table-row__data-title">{{'process' | i18n | uppercase}}</span>
+                                        <span>{{trans.processId ? trans.process : ('lot-detail-divided' |i18n)}}</span>
+                                        <p *ngIf="!trans.processId">{{'lot-detail-id' |i18n}} {{trans.folio}}</p>
+                                    </div>
+                                    <div class="table-row__data">
+                                        <span class="table-row__data-title">{{'start-date' | i18n | uppercase}}</span>
+                                        <span>
+                                            {{trans.transitionAt === 'N/A' ? (lot.createdDate  | formatMoment : dateFormat : true) : (trans.transitionAt | formatMoment : dateFormat : true)}}                                        </span>
+                                    </div>
+                                    <div class="table-row__data">
+                                        <span class="table-row__data-title">{{'end-date' | i18n | uppercase}}</span>
+                                        <span>
+                                            {{
+                                                trans.processId ?
+                                                    trans.closeDate.isValid() ?
+                                                        (trans.closeDate | formatMoment : dateFormat : true)
+                                                        :
+                                                        '--'
+                                                    :
+                                                    trans.updatedDate | formatMoment : dateFormat: true
+                                            }}
+                                        </span>
+                                    </div>
+                                    <div class="table-row__data number-data-column">
+                                        <span class="number-data-title table-row__data-title">{{'hours' | i18n |
+                                            uppercase}}</span>
+                                        <span>{{trans.processId ? (trans.hours || '--') : '0'}}</span>
+                                    </div>
+                                    <div class="table-row__data number-data-column">
+                                        <span class="number-data-title table-row__data-title">{{'weight' | i18n |
+                                            uppercase}} ({{configuration.conversionMeasurementUnitAbbreviation |
+                                            uppercase}})</span>
+                                        <span>{{trans.finalTransitionWeight | number
+                                            : "1." +
+                                            DECIMAL_DIGITS +
+                                            "-" +
+                                            DECIMAL_DIGITS
+                                            : "en"}}</span>
+                                    </div>
+                                    <div class="table-row__data number-data-column">
+                                        <span class="number-data-title table-row__data-title">{{'performance' | i18n |
+                                            uppercase}}</span>
+                                        <span>{{trans.processId ? (trans.efficiency + '%') : ('not-apply' | i18n)}}</span>
+                                    </div>
+                                </div>
+                                <mat-divider *ngIf="!trans.processId && this.lot.lotParentId"></mat-divider>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</ng-container>

@@ -1,0 +1,55 @@
+.app-component,
+.wrapper {
+    height: 100%;
+}
+
+.wrapper-header-content {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    left: 0;
+}
+
+.main-container {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.main-container-transform {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+::ng-deep.swal-text {
+    text-align: center;
+}
+
+.pad-body {
+    padding: 4px 4px 4px 4px;
+    display: flex;
+}
+
+.main-margin-0 {
+    margin-top: 1em !important;
+}
+
+.header-sticky {
+    width: 100%;
+    position: -webkit-sticky !important;
+    /* Safari */
+    position: sticky !important;
+    top: 0px !important;
+    display: block;
+    z-index: 30001 !important;
+}
+
+/* Fix height when display alert on login */
+::ng-deep body.swal2-height-auto {
+    height: 100% !important;
+}

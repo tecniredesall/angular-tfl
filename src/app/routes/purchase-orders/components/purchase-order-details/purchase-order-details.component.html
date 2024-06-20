@@ -1,0 +1,213 @@
+<div class="panel-container-overflow scroll-view-app">
+    <div class="purchase-order" *blockUI="'purchase-order-detail'; template: templateBlockModalUiComponent">
+        <div class="purchase-order__back-list" (click)="back()">
+            <i class="icon-arrow_icon"></i>
+            <span>{{ "back-to-list" | i18n }}</span>
+        </div>
+        <div class="purchase-order__title-detail">
+            <div class="purchase-order__title-detail__name">
+                {{'purchase-order-detail' | i18n}}
+            </div>
+            <div class="purchase-order__title-detail__date">
+                <div class="information">
+                    <div>{{'created' | i18n}}:</div>
+                    <div class="created purchase-order-right-title">
+                        {{purchaseOrder.creationUser}},&nbsp;
+                        {{purchaseOrder.creationDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}
+                    </div>
+                </div>
+                <div class="information">
+                    <div>{{'last-edition' | i18n}}:</div>
+                    <div class="purchase-order-right-title">
+                        {{purchaseOrder.creationUser}},&nbsp;
+                        {{purchaseOrder.updateDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="purchase-order__container-detail">
+            <div class="purchase-order__container-detail-description">
+                <div class="purchase-order__container-detail-description__company-info">
+                    <div class="icon">
+                        <img src="./assets/img/svg/menu/logo-icon.svg" />
+                    </div>
+                    <div class="description">
+                        <div class="description__order-number">
+                            <span class="description__order-number__folio"> #{{purchaseOrder.folio}}</span>
+                            <span class="description__order-number__title">{{'purchase-order' | i18n}}</span>
+                        </div>
+                        <div class="description__order-information">
+                            <div class="company-title">{{companyInfo.name}}</div>
+                            <div>
+                                <span class="company-title">{{"phone" | i18n}}: </span>
+                                <span>{{companyInfo.phone}}</span>
+                            </div>
+                            <div>
+                                <span class="company-title">{{"flo-id" | i18n}}: </span>
+                                <span>{{companyInfo.floId}}</span>
+                            </div>
+                            <div>
+                                <span class="company-title">{{"rtn" | i18n}}: </span>
+                                <span>{{companyInfo.rtn}}</span>
+                            </div>
+                            <div>
+                                <span class="company-title">{{"mail" | i18n}}: </span>
+                                <span>{{companyInfo.email}}</span>
+                            </div>
+                        </div>
+                        <div class="description__order-actions" *ngIf="purchaseOrder.status == PURCHASE_STATUS.LIQUIDATE">
+                            <div (click)="onDownloadOrderPdf()"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-download' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint">
+                                <i class="icon-download"></i>
+                            </div>
+                            <div (click)="onPrintdOrderPdf()"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-print' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint">
+                                <i class="icon-report-print"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="purchase-order__container-detail-description__purchase-detail">
+                    <div class="purchase-general-information">
+                        <div class="purchase-general-information__container">
+                            <div class="purchase-general-information__container-header">
+                                <div class="title-info">
+                                    {{'general-information' | i18n}}
+                                    <div class="note-status"  *ngIf="purchaseOrder.status !== PURCHASE_STATUS.LIQUIDATE; else settledPurchase"
+                                        [ngClass]="purchaseOrder.settlingStatus?.getStyleForSettlingStatus() ">
+                                        <p>
+                                            <i [ngClass]="purchaseOrder.settling === PURCHASER_SETLED.IN_SETTLED_PROCESS ?'icon-clock' :'icon-note-open'">  </i>
+                                            <span> {{purchaseOrder.settlingStatus?.getLabelForSettlingStatus() | i18n }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- <div class="title-info-status">
+                                    {{'general-information' | i18n}}
+                                </div> -->
+                                <div class="date-purchase-info">
+                                    <span>
+                                        {{'date' | i18n}}: {{purchaseOrder.creationDate | formatMoment : 'MMM DD, YYYY HH:mm' :
+                                        true}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="purchase-general-information__container-details">
+                                <div>
+                                    <span class="purchase-order-title-commun">{{'producer' | i18n}}: </span>
+                                    <span class="purchase-order-main-name"> {{purchaseOrder.producerName}}</span>
+                                    <span class="purchase-order-title-commun">{{'t-producer-type' | i18n}}: </span>
+                                    <span class="purchase-order-description-commun">
+                                        {{purchaseOrder.producerType | i18n}}</span>
+                                </div>
+                                <div>
+                                    <span class="purchase-order-title-commun">{{'address'| i18n}}: </span>
+                                    <span
+                                        class="purchase-order-description-commun purchase-order-right-title">{{purchaseOrder.producerAddress}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contract-information">
+                        <div class="contract-information__title">
+                            <i class="icon-report"></i>
+                            {{'contract' | i18n}}
+                        </div>
+                        <div class="contract-information__details">
+                            <div class="contract-information__details-description">
+                                <span class="purchase-order-title-commun">{{'id' | i18n | uppercase}}: </span>
+                                <span class="purchase-order-main-name"> {{purchaseOrder.contract}}</span>
+                                <span class="purchase-order-title-commun">{{'competitor' | i18n}}: </span>
+                                <span class="purchase-order-description-commun"> {{purchaseOrder.buyer}}</span>
+                                <span class="purchase-order-title-commun">{{'commodity' | i18n}}: </span>
+                                <span class="purchase-order-description-commun"> {{purchaseOrder.commodityName}}</span>
+                            </div>
+                            <div class="contract-information__details-description">
+                                <span class="purchase-order-title-commun">{{'date'| i18n}}: </span>
+                                <span class="purchase-order-description-commun purchase-order-right-title">{{purchaseOrder.date |
+                                    formatMoment : 'MMM DD, YYYY' :true}}</span>
+                                <span class="purchase-order-title-commun">{{'weight' | i18n}}: </span>
+                                <div class="weight-information">
+                                    <span class="purchase-order-description-commun">
+                                        {{purchaseOrder.totalQQ | number : "1." + DECIMAL_DIGITS + "-" +
+                                        DECIMAL_DIGITS: "en"}} / {{purchaseOrder.weight | number : "1." +
+                                        DECIMAL_DIGITS + "-" + DECIMAL_DIGITS: "en"}}
+                                        {{config.conversionMeasurementUnitAbbreviation}}</span>
+                                    <mat-progress-bar class="tr__progress-bar" mode="determinate"
+                                        [value]="purchaseOrder.percentage">
+                                    </mat-progress-bar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weight-notes-information">
+                        <div class="weight-notes-information__title">
+                            <i class="icon-notas"></i>
+                            {{'weight-notes' | i18n}}
+                            <span>{{purchaseOrder.weightNotes.length}}</span>
+                        </div>
+                        <div class="weight-notes-information_notes">
+                            <div class="weight-notes-information_notes-table">
+                                <div class="weight-notes-information_notes-table__header">
+                                    <div>{{'id' | i18n | uppercase}}</div>
+                                    <div class="purchase-order-right-title">{{'sacks' | i18n }}</div>
+                                    <div>{{'type' | i18n }}</div>
+                                    <div class="purchase-order-right-title">{{'net-weight' | i18n }} ({{config.conversionMeasurementUnitAbbreviation}})</div>
+                                    <div class="purchase-order-right-title">{{'currency' | i18n }}</div>
+                                    <div class="purchase-order-right-title">{{'price' | i18n }} / {{'unit' | i18n}}</div>
+                                    <div class="purchase-order-right-title">{{'total-to-pay' | i18n }}</div>
+                                </div>
+                                <div *ngFor="let note of purchaseOrder.weightNotes"
+                                    class="weight-notes-information_notes-table__row-body">
+                                    <div>{{note.folio}}</div>
+                                    <div class="purchase-order-right-title">{{note.sacks}}</div>
+                                    <div>{{note.commodityName}}</div>
+                                    <div class="purchase-order-right-title">{{note.weightQQ| number : "1." + DECIMAL_DIGITS + "-" +
+                                        DECIMAL_DIGITS: "en"}}</div>
+                                    <div class="purchase-order-right-title">{{companyInfo.currency.isoCode}}</div>
+                                    <div class="purchase-order-right-title">{{note.price| number : "1." + DECIMAL_DIGITS + "-" +
+                                        DECIMAL_DIGITS: "en"}}</div>
+                                    <div class="purchase-order-right-title">{{companyInfo.currency.symbol}} {{note.total| number : "1." + DECIMAL_DIGITS + "-" +
+                                        DECIMAL_DIGITS: "en"}} {{companyInfo.currency.isoCode}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="purchase-note-inforation">
+                        <div class="purchase-note-inforation__note">
+                            <span class="purchase-note-inforation__note-title">
+                                {{'note' | i18n}}:
+                            </span>
+                            <span class="purchase-note-inforation__note-description">
+                                {{purchaseOrder.note}}
+                            </span>
+                        </div>
+                        <div class="purchase-note-inforation__totals">
+                            <div class="info-total">
+                                <span>{{'total-in' | i18n}} {{ config.conversionMeasurementUnitName | lowercase }}</span>
+                                <span class="purchase-order-right-title">{{purchaseOrder.totalQQ | number : "1." + DECIMAL_DIGITS + "-" +
+                                    DECIMAL_DIGITS: "en"}}</span>
+                            </div>
+                            <div class="info-total">
+                                <span>{{'average-price' | i18n}}</span>
+                                <span class="purchase-order-right-title">{{companyInfo.currency.symbol}} {{purchaseOrder.averagePrice | number : "1." + DECIMAL_DIGITS + "-" +
+                                    DECIMAL_DIGITS: "en"}} {{companyInfo.currency.isoCode}}</span>
+                            </div>
+                            <div class="info-total">
+                                <span class="info-total-title-total">{{'total-to-pay' | i18n}}</span>
+                                <span class="info-total-title-color purchase-order-right-title">{{companyInfo.currency.symbol}} {{purchaseOrder.totalPayment | number : "1." + DECIMAL_DIGITS + "-" +
+                                    DECIMAL_DIGITS: "en"}} {{companyInfo.currency.isoCode}}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- icon-reports -->

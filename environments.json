@@ -1,0 +1,28 @@
+{
+  "development": [
+    {
+      "output": "./dist131",
+      "uri": "http://192.168.100.131:8080/api"
+    },
+    {
+      "output": "./dist100",
+      "uri": "http://192.168.100.100:8080/api"
+    }
+  ],
+  "production": [
+    {
+      "output": "./dist170",
+      "uri": "http://192.168.88.170:8080/api"
+    }
+  ],
+  "staging": [
+    {
+      "output": "./dist132",
+      "uri": "http://192.168.100.132:8080/api"
+    },
+    {
+      "output": "./dist133",
+      "uri": "http://192.168.100.133:8080/api"
+    }
+  ]
+}

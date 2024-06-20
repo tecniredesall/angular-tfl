@@ -1,0 +1,54 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 85%;
+    position: relative;
+    overflow-y: hidden;
+    padding-bottom: 100px;
+    .sil-tab-group {
+        padding: 0;
+        ::ng-deep mat-tab-header {
+            padding: 24px 0;
+        }
+        ::ng-deep .mat-tab-body-content {
+            padding: 0;
+        }
+    }
+    .footer-buttons {
+        display: flex;
+        width: 100%;
+        padding: 24px;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        background-color: var(--container-background);
+        margin-bottom: 75px;
+        .btn-transparent-delete {
+            i {
+                margin-right: 4px;
+            }
+        }
+    }
+    .sil-overflow-container {
+        padding-bottom: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    :host {
+        height: 100%;
+        .footer-buttons {
+            padding: 32px;
+            justify-content: flex-end;
+            margin-bottom: 60px;
+            position: absolute;
+            bottom: 0;
+            .btn-transparent-delete {
+                margin-right: auto;
+            }
+        }    
+    }
+}
+
+@media (min-width: 1200px) {
+}

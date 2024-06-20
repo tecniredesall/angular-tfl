@@ -1,0 +1,61 @@
+<!-- Modal Delete location-->
+<div class="modal show" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-delete">
+            <div class="modal-header border-pad-5">
+                <div class="col-xs-12 text-left p0">
+                    <div class="col-xs-12 text-left p0 text-center">
+                        <img
+                            style="width: 45px"
+                            src="assets/img/svg/unit-gray.svg"
+                        />
+                    </div>
+                    <div
+                        class="col-xs-12 text-left p0 text-center delete-modal-title"
+                    >
+                        {{ "delete-unit-measure-msg" | i18n }}
+                        <span class="form-label-ss"> {{ unit.name }}</span
+                        >?
+                    </div>
+                    <div
+                        class="col-xs-12 text-left p0 text-center delete-modal-info"
+                    >
+                        {{ "delete-msg-info" | i18n }}
+                    </div>
+                    <div class="col-xs-12 pad-20">
+                        <div
+                            class="col-xs-12 text-left text-center col-lg-2 col-md-2 col-sm-2"
+                        >
+                            &nbsp;
+                        </div>
+                        <div
+                            class="col-xs-6 text-left text-center col-lg-4 col-sm-4 col-md-4"
+                        >
+                            <button
+                                (click)="onButtonClicked(ACTIONS.CANCEL)"
+                                class="btn btn-default btn-sm pull-center delete-modal-btn"
+                            >
+                                {{ "cancel" | i18n | uppercase }}
+                            </button>
+                        </div>
+                        <div
+                            class="col-xs-6 col-sm-4 col-lg-4 col-md-4 text-left text-center"
+                        >
+                            <button
+                                (click)="onButtonClicked(ACTIONS.DELETE)"
+                                class="btn btn-danger btn-sm pull-center delete-modal-btn"
+                            >
+                                {{ "delete" | i18n | uppercase }}
+                            </button>
+                        </div>
+                        <div
+                            class="col-xs-12 col-lg-2 col-md-2 col-sm-2 text-left text-center"
+                        >
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

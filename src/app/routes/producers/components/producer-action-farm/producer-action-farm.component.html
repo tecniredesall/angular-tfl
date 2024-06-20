@@ -1,0 +1,39 @@
+<div class="producer-action-farm-container" *blockUI="'action-farm-container'; template: templateBlockModalUiComponent">
+
+    <div class="producer-action-farm-body scroll-view-app" (resized)="handleResponsive($event)"
+        [ngStyle]="{'paddingTop.px': style.paddingTopContainer, 'paddingRight.px': style.paddingRightContainer, 'paddingBottom.px': style.paddingBottomContainer, 'paddingLeft.px': style.paddingLeftContainer}">
+
+        <!-- header -->
+        <div class="row header-producer-action-farm">
+
+            <div class="title-producer-action-farm">
+                <span>
+                    <ng-container *ngIf="data.isReadOnly; else actionTitle">
+                        {{'t-farms-detail' | i18n}}
+                        <i class="icon-logo-grain" *ngIf="data.farm?.federated"></i>
+                    </ng-container>
+                    <ng-template #actionTitle>
+                        {{ data.isEdit ? ("t-farms-edit" | i18n) : ("t-farms-new" | i18n) }}
+                        <i class="icon-logo-grain" *ngIf="data.farm?.federated"></i>
+                    </ng-template>
+                </span>
+                <ng-container *ngIf="data.isReadOnly">
+                    <button class="sil-form__header-button btn btn-transparent-blue btn-close-icon" (click)="onCancelEvent()">
+                        <i class="icon-erase"></i>
+                    </button>
+                </ng-container>
+            </div>
+
+            <div class="header-line-producer-action-farm" [ngStyle]="{'width': style.widthHeaderLine}"></div>
+
+        </div>
+
+        <!-- Body -->
+        <tfarms-actions (closeEvent)="onCancelEvent()" (emitEvent)="onRefreshEvent()" [seller]="data.producer"
+            [isReadonly]="data.isReadOnly" [isEdit]="data.isEdit" [farm]="data.farm" (emitReadonlyEvent)="onEditButtonClick()"
+            [allowedBlocks]="data.allowedBlocks" [isFromModal]="true" [action]="data.isReadOnly ? 2 : data.action">
+        </tfarms-actions>
+
+    </div>
+
+</div>

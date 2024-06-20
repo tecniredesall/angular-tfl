@@ -1,0 +1,84 @@
+:host {
+    #backToList {
+        width: fit-content;
+        margin: 20px 0 0 10px;
+    }
+    display: block;
+    width: 100%;
+    height: 85%;
+    position: relative;
+    overflow-y: hidden;
+    padding-bottom: 160px;
+    .footer-buttons {
+        display: flex;
+        width: 100%;
+        padding: 24px;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        background-color: var(--container-background);
+        margin-bottom: 75px;
+        .btn-transparent-blue {
+            i {
+                margin-right: 4px;
+            }
+        }
+    }
+    .sil-overflow-container {
+        padding-bottom: 0;
+    }
+    .sil-tab-group {
+        padding: 10px 0px;
+        margin-top: 0px;
+        ::ng-deep mat-tab-header {
+            padding: 0px 0;
+        }
+        ::ng-deep .mat-tab-body-content {
+            padding: 0;
+        }
+    }
+    app-match-feature {
+        display: block;
+        overflow: hidden;
+    }
+    .sil-container {
+        &__sync {
+            button {
+                float: right;
+                z-index: 2;
+                position: relative;
+
+            }
+            .sync-started {
+                background-color: var(--tr-button-sync-background-color) !important;
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    :host {
+        padding-bottom: 140px;
+        height: 100%;
+        .footer-buttons {
+            padding: 32px;
+            justify-content: flex-end;
+            margin-bottom: 60px;
+            position: absolute;
+            bottom: 0;
+            .btn-transparent-blue {
+                margin-right: auto;
+            }
+        }
+        .sil-tab-group {
+            padding: 0;
+            margin-top: -40px;
+            ::ng-deep mat-tab-header {
+                padding: 0px 0;
+            }
+            ::ng-deep .mat-tab-body-content {
+                padding: 0;
+            }
+        }
+    }
+}

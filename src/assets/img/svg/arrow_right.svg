@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="20px" viewBox="0 0 12 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Path</title>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="element/ticket--slected" transform="translate(-41.000000, -17.000000)" fill="#78BCEF">
+            <polygon id="Path" transform="translate(47.000000, 27.000000) rotate(-90.000000) translate(-47.000000, -27.000000) " points="39.35 21 47 28.4231806 54.65 21 57 23.296496 47 33 37 23.296496"></polygon>
+        </g>
+    </g>
+</svg>

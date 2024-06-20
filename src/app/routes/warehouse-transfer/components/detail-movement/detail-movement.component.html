@@ -1,0 +1,641 @@
+<div class="movement-detail-note-container panel-container-overflow scroll-view-app"
+    *ngIf="!isLoadingMovement && !isError; else emptyState">
+    <div class="movement-detail-note-back">
+        <div class="movement-detail-note-back__content" (click)="back()">
+            <i class="icon-arrow_icon"></i>
+            <span class="dete-blue">{{ "back-to-list" | i18n }}</span>
+        </div>
+    </div>
+    <div class="movement-detail-note-header">
+        <p class="movement-detail-note-header-title font-ss24 font-sssb">
+            {{ warehouseTransferDetail | i18n }}
+        </p>
+        <div class="movement-detail-note-header-detail">
+            <div class="movement-detail-note-header-detail-date">
+                <p class="font-sssb">{{ "created" | i18n }}:</p>
+                <p class="date-blue">
+                    {{ movement.user.fullName }},
+                    {{ movement.createdAt | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm" }}
+                </p>
+            </div>
+            <div class="movement-detail-note-header-detail-date">
+                <p class="font-sssb">{{ "last-edition" | i18n }}:</p>
+                <p class="date-edition">
+                    {{ movement.user.fullName }},
+                    {{ movement.updatedAt | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm" }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="movement-detail-note">
+        <!-- HEADER -->
+        <div class="header-note-detail">
+            <div class="header-note-detail-image">
+                <img src="./assets/img/svg/menu/logo-icon.svg" />
+            </div>
+            <div class="header-note-detail-content">
+                <div class="header-note-detail-content-data">
+                    <p class="font-ssb">#{{ movement.transactionID }}</p>
+                    <p>{{ warehouseTransfer | i18n }}</p>
+                    <hr />
+                </div>
+                <div class="header-note-detail-content-buttons">
+                    <ng-container *permission="{tag: PERMISSIONS.WAREHOUSE_TRANSFER, type: PERMISSION_TYPES.PRINT}">
+                        <ng-container *ngIf="movement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CLOSE ||
+                                    movement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED">
+                            <div (click)="actionPDF(FILE_REPORT_ACTIONS.FORMAT.PDF, FILE_REPORT_ACTIONS.DOWNLOAD)"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-download' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                <i class="icon-download"></i>
+                            </div>
+                            <div (click)="actionPDF(FILE_REPORT_ACTIONS.FORMAT.PDF, FILE_REPORT_ACTIONS.PRINT)"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-print' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                <i class="icon-report-print"></i>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div class="address-note">
+                    <p class="font-ssb">{{ companyInfo.name }}</p>
+                    <p>
+                        <span class="font-ssb">{{ "phone" | i18n }}:</span>
+                        {{ companyInfo.phone }}
+                    </p>
+                    <p>
+                        <span class="font-ssb">{{ "flo-id" | i18n }}:</span>
+                        {{ companyInfo.floId }}
+                    </p>
+                    <p>
+                        <span class="font-ssb">{{ "rtn" | i18n }}:</span>
+                        {{ companyInfo.rtn }}
+                    </p>
+                    <p>
+                        <span class="font-ssb">{{ "mail" | i18n }}:</span>
+                        {{ companyInfo.email }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- GENERAL INFORMATION -->
+        <div class="body-note-details">
+            <div class="body-note-details-data">
+                <div class="body-note-details-data-first">
+                    <p class="body-note-details-title font-ss18 font-ssb">
+                        {{ "general-information" | i18n }}
+                    </p>
+
+                    <div *ngIf="movement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED"
+                        class="delete-status-movement">
+                        <p>
+                            <i class="icon-note-canceled"> </i>
+                            <span> {{'voided' | i18n }}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "date" | i18n }}:</p>
+                        <p class="font-ssb">
+                            {{ movement.dateAt | formatMoment : "LLLL" | titlecase}}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "origin" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.originPoint.company.companyName
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "destination" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.destinyPoint.company.companyName
+                            }}
+                        </p>
+                    </div>
+                </div>
+                <div class="body-note-details-data-second">
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "shipping-ticket-reason-transfer" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.reasonTitle
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "shipping-ticket-company-branch-point" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{ movement.originPoint.address }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "shipping-ticket-buyer-location" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{ movement.destinyPoint.address }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRIVER AND TRANSPORT INFORMATION -->
+        <div class="body-note-details">
+            <div class="body-note-details-data">
+                <div class="body-note-details-data-first">
+                    <p class="body-note-details-title font-ss18 font-ssb">
+                        {{ "driver-information" | i18n }}
+                    </p>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "delivered-by" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{ movement.transport.serviceTypeId == 1 ?
+                            ('drive-type-owner' | i18n) :
+                            movement.transport.serviceTypeId == 2 ?
+                            ('drive-type-third' | i18n) : ''}}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "driver" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.driver.fullName
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "shipping-ticket-vehicle-license" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.transport.licensePlate
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "vehicle-type" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.transport.type.type
+                            }}
+                        </p>
+                    </div>
+                </div>
+                <div class="body-note-details-data-second">
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "drive-type-third" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.transport.transportCompany.legalName
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "shipping-ticket-driver-identity" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.driver.identity
+                            }}
+                        </p>
+                    </div>
+
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "shipping-ticket-vehicle" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.transport.name
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DESCRIPTION -->
+        <div>
+            <div class="body-note-details">
+                <div class="body-note-details-data">
+                    <div class="body-note-details-data-first">
+                        <p class="body-note-details-title font-ss18 font-ssb">
+                            {{ "weight-capture" | i18n }}
+                        </p>
+                        <p class="body-note-details-subtitle font-ss16 font-ssb mb-20">
+                            {{ "commodity-information" | i18n }}
+                        </p>
+                        <div class="body-note-data">
+                            <p class="font-ssb">{{ "commodity" | i18n }}:</p>
+                            <p class="subtitle-note">
+                                {{
+                                movement.transformation.commodity.name
+                                }}
+                            </p>
+                        </div>
+                        <div class="body-note-data">
+                            <p class="font-ssb">{{ "commodity-state" | i18n }}:</p>
+                            <p class="subtitle-note">
+                                {{
+                                movement.transformation.type.name
+                                }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="body-note-details-data-second">
+                        <div class="body-note-data mt-50">
+                            <p class="font-ssb">{{ "commodity-type" | i18n }}:</p>
+                            <p class="subtitle-note">
+                                {{
+                                movement.transformation.name
+                                }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-note-details-data">
+                    <div class="body-note-details-data-first">
+                        <p class="body-note-details-subtitle font-ss16 font-ssb">
+                            {{ (movement.operationType == this.PROCESS_FLOW.IN ? "destination-warehouse" :
+                            "origin-warehouse") | i18n }}
+                        </p>
+                        <p class="subtitle-note mb-20 ">
+                            {{ (movement.operationType == this.PROCESS_FLOW.IN ? "warehouse-transfer-destination" :
+                            "source-warehouse-info") | i18n }}
+                        </p>
+                        <div class="body-note-data">
+                            <p class="font-ssb">{{ "warehouse" | i18n }}:</p>
+                            <p class="subtitle-note">
+                                {{
+                                movement.productionTank.name
+                                }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-note-details-data">
+                    <div class="body-note-details-data-first">
+                        <p class="body-note-details-subtitle font-ss16 font-ssb">
+                            {{ "weighings-information" | i18n }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="body-note-details-description">
+                    <div class="body-note-details-description-data">
+                        <!-- WEIGHT LABELS -->
+                        <div class="body-note-details-description-data-columns note-sacks-title">
+                            <div class="note-sacks-id">
+                                <p class="font-ssb">{{ "id-lot" | i18n }}</p>
+                            </div>
+                            <div class="note-sacks-sack">
+                                <p class="font-ssb">{{ "sacks" | i18n }}</p>
+                            </div>
+                            <div class="note-sacks-weight">
+                                <p class="font-ssb">
+                                    {{ "gross-weight" | i18n }} ({{
+                                    config.measurementUnitAbbreviation | i18n
+                                    }})
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="font-ssb">
+                                    {{ "tara" | i18n }} ({{ config.measurementUnitAbbreviation | i18n }})
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="font-ssb">
+                                    {{ "transport-tare" | i18n }} ({{ config.measurementUnitAbbreviation | i18n }})
+                                </p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="font-ssb">
+                                    {{ "featured-weight" | i18n }} ({{
+                                    config.measurementUnitAbbreviation | i18n
+                                    }})
+                                </p>
+                            </div>
+                            <div class="note-sacks-qq">
+                                <p class="font-ssb">
+                                    {{ "net-weight" | i18n }} ({{
+                                    config.conversionMeasurementUnitAbbreviation | i18n
+                                    }})
+                                </p>
+                            </div>
+                        </div>
+                        <!-- WEIGHT QUANTITIES -->
+                        <div class="body-note-details-description-data-columns note-sacks"
+                            *ngFor="let weightNote of movement.warehouseMovementNotes; let i = index">
+                            <div class="note-sacks-id">
+                                <p class="font-ssb">{{ weightNote.lotFolio }}</p>
+                            </div>
+                            <div class="note-sacks-sack">
+                                <p class="subtitle-note">
+                                    {{ weightNote.weightSacksNumber }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-weight">
+                                <p class="subtitle-note">
+                                    {{
+                                    weightNote.groosWeight
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note">
+                                    {{
+                                    weightNote.tareWeight
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note">
+                                    {{
+                                    weightNote.weightTareAditional
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="subtitle-note">
+                                    {{
+                                    weightNote.featuredWeight
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-qq">
+                                <p class="subtitle-note">
+                                    {{
+                                    weightNote.featuredWeightOut
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                        <!-- TOTALS WEIGHT -->
+                        <div class="body-note-details-description-data-columns note-sacks note-totals">
+                            <div class="note-sacks-id">
+                                <p class="font-ssb"></p>
+                            </div>
+                            <div class="note-sacks-sack">
+                                <p class="subtitle-note total__p" appSignedValue
+                                    [value]="movement.totals.totalWeightSacksNumber" [format]="'1.0'"></p>
+                            </div>
+                            <div class="note-sacks-weight">
+                                <p class="subtitle-note total__p" appSignedValue
+                                    [value]="movement.totals.totalGrossWeight"></p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note total__p" appSignedValue [valueType]="
+                                        CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                                    " [value]="movement.totals.totalTareWeight"></p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note total__p" appSignedValue [valueType]="
+                                        CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                                    " [value]="movement.totals.totalWeightTareAdditional"></p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="subtitle-note total__p" appSignedValue
+                                    [value]="movement.totals.featuredWeight"></p>
+                            </div>
+                            <div class="note-sacks-qq">
+                                <p class="subtitle-note total__p" appSignedValue
+                                    [value]="movement.totals.featuredWeightOut"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="body-note-details-data">
+                    <div class="body-note-details-data-first">
+                        <p class="body-note-details-subtitle font-ss16 font-ssb">
+                            {{ "characteristics-information" | i18n }}
+                        </p>
+                    </div>
+                </div>
+                <!-- CHARACTERISTICS -->
+                <div class="body-note-details-description" *ngIf="movement.warehouseMovementPenaltyNotes.length > 0">
+                    <div class="body-note-details-description-data">
+                        <div class="note-penalties">
+                            <div class="body-note-details-description-data-columns">
+                                <div class="body-penalties">
+                                    <p class="font-ssb">
+                                        {{ "features" | i18n }}
+                                    </p>
+                                </div>
+                                <div class="body-penalties">
+                                    <p class="font-ssb">
+                                        {{ "selection" | i18n }}
+                                    </p>
+                                </div>
+                                <div class="body-penalties">
+                                    <p class="font-ssb">
+                                        {{ "value" | i18n | titlecase }}
+                                    </p>
+                                </div>
+                                <div class="body-penalties">
+                                    <p class="font-ssb">
+                                        {{ "total" | i18n }} ({{
+                                        config.measurementUnitAbbreviation | i18n
+                                        }})
+                                    </p>
+                                </div>
+                            </div>
+
+
+                            <ng-container *ngIf="movement.warehouseMovementPenaltyNotes.length > 0">
+                                <div class="body-note-details-description-data-columns-penalties" *ngFor="
+                                        let penalty of movement.warehouseMovementPenaltyNotes
+                                    ">
+                                    <div class="body-penalties">
+                                        <p class="penalty-note">
+                                            {{ penalty.deduction.name | titlecase}}:
+                                        </p>
+                                    </div>
+                                    <div class="body-penalties">
+                                        <p class="subtitle-note">
+                                            {{
+                                            penalty.deduction.type == 'choice'
+                                            ? (penalty.value | titlecase)
+                                            : ("not-apply" | i18n)
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div class="body-penalties">
+                                        <p class="subtitle-note">
+                                            <span>
+                                                {{
+                                                penalty.coefficient | number : "1." + CHARACTERISTICS_DECIMAL + "-" +
+                                                CHARACTERISTICS_DECIMAL : "en"
+                                                }} %
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="body-penalties">
+                                        <p class="subtitle-note" appSignedValue [value]="penalty.total"
+                                            [valueType]="penalty.sign"></p>
+                                    </div>
+                                </div>
+                                <div class="body-note-details-description-data-columns-penalties">
+                                    <div class="body-penalties"></div>
+                                    <div class="body-penalties"></div>
+                                    <div class="body-penalties">
+                                        <p class="font-ssb">
+                                            {{ "total" | i18n | uppercase }}:
+                                        </p>
+                                    </div>
+
+                                    <div class="body-penalties">
+                                        <p class="subtitle-note total__p" appSignedValue
+                                            [value]="movement.totals.totalPenalties">
+                                        </p>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <!-- TOTAL RECEPTION NOTE -->
+                <div class="shipping-note-inforation">
+                    <div class="shipping-note-inforation__note">
+                        <span class="shipping-note-inforation__note-title">
+                            {{'notes' | i18n}}:
+                        </span>
+                        <span class="shipping-note-inforation__note-description">
+                            {{ movement.notes}}
+                        </span>
+                    </div>
+                    <div class="shipping-note-inforation__totals">
+                        <div class="info-total">
+                            <span>
+                                {{'total-gross' | i18n}}
+                                ({{config.measurementUnitAbbreviation}}):
+                            </span>
+                            <span class="shipping-ticket-right-title right-title">
+                                {{movement.totals.totalGrossWeight | number : "1." + DECIMAL_DIGITS
+                                +
+                                "-"+ DECIMAL_DIGITS: "en"}}
+                            </span>
+                        </div>
+                        <div class="info-total">
+                            <span>
+                                {{'total-tares' | i18n}}
+                                ({{config.measurementUnitAbbreviation}}):
+                            </span>
+                            <span class="shipping-ticket-right-title right-title" [value]="movement.totals.totalTares"
+                                appSignedValue [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT"
+                                [format]="'1.'+ DECIMAL_DIGITS">
+                            </span>
+                        </div>
+                        <div class="info-total">
+                            <span>
+                                {{'featured-weight' | i18n}}
+                                ({{config.measurementUnitAbbreviation}}):
+                            </span>
+                            <span class="shipping-ticket-right-title right-title">
+                                {{movement.totals.featuredWeight | number : "1." + DECIMAL_DIGITS
+                                +"-"
+                                + DECIMAL_DIGITS: "en"}}
+                            </span>
+                        </div>
+                        <div class="info-total">
+                            <span>
+                                {{'discount' | i18n}}
+                                ({{config.measurementUnitAbbreviation}}):
+                            </span>
+                            <span class="shipping-ticket-right-title right-title"
+                                [value]="movement.totals.totalPenalties" appSignedValue
+                                [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT" [format]="'1.'+ DECIMAL_DIGITS">
+                            </span>
+                        </div>
+                        <div class="info-total">
+                            <span>
+                                {{'addition' | i18n}}
+                                ({{config.measurementUnitAbbreviation}}):
+                            </span>
+                            <span class="shipping-ticket-right-title right-title" [value]="0" appSignedValue
+                                [valueType]="CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT" [format]="'1.'+ DECIMAL_DIGITS">
+                            </span>
+                        </div>
+                        <div class="info-total">
+                            <span class="info-total-title-total">
+                                {{'net-weight' | i18n}}
+                                ({{config.conversionMeasurementUnitAbbreviation}}):
+                            </span>
+                            <span class="shipping-ticket-right-title right-title">
+                                {{
+                                movement.totals.totalNetWeightOut | number :"1." + DECIMAL_DIGITS
+                                +
+                                "-" + DECIMAL_DIGITS: "en"
+                                }}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="body-note-details-data-first" *ngIf="movement.operationType == this.PROCESS_FLOW.OUT">
+                    <p class="body-note-details-subtitle font-ss16 font-ssb">
+                        {{ "warehouse-in-transit" | i18n }}
+                    </p>
+                    <p class="subtitle-note">
+                        {{ "warehouse-in-transit-info" | i18n }}
+                    </p>
+                    <div class="body-note-data mb-20">
+                        <p class="font-ssb">{{ "warehouse" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            movement.tank.name
+                            }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DELETE REASON -->
+                <p *ngIf="movement.status == WAREHOUSE_TRANSFER_STATUS_DESCRIPTION.CANCELED"
+                    class="body-note-details-comments__delete">
+                    <span>{{"void-weight-note-reason" |i18n}}</span>
+                    <br />
+                    {{movement.deletedReason}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <a id="dowloadPDF" href="" download></a>
+</div>
+
+<ng-template #emptyState id="emptyState">
+    <app-not-results-found *ngIf="!isLoadingMovement && isError"
+        [imgName]="'empty_movimiento_salida'"></app-not-results-found>
+</ng-template>

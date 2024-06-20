@@ -1,0 +1,209 @@
+@import 'src/scss/breakpoints.scss';
+
+.actions-block-container {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  background-color: transparent;
+  min-width: 600px;
+}
+
+@media(max-width: $screen-sm-min) {
+  .actions-block-container {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    background-color: transparent;
+    min-width: 100%;
+  }
+}
+
+.actions-block-mode-edit input.ng-invalid {
+  border: 1px solid #df0000;
+  box-shadow: 0 1px 5px rgba(255, 0, 0, 0.2);
+}
+
+.actions-block-input-container {
+  padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+:not(.dark) :host .actions-block-input-container {
+  color: #333333;
+}
+
+.dark :host .actions-block-input-container {
+  color: white;
+}
+
+.actions-block-label-input {
+  height: 16px;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: normal;
+}
+
+:not(.dark) :host .actions-block-label-input {
+  color: #333333;
+}
+
+.dark :host .actions-block-label-input {
+  color: white;
+}
+
+.actions-block-item {
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.actions-block-btn-add-block-item {
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-align: center;
+
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 50px;
+  height: 29px;
+  width: auto;
+}
+
+:not(.dark) :host .actions-block-btn-add-block-item {
+  color: #0068d1 !important;
+  background-color: transparent !important;
+}
+
+.dark :host .actions-block-btn-add-block-item {
+  color: #00aaff !important;
+  background-color: #20293c !important;
+}
+
+
+.multiple-actions-block-item {
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 15px 0;
+}
+
+:not(.dark) :host .multiple-actions-block-item {
+  border: solid 1px #e1e7f5;
+  box-shadow: 0 2px 4px 0 #e0e8f6;
+}
+
+.dark :host .multiple-actions-block-item {
+  border: solid 1px rgba(24, 32, 48, 0.5);
+  box-shadow: 0 2px 15px 0 rgba(24, 32, 48, 0.5);
+}
+
+.action-block-footer {
+  display: inline-block;
+  width: 100%;
+  height: auto;
+}
+
+.action-block-container-button-footer {
+  display: inline-block;
+  height: 40px;
+}
+
+.action-block-container-button-footer button,
+.action-block-btn-remove-item {
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: center;
+
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 5px;
+  height: 40px !important;
+  width: 100%;
+}
+
+.action-block-btn-delete,
+.action-block-btn-remove-item {
+  background-color: transparent !important;
+  width: auto;
+  color: #d63649 !important;
+}
+
+.action-block-btn-delete img,
+.action-block-btn-remove-item img {
+  padding-bottom: 5px;
+}
+
+.action-block-btn-delete-mobile {
+  width: 40px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(214, 54, 73, 0.2) !important;
+  padding-left: 13px;
+  padding-bottom: 4px;
+}
+
+.action-block-btn-remove-item,
+.action-block-btn-delete:not(.action-block-btn-delete-mobile) {
+  padding-left: 0 !important;
+}
+
+.action-block-btn-submit:disabled {
+  color: #344057 !important;
+  background-color: #dbdfe7 !important;
+  cursor: not-allowed;
+}
+
+:not(.dark) :host .action-block-btn-submit:enabled {
+  color: white !important;
+  background-color: #0068d1 !important;
+}
+
+.dark :host .action-block-btn-submit:enabled {
+  color: white !important;
+  background-color: #1f8efa !important;
+}
+
+
+.action-block-btn-cancel {
+  background-color: transparent !important;
+}
+
+:not(.dark) :host .action-block-btn-cancel {
+  color: #0068d1 !important;
+}
+
+.dark :host .action-block-btn-cancel {
+  color: white !important;
+}
+
+
+.ng-select.actions-block-ng-select.ng-select-single ::ng-deep .ng-select-container {
+  height: 32px;
+}
+
+.ng-select.actions-block-ng-select ::ng-deep .ng-select-container{
+  min-height: 32px;
+  border: 1px solid #e1e7f5;
+  outline: none;
+  box-shadow: none;
+
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius:  5px;
+}
+
+:host .create-input{
+  outline: none;
+}

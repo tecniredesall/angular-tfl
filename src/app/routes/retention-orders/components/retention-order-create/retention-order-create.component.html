@@ -1,0 +1,49 @@
+<div class="lot-create">
+  <div class="lot-create__wrapper" *blockUI="'lot-create-wrapper'; template: templateBlockModalUiComponent">
+    <div class="lot-create__wrapper__container">
+      <div class="scroll-view-app overflow-c">
+        <!-- Back to list button -->
+        <button class="sil-form__header-button btn btn-transparent-blue lot-create__button-back"
+          (click)="onBackToList()">
+          <i class="icon-arrow_icon"></i>
+          {{ "back-to-list" | i18n }}
+        </button>
+        <!-- Header -->
+        <div class="lot-create__header">
+          <span *ngIf="!isEdit">{{'retention-order-new' | i18n }}</span>
+          <span *ngIf="isEdit">{{'retention-order-edit' | i18n }}</span>
+          <hr class="lot-create__header__line">
+        </div>
+        <!-- Tab group -->
+        <div class="sil-tab-group" dynamicHeight mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex"
+          (selectedTabChange)="onTabClick($event)">
+          <sst-retention-order-filter [(urlBackToList)]="urlBackToList" [idRetentionOrder]="retentionOrderId"
+            (eventFormStatusChange)="onEventFormFilterStatusChange($event)">
+          </sst-retention-order-filter>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="footer-retention-order">
+      <ng-container [ngTemplateOutlet]="footerReceivingNote"></ng-container>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #footerReceivingNote>
+  <button class="btn btn-default footer-retention-order__button--save footer-retention-order__button float-right"
+    (click)="saveAndExit(RETENTION_ORDER_STATUS.OPEN)" [disabled]="!this.isComplete">
+    {{ "save-exit" | i18n }}
+  </button>
+  <button class="btn btn-default footer-retention-order__button--close footer-retention-order__button  float-right"
+    (click)="saveAndExit(RETENTION_ORDER_STATUS.CLOSED)" [disabled]="!this.isComplete">
+    {{ "retention-order-close" | i18n }}
+  </button>
+  <button (click)="onCancel()"
+    class="btn btn-default footer-retention-order__button--cancel footer-retention-order__button float-right"
+    [disabled]="">
+    {{ "cancel" | i18n }}
+  </button>
+</ng-template>

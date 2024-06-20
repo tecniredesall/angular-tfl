@@ -1,0 +1,310 @@
+<section class="contract-header">
+    <div class="contract-header__info">
+        <i class="icon-icon-menu-notas"></i>
+        <div class="info-title">
+            <h3 class="title-base--black">
+                ID: {{ contract ? contract.id : "-" }}
+            </h3>
+            <p>
+                {{ "competitor" | i18n }}:
+                {{ producer.fullName }}
+            </p>
+        </div>
+    </div>
+    <div class="contract-header__weight">
+        <p>{{ "weight" | i18n }}:</p>
+        {{
+        currentContractWeight
+        | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS:"en"
+        }}
+        /
+        {{
+        contract
+        ? (contract.weightQQ
+        | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS:"en")
+        : ("0"
+        | number: "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS:"en")
+        }}
+        {{configuration.conversionMeasurementUnitAbbreviation}}
+        <mat-progress-bar class="tr__progress-bar" [color]="hasValidAmount ? 'primary' : 'warn'" mode="determinate"
+            [value]="
+                contract
+                    ? (currentContractWeight / contract.weightQQ) * 100
+                    : 100
+            "></mat-progress-bar>
+    </div>
+</section>
+<section class="contract-search">
+    <div class="sil-form__section scan-input">
+        <label [ngClass]="{ 'scan-input__label--errors': scanInput.errors }">{{
+            "scan-barcode" | i18n
+            }}</label>
+        <div class="input-container" [ngClass]="{
+                'input-container--disabled': !hasValidAmountPrice,
+                'input-container--errors': scanInput.errors
+            }">
+            <i class="icon-barcode"></i>
+            <input type="text" class="sil-form__input" [placeholder]="'select-to-scan' | i18n" [formControl]="scanInput"
+                (input)="scan()" (keydown)="clearScan($event)" />
+        </div>
+        <div *ngIf="scanInput.errors" class="scan-input--errors">
+            <span *ngIf="scanInput.hasError('alreadyExists')">
+                {{ "purchase-order-scan-error-already-exists" | i18n }}
+            </span>
+            <span *ngIf="scanInput.hasError('maxWeightExceded')">
+                {{ "purchase-order-scan-error-max-weight" | i18n }}
+            </span>
+            <span *ngIf="scanInput.hasError('errorMessage')">
+                {{ scanInput.getError("errorMessage") | i18n }}
+            </span>
+        </div>
+    </div>
+    <div class="note-actions">
+        <p class="counter">
+            {{ selectedNotes.length }} {{ "selected-notes" | i18n }}
+        </p>
+        <button [disabled]="!hasValidAmount || !hasValidAmountPrice" class="btn btn-resize blue-btn button-lg"
+            (click)="onShowProducerNotes()">
+            {{ "add-note" | i18n }}
+        </button>
+    </div>
+</section>
+<section class="weight-notes sil-table">
+    <div class="weight-notes__amount">
+        <span class="adm-icon">i</span>
+        {{ "purchase-order-amount-price-info" | i18n }}
+        <span>
+            {{companyInfo.currency.symbol}} {{companyInfo.purchaseOrderMaxAmount | number
+            : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+            : "en"}} {{companyInfo.currency.isoCode}}
+        </span>
+    </div>
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__creation">
+            {{ "creation" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortData('creation')"
+                [ngClass]="{ 'sort-icon-invert': columnAscState.creation }"></i>
+        </span>
+        <span class="sil-table__header-cell header__id">
+            {{ "id" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortData('id')"
+                [ngClass]="{ 'sort-icon-invert': columnAscState.id }"></i>
+        </span>
+        <span class="sil-table__header-cell header__sacks">
+            {{ "sacks" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortData('sacks')" [ngClass]="{
+                    'sort-icon-invert': columnAscState.sacks
+                }"></i>
+        </span>
+        <span class="sil-table__header-cell header__type">
+            {{ "type" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortData('type')" [ngClass]="{
+                    'sort-icon-invert': columnAscState.type
+                }"></i>
+        </span>
+        <span class="sil-table__header-cell header__net-weight">
+            {{ "net-weight" | i18n | uppercase }}
+            <i class="icon-arrow_down show-on-mobile" (click)="sortData('net_weight')" [ngClass]="{
+                    'sort-icon-invert': columnAscState.net_weight
+                }"></i>
+        </span>
+        <span class="sil-table__header-cell header__currency">
+            {{ "currency" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__unit-price">
+            {{ "price" | i18n | uppercase }}/{{ "unit" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__actions">
+            {{ "total-to-pay" | i18n | uppercase }}
+        </span>
+    </header>
+    <ng-container *ngIf="selectedNotes.length > 0; else noNotesTemplate">
+        <article class="sil-table__row" *ngFor="let note of selectedNotes">
+            <span class="sil-table__cell cell__creation">
+                <i class="icon-icon-menu-notas"></i>
+                <div class="date__wrapper">
+                    <p class="sil-table__cell-label">
+                        {{ "creation" | i18n }}
+                    </p>
+                    <span class="date__wrapper-date">{{
+                        note.startDate
+                        | dateStringFormat
+                        : "YYYY-MM-DD HH:mm:ss"
+                        : "MMM DD, YYYY [" +
+                        ("at" | i18n) +
+                        "] HH:mm"
+                        : true
+                        }}
+                        <span>{{ note.creationEmail }}</span>
+                    </span>
+                </div>
+            </span>
+            <span class="sil-table__cell cell__id">
+                <p class="sil-table__cell-label">
+                    {{ "id" | i18n | uppercase }}
+                </p>
+                <span>{{ note.transactionInId }}</span>
+            </span>
+            <span class="sil-table__cell cell__sacks">
+                <p class="sil-table__cell-label">
+                    {{ "sacks" | i18n | uppercase }}
+                </p>
+                <span>{{ note.totalSacks }}</span>
+            </span>
+            <span class="sil-table__cell cell__type">
+                <p class="sil-table__cell-label">
+                    {{ "type" | i18n | uppercase }}
+                </p>
+                <span>{{ note.commodityTypename }}</span>
+            </span>
+            <span class="sil-table__cell cell__net-weight">
+                <p class="sil-table__cell-label">
+                    {{ "net-weight" | i18n | uppercase }}
+                </p>
+                <span>{{
+                    note.netDryWeightOut
+                    | number
+                    : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                    : "en"
+                    }}
+                    {{configuration.conversionMeasurementUnitAbbreviation}}</span>
+            </span>
+            <span class="sil-table__cell cell__currency">
+                <p class="sil-table__cell-label">
+                    {{ "currency" | i18n | uppercase }}
+                </p>
+                <span>
+                    {{companyInfo.currency.isoCode}}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__unit-price">
+                <p class="sil-table__cell-label">
+                    {{ "price" | i18n | uppercase }}
+                </p>
+                <div class="sil-form__section">
+                    <input type="text" class="sil-form__input" autocomplete="off" [textMask]="{
+                            mask: positiveDecimalNumberMask,
+                            guide: false,
+                            showMask: false
+                        }" (blur)="formatPrice(note.price, $event)" (input)="onPriceChanged($event, note)"
+                        [value]="note.price" [ngClass]="note.price <= 0 ? 'ng-dirty ng-invalid': ''"
+                        [disabled]="!hasPlacePriceFeature && contract"/>
+                    <span> {{configuration.conversionMeasurementUnitAbbreviation}}</span>
+                    <mat-error *ngIf="note.price <= 0" class="error-msg-form">{{'non-zero-value' | i18n}}</mat-error>
+                </div>
+            </span>
+            <span class="sil-table__cell cell__total">
+                <p class="sil-table__cell-label">
+                    {{ "total-to-pay" | i18n | uppercase }}
+                </p>
+                <span>
+                    {{companyInfo.currency.symbol}}
+                    {{
+                    note.total
+                    | number
+                    : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                    : "en"
+                    }}
+                    {{companyInfo.currency.isoCode}}
+                </span>
+            </span>
+            <span class="sil-table__cell cell__delete">
+                <button class="btn btn-transparent-delete" (click)="onRemoveNote(note)">
+                    <i class="icon-erase"></i>
+                </button>
+            </span>
+        </article>
+    </ng-container>
+    <ng-template #noNotesTemplate>
+        <section class="order_empty" *ngIf="action === ACTIONS.CREATE; else noEmptyNotesEdit">
+            <img src="assets/img/svg/order_empty.svg" alt="" />
+            <p>
+                {{ "to-add-note" | i18n }}
+                <span (click)="onShowProducerNotes()"><i class="icon-plus"></i>{{ "add-note" | i18n }}</span>
+                {{ "scan-using-input" | i18n }}
+                <span>{{ "scan-barcode" | i18n }}</span>
+            </p>
+        </section>
+        <ng-template #noEmptyNotesEdit>
+            <section class="order_empty--error">
+                <i class="icon-notas-r"></i>
+                <p>
+                    {{ "sorry" | i18n }}
+                    <span>{{
+                        "purchase-order-needs-at-least-one-note" | i18n
+                        }}</span>
+                </p>
+            </section>
+        </ng-template>
+    </ng-template>
+</section>
+<section class="liquidate">
+    <section class="sil-form__section liquidate__notes">
+        <label>{{ "note" | i18n }}</label>
+        <input type="text" [placeholder]="'add-description' | i18n" class="sil-form__input" autocomplete="off"
+            maxlength="255" [formControl]="noteControl" />
+        <p class="counter">{{ noteControl.value.length }}/255</p>
+        <div class="liquidate__contract-card liquidate__info" *ngIf="!contract">
+            <i class="icon-alert_icon"></i>
+            <div>{{ "related-contract-to-settle-purchase-order" | i18n }}</div>
+        </div>
+        <div class="liquidate__contract-card liquidate__danger" *ngIf="contract && !hasValidAmount">
+            <i class="icon-alert_icon"></i>
+            <div>{{ "amount-selected-exceds-stipulate-purchase-order" | i18n }}</div>
+        </div>
+        <div class="liquidate__contract-card liquidate__danger" *ngIf="!hasValidAmountPrice">
+            <i class="icon-alert_icon"></i>
+            <div>{{ "purchase-order-amount-price-error" | i18n }}</div>
+        </div>
+    </section>
+    <section class="liquidate__totals">
+        <section class="liquidate__totals-labels"
+            [ngClass]="{'liquidate__totals-labels--errors': !hasValidAmountPrice}">
+            <p class="total-qq">
+                <span class="totals__label"> {{ "total-in" | i18n }} {{ configuration.conversionMeasurementUnitAbbreviation | lowercase | i18n}}: </span>
+                <span>
+                    {{
+                    currentWeight
+                    | number
+                    : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                    : "en"
+                    }}
+                </span>
+            </p>
+            <p class="average-price">
+                <span class="totals__label">
+                    {{ "average-price" | i18n }}:
+                </span>
+                <span>
+                    {{companyInfo.currency.symbol}}
+                    {{
+                    currentAveragePrice
+                    | number
+                    : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                    : "en"
+                    }}
+                    {{companyInfo.currency.isoCode}}
+                </span>
+            </p>
+            <p class="total-to-pay">
+                <span class="totals__label">
+                    {{ "total-to-pay" | i18n }}:
+                </span>
+                <span class="total__payment">
+                    {{companyInfo.currency.symbol}}
+                    {{
+                    currentTotalToPay
+                    | number
+                    : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                    : "en"
+                    }}
+                    {{companyInfo.currency.isoCode}}
+                </span>
+            </p>
+        </section>
+        <button class="btn btn-success button-lg" (click)="onShowLiquidatePurchseOrder()"
+            [disabled]="selectedNotes.length === 0 || !contract || !hasValidAmount || !hasValidAmountPrice || !hasValidPricePerNote">
+            {{ "liquidate" | i18n }}
+        </button>
+    </section>
+</section>

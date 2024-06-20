@@ -1,0 +1,16 @@
+<div class="modal-confirm">
+    <p class="modal-confirm-title">{{message}}</p>
+
+    <p>{{'related-block-to-farm' |i18n}}</p>
+
+    <div class="modal-confirm-footer">
+        <button type="button" class="btn btn-default action-footer-btn-cancel float-right" (click)="cancel()">
+            {{ 'cancel' | i18n }}
+        </button>
+        <button type="button" class="btn btn-default action-footer-btn-submit float-right" (click)="confirm()">
+            <span>
+                {{'accept' | i18n}}
+            </span>
+        </button>
+    </div>
+</div>

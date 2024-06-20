@@ -1,0 +1,23 @@
+<mat-accordion multi class="lot-detail__notes-panel">
+    <mat-expansion-panel hideToggle (opened)="onPanelOpened()" (closed)="onPanelOpened()">
+        <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+            <section class="panel__header">
+                <div class="panel__header__notes">
+                    <i class="icon-arrow_right" [ngClass]="{ rotate: panelOpened }"></i>
+                    <h3 class="title-base--black">
+                        {{ "lots-to-merge" | i18n }}
+                    </h3>
+                    <span>{{ lots.length | number: "2.0" }}</span>
+                </div>
+            </section>
+        </mat-expansion-panel-header>
+        <ng-container [ngTemplateOutlet]="detailPanel"> </ng-container>
+    </mat-expansion-panel>
+</mat-accordion>
+<!-- Detail grid template -->
+<ng-template #detailPanel>
+    <app-lot-list-result [lots]="lots" 
+                         [configuration]="configuration" 
+                         [isOnlyView]="true">
+    </app-lot-list-result>
+</ng-template>

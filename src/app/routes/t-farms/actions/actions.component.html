@@ -1,0 +1,20 @@
+<div *blockUI="'farm-action-container'; template: templateBlockModalUiComponent"
+[ngStyle]="{'min-height': !isFisnishRequest ? '450px': ''}">
+
+    <ng-container *ngIf="hasFederatedData; then federateComponent; else formContent">
+
+    </ng-container>
+
+    <ng-template #federateComponent>
+        <app-federate-farm *ngIf="federatedFarms.length > 0" [seller]="seller" (closeEvent)="cancel()"
+            [federatedFarms]="federatedFarms" (emitEvent)="onRefreshData()"
+            (createFarmEventEmiter)="onCreateFarmEvent()">
+        </app-federate-farm>
+    </ng-template>
+    <ng-template #formContent>
+        <app-form-data (closeEvent)="cancel()" (emitEvent)="onRefreshData($event)" [seller]="seller" [isReadonly]="isReadonly"
+            [isEdit]="isEdit" [farm]="farm" (emitReadonlyEvent)="onEditFormEvent()" [allowedBlocks]="allowedBlocks"
+            [isFromModal]="true" [action]="isReadonly ? 2 : action">
+        </app-form-data>
+    </ng-template>
+</div>

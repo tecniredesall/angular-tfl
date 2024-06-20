@@ -1,0 +1,333 @@
+/* Header container styles */
+.actions-driver-container {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  background-color: transparent;
+  --header-line-width: 284px;
+  --header-button-width: 160px;
+}
+
+.actions-driver-header-container {
+  width: 100%;
+  height: auto;
+  text-align: left;
+}
+
+.actions-driver-xs .actions-driver-header-container {
+  margin: 0 0 20px 0;
+}
+
+.actions-driver-lg .actions-driver-header-container {
+  margin: 0 0 32px 0;
+}
+
+/* Header grid styles */
+.actions-driver-header {
+  display: grid;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.actions-driver-xs:not(.actions-driver-hidden-header-button) .actions-driver-header {
+  grid-template-areas:
+    "headerTitle"
+    "headerButton";
+  grid-template-columns: 100%;
+  grid-template-rows: max-content max-content;
+}
+
+.actions-driver-lg:not(.actions-driver-hidden-header-button) .actions-driver-header {
+  grid-template-areas: "headerTitle headerButton";
+  grid-template-columns: calc(100% - var(--header-button-width)) var(
+      --header-button-width
+    );
+  grid-template-rows: max-content;
+}
+
+.actions-driver-xs.actions-driver-hidden-header-button .actions-driver-header,
+.actions-driver-lg.actions-driver-hidden-header-button .actions-driver-header {
+  grid-template-areas: "headerTitle";
+  grid-template-columns: 100%;
+  grid-template-rows: max-content;
+}
+
+/* Header title styles */
+.actions-driver-title {
+  grid-area: headerTitle;
+  height: auto;
+  font-size: 28px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+.actions-driver-xs:not(.actions-driver-from-external) .actions-driver-title {
+  padding: 0;
+  margin-bottom: 22px;
+}
+
+.actions-driver-xs.actions-driver-from-external .actions-driver-title {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.actions-driver-lg:not(.actions-driver-hidden-header-button) .actions-driver-title {
+  padding: 0 16px 0 0;
+}
+
+.actions-driver-lg.actions-driver-hidden-header-button .actions-driver-title {
+  padding: 0;
+}
+
+:not(.dark) :host .actions-driver-title {
+  color: #0068d1;
+}
+
+.dark :host .actions-driver-title {
+  color: white;
+}
+
+/* Header button styles */
+.actions-driver-header-button-container {
+  grid-area: headerButton;
+  height: auto;
+}
+
+.actions-driver-xs .actions-driver-header-button-container {
+  width: 100%;
+}
+
+.actions-driver-lg .actions-driver-header-button-container {
+  width: var(--header-button-width);
+}
+
+.actions-driver-header-dropdown {
+  width: 100%;
+}
+
+.actions-driver-header-button {
+  width: 100%;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: center;
+  color: white;
+}
+
+/* Header line styles */
+.actions-driver-header-line {
+  height: 0;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0;
+}
+
+:not(.dark) :host .actions-driver-header-line {
+  border-color: rgba(146, 162, 182, 0.3);
+}
+
+.dark :host .actions-driver-header-line {
+  border-color: #92a2b6;
+}
+
+.actions-driver-from-external .actions-driver-header-line {
+  margin: 11px 0 0 0;
+}
+
+.actions-driver-xs:not(.actions-driver-from-external)
+  .actions-driver-header-line {
+  margin: 20px 0 0 0;
+}
+
+.actions-driver-lg:not(.actions-driver-from-external)
+  .actions-driver-header-line {
+  margin: 40px 0 0 0;
+}
+
+.ad-full-header-line {
+  width: 100%;
+}
+
+.ad-partial-header-line {
+  width: var(--header-line-width);
+}
+
+/* Body styles */
+.actions-driver-form{
+  margin: 27px auto;
+  max-width: 769px;
+  &__subtitle{
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.33;
+    color: var(--tr-data-grid-color);
+    margin-bottom: 16px;
+  }
+  &__company{
+    margin-top: 16px;
+    .mat-divider{
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.actions-driver-item {
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.multiple-actions-driver-item {
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+:not(.dark) :host .multiple-actions-driver-item {
+  border: solid 1px #e1e7f5;
+  box-shadow: 0 2px 4px 0 #e0e8f6;
+}
+
+.dark :host .multiple-actions-driver-item {
+  border: solid 1px rgba(24, 32, 48, 0.5);
+  box-shadow: 0 2px 15px 0 rgba(24, 32, 48, 0.5);
+}
+
+.action-driver-btn-remove-item {
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: center;
+
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 5px;
+  height: 40px !important;
+  width: 100%;
+  background-color: transparent !important;
+  width: auto;
+  color: #d63649 !important;
+  padding-left: 0 !important;
+}
+
+.action-driver-btn-remove-item img {
+  padding-bottom: 5px;
+}
+
+.actions-driver-btn-add-item {
+  font-size: 14px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-align: center;
+
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 50px;
+  height: 29px;
+  width: auto;
+}
+
+:not(.dark) :host .actions-driver-btn-add-item {
+  color: #0068d1 !important;
+  background-color: transparent !important;
+}
+
+.dark :host .actions-driver-btn-add-item {
+  color: #00aaff !important;
+  background-color: #20293c !important;
+}
+
+.actions-driver-input-container.ad-ic-odd{
+  padding: 0 15px 16px 0;
+}
+
+.actions-driver-input-container.ad-ic-even{
+  padding: 0 0 16px 15px;
+}
+
+:not(.dark) :host .actions-driver-input-container {
+  color: #333333;
+}
+
+.dark :host .actions-driver-input-container {
+  color: white;
+}
+
+.actions-driver-label-input {
+  height: 16px;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: normal;
+  width: 100%;
+}
+
+:not(.dark) :host .actions-driver-label-input {
+  color: #333333;
+}
+
+.dark :host .actions-driver-label-input {
+  color: white;
+}
+
+.driver-fullname-duplicate-container{
+  padding: 0 0 16px 0;
+  text-align: left;
+}
+
+:host input{
+  width: 100%;
+  outline: none;
+}
+
+:host input:focus{
+  outline: none;
+}
+
+.error-msg-form label{
+  margin-right: 8px;
+}
+
+.ng-select.custom-ng-select ::ng-deep .ng-select-container {
+  min-height: 32px;
+  border: 1px solid var(--tr-ng-select-border-color);
+  outline: none;
+  box-shadow: none;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.ng-select.custom-ng-select.ng-select-single ::ng-deep .ng-select-container {
+  height: 32px;
+}
+
+app-action-footer{
+  margin-top: 24px;
+}
+
+
+@media (max-width: 767px) {
+  .actions-driver-input-container:nth-child(odd),
+  .actions-driver-input-container:nth-child(even) {
+    padding: 0 0 16px 0;
+  }
+}

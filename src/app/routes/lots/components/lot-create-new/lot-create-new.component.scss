@@ -1,0 +1,165 @@
+@import "src/scss/breakpoints.scss";
+
+:not(.dark) :host {
+    --card-box-shadow-color: #e0e8f6;
+    --card-border-color: #e1e7f5;
+    --tr-footer-actions-backgroud-color: #ffffff;
+}
+.dark :host {
+    --card-box-shadow-color: #1f1709;
+    --card-border-color: #20293c;
+    --tr-footer-actions-backgroud-color: #182030;
+}
+.panel {
+    padding: 10px;
+    display: grid;
+    grid-template-rows: 55px;
+    row-gap: 10px;
+    .total-label {
+        font-weight: 600;
+        width: auto;
+    }
+    .total-quantity-card {
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px 0 var(--card-box-shadow-color);
+        border: solid 2px var(--card-border-color);
+        height: 100%;
+        cursor: pointer;
+        background-color: var(--tr-foreground-color);
+        display: inline-grid;
+        grid-template-columns: 50% 50%;
+        margin-bottom: 10px;
+        width: 100%;
+        .quantity-label {
+            width: auto;
+            font-weight: bold;
+            color: var(--tr-base-color-blue);
+            text-align: end;
+        }
+    }
+    .transformation-column {
+        &__icon {
+            i {
+                color: var(--tr-panel-header-toggle-icon-color);
+                font-size: 26px;
+                margin-right: 10px;
+            }
+        }
+    }
+    .flow-description {
+        display: inline-grid;
+        .label-flow-subtitle {
+            color: var(--base-black-2);
+        }
+    }
+    .prod-type-bt {
+        width: max-content;
+        padding: 7px 15px;
+        border-radius: 5px;
+        height: 35px;
+        color: var(--tr-foreground-color);
+        min-width: 135px;
+        text-align: center;
+    }
+    .microlot-color {
+        background-color: var(--base-purple);
+    }
+    .icon-container {
+        min-width: 35px;
+        min-height: 35px;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 8px;
+        color: var(--tr-foreground-color);
+        background: var(--tr-panel-header-toggle-icon-color);
+        font-weight: bold;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
+
+    .w-label {
+        width: 50%;
+    }
+
+    .msg-lote-msg {
+        color: var(--tr-labe-columns-list-color);
+        display: inline-flex;
+        p {
+            margin-bottom: 0;
+            padding-left: 10px;
+        }
+    }
+    .column-notes {
+        grid-row: 5;
+        grid-column: 1;
+    }
+}
+/* Responsive*/
+/* tablet */
+@media (min-width: $screen-sm-min) {
+    .panel {
+        grid-template-rows: 55px;
+        row-gap: 25px;
+        grid-template-columns: 1fr 1fr;
+        padding: 25px;
+        .column-description {
+            grid-row: 1;
+            grid-column: 1/1;
+        }
+        .total-quantity-card-column {
+            grid-row: 1;
+            grid-column: 2/3;
+        }
+        .transformation-column {
+            grid-row: 2;
+            grid-column: 1;
+            span:first-child {
+                margin-top: 20px;
+            }
+            span:nth-child(2) {
+                margin-bottom: 25px;
+            }
+        }
+        .icons-column {
+            grid-row: 2;
+            grid-column: 2/3;
+        }
+        .msg-lote-msg {
+            grid-row: 4;
+            grid-column: 1;
+        }
+        .column-warehouse {
+            grid-row: 5;
+            grid-column: 1;
+        }
+        .column-notes {
+            grid-row: 3;
+            grid-column: 1/3;
+        }
+    }
+}
+
+@media (min-width: 1024px) {
+    .panel {
+        .w-label {
+            width: 15%;
+        }
+        .total-quantity-card-column {
+            display: grid;
+            grid-template-columns: 30% 70%;
+            .total-quantity-card {
+                grid-column-start: 2;
+            }
+        }
+        .icons-column {
+            text-align: right;
+            font-weight: 600;
+        }
+        .column-notes {
+            grid-row: 3;
+        }
+    }
+}

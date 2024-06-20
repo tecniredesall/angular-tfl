@@ -1,0 +1,58 @@
+<div class="kanban__transition__sort-machine">
+    <div class="kanban__transition__sort-machine__header">
+        <div class="kanban__transition__sort-machine__header__flex">
+            <p>{{'sort-machine-title' | i18n}}</p>
+            <p class="kanban__transition__sort-machine__alert" *ngIf="machineSort">
+                <i class="icon-alert_icon"></i>
+                {{'sort-machine-info-message' | i18n}}
+            </p>
+        </div>
+        <button (click)="openModalSortMachine()" [disabled]="isEdit">
+            {{'sort-machine-capture-message' | i18n}}
+        </button>
+    </div>
+
+    <div *ngIf="machineSort; else emptyMachineSort" class="kanban__transition__sort-machine__content">
+        <div class="kanban__transition__sort-machine__content__column">
+            <div class="kanban__transition__sort-machine__content__column__text">
+                <p class="kanban__transition__sort-machine__content__column__text--bold">{{'sort-machine-product-in' |i18n}}:</p>
+                <p class="kanban__transition__sort-machine__content__column__text--bold">{{'sort-machine-product-out' |i18n}}:</p>
+                <p class="kanban__transition__sort-machine__content__column__text--bold">{{'sort-machine-speed-production' |i18n}}:</p>
+            </div>
+            <div class="kanban__transition__sort-machine__content__column__text">
+                <p>
+                    {{machineSort.total | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} {{configuration.measurementUnitAbbreviation}}
+                    <span class="kanban__transition__sort-machine__content__column__text--bold">- 100 %</span>
+                </p>
+                <p>
+                    {{machineSort.bad | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} {{configuration.measurementUnitAbbreviation}}
+                    <span class="kanban__transition__sort-machine__content__column__text--bold">
+                        - {{machineSort.exitRatio | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} %
+                    </span>
+                </p>
+                <p>
+                    {{machineSort.speed | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} t/h
+                </p>
+            </div>
+        </div>
+        <div class="kanban__transition__sort-machine__content__column">
+            <div class="kanban__transition__sort-machine__content__column__text">
+                <p class="kanban__transition__sort-machine__content__column__text--bold">{{'sort-machine-impurity-ratio' |i18n}}:</p>
+                <p class="kanban__transition__sort-machine__content__column__text--bold">{{'sort-machine-defective-ratio' |i18n}}:</p>
+            </div>
+            <div class="kanban__transition__sort-machine__content__column__text">
+                <p>
+                    {{machineSort.impurityRatio | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} %
+                </p>
+                <p>
+                    {{machineSort.defectiveRatio | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"}} %
+                </p>
+            </div>
+        </div>
+    </div>
+    <ng-template #emptyMachineSort>
+        <div class="kanban__transition__sort-machine__empty">
+            <p> {{'sort-machine-dialog-capture' | i18n}} <span> “{{'sort-machine-capture-message' | i18n}}” </span> </p>
+        </div>
+    </ng-template>
+</div>

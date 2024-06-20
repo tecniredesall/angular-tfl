@@ -1,0 +1,124 @@
+<div class="subtank__card bg-theme" (resized)="onResizedCard($event)" [ngClass]="cardResponsiveClass">
+  <div class="subtank__card__title">
+    <i class="icon-almacen-blue"></i>
+    <span [matTooltip]="subtank.name">
+      {{ (subtank.name | titlecase) | ellipsis: 20 }}
+    </span>
+    <div class="subtank__card__title__actions" *permission="{tag: PERMISSIONS.WAREHOUSE, type: PERMISSION_TYPES.UPDATE}">
+      <i class="icon-options-vertical" [matMenuTriggerFor]="actionsMenu"></i>
+      <mat-menu #actionsMenu="matMenu">
+        <button mat-menu-item (click)="editSubTank(subtank)"
+          *permission="{tag: PERMISSIONS.WAREHOUSE, type: PERMISSION_TYPES.UPDATE}">
+          {{'edit' | i18n}}
+        </button>
+        <button mat-menu-item (click)="deleteElement(subtank)"
+          *permission="{tag: PERMISSIONS.WAREHOUSE, type: PERMISSION_TYPES.DELETE}">
+          {{'delete' | i18n}}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="subtank__card__container">
+    <div class="subtank__card__container__circle">
+      <div class="progress-circle" [ngClass]="{'over50': subtank.percentageStock > 49}" #progressBar >
+        <div class="text-container" ><span >
+          <span class="circle-title">
+            {{subtank.percentageStock | number:'1.0-2':'en'}} %
+          </span>
+          <br>
+          <div class="text-desc">
+            <span class="text-dot__width" [style.backgroundColor]="colorLevel"></span>
+            {{ 'level' | i18n }}
+          </div>
+          <div class="text-desc">
+            {{ 'in-use' | i18n }}
+          </div>
+          </span>
+        </div>
+        <mat-progress-spinner
+            class="example-margin"
+            [ngClass]="progressBarClass"
+            mode="determinate"
+            [value]="subtank.percentageStock">
+        </mat-progress-spinner>
+      </div>
+    </div>
+    <div class="subtank__card__container__info">
+      <div class="subtank__card__container__info__top">
+        <div class="subtank__card__container__info__row">
+          <span class="subtank__card__container__info__row__label"> {{'type' | i18n }} </span>
+          <span class="subtank__card__container__info__row__name"> {{subtank.transformationTypeName}} </span>
+        </div>
+        <div class="subtank__card__container__info__row">
+          <span class="subtank__card__container__info__row__label"> {{'unit' | i18n }} </span>
+          <mat-select class="subtank__card__container__info__row__name"
+            [value]="measurementUnitSelected"
+            (selectionChange)="onChangeUnit($event)">
+            <mat-option [value]="configuration.conversionMeasurementUnitAbbreviation">{{configuration.conversionMeasurementUnitAbbreviation}}</mat-option>
+            <mat-option [value]="configuration.measurementUnitAbbreviation">{{configuration.measurementUnitAbbreviation}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <div class="subtank__card__container__info__bottom">
+        <span class="subtank__card__container__info__title">{{'capacity' | i18n }}</span>
+        <div class="subtank__card__container__info__row">
+          <span class="subtank__card__container__info__row__dot--red"></span>
+          <span class="subtank__card__container__info__row__label">{{'warehouse-capacity-used' | i18n}}:</span>
+          <span class="subtank__card__container__info__row__name">
+            {{
+              (measurementUnitSelected == configuration.measurementUnitAbbreviation ?
+                subtank.amount : subtank.amountQQ)
+              | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"
+            }}
+          </span>
+        </div>
+        <div class="subtank__card__container__info__row">
+          <span class="subtank__card__container__info__row__dot--green"></span>
+          <span class="subtank__card__container__info__row__label">{{'warehouse-capacity-remainder' | i18n}}:</span>
+          <span class="subtank__card__container__info__row__name">
+            {{ (measurementUnitSelected == configuration.measurementUnitAbbreviation ?
+              (subtank.capacity - subtank.amount) :
+              (subtank.capacityQQ - subtank.amountQQ))
+              | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"
+            }}
+          </span>
+        </div>
+        <div class="subtank__card__container__info__row">
+          <span class="subtank__card__container__info__row__dot--blue"></span>
+          <span class="subtank__card__container__info__row__label">{{'total' | i18n}}:</span>
+          <span class="subtank__card__container__info__row__name">
+            {{
+              (measurementUnitSelected == configuration.measurementUnitAbbreviation ?
+                subtank.capacity :
+                subtank.capacityQQ)
+              | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"
+            }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="subtank__card__container__info--small">
+      <div class="subtank__card__container__info__top">
+        <span class="subtank__card__container__info__row__label"> {{'type' | i18n }} </span>
+        <span class="subtank__card__container__info__row__name"> {{subtank.transformationTypeName}} </span>
+      </div>
+      <div class="subtank__card__container__info__bottom">
+        <span class="subtank__card__container__info__row__label"> {{'capacity' | i18n }} </span>
+        <span class="subtank__card__container__info__row__name">
+          {{
+            (measurementUnitSelected == configuration.measurementUnitAbbreviation ?
+              subtank.capacity :
+              subtank.capacityQQ)
+            | number : "2." + DECIMAL_PLACES + "-" + DECIMAL_PLACES : "en"
+          }}
+        </span>
+        <mat-select class="subtank__card__container__info__row__name"
+          [value]="measurementUnitSelected"
+          (selectionChange)="onChangeUnit($event)">
+          <mat-option [value]="configuration.conversionMeasurementUnitAbbreviation">{{configuration.conversionMeasurementUnitAbbreviation}}</mat-option>
+          <mat-option [value]="configuration.measurementUnitAbbreviation">{{configuration.measurementUnitAbbreviation}}</mat-option>
+        </mat-select>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div *ngIf="searchValue.length === 0" class="si-icon">
+  <img [src]="'assets/img/svg/'+(isDarkTheme ? 'search-dark' : 'search')+'.svg'" alt="">
+</div>
+
+<div class="si-input" [ngClass]="{'si-input-with-text': searchValue.length > 0}">
+  <ng-content></ng-content>
+</div>
+
+<div *ngIf="searchValue.length > 0" class="search-input-erase-icon" (click)="clearData()">
+  <img [src]="'assets/img/svg/'+(isDarkTheme ? 'erase-dark' : 'erase')+'.svg'" alt="" />
+</div>

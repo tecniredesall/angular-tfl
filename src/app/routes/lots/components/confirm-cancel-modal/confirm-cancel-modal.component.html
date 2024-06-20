@@ -1,0 +1,14 @@
+<div class="dialog-container">
+  <div class="dialog-msg">{{'lots-msg-dialog' | i18n}}</div>
+  <div class="dialog-confirm">{{'lot-confirm-dialog' | i18n}}</div>
+<mat-dialog-actions align="center" class="space-around">
+  <div class="action-footer-container-button">
+    <button class="btn  btn-theme no-border" mat-dialog-close>
+      {{'cancel' | i18n}}
+    </button>
+    <button class="btn  btn-default action-footer-btn-submit" mat-dialog-close (click)="onEventCancelCreation()">
+      {{'accept' | i18n}}
+    </button>
+  </div>
+</mat-dialog-actions>
+</div>

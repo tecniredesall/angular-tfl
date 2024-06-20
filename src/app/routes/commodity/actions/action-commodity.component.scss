@@ -1,0 +1,243 @@
+.action-commodity-container {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 40px;
+
+    .action-commodity__header {
+        display: block;
+        width: 100%;
+        height: auto;
+        text-align: left;
+        padding: 0 0 40px 0;
+        border-bottom: 1px solid rgba(146, 162, 182, 0.3);
+
+        .action-commodity__header-title {
+            font-size: 28px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+        }
+    }
+
+    .action-commodity__body {
+        padding: 56px 0 24px 0;
+
+        .action-commodity__label-input {
+            height: 16px;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.14;
+            letter-spacing: normal;
+            width: 100%;
+        }
+
+        .action-commodity__content{
+            display: flex;
+            flex-direction: row;
+            &__label{
+                height: 16px;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.14;
+                letter-spacing: normal;
+            }
+        }
+
+        .action-commodity__input-container {
+            padding-bottom: 16px;
+        }
+
+        :host{
+            ::ng-deep .ng-select.custom-ng-select.ng-select-single
+            .ng-select-container {
+                height: 32px;
+            }
+
+            ::ng-deep .ng-select.custom-ng-select  .ng-select-container {
+                    min-height: 32px;
+                    border: 1px solid #e1e7f5;
+                    outline: none;
+                    box-shadow: none;
+                    -moz-border-radius: 5px;
+                    -webkit-border-radius: 5px;
+                    border-radius: 5px;
+                }
+        }
+
+        .ng-select.custom-ng-select.ng-invalid.ng-dirty {
+            border-radius: 5px;
+            border: 1px solid #df0000;
+            box-shadow: 0 1px 5px rgba(255, 0, 0, 0.2);
+        }
+
+        .ng-select.custom-ng-select.ng-invalid.ng-dirty:focus {
+            border-radius: 5px;
+            border: 1px solid #df0000;
+            box-shadow: 0 1px 5px rgba(255, 0, 0, 0.2);
+        }
+
+        .action-commodity__variety-title {
+            padding: 16px 0 22px 0;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+        }
+
+        .action-commodity__variety-container {
+            padding-bottom: 16px;
+            display: grid;
+            grid-template-areas:
+                "value delete"
+                "error empty";
+            grid-template-columns: auto max-content;
+            grid-template-rows: auto auto;
+        }
+
+        .action-commodity__control-variety-delete {
+            grid-area: delete;
+            width: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &.action-commodity__control-variety-delete--visible {
+                width: 40px;
+                padding-left: 15px;
+            }
+
+            & img {
+                width: 25px;
+                height: 25px;
+            }
+
+            .action-commodity__spin-icon {
+                font-size: 20px;
+            }
+        }
+
+        .action-commodity__control-variety {
+            grid-area: value;
+        }
+
+        .action-commodity__control-variety:disabled {
+            cursor: not-allowed;
+        }
+
+        .action-commodity__control-variety-error {
+            grid-area: error;
+        }
+    }
+
+    .action-commodity__add-variety-button {
+        height: 30px !important;
+    }
+
+    .action-commodity__footer{
+        padding: 0 15px;
+        width: 100%;
+    }
+
+    @media (max-width: 539px) {
+        .action-commodity__body {
+            padding-top: 28px;
+        }
+    }
+}
+
+:host {
+    & .action-commodity-container {
+        background-color: var(--tr-foreground-color);
+    }
+
+    & .action-commodity__control,
+    & .action-commodity__label-input {
+        color: var(--tr-panel-body-color);
+    }
+
+    & .action-commodity__header-title,
+    & .action-commodity__variety-title {
+        color: var(--tr-primary-color);
+    }
+
+    & .action-commodity__add-variety-button {
+        padding-left: 0;
+    }
+
+    & .action-commodity__control-variety:disabled {
+        background-color: var(--tr-background-input-disabled);
+    }
+}
+
+
+.tr-tooltip-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    flex-direction: column;
+
+}
+
+.note-information {
+    width: 16px;
+    height: 16px;
+    background-color: var(--tr-base-color-blue);
+    color: var(--tr-foreground-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+
+.label-form-title{
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.33;
+    color: var(--tr-data-grid-color);
+    margin-top: 16px;
+}
+
+:host{
+    ::ng-deep .tooltip.bottom .tooltip-arrow{
+        border-bottom-color:  var( --tr-foreground-color) !important;
+    }
+
+    ::ng-deep .tooltip.bottom .tooltip-inner{
+        background-color:   var( --tr-foreground-color)  !important;
+        padding: 13px 9px 13px 14px;
+        border-radius: 7px;
+        box-shadow: 1px -2px 7px 0 rgba(0, 0, 0, 0.1);
+        border: solid 1px var(--tr-title-detail-order-backgroud-color);
+        max-width: 235px;
+    }
+
+    ::ng-deep .tooltip.bottom .tr-tooltip-content{
+        label{
+            color : var(--tr-weights-section-label-fold-color);
+            text-align: left;
+        }
+        .label-title{
+            font-weight: 600;
+        }
+        .label-legend{
+            font-weight: normal;
+        }
+    }
+}

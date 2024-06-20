@@ -1,0 +1,5 @@
+{
+    "btnAddNew":".main-header__new-container > .btn",
+    "identity":"identity"
+    ,"btnNext":".blue-btn"
+}

@@ -1,0 +1,191 @@
+<div class="t-container-view scroll-view-app" *blockUI="'container-seals-create'; template: blockTemplate">
+
+  <div [hidden]="isLoading" class="seals-create-wrapper">
+
+    <div class="seals-principal-panel">
+
+      <div class="panel">
+
+        <h1 class="title">
+          {{ title | i18n }}
+        </h1>
+
+        <hr class="create-seal-header-line">
+
+        <form #formSeal="ngForm" novalidate>
+
+          <div class="row-name-image">
+
+            <div class="create-seal-container-name col-md-6 col-sm-6 col-xs-12">
+
+              <p class="create-label">
+                {{ 'name' | i18n }}*
+              </p>
+
+              <input type="text" class="w-100 create-input" name="name" [(ngModel)]="seal.name" [placeholder]="'seal-name-input' | i18n" [maxlength]="250" [pattern]="ALPHANUMERIC_REGEXP" #name="ngModel" autocomplete="off" required />
+
+              <label *ngIf="name.dirty || isEditting" class="error-msg-form">
+                <label *ngIf="name.hasError('required')">
+                  {{'is-required-msg' | i18n}}
+                </label>
+                <label *ngIf="name.hasError('pattern')">
+                  {{'alphanumeric-pattern' | i18n}}
+                </label>
+              </label>
+
+            </div>
+
+            <div class="create-seal-container-image col-md-6 col-sm-6 col-xs-12">
+
+              <p class="create-label">
+                {{ 'seal-image' | i18n }}*
+              </p>
+
+              <div class="dropzone" dragNDrop (fileDropped)="onFileDropped($event)">
+
+                <input type="file" accept="image/jpg, image/jpeg, image/png" id="fileDropRef" (change)="processFile($event.target)" />
+
+                <span
+                  [ngClass]="{'dropzone-grid': seal.image.src === null, 'selectedImage-dropzone-grid': seal.image.src !== null}">
+
+                  <div class="grid-image-zone" *ngIf="seal.image.src === null">
+                    <img [src]="isDarkTheme ? 'assets/img/svg/multimedia-dark.svg' : 'assets/img/svg/multimedia.svg'"
+                      height="28px" />
+                  </div>
+
+                  <p *ngIf="seal.image.src === null" class="jpg-png-title grid-png-zone">
+                    .JPG .PNG
+                  </p>
+
+                  <p *ngIf="seal.image.src === null" class="drag-drop-paragraph drag-zone">
+                    {{ 'drag-drop' | i18n }}
+                  </p>
+
+                  <div *ngIf="seal.image.src !== null">
+
+                    <div class="grid-image-zone">
+
+                      <div class="preview-img" [ngStyle]="{'background-image': 'url('+ seal.image.src + ')'}">
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <div class="drop-label">
+                    <label for="fileDropRef"> {{ imageLabel | i18n }} </label>
+                  </div>
+
+                </span>
+
+              </div>
+
+              <p class="size-label">
+                {{ 'max-size-label' | i18n }}
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="row-related-farms-info">
+
+            <div class="container-number-related-farms col-sm-6 col-xs-12">
+
+              <p class="fields-label">
+
+                {{ 'related-farms' | i18n}}
+
+                <span class="seal-create-counter">
+                  <span *ngIf="0 == seal.number_related_farms">00</span>
+                  <span *ngIf="seal.number_related_farms > 0">{{seal.number_related_farms}}</span>
+                </span>
+
+              </p>
+
+            </div>
+
+            <div class="container-btn-relate-farm col-sm-6  col-xs-12 text-right">
+              <button type="button" [disabled]="isRemovingFarm" class="relate-fields-btn btn-theme" (click)="openModal()">
+                {{ 'relate-farm' | i18n }}
+              </button>
+            </div>
+
+          </div>
+
+          <div class="relation-label" *ngIf="0 === seal.related_sellers.length && 0 == seal.number_related_farms">
+            {{ 'related-farms-instruction' | i18n }}
+          </div>
+
+          <div *ngIf="seal.related_sellers.length>0" class="row-related-sellers">
+
+            <div class="container-related-sellers col-xs-12">
+
+              <p>
+                {{ 'producer' | i18n | titlecase }}
+              </p>
+
+              <div class="sellers-container scroll-view-app">
+
+                <div *ngFor="let s of seal.related_sellers">
+
+                  <div *ngIf="s.farms.length>0" class="sellers-grid" (click)="showFarms(s)">
+
+                    <p class="container-name-farm-related modal-default-paragraph pointer">
+                      {{s.name}}
+                    </p>
+
+                    <p class="container-icon-condensed modal-default-paragraph pointer">
+                      <span>
+                        <mat-icon [ngStyle]="{'color': '#00a4fa'}" [@rotate]="s.isShowing ? 'rotated' : 'idle'">
+                          chevron_right
+                        </mat-icon>
+                      </span>
+                    </p>
+
+                  </div>
+
+                  <span *ngIf="s.isShowing">
+
+                    <div *ngFor="let f of s.farms">
+
+                      <div class="fincas-grid">
+
+                        <p class="create-default-farm">
+                          <img src="assets/img/svg/silo.svg" width="20px" height="20px" />
+                          {{f.name}}
+                        </p>
+
+                        <div *ngIf="f.isRemoving" class="remove-finca-container">
+                          <span class="fa fa-circle-o-notch fa-spin"></span>
+                        </div>
+
+                        <div *ngIf="!f.isRemoving" class="remove-finca-container pointer" (click)="submitRemoveFarm(s, f)">
+                          <img src="assets/img/svg/remove.svg" width="20px" height="20px" />
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <app-action-footer [isEdit]="isEditting" [isButtonSubmitDisabled]="formSeal.invalid || !seal.image.src || isRemovingFarm || isDisableActionButtons || (isEditting && sealNameReference == seal.name && !imageWasModified)" [isVisibleDeleteButton]="false" [isButtonCancelDisabled]="isRemovingFarm || isDisableActionButtons" (onActionSelected)="onActionFooterSelected($event)"></app-action-footer>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

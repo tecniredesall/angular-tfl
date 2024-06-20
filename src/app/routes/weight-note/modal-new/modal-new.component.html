@@ -1,0 +1,66 @@
+<div
+    [ngSwitch]="data.element"
+    class="modal-new"
+    *blockUI="
+        'action-driver-container';
+        template: templateBlockModalUiComponent
+    "
+>
+    <div *ngSwitchCase="OPTIONS_MODAL.PRODUCER">
+        <app-producer-edit
+            [externalUse]="true"
+            (producerEvent)="onActionProducerSelected($event)"
+        ></app-producer-edit>
+    </div>
+    <div *ngSwitchCase="OPTIONS_MODAL.FARM">
+        <div class="modal-new-title">
+            <span class="font-blue">{{ "t-farms-new" | i18n }}</span>
+            <hr />
+        </div>
+        <tfarms-actions
+            (closeEvent)="onCancelEvent()"
+            (emitEvent)="onEmitEvent($event)"
+            [seller]="data.producerId"
+            [isEdit]="false"
+            [isFromModal]="true"
+            [isMultiple]="false"
+            [allowedBlocks]="data.blocks"
+        >
+        </tfarms-actions>
+    </div>
+    <div *ngSwitchCase="OPTIONS_MODAL.BLOCK">
+        <div class="modal-new-title">
+            <span class="font-blue">{{ "t-new-block" | i18n }}</span>
+            <hr />
+        </div>
+        <app-actions-block
+            [data]="dataBlocks"
+            [isMultiple]="false"
+            [isFromWeightNote]="true"
+            (eventCancel)="onCancelEvent()"
+            (eventRefresh)="onEmitEvent($event)"
+        >
+        </app-actions-block>
+    </div>
+    <div *ngSwitchCase="OPTIONS_MODAL.DRIVER">
+        <app-actions-driver
+            [data]="actionDriver"
+            (eventActionSelected)="onActionDriverSelected($event)"
+        >
+        </app-actions-driver>
+    </div>
+    <div *ngSwitchCase="OPTIONS_MODAL.TRUCK">
+        <div class="modal-new-title">
+            <span class="font-blue">{{ "new-vehicle" | i18n }}</span>
+            <hr />
+        </div>
+        <app-action-trucks
+            [isEdit]="false"
+            [isFromExternalModule]="true"
+            (closeModal)="onCancelEvent()"
+            (eventRefresh)="onEmitEvent($event)"
+        >
+        </app-action-trucks>
+    </div>
+    <div *ngSwitchDefault></div>
+</div>

@@ -1,0 +1,14 @@
+.modal-delete-driver-container {
+  max-width: 554px;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-delete-driver-icon {
+  width: 50px;
+}
+
+.dark :host .modal-delete-driver-confirmation {
+  color: white;
+}

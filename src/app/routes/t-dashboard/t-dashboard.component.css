@@ -1,0 +1,23 @@
+.notfoud-content div img {
+  margin-bottom: 0em;
+  max-width: 100%;
+}
+
+.not-found-msg-t span {
+  width: 265px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #9d9fac;
+}
+
+@media (max-width: 425px) {
+  .notfoud-content div img {
+    width: inherit;
+  }
+}

@@ -1,0 +1,108 @@
+<div class="company__dialog" *blockUI="'company-dialog'; template: templateBlockModalUiComponent">
+    <p class="company__dialog__header">{{'new-company' | i18n}}</p>
+    <mat-divider></mat-divider>
+    <form class="company__dialog__form" [formGroup]="companyForm">
+        <!-- NAME -->
+        <div class="company__dialog__form__container">
+            <div class="company__dialog__form__input">
+                <label>{{'name' | i18n}} *</label>
+                <input
+                    type="text"
+                    formControlName="name"
+                    [value]="companyForm.get('name').value | titlecase"
+                    placeholder="{{'company-name-placeholder' | i18n}}">
+                <span *ngIf="companyForm.get('name').dirty">
+                    <span *ngIf="companyForm.get('name').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('name').hasError('pattern')">
+                        {{ "alphabet-pattern-error" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('name').hasError('maxlength')">
+                        {{
+                            "max-length-value-error" | i18n | stringReplace : "[value]" :
+                            CONSTANTS.MAX_LENGTH_PRODUCER_NAME
+                        }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <p class="company__dialog__subheader">
+            {{"company-legal-representative-information" | i18n}}
+        </p>
+        <!-- IDENTITY & LEGAL NAME -->
+        <div class="company__dialog__form__container">
+            <div class="company__dialog__form__input">
+                <label>{{'producer-identity' | i18n}} *</label>
+                <input
+                    type="text"
+                    formControlName="legalIdentity"
+                    [textMask]="{
+                        mask: IDENTITY_MASK,
+                        guide: false
+                    }"
+                    placeholder="{{'company-identity-placeholder' | i18n}}">
+                <span *ngIf="companyForm.get('legalIdentity').dirty">
+                    <span *ngIf="companyForm.get('legalIdentity').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('legalIdentity').hasError('minlength')">
+                        {{ "min-length-value-error" | i18n | stringReplace : "[value]" :
+                            CONSTANTS.MIN_LENGTH_PRODUCER_IDENTITY
+                        }}
+                    </span>
+                </span>
+            </div>
+            <div class="company__dialog__form__input">
+                <label>{{'name' | i18n}} *</label>
+                <input
+                    type="text"
+                    [value]="companyForm.get('legalName').value | titlecase"
+                    formControlName="legalName"
+                    placeholder="{{'company-legal-name-placeholder' | i18n}}">
+                <span *ngIf="companyForm.get('legalName').dirty">
+                    <span *ngIf="companyForm.get('legalName').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('legalName').hasError('pattern')">
+                        {{ "alphabet-pattern-error" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('legalName').hasError('maxlength')">
+                        {{
+                            "max-length-value-error" | i18n | stringReplace : "[value]" :
+                            CONSTANTS.MAX_LENGTH_PRODUCER_NAME
+                        }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="company__dialog__form__container">
+            <div class="company__dialog__form__input">
+                <label>{{'last-names' | i18n}} *</label>
+                <input
+                    type="text"
+                    [value]="companyForm.get('legalLastname').value | titlecase"
+                    formControlName="legalLastname"
+                    placeholder="{{'company-legal-lastname-placeholder' | i18n}}">
+                <span *ngIf="companyForm.get('legalLastname').dirty">
+                    <span *ngIf="companyForm.get('legalLastname').hasError('required')">
+                        {{ "is-required-msg" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('legalLastname').hasError('pattern')">
+                        {{ "alphabet-pattern-error" | i18n }}
+                    </span>
+                    <span *ngIf="companyForm.get('legalLastname').hasError('maxlength')">
+                        {{
+                            "max-length-value-error" | i18n | stringReplace : "[value]" :
+                            CONSTANTS.MAX_LENGTH_PRODUCER_NAME
+                        }}
+                    </span>
+                </span>
+            </div>
+        </div>
+    </form>
+    <app-action-footer
+        [isButtonSubmitDisabled]="companyForm.invalid"
+        (onActionSelected)="onActionFooter($event)"
+    ></app-action-footer>
+</div>

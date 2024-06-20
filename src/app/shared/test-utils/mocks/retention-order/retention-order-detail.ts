@@ -1,0 +1,70 @@
+export const Responser0rderDetail ={
+    "status": 200,
+    "message": "Retention found successfully",
+    "data": {
+        "id": "5a8a5ce6-0d9c-49d4-9d14-b99d1716f8f7",
+        "folio": "OR00018",
+        "seller_id": 2,
+        "cv_ihcafe": "lugar",
+        "note": "nueva nota de retención 25 marzo",
+        "total": "5410.0000",
+        "total_net": "54.1000",
+        "total_gold": "43.2800",
+        "status": 1,
+        "created_by": 1,
+        "updated_by": null,
+        "deleted_at": null,
+        "deleted_by": null,
+        "retention_date": "2023-03-25 06:00:00",
+        "created_at": "2023-03-26 19:11:12",
+        "updated_at": "2023-03-26 19:11:12",
+        "cancellation_reason": null,
+        "seller_name": "Abel Canto ",
+        "created_by_name": "Administrator admin",
+        "total_gold_out": 0.43,
+        "total_net_out": 0.54,
+        "weight_notes": [
+            {
+                "id": "f71088de-bcfe-11ed-babb-5254008fb210",
+                "folio": "000176",
+                "created_by": "Administrator admin",
+                "seller_name": "Abel Canto",
+                "purchase_order_folio": "000043",
+                "payment_status": 2,
+                "net_weight_out": 0.54,
+                "gold_weight_out": 0.43,
+                "net_weight": 54.1,
+                "gold_weight": 43.28,
+                "price": 100,
+                "transformation_type": "Húmedo",
+                "is_gold": false,
+                "sacks": 1,
+                "created_at": "2023-03-07 15:44:38",
+                "retention_order_id": "5a8a5ce6-0d9c-49d4-9d14-b99d1716f8f7",
+                "selected": true
+            }
+        ],
+        "seller": {
+            "id": 2,
+            "name": "Abel",
+            "paternal_last": "Canto",
+            "maternal_last": null,
+            "ihcafe_carnet": "IHCAFE",
+            "tax_identifier": null,
+            "address": "Rió Colón #340"
+        },
+        "creator": {
+            "id": 1,
+            "name": "Administrator",
+            "lastname": "admin",
+            "status_label": null,
+            "status": null
+        },
+        "weight_notes_count": 1,
+        "currency_symbol": "L.",
+        "currency_code": "HNL",
+        "currency_name": "Lempira",
+        "total_amount": 54.1,
+        "total_amount_text": "Fifty-four (1/100)"
+    }
+}

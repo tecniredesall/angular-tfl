@@ -1,0 +1,15 @@
+.modal-delete-commodity-type-container {
+    max-width: 554px;
+    height: auto;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .modal-delete-commodity-type-icon {
+    width: 50px;
+  }
+  
+  .dark :host .modal-delete-commodity-type-confirmation {
+    color: white;
+  }
+  

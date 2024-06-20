@@ -1,0 +1,122 @@
+<!-- Content of the page-->
+<div class="production-flows" *blockUI="'production-flows'; template: templateBlockModalUiComponent">
+    <div class="production-flows__new"   *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.CREATE}">
+        <button (click)="createProductionFlow()">{{'new' | i18n}}</button>
+    </div>
+
+    <div class="production-flows__container">
+        <div class="production-flows__container__commodities scroll-view-app">
+            <p class="production-flows__container__subtitle"> {{ 'commodity' | i18n | uppercase }} </p>
+            <div class="production-flows__container__commodities__items" *ngFor="let commodity of commodities">
+                <mat-card class="production-flows__container__commodities__item"
+                    [ngClass]="{'production-flows__container__commodities__item--active': selectedCommodity == commodity}"
+                    (click)="selectCommodity(commodity)">
+                    <div class="production-flows__container__commodities__item__description">
+                        <p class="production-flows__container__commodities__item__description__name"> {{commodity.name}} </p>
+                        <div>
+                            <p> {{ 'flows-quantity' | i18n }} </p>
+                            <p class="production-flows__container__commodities__item__description__flows">
+                                {{commodity.totalModels | number: "2.0":"en"}}
+                            </p>
+                        </div>
+                    </div>
+                    <i *ngIf="selectedCommodity == commodity" class="icon-arrow_right"></i>
+                </mat-card>
+                <div class="production-flows__container__commodities__items__flows" *ngIf="selectedCommodity == commodity">
+                    <ng-container [ngTemplateOutlet]="flows"></ng-container>
+                </div>
+            </div>
+        </div>
+        <mat-divider [vertical]="true" class="production-flows__container__divider"></mat-divider>
+        <div class="production-flows__container__flows">
+            <ng-container [ngTemplateOutlet]="flows"></ng-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #flows>
+    <div class="production-flows__container__flows__template">
+        <p class="production-flows__container__subtitle"> {{ 'production-flows' | i18n | uppercase }} </p>
+        <app-search-input
+            [searchValue]="searchText"
+            [isFocused]="isInputSearchFocused"
+            (clearEvent)="clearSearch()">
+            <input searchInput type="text"
+                class="elipsis main-header__input"
+                (input)="eventSearch()"
+                [placeholder]="'search-name' | i18n"
+                [(ngModel)]="searchText"
+                (focus)="isInputSearchFocused = true"
+                (blur)="isInputSearchFocused = false"
+                autocomplete="not" />
+        </app-search-input>
+        <mat-tab-group
+            [selectedIndex]="selectedIndexTab"
+            (selectedIndexChange)="filterWorkflows($event)">
+            <mat-tab
+                *ngFor="let tab of tabs"
+                [label]="tab.name |i18n">
+                <ng-template matTabContent>
+                    <div class="scroll-view-app"
+                        [ngClass]="{'production-flows__container__flows__template__items': productionFlows.length > 0}">
+                        <ng-container *ngIf="productionFlows.length > 0; else emptyWorkflows">
+                            <mat-card class="tr__workflow__card" *ngFor="let workflow of productionFlows">
+                                <div class="tr__workflow__card__header">
+                                    <div class="tr__workflow__card__header_name">
+                                        <span> {{'name' | i18n }} </span>
+                                        <p (click)="goToWorkflow(workflow)">
+                                            {{ workflow.name }}
+                                        </p>
+                                    </div>
+                                    <div class="tr__workflow__card__header_menu"
+                                        *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.UPDATE}">
+                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <i class="icon-options-vertical"></i>
+                                        </button>
+                                        <mat-menu #menu="matMenu" xPosition="before">
+                                            <button mat-menu-item (click)="editProductionFlow(workflow)"
+                                                *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.UPDATE}">
+                                                <span>{{'edit' | i18n}} </span>
+                                            </button>
+                                            <button mat-menu-item (click)="deleteProductionFlow(workflow)"
+                                                *permission="{tag: PERMISSIONS.WORKFLOW, type: PERMISSION_TYPES.DELETE}">
+                                                <span>{{'delete' | i18n}} </span>
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                </div>
+                                <p class="tr__workflow__card_description" (click)="goToWorkflow(workflow)">
+                                    {{ workflow.description }}
+                                </p>
+                                <p class="tr__workflow__card_text" (click)="goToWorkflow(workflow)">
+                                    {{ 'workflow-process-number' | i18n | titlecase }} </p>
+                                <p class="tr__workflow__card_text-blue" (click)="goToWorkflow(workflow)">
+                                    {{workflow.totalProcess}} </p>
+                                <div class="tr__workflow__card__footer">
+                                    <p class="tr__workflow__card__footer_date"> {{ workflow.createdDate | date }}
+                                    </p>
+                                    <div>
+                                        <app-lote [lote]="workflow.productionTypeId"
+                                            [definitions]="productionTypes"></app-lote>
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </ng-container>
+                        <ng-template #emptyWorkflows>
+                            <div class="production-flows__container__flows__search" *ngIf="searchText != ''">
+                                <app-not-results-found></app-not-results-found>
+                            </div>
+                            <div class="production-flows__container__flows__template__empty" *ngIf=" searchText == '' ">
+                                <img
+                                    [src]="'/assets/img/workflow_empty_' + (isDarkTheme ? 'dark' : 'light') + '.png'">
+                                <p>{{ 'text-empty-state-flow-production' | i18n}}
+                                    <span (click)="createProductionFlow()">{{ 'new' |i18n}}</span>.
+                                </p>
+                            </div>
+                        </ng-template>
+                    </div>
+                </ng-template>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</ng-template>

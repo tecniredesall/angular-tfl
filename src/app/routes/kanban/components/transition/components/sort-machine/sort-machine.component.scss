@@ -1,0 +1,65 @@
+.kanban__transition__sort-machine{
+    color: var(--tr-title-detail-order-color);
+    padding: 16px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: var(--tr-panel-background-color);
+    &__header{
+        display: flex;
+        margin-bottom: 40px;
+        justify-content: space-between;
+        &__flex{
+            display: flex;
+        }
+        p{
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 16px;
+        }
+        button{
+            width: 181px;
+            color: var(--tr-base-color-white);
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 5px;
+            background-color: var(--tr-base-color-green);
+            &:disabled{
+                cursor: not-allowed;
+                opacity: 0.65;
+            }
+        }
+    }
+    &__alert{
+        font-size: 14px;
+        font-weight: normal;
+        color: var(--tr-info-text-color);
+        i{
+            color: var(--tr-base-color-yellow);
+        }
+    }
+    &__content{
+        display: flex;
+        &__column{
+            width: 50%;
+            display: flex;
+            &__text{
+                width: 50%;
+                color: var(--tr-panel-body-color);
+                font-size: 16px;
+                &--bold{
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+    &__empty{
+        margin: 0 auto;
+        font-size: 14px;
+        max-width: 354px;
+        text-align: center;
+        span{
+            font-weight: 600;
+        }
+    }
+}

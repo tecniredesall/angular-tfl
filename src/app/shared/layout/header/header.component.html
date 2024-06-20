@@ -1,0 +1,54 @@
+<nav class="head-pad-content navbar navbar-default nav-head">
+  <div class="flex header-align-center">
+    <button class="menu-action" (click)="collapseMenu()">
+      <i class="btncolapse pointer font-ss28 left" aria-hidden="true">
+        <img src="./assets/img/svg/menu-icon.svg" alt="">
+      </i>
+    </button>
+
+    <div class="modules-menu p0">
+
+    </div>
+    <div class="right p0 vertical-center inline-flex">
+
+      <button class="btn btn-headers hidden-xs" style="outline: none;">
+        <img src="./assets/img/svg/bell-outline.svg" alt="">
+      </button>
+      <div class="dropdown">
+        <div class="btn-group mrg-left-10">
+          <button type="button" class="btn btn-headers dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <img [src]="'./assets/img/svg/langs/'+lang+'.svg'" alt="">&nbsp;&nbsp;{{lang.toUpperCase() | i18n}}
+          </button>
+          <div class="dropdown-menu">
+            <li class="poiter" (click)="setLanguage('en')">
+              <a> <img src="./assets/img/svg/langs/en.svg" alt="">&nbsp;&nbsp;{{'english' | i18n}} </a>
+            </li>
+            <li class="poiter" (click)="setLanguage('es')">
+              <a> <img src="./assets/img/svg/langs/es.svg" alt="">&nbsp;&nbsp;{{'spanish' | i18n}} </a>
+            </li>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-headers hidden-xs" style="outline: none;" (click)="getCompanyInfo()"
+        *ngIf="currentApp.name === availableApp.Silosys">
+        <img src="./assets/img/svg/menu/company.svg" alt="">
+      </button>
+      <button class="btn btn-headers" (click)="changeTheme()" style="outline: none;"
+        *ngIf="currentApp.name === availableApp.Transformaciones">
+        <img [src]="isDark ?'./assets/img/svg/moon.svg': './assets/img/svg/light-icon.svg'" alt="">
+      </button>
+      <div class="dropdown">
+        <button class="btn btn-headers" style="outline: none;" data-toggle="dropdown" *ngIf="user_type !== 2">
+          <img src="./assets/img/svg/kebab-menu.svg" alt="menu">
+        </button>
+        <ul class="dropdown-menu header-apps">
+          <li *ngFor="let app of Apps" class="pointer" (click)="setApp(app.name)">
+            <a> {{app.name | i18n}} </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

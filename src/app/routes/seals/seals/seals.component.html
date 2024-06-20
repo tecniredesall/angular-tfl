@@ -1,0 +1,145 @@
+<div class="t-seals" [hidden]="viewOptions.Principal !== optionView">
+    <div
+        class="t-seals-container"
+        *blockUI="'list-layout'; template: templateBlockModalUiComponent"
+    >
+        <div class="t-seals-content scroll-view-app">
+            <div class="seals-list-container">
+                <div class="seals-header">
+                    <silosys-main-header
+                        [title]="'seals'"
+                        [searchValue]="searchText"
+                        [searchInputPlaceholder]="'search-seal'"
+                        [showExportCSVButton]="false"
+                        [showNewButton]="false"
+                        [permissionTag]="PERMISSIONS.SEALS"
+                        [permissionType]="PERMISSION_TYPES.CREATE"
+                        (eventSearchInput)="searchSeals($event)"
+                        (eventNew)="newSeal()"
+                    >
+                    </silosys-main-header>
+                </div>
+                <div
+                    class="seals-data-list"
+                    *blockUI="
+                        'data-list-container';
+                        template: templateBlockModalUiDataList
+                    "
+                >
+                    <ng-container
+                        *ngIf="
+                            sealsPaginator.seals.length > 0 ||
+                                (0 == sealsPaginator.seals.length &&
+                                    0 == searchText.length) ||
+                                (0 == sealsPaginator.seals.length &&
+                                    isRunningSearch);
+                            then sealsList;
+                            else emptySearchResults
+                        "
+                    ></ng-container>
+                    <mat-paginator
+                        [hidden]="
+                            0 == sealsPaginator.seals.length ||
+                            viewOptions.Create === optionView
+                        "
+                        class="custom-paginator"
+                        [length]="sealsPaginator.totalItems"
+                        [pageSize]="sealsPaginator.itemsPerPage"
+                        [pageSizeOptions]="sealsPaginator.itemsPerPageOptions"
+                        (page)="eventPaginator($event)"
+                        showFirstLastButtons
+                        #paginator
+                    ></mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seals list template -->
+<ng-template #sealsList>
+    <div class="row bg-default">
+        <div
+            class="container-seal-item col-lg-4 col-md-6 col-sm-6 col-xs-12"
+            *ngFor="let seal of sealsPaginator.seals"
+        >
+            <div class="base-card">
+                <div class="seals-image-container">
+                    <img [src]="seal.image" class="seal-image" />
+                </div>
+
+                <div class="detail-container">
+                    <p class="name-title">
+                        {{ "name" | i18n }}
+                    </p>
+
+                    <p class="name-paragraph" [matTooltip]="seal.name">
+                        {{ seal.name }}
+                    </p>
+
+                    <!-- Hide for Capucas -->
+                    <!-- <p class="related-farms-text">
+            {{'related-farms' | i18n}}
+          </p>
+          <p class="fields-counter">
+            <span *ngIf="0===seal.related_farms">00</span>
+            <span *ngIf="seal.related_farms>0">{{seal.related_farms}}</span>
+          </p> -->
+                </div>
+                <div class="seals-options-container">
+                    <span *ngIf="seal.federated">
+                        <i
+                            class="icon-logo-grain sil-table__federated-icon"
+                        ></i>
+                    </span>
+                </div>
+                <!-- Hide for Capucas -->
+                <!-- <div class="seals-options-container" *permission="{tag: PERMISSIONS.SEALS, type: PERMISSION_TYPES.UPDATE}">
+          <div class="dropdown seals-options">
+
+            <img class="pointer dropdown-toggle" data-toggle="dropdown"
+              [src]=" isDarkTheme ? 'assets/img/svg/options-dark.svg' : 'assets/img/svg/options.svg'">
+
+            <ul class="dropdown-menu">
+
+              <li
+                class="pointer"
+                (click)="editSeal(seal)"
+                *permission="{tag: PERMISSIONS.SEALS, type: PERMISSION_TYPES.UPDATE}">
+                <a>
+                  {{'edit' | i18n}}
+                </a>
+              </li>
+
+              <li
+                class="pointer"
+                (click)="deleteSeal(seal)"
+                *permission="{tag: PERMISSIONS.SEALS, type: PERMISSION_TYPES.DELETE}">
+                <a>
+                  {{'delete' | i18n}}
+                </a>
+              </li>
+
+            </ul>
+
+          </div>
+        </div> -->
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Empty results template -->
+<ng-template #emptySearchResults>
+    <div class="t-seals-empty-search-results">
+        <app-not-results-found></app-not-results-found>
+    </div>
+</ng-template>
+
+<!-- Create seal component -->
+<app-seals-create
+    *ngIf="viewOptions.Create === optionView"
+    [data]="createSealData"
+    (cancelEvent)="cancelEventCreate()"
+    (refreshEvent)="refreshEventCreate()"
+></app-seals-create>

@@ -1,0 +1,34 @@
+<div class="sil-container">
+    <silosys-main-header [title]="'transformation-types'" [showSearchInput]="true"
+        [searchInputPlaceholder]="'search-name'" [showExportCSVButton]="false"
+        [permissionTag]="PERMISSIONS.TRANSFORMATION_TYPES" [permissionType]="PERMISSION_TYPES.CREATE"
+        (eventNew)="onActionClicked(ACTIONS.CREATE)"></silosys-main-header>
+    <section class="sil-table">
+        <header class="sil-table__header-row">
+            <span class="sil-table__header-cell">
+                {{ "NAME" | i18n }}
+                <i class="icon-arrow_down show-on-mobile" (click)="sortData('name')"
+                    [ngClass]="{ 'sort-icon-invert': columnSort.name }"></i>
+            </span>
+            <span class="sil-table__header-cell sil-table__action-header-cell">
+                {{ "ACTIONS" | i18n }}
+            </span>
+        </header>
+        <article class="sil-table__row" *ngFor="let t of transformations">
+            <span class="sil-table__cell">
+                <i class="icon-tranformaciones"> </i>
+                {{ t.name }}
+            </span>
+            <app-table-action-button-group [permissionTag]="PERMISSIONS.TRANSFORMATION_TYPES"
+                (actionClicked)="onActionClicked($event, t.name)"></app-table-action-button-group>
+        </article>
+        <app-not-results-found *ngIf="transformations.length === 0"></app-not-results-found>
+        <mat-paginator class="sil-table__paginator" [length]="pagination?.total"
+            [pageIndex]="pagination?.current_page - 1" [pageSize]="pagination?.per_page"
+            (page)="onPaginatorEvent($event)" showFirstLastButtons *ngIf="transformations.length > 0">
+        </mat-paginator>
+    </section>
+    <app-transformation-delete-modal *ngIf="transFormationToDelete" [transformation]="transFormationToDelete"
+        (cancelClicked)="onActionClicked(ACTIONS.CANCEL)" (deleteClicked)="onTransformationDelete($event)">
+    </app-transformation-delete-modal>
+</div>

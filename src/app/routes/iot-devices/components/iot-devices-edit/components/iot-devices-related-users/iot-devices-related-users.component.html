@@ -1,0 +1,65 @@
+<h3 class="title-base--black">{{ "scales-link-user" | i18n }}</h3>
+<section class="lists">
+    <div class="list-container">
+        <p>{{ "scales-available-users" | i18n }}</p>
+        <div class="user-list-container">
+            <app-search-input [searchValue]="userSearchInput.value" (clearEvent)="onClearAvailableUsers()">
+                <input type="text" class="elipsis" [placeholder]="'scales-search-by-name' | i18n" autocomplete="not"
+                    [formControl]="userSearchInput" />
+            </app-search-input>
+            <div class="user-list" *ngIf="filteredAvailableUsers.length > 0; else emptySearchUser">
+                <ng-container *ngFor="let user of filteredAvailableUsers">
+                    <p class="user-item" (click)="onUserClick(user.id)">
+                        <i class="icon-user"></i><span>{{ user.name }} {{ user.lastname }}</span>
+                    </p>
+                </ng-container>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="list-container">
+        <p>{{ "scales-linked-users" | i18n }}</p>
+        <div class="user-list-container">
+            <ng-container *ngIf="filteredSelectedUsers.length > 0 || selectedUsers.length > 0; else emptyRelatedUsers">
+                <app-search-input [searchValue]="relatedUserSearchInput.value" (clearEvent)="onClearRegisteredUsers()">
+                    <input type="text" class="elipsis" [placeholder]="'scales-search-by-name' | i18n" autocomplete="not"
+                        [formControl]="relatedUserSearchInput" vb />
+                </app-search-input>
+                <div class="user-list" *ngIf="filteredSelectedUsers.length > 0; else emptySearchSelectedUser">
+                    <ng-container *ngFor="let item of filteredSelectedUsers">
+                        <p class="user-item" (click)="onUnlinkClick(item.id)">
+                            <i class="icon-user"></i><span>{{ item.name }} {{ item.lastname }}</span>
+                            <i class="button-inlink icon-unlink"></i>
+                        </p>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</section>
+
+<ng-template #emptyRelatedUsers>
+    <div class="empty-users__section">
+        <i class="icon-empty_users_link"></i>
+        <p class="empty-users__message">
+            {{ "scales-empty-users" | i18n }}
+        </p>
+        <p class="empty-users__message-small">
+            {{ "scales-empty-users-link" | i18n }}
+        </p>
+    </div>
+</ng-template>
+
+<ng-template #emptySearchUser>
+    <div *ngIf="userSearchInput.value.length > 0">
+        <app-not-results-found></app-not-results-found>
+    </div>
+</ng-template>
+
+<ng-template #emptySearchSelectedUser>
+    <div *ngIf="relatedUserSearchInput.value.length > 0">
+        <app-not-results-found></app-not-results-found>
+    </div>
+</ng-template>

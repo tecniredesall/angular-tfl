@@ -1,0 +1,86 @@
+<section class="sil-table">
+    <header class="sil-table__header-row">
+        <span class="sil-table__header-cell header__name">
+            {{ "name" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortFarms('name')"
+                [ngClass]="{ 'sort-icon-invert': !orderStatusAsc.name }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__extension">
+            {{ "extension" | i18n | uppercase }} (MZ)
+            <i
+                class="icon-arrow_down show-on-mobile"
+                (click)="sortFarms('extension')"
+                [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.extension
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__blocks">
+            {{ "blocks" | i18n | uppercase }}
+            <i
+                class="icon-arrow_down"
+                (click)="sortFarms('blocksLength')"
+                [ngClass]="{
+                    'sort-icon-invert': !orderStatusAsc.blocksLength
+                }"
+            ></i>
+        </span>
+        <span class="sil-table__header-cell header__seals">
+            {{ "seals" | i18n | uppercase }}
+        </span>
+        <span class="sil-table__header-cell header__actions">
+            {{ "ACTIONS" | i18n }}
+        </span>
+    </header>
+    <article
+        class="sil-table__row sil-table__row--bordered"
+        *ngFor="let farm of farms"
+        (click)="onActionClicked(ACTIONS.READ, farm)"
+    >
+        <span class="sil-table__cell cell__name">
+            <p class="sil-table__cell-label">{{ "name" | i18n }}</p>
+            <div>
+                <i class="icon-farm light"></i>
+                <span>{{ farm.name }}</span>
+            </div>
+        </span>
+        <span class="sil-table__cell cell__extension">
+            <p class="sil-table__cell-label">{{ "extension" | i18n }} (M2)</p>
+            {{ farm.extension | number: "2.2-2" }}
+        </span>
+        <span class="sil-table__cell cell__blocks">
+            <p class="sil-table__cell-label">{{ "blocks" | i18n }}</p>
+            {{ farm.blocks.length | number: "2.0" }}
+        </span>
+        <span class="sil-table__cell cell__seals">
+            <p class="sil-table__cell-label">{{ "seals" | i18n }}</p>
+            <div>
+                <ng-container *ngFor="let seal of farm.seals">
+                    <span
+                        [matTooltip]="seal.name"
+                        matTooltipPosition="below"
+                        matTooltipClass="sil-table__tooltip"
+                    >
+                        <img [src]="seal.image" />
+                    </span>
+                </ng-container>
+            </div>
+        </span>
+        <span class="sil-table__cell cell__federated">
+            <i
+                *ngIf="farm.federated"
+                class="icon-logo-grain sil-table__federated-icon"
+            ></i>
+        </span>
+        <span class="cell__actions">
+            <app-table-action-button-group
+                [disableDelete]="false"
+                [permissionTag]="PERMISSIONS.FARMS"
+                (actionClicked)="onActionClicked($event, farm)"
+            ></app-table-action-button-group>
+        </span>
+    </article>
+</section>

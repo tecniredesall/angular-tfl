@@ -1,0 +1,10 @@
+<div class="section__tags" *ngIf="tags?.length > 0">
+    <span class="tag--items" *ngFor="let tag of tags">
+        <span class="tag--item__label">{{ tag.title  | i18n }}</span>
+        <span
+            class="tag--item__button"
+            (click)="onDeleteTag(tag)"
+            >X</span
+        >
+    </span>
+</div>

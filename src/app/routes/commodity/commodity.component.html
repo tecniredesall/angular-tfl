@@ -1,0 +1,208 @@
+<div class="t-commodity">
+  <div class="t-commodity__wrapper" *blockUI="'commodity-container'; template: templateBlockModalUiComponent">
+    <div class="t-commodity__wrapper__container scroll-view-app">
+      <ng-container [ngSwitch]="selectedView">
+        <ng-container *ngSwitchCase="CONSTANTS.VIEW_MODE.LIST" [ngTemplateOutlet]="commodityList">
+        </ng-container>
+        <ng-container *ngSwitchCase="CONSTANTS.VIEW_MODE.ACTION">
+          <ng-container *ngIf="action.isType; then commodityTypesAction else commodityActionTemplate">
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchDefault></ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #commodityList>
+  <div class="t-commodity__list-view">
+    <silosys-main-header class="t-commodity__list-view__header" [title]="'commodityM'" [searchValue]="searchText"
+      [searchInputPlaceholder]="'placeholder-search-commodity'" [showExportCSVButton]="false"
+      [permissionTag]="PERMISSIONS.COMMODITIES" [permissionType]="PERMISSION_TYPES.CREATE"
+      (eventSearchInput)="searchCommodity($event)" (eventNew)="newCommodity()"></silosys-main-header>
+    <div class="t-commodity__list-view__body">
+      <ng-container>
+        <ng-container *ngIf="(commodities | search:searchText) as result; else emptySearchResults">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="(null != idxSelected && commodities[idxSelected].id === commodity.id)"
+              [disabled]="true" hideToggle *ngFor="let commodity of result">
+              <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'">
+                <div class="t-commodity__panel__header">
+                  <!-- toogle -->
+                  <div class="t-commodity__panel__header__toggle"
+                    [ngClass]="{'t-commodity__panel__header__toggle--disabled': 0==commodity.totalCommodityTypes}"
+                    (click)="togglePanel(commodity)">
+                    <i class="t-commodity__panel__header__toggle__icon icon-arrow_right no-select"
+                      [ngClass]="{'rotated': (null != idxSelected && commodities[idxSelected].id === commodity.id)}"></i>
+                  </div>
+                  <!-- commodity name -->
+                  <div class="t-commodity__panel__header__commodity">
+                    <div class="t-commodity__panel__header__title no-select">
+                      {{'name' | i18n}}
+                    </div>
+                    <div class="t-commodity__panel__header__commodity__data">
+                      <span
+                        class="t-commodity__panel__header__value t-commodity__panel__header__commodity__data__name no-select">
+                        {{ commodity.name }}
+                      </span>
+                      <span class="t-commodity__panel__header__commodity__data__alias no-select">
+                        ({{commodity.generalCommodity.name}})
+                      </span>
+                    </div>
+                  </div>
+                  <!-- variety -->
+                  <!-- <div class="t-commodity__panel__header__variety"> -->
+                  <!-- <div class="t-commodity__panel__header__title no-select">
+                                      {{'variety' | i18n}}
+                        </div>
+                        <div class="t-commodity__panel__header__value no-select">
+                          {{commodity.totalVarieties | number:'2.0'}}
+                        </div> -->
+                  <!-- </div> -->
+                  <!-- commodity types -->
+                  <div class="t-commodity__panel__header__types">
+                    <div class="t-commodity__panel__header__title">
+                      <span class="t-commodity__panel__header__types--short no-select">
+                        {{'types' | i18n}}
+                      </span>
+                      <span class="t-commodity__panel__header__types--large no-select">
+                        {{'commodity-types' | i18n}}
+                      </span>
+                    </div>
+                    <div class="t-commodity__panel__header__value no-select">
+                      {{commodity.totalCommodityTypes | number:'2.0'}}
+                    </div>
+                  </div>
+
+                  <div class="t-commodity__panel__header__units">
+                    <div class="t-commodity__panel__header__title">
+                      <span class="t-commodity__panel__header__types no-select">
+                        {{'unit-measurenment-info' | i18n}}
+                      </span>
+                    </div>
+                    <div class="t-commodity__panel__header__value no-select">
+                      <div class="t-commodity__panel__header__value__units">
+                        <div class="t-commodity__panel__header__value__units--in">
+                          <div class="t-commodity__panel__header__value__units--in__icon-in">
+                            <i class="icon-arrow-in "></i>
+                          </div>&nbsp;
+
+                          <span> {{commodity.measurementNameIn | titlecase}}</span>
+
+                        </div>
+                        <div class="t-commodity__panel__header__value__units--out">
+                          <div class="t-commodity__panel__header__value__units--out__icon-out">
+                            <i class="icon-arrow-in "></i>
+                          </div>&nbsp;
+
+                          <span> {{commodity.measurementNameOut | titlecase}}</span>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- add type -->
+                  <div class="t-commodity__panel__header__add-type" (click)="newType(commodity)"
+                    *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.CREATE}">
+                    <span class="t-commodity__panel__header__add-type__text no-select">
+                      {{'new-type' | i18n}}
+                    </span>
+                    <i class="icon-plus t-commodity__panel__header__add-type__icon no-select"></i>
+                  </div>
+                  <!-- commodity options -->
+                  <div class="t-commodity__options"
+                    *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.UPDATE}">
+                    <i class="icon-options-vertical t-commodity__options__dropdown__icon no-select"
+                      [matMenuTriggerFor]="actionsMenu"></i>
+                    <mat-menu #actionsMenu="matMenu">
+                      <button mat-menu-item (click)="editCommodity(commodity)"
+                        *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.UPDATE}">
+                        {{'edit' | i18n}}
+                      </button>
+                      <ng-container *ngIf="commodity.totalCommodityTypes === 0">
+                        <button mat-menu-item (click)="deleteCommodity(commodity)"
+                          *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.DELETE}">
+                          {{'delete' | i18n}}
+                        </button>
+                      </ng-container>
+                    </mat-menu>
+                  </div>
+                </div>
+              </mat-expansion-panel-header>
+              <div [hidden]="!isLoadingCommodityTypes" class="t-commodity__panel__body__spinner"
+                *blockUI="'commodity-detail'; template: blockTemplateModalUiDetail"></div>
+              <ng-container *ngIf="null!=idxSelected && !isLoadingCommodityTypes">
+                <ng-container
+                  *ngIf="commodity.types.length>0; then commodityTypesListViewTemplate else noCommodityTypesTemplate">
+                </ng-container>
+              </ng-container>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #commodityTypesListViewTemplate>
+  <div class="t-commodity__panel__body__commodity-type" *ngFor="let type of commodities[idxSelected].types">
+    <div class="t-commodity__panel__body__commodity-type__icon-container">
+      <i class="icon-cafe no-select"></i>
+    </div>
+    <div class="t-commodity__panel__body__commodity-type__name">
+      {{ type.name }}
+    </div>
+    <div class="t-commodity__panel__body__commodity-type__edit" (click)="editType(type)"
+      *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.UPDATE}">
+      <i class="icon-edit no-select"></i>
+    </div>
+    <div class="t-commodity__panel__body__commodity-type__delete" (click)="deleteTypeCommodity(type)"
+      *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.DELETE}">
+      <i class="icon-trash-gray no-select"></i>
+    </div>
+    <div class="t-commodity__options t-commodity__panel__body__commodity-type__options"
+      *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.UPDATE}">
+      <i class="icon-options-vertical t-commodity__options__dropdown__icon no-select"
+        [matMenuTriggerFor]="actionsMenu"></i>
+      <mat-menu #actionsMenu="matMenu">
+        <button mat-menu-item (click)="editType(type)"
+          *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.UPDATE}">
+          {{'edit' | i18n}}
+        </button>
+        <button mat-menu-item (click)="deleteTypeCommodity(type)"
+          *permission="{tag: PERMISSIONS.COMMODITIES, type: PERMISSION_TYPES.DELETE}">
+          {{'delete' | i18n}}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noCommodityTypesTemplate>
+  <div class="t-commodity__panel__body__no-types">
+    {{'whitout-result' | i18n}}
+  </div>
+</ng-template>
+
+<ng-template #emptySearchResults>
+  <div *ngIf="searchText.length > 0">
+    <app-not-results-found></app-not-results-found>
+  </div>
+</ng-template>
+
+<ng-template #commodityActionTemplate>
+  <app-action-commodity [isEdit]="action.isEdit" [commodity]="action.data"
+    (eventActionSelected)="onEventActionSelected($event)">
+  </app-action-commodity>
+</ng-template>
+
+<ng-template #commodityTypesAction>
+  <app-action-types-commodity [isEdit]="action.isEdit" [commodityType]="action.data"
+    (eventActionSelected)="onEventActionSelected($event)">
+  </app-action-types-commodity>
+</ng-template>

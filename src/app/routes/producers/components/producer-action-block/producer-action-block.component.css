@@ -1,0 +1,74 @@
+.producer-action-block-container {
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.producer-action-block-body {
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+:not(.dark) :host .producer-action-block-body {
+  background-color: white;
+}
+
+.dark :host .producer-action-block-body {
+  background-color: #2f3b52;
+}
+
+.header-producer-action-block {
+  width: 100%;
+  height: auto;
+  padding: 0 15px;
+  margin: 0 0 40px 0;
+  text-align: left;
+}
+
+.title-producer-action-block {
+  width: 100%;
+  height: auto;
+  font-size: 28px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+:not(.dark) :host .title-producer-action-block {
+  color: #0068d1;
+}
+
+.dark :host .title-producer-action-block {
+  color: white;
+}
+
+.header-line-producer-action-block {
+  height: 0;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0;
+  margin: 11px 0 0 0;
+}
+
+:not(.dark) :host .header-line-producer-action-block {
+  border-color: rgba(146, 162, 182, 0.3);
+}
+
+.dark :host .header-line-producer-action-block {
+  border-color: #92a2b6;
+}

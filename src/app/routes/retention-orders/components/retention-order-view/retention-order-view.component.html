@@ -1,0 +1,199 @@
+<div class="container-view" *blockUI="'container-view'; template: templateBlockModalUiComponent">
+
+    <div class="container-fluid mt__26">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="link-back" (click)="backTolist()"> <i class="icon-arrow_icon"></i> &nbsp; {{'back-to-list' | i18n }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt__26 main-content scroll-view-app">
+        <div class="row mt__15">
+            <div class="content-title">
+                <div>
+                    <span class="label-title">{{'retention-order-detail-label' | i18n }}</span>
+                </div>
+                <div class="">
+                    <div class="container-created-by">
+                        <div class="created-by">
+                            <span class="label-14">{{'created' | i18n}}: </span>
+                            <span class="label-14 label-14__blue">{{currentRetentionOrder.createdName}}
+                                {{currentRetentionOrder.createdAt  | formatMoment : 'MMM DD, YYYY HH:mm' : true}} </span>
+                        </div>
+                        <div class="created-at" *ngIf="currentRetentionOrder.updatedAt?.isValid() ">
+                            <span class="label-14">{{'last-edition' | i18n}}: </span>
+                            <span class="label-14">{{currentRetentionOrder.updatedName}}
+                                {{currentRetentionOrder.updatedAt  | formatMoment : 'MMM DD, YYYY HH:mm' : true}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-background">
+            <div class="row">
+                <div class="col-md-12 p0">
+                    <div class="container-header-blue">
+                        <div class="content-left">
+                            <div class="logo">
+                                <img src="./assets/img/svg/menu/logo-icon.svg" alt="SS">
+                            </div>
+                            <div class="no-orden">
+                                <span class="label-orden label-orden__title" id="folio_label">#{{currentRetentionOrder.folio}}</span>
+                                <span class="label-orden label-orden__subtitle">{{'retention-order' | i18n}}</span>
+                            </div>
+                            <div class="divider">&nbsp;</div>
+                            <div class="info">
+                                <span class="info__label-title"> {{companyInfo.name}}
+                                    C.A.</span>
+                                <span>{{"phone" | i18n}}: {{companyInfo.phone}}</span>
+                                <span>{{"flo-id" | i18n}}: {{companyInfo.floId}}</span>
+                                <span>{{"rtn" | i18n}}: {{companyInfo.rtn}}</span>
+                                <span>{{"mail" | i18n}}: {{companyInfo.email}}</span>
+                            </div>
+                        </div>
+                        <div class="actions-buttons" *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.PRINT }">
+                            <button (click)="onDownload()" id="btn_download">
+                                <i class="icon-download"></i>
+                            </button>
+                            <!-- <button>
+                                <i class="icon-email"></i>
+                            </button> -->
+                            <button (click)="onPrint()" id="btn_print">
+                                <i class="icon-report-print"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 p0">
+                    <div class="container-general-info">
+                        <div class="info-title">
+                            <span>{{'general-information' | i18n}}</span>
+                            <div class="tag-void" *ngIf="currentRetentionOrder.isVoided">
+                                <i class="icon-note-canceled"></i>
+                                <span>{{currentRetentionOrder.classStatus?.label  | i18n}}</span>
+                            </div>
+                        </div>
+                        <div class="info-divider">
+                            &nbsp;
+                        </div>
+                        <div class="info-detail">
+                            <div class="info-row">
+                                <div class="info-text">
+                                    <span class="info-label">{{'date' | i18n}}: </span>
+                                    <span class="info-value">{{currentRetentionOrder.retentionDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}</span>
+                                </div>
+                                <div class="info-text">
+                                    <span class="info-label">{{'producer' | i18n}}: </span>
+                                    <span class="info-value info-value__bold">{{currentRetentionOrder.sellerName}} </span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-text">
+                                    <span class="info-label">{{'retention-orders-ihcafe' | i18n}}: </span>
+                                    <span class="info-value">{{currentRetentionOrder.CvIhcafe}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12 p0 mt__27">
+                    <div class="container-selected-note">
+                        <div class="selected-note-detail">
+                            <div class="row-note">
+                                <div class="note-text">
+                                    <span class="note-selected">{{'selected-weight-note' | i18n}}: </span>
+                                    <span class="note-selected-value">{{currentRetentionOrder?.notes?.length}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt__31">
+                <div class="col-md-12 p0">
+                    <div class="container-table">
+                        <div class="container-table-header">
+                            <div class="text-left"><span>{{'creation'| i18n | uppercase}}</span></div>
+                            <div class="text-left"><span>{{'id'| i18n | uppercase}}</span></div>
+                            <div class="text-left"><span>{{'type'| i18n | uppercase}}</span></div>
+                            <div class="text-right"><span>{{'sacks'| i18n | uppercase}}</span></div>
+                            <div class="text-right"><span># {{'purchase-order'| i18n | uppercase}}</span></div>
+                            <div class="text-right"><span>{{'net-weight'| i18n | uppercase}}</span></div>
+                            <div class="text-right"><span>{{'gold_net_weight'| i18n | uppercase}}</span></div>
+                            <div class="text-right"><span>{{'price_per_unit'| i18n | uppercase}}</span></div>
+                        </div>
+                        <div class="row-table" *ngFor="let item of currentRetentionOrder.notes">
+                            <div class="container-table-body ">
+                                <div class="text-left column-user ml__7">
+                                    <span>{{item.createdDate | formatMoment : 'MMM DD, YYYY HH:mm' : true}}</span>
+                                    <span class="label-user">{{item.createdBy}}</span>
+                                </div>
+                                <div class="text-left"><span>{{item.folio}}</span></div>
+                                <div class="text-left"><span>{{item.transformationType}}</span></div>
+                                <div class="text-right"><span>{{item.sacks}}</span></div>
+                                <div class="text-right"><span>{{item.purcharseOrderId}}</span></div>
+                                <div class="text-right"><span>{{item.netWeightOut}}
+                                        {{configuration.conversionMeasurementUnitAbbreviation}}</span></div>
+                                <div class="text-right"><span>{{item.goldNetWeightOut}}
+                                        {{configuration.conversionMeasurementUnitAbbreviation}}</span></div>
+                                <div class="text-right  mr__7"><span>{{ companyInfo?.currency?.symbol}} {{item.price | number :
+                                        "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }} {{
+                                        companyInfo?.currency?.isoCode}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt__27">
+                <div class="container-notas">
+                    <div class="container-notas-left">
+                        <span class="info-label info-label__12">{{'notes' | i18n}}: </span>
+                        <p class="info-value"> {{currentRetentionOrder.Note}}</p>
+                    </div>
+                    <div class="container-notas-rigth">
+                        <div class="container-totals">
+                            <div class="content-wn">
+                                <span class="info-label"> {{ "net-weight" | i18n | titlecase }} ({{
+                                    configuration.conversionMeasurementUnitAbbreviation }}):</span>
+                                <span class="info-label">{{currentRetentionOrder.totalNetOut| number : "1." +
+                                    DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }}</span>
+                            </div>
+                            <div class="content-wn">
+                                <span class="info-label"> {{ "gold_total" | i18n | titlecase }} ({{
+                                    configuration.conversionMeasurementUnitAbbreviation }}):</span>
+                                <span class="info-label">{{currentRetentionOrder.totalGoldOut | number : "1." +
+                                    DECIMAL_DIGITS + "-" + DECIMAL_DIGITS : "en" }}</span>
+                            </div>
+                            <div class="content-wn mt__8">
+                                <span class="info-label-xl info-label-xl__black"> {{ "total" | i18n }}:</span>
+                                <span class="info-label-xl info-label-xl__blue info-label-xl__bold">{{ companyInfo?.currency?.symbol}}
+                                    {{currentRetentionOrder.total| number : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                                    : "en" }} {{ companyInfo?.currency?.isoCode}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt__31" *ngIf="currentRetentionOrder.isClose">
+                <div class="container-footer-btns"  *permission="{tag: PERMISSIONS.RETENTION_ORDERS,type: PERMISSION_TYPES.VOID }">
+                    <div class="content-btn">
+                        <button (click)="onVoided(currentRetentionOrder)">
+                            <i class="icon-trash-gray"></i>
+                            {{'retention-order-void' | i18n}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="currentRetentionOrder.isVoided">
+                <div class="container-void-note">
+                    <span class="info-label info-label__12">{{'void-weight-note-reason' | i18n}}</span>
+                    <span class="info-value info-value__12">{{currentRetentionOrder.cancellationReason}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

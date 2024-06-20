@@ -1,0 +1,274 @@
+<div class="scale-list__view">
+    <div class="scale-list__view__wrapper">
+        <div class="scale-list__view__wrapper__container scroll-view-app">
+            <div class="scale-list">
+                <!-- Header -->
+                <div class="scale-list__header">
+                    <silosys-main-header title="{{ 'iot-devices' | i18n }}" [searchValue]="searchText"
+                        (eventExportCSV)="onDownloadCsv()" (eventSearchInput)="onTypeSearchInput($event)"
+                        [showExportCSVButton]="true" searchInputPlaceholder="{{
+                            'scales-list-view-placeholder-search' | i18n
+                        }}" (eventNew)="onNewIotDevices()" [permissionTag]="PERMISSION_TAG"
+                        [permissionType]="PERMISSION_TYPES.CREATE"></silosys-main-header>
+                </div>
+
+                <!-- Body -->
+                <div class="scale-list__body" *blockUI="
+                        'iots-list-layout';
+                        template: templateBlockModalUiComponent
+                    ">
+                    <ng-container *ngIf="iots.length > 0; else emptySearchResults">
+                        <!-- Columns -->
+                        <div class="scale-list__columns">
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__empty
+                                "></div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__creation
+                                ">
+                                <span class="
+                                        no-select
+                                        scale-list__columns__sortable
+                                    " (click)="sortData('created_at')">
+                                    <span class="pointer">{{
+                                        "creation" | i18n | uppercase
+                                        }}
+                                        <i [ngClass]="
+                                            columnAscState.created_at
+                                                ? 'icon-caret-down'
+                                                : 'icon-caret-up'
+                                        "></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="tr__list__column__label scale-list__area__data__device">
+                                <span>{{"devices" | i18n | uppercase}}</span>
+                            </div>
+                            <div class="tr__list__column__label scale-list__area__data__brand">
+                                <span class="pointer" (click)="sortData('brand')">{{"brand" | i18n | uppercase}}
+                                    <i [ngClass]="columnAscState.brand ? 'icon-caret-down': 'icon-caret-up'"></i>
+                                </span>
+                            </div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__model
+                                ">
+                                <span class="pointer" (click)="sortData('model')">{{
+                                    "scales-model" | i18n | uppercase
+                                    }}
+                                    <i [ngClass]="
+                                    columnAscState.model
+                                        ? 'icon-caret-down'
+                                        : 'icon-caret-up'
+                                "></i>
+                                </span>
+                            </div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__location
+                                ">
+                                <span class="
+                                        no-select
+                                        scale-list__columns__sortable
+                                    ">
+                                    <span>{{
+                                        "location" | i18n | uppercase
+                                        }}</span>
+
+                                </span>
+                            </div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__ip
+                                ">
+                                <span>{{
+                                    "scales-ip-address" | i18n | uppercase
+                                    }}</span>
+                            </div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__user
+                                ">
+                                <span>{{
+                                    "scales-users" | i18n | uppercase
+                                    }}</span>
+                            </div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__status
+                                ">
+                                <span>{{ "status" | i18n | uppercase }}</span>
+                            </div>
+                            <div class="
+                                    tr__list__column__label
+                                    scale-list__area__data__actions
+                                ">
+                                <span>{{ "ACTIONS" | i18n | uppercase }}</span>
+                            </div>
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngFor="let iot of iots">
+                            <div class="scale-list__area__data">
+                                <div class="scale-list__area__data__empty">
+                                    <div class="
+                                            scale-list__area__data__empty__value
+                                        ">
+                                        <i class="icon-io-t"></i>
+                                    </div>
+                                </div>
+                                <div class="
+                                        scale-list__area__label
+                                        scale-list__area__label__creation
+                                    ">
+                                    <span>{{
+                                        "creation" | i18n | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="scale-list__area__data__creation">
+                                    <div class="
+                                            scale-list__area__data__creation__value
+                                        ">
+                                        <span>{{
+                                            iot.createdDate
+                                            | formatMoment
+                                            : "MMM DD, YYYY HH:mm"
+                                            : true
+                                            }}</span>
+                                        <span class="
+                                                scale-list__area__data__creation__value__creator
+                                            ">{{ iot.creatorUser }}</span>
+                                    </div>
+                                </div>
+                                <div class="scale-list__area__label scale-list__area__label__device">
+                                    <span>{{ "device" | i18n | uppercase }}</span>
+                                </div>
+                                <div class="scale-list__area__data__device">
+                                    <div class="scale-list__area__data__device__value">
+                                        <span>{{ iot.deviceType | i18n }}</span>
+                                    </div>
+                                </div>
+                                <div class="scale-list__area__label scale-list__area__label__brand">
+                                    <span>{{ "brand" | i18n | uppercase }}</span>
+                                </div>
+                                <div class="scale-list__area__data__brand">
+                                    <div class="scale-list__area__data__brand__value">
+                                        <span>{{ iot.brand || '-' }}</span>
+                                    </div>
+                                </div>
+                                <div class="
+                                        scale-list__area__label
+                                        scale-list__area__label__model
+                                    ">
+                                    <span>{{
+                                        "scales-model" | i18n | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="scale-list__area__data__model">
+                                    <div class="
+                                            scale-list__area__data__model__value
+                                        ">
+                                        <span>{{ iot.model }}</span>
+                                    </div>
+                                </div>
+                                <div class="
+                                        scale-list__area__label
+                                        scale-list__area__label__location
+                                    ">
+                                    <span>{{
+                                        "location" | i18n | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="scale-list__area__data__location">
+                                    <div class="
+                                            scale-list__area__data__location__value
+                                        ">
+                                        <span>{{ iot.location }}</span>
+                                    </div>
+                                </div>
+                                <div class="
+                                        scale-list__area__label
+                                        scale-list__area__label__ip
+                                    ">
+                                    <span>{{
+                                        "scales-ip-address" | i18n | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="scale-list__area__data__ip">
+                                    <div class="
+                                            scale-list__area__data__ip__value
+                                        ">
+                                        <span>{{ iot.ipAddress }}</span>
+                                    </div>
+                                </div>
+                                <div class="
+                                        scale-list__area__label
+                                        scale-list__area__label__user
+                                    ">
+                                    <span>{{
+                                        "scales-users" | i18n | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="scale-list__area__data__user">
+                                    <div class="
+                                            scale-list__area__data__user__value
+                                        ">
+                                        <span>{{
+                                            iot.users | number: "2.0-0":"en"
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <div class="
+                                        scale-list__area__label
+                                        scale-list__area__label__status
+                                    ">
+                                    <span>{{
+                                        "status" | i18n | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="scale-list__area__data__status">
+                                    <div class="
+                                            scale-list__area__data__status__value
+                                        ">
+                                        <div>
+                                            <mat-slide-toggle
+                                                [checked]="iot.isActive"
+                                                (change)="onToggleIotDevicesStatus(iot)">
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="scale-list__area__data__actions">
+                                    <app-table-action-button-group [disableDelete]="false"
+                                        [permissionTag]="PERMISSION_TAG" (actionClicked)="
+                                            onActionClicked($event, iot)
+                                        "></app-table-action-button-group>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <!-- Paginator -->
+                    <mat-paginator [hidden]="0 == iots.length" class="custom-paginator" [length]="pagination.totalItems"
+                        [pageSize]="pagination.itemsPerPage" [pageSizeOptions]="[pagination.itemsPerPage]"
+                        (page)="eventPaginator($event)" showFirstLastButtons #paginator></mat-paginator>
+                </div>
+            </div>
+            <!-- Empty search results template -->
+            <ng-template #emptySearchResults>
+                <div *ngIf="searchText == ''; else notResultsFound" class="scale-list__empty">
+                    <img src="assets/img/empty_scale.png" />
+                    <p>
+                        {{ "scales-list-view-empty" | i18n }}
+                        <span [routerLink]="'/routes/scales/new'">{{
+                            "new" | i18n
+                            }}</span>
+                    </p>
+                </div>
+                <ng-template #notResultsFound>
+                    <app-not-results-found></app-not-results-found>
+                </ng-template>
+            </ng-template>
+        </div>
+    </div>
+</div>

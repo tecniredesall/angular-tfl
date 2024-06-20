@@ -1,0 +1,767 @@
+<div class="weight-detail-note-container panel-container-overflow scroll-view-app"
+    *blockUI="'notes-detail'; template: templateBlockModalUiComponent">
+    <div class="weight-detail-note-back">
+        <div class="weight-detail-note-back__content" (click)="back()">
+            <i class="icon-arrow_icon"></i>
+            <span class="dete-blue">{{ "back-to-list" | i18n }}</span>
+        </div>
+    </div>
+    <div class="weight-detail-note-header">
+        <p class="weight-detail-note-header-title font-ss24 font-sssb">
+            {{ "receiving-note-detail" | i18n }}
+        </p>
+        <div class="weight-detail-note-header-detail">
+            <div class="weight-detail-note-header-detail-date">
+                <p class="font-sssb">{{ "created" | i18n }}:</p>
+                <p class="date-blue">
+                    {{ note.information.creationUserEmail }},
+                    {{ note.information?.creationDate | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm"
+                    }}
+                </p>
+            </div>
+            <div class="weight-detail-note-header-detail-date">
+                <p class="font-sssb">{{ "last-edition" | i18n }}:</p>
+                <p class="date-edition">
+                    {{ note.information.editionUserEmail }},
+                    {{ note.information?.editionDate | dateStringFormat: "YYYY-MM-DD HH:mm:ss" : "MMM DD, YYYY HH:mm" }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="weight-detail-note">
+        <!-- HEADER -->
+        <div class="header-note-detail">
+            <div class="header-note-detail-image">
+                <img src="./assets/img/svg/menu/logo-icon.svg" />
+            </div>
+            <div class="header-note-detail-content">
+                <div class="header-note-detail-content-data">
+                    <p class="font-ssb">#{{ note.information.folio }}</p>
+                    <p>{{ "receiving-note" | i18n }}</p>
+                    <hr />
+                </div>
+                <div class="header-note-detail-content-buttons">
+                    <ng-container *permission="{tag: PERMISSIONS.WEIGHT_NOTE, type: PERMISSION_TYPES.PRINT}">
+                        <ng-container *ngIf="note.information.status == CONSTANTS.RECEIVING_NOTE_STATUS.CLOSED">
+                            <div (click)="actionPDF('pdf', 'download')"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-download' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                <i class="icon-download"></i>
+                            </div>
+                            <div (click)="actionPDF('mail')" [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-mail' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                <i class="icon-email"></i>
+                            </div>
+                            <div (click)="actionPDF('pdf', 'print')"
+                                [ngClass]="{'note__print--disabled': isDisabledPrint}"
+                                matTooltip="{{'weight-note-detail-cant-print' | i18n}}"
+                                [matTooltipDisabled]="!isDisabledPrint" class="note__print pointer pull-right">
+                                <i class="icon-report-print"></i>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div class="address-note">
+                    <p class="font-ssb">{{ companyInfo.name }}</p>
+                    <p>
+                        <span class="font-ssb">{{ "phone" | i18n }}:</span>
+                        {{ companyInfo.phone }}
+                    </p>
+                    <p>
+                        <span class="font-ssb">{{ "flo-id" | i18n }}:</span>
+                        {{ companyInfo.floId }}
+                    </p>
+                    <p>
+                        <span class="font-ssb">{{ "rtn" | i18n }}:</span>
+                        {{ companyInfo.rtn }}
+                    </p>
+                    <p>
+                        <span class="font-ssb">{{ "mail" | i18n }}:</span>
+                        {{ companyInfo.email }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- GENERAL INFORMATION -->
+        <div class="body-note-details">
+            <div class="body-note-details-data">
+                <div class="body-note-details-data-first">
+                    <p class="body-note-details-title font-ss18 font-ssb">
+                        {{ "general-information" | i18n }}
+                    </p>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "client" | i18n }}:</p>
+                        <p class="font-ssb">
+                            {{ note.information.producer?.fullName }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "domicile" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.producer?.address
+                            ? note.information.producer.address
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "customer-no" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.producer?.identifier
+                            ? note.information.producer?.identifier
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "rtn" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.producer?.rtn
+                            ? note.information.producer?.rtn
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "card" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.producer?.carnet
+                            ? note.information.producer?.carnet
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                </div>
+                <div class="body-note-details-data-second">
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "seller-type" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.producer?.type ==
+                            CONSTANTS.PRODUCER_TYPE.ASSOCIATE
+                            ? ("associate" | i18n)
+                            : note.information.producer?.type ==
+                            CONSTANTS.PRODUCER_TYPE.PROVIDER
+                            ? ("provider" | i18n)
+                            : note.information.producer?.type ==
+                            CONSTANTS.PRODUCER_TYPE.CLIENT
+                            ? ("client" | i18n)
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "harvest" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{ note.information.season?.name }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "field-ticket" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.fieldTicket
+                            ? note.information.fieldTicket
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                    <div class="body-note-data">
+                        <p class="font-ssb">{{ "contract-id" | i18n }}:</p>
+                        <p class="subtitle-note">
+                            {{
+                            note.information.contractId
+                            ? note.information.contractId
+                            : "-"
+                            }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DESCRIPTION -->
+        <div>
+            <div class="body-note-details-description">
+                <p class="body-note-details-title font-ss18 font-ssb">
+                    {{ "weight-notes" | i18n }}
+                    <span class="notes_lenght__span">
+                        {{ note.description.length | number: "2.0" }}
+                    </span>
+                </p>
+                <ng-container *ngFor="let weightNote of note.description; let i = index">
+                    <div class="w-note-desc">
+                        <div class="w-note-desc__name">
+                            {{ "note-of-weight" | i18n }} # {{ weightNote.transactionInId }}
+                            <span *ngIf="weightNote.status == WEIGHT_NOTE_STATUS.DELETED"
+                                class="w-note-desc__name__status">
+                                <i class="icon-note-canceled"></i>
+                                {{'voided' | i18n}}
+                            </span>
+                        </div>
+                        <div class="w-note-desc__date">
+                            <span class="w-note-desc__date__value">
+                                {{ "date" | i18n }}: {{ weightNote?.date | formatMoment : 'MMM DD, YYYY HH:mm' : true}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="body-note-details-description-data">
+                        <!-- FARM -->
+                        <div class="body-note-details-description-farm">
+                            <div class="container__div">
+                                <div class="body-note-data">
+                                    <p class="font-ssb">{{ "farm" | i18n }}:</p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        weightNote.farm
+                                        ? weightNote.farm.name
+                                        : "-"
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "block" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        weightNote.block
+                                        ? weightNote.block.name
+                                        : "-"
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="container__div">
+                                <div class="body-note-details-certificates">
+                                    <p class="font-ssb">
+                                        {{ "certificates" | i18n }} :
+                                    </p>
+                                    <div class="body-note-details-certificates-container" *ngIf="
+                                        weightNote.certifications.length >
+                                            0;
+                                        else emptyCertifications
+                                    ">
+                                        <div *ngFor="
+                                            let certification of weightNote.certifications
+                                        " class="img-note-detail" style="z-index: 5">
+                                            <img [src]="certification.image" />
+                                        </div>
+                                    </div>
+                                    <ng-template #emptyCertifications>
+                                        <p class="font-ssb">
+                                            {{ "not-apply" | i18n }}
+                                        </p>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="body-note-details-description__row">
+                            <!-- COMMODITY -->
+                            <div class="body-note-details-description__div">
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "commodityM" | i18n }}:
+                                    </p>
+                                    <p class="font-ssb">
+                                        {{ weightNote.commodity?.name }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "commodity-type" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{ weightNote.commodityType?.name }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "commodity-state" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        weightNote.commodityTransformation
+                                        ?.name
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "container" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{ weightNote.container?.name }}
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- TRUCK -->
+                            <div class="body-note-details-description__div">
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "delivered-by" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        note.description[i]
+                                        .deliveredByProducer
+                                        ? ("himself" | i18n)
+                                        : note.description[i].driver
+                                        ?.fullName
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "truck-plate" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        weightNote.truck
+                                        ? weightNote.truck.plate
+                                        : "-"
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "licence" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        weightNote.driver
+                                        ? weightNote.driver.license
+                                        : "-"
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="body-note-data">
+                                    <p class="font-ssb">
+                                        {{ "vehicle" | i18n }}:
+                                    </p>
+                                    <p class="subtitle-note">
+                                        {{
+                                        weightNote.truck
+                                        ? weightNote.truck.name
+                                        : "-"
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- WEIGHT LABELS -->
+                        <div class="body-note-details-description-data-columns note-sacks-title">
+                            <div class="note-sacks-id">
+                                <p class="font-ssb">#</p>
+                            </div>
+                            <div class="note-sacks-sack">
+                                <p class="font-ssb">{{ "sacks" | i18n }}</p>
+                            </div>
+                            <div class="note-sacks-weight">
+                                <p class="font-ssb">
+                                    {{ "gross-weight" | i18n }} ({{
+                                    "lb" | i18n
+                                    }})
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="font-ssb">
+                                    {{ "tara" | i18n }} ({{config?.measurementUnitAbbreviation}})
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="font-ssb">
+                                    {{ "transport-tare" | i18n }} ({{config?.measurementUnitAbbreviation}})
+                                </p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="font-ssb">
+                                    {{ "featured-weight" | i18n }} ({{config?.measurementUnitAbbreviation}})
+                                </p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="font-ssb">
+                                    {{ "featured-weight" | i18n }} ({{config?.conversionMeasurementUnitAbbreviation}})
+                                </p>
+                            </div>
+                        </div>
+                        <!-- WEIGHT QUANTITIES -->
+                        <div class="body-note-details-description-data-columns note-sacks"
+                            *ngFor="let sack of weightNote.weights">
+                            <div class="note-sacks-id">
+                                <p class="font-ssb">{{ sack.index + 1 }}</p>
+                            </div>
+                            <div class="note-sacks-sack">
+                                <p class="subtitle-note">
+                                    {{ sack.sacksNumber }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-weight">
+                                <p class="subtitle-note">
+                                    {{
+                                    sack.grossWeight
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note">
+                                    {{
+                                    sack.tare
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note">
+                                    {{
+                                    sack.tareAditional
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="subtitle-note">
+                                    {{
+                                    sack.featuredWeight
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="subtitle-note">
+                                    {{
+                                    sack.netWeightQQ
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                        <!-- TOTALS WEIGHT -->
+                        <div class="body-note-details-description-data-columns note-sacks note-totals">
+                            <div class="note-sacks-id">
+                                <p class="font-ssb"></p>
+                            </div>
+                            <div class="note-sacks-sack">
+                                <p class="subtitle-note total__p" appSignedValue [value]="weightNote.totalSacks"
+                                    [format]="'1.0'"></p>
+                            </div>
+                            <div class="note-sacks-weight">
+                                <p class="subtitle-note total__p" appSignedValue [value]="weightNote.totalGross"></p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note total__p" appSignedValue [valueType]="
+                                    CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                                " [value]="weightNote.totalTareContainer"></p>
+                            </div>
+                            <div class="note-sacks-tare">
+                                <p class="subtitle-note total__p" appSignedValue [valueType]="
+                                    CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                                " [value]="weightNote.totalTareAditional"></p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="subtitle-note total__p" appSignedValue [value]="weightNote.totalNet"></p>
+                            </div>
+                            <div class="note-sacks-total">
+                                <p class="subtitle-note total__p" appSignedValue [value]="weightNote.totalNetQQ"></p>
+                            </div>
+                        </div>
+                        <!-- CHARACTERISTICS -->
+                        <ng-container *ngIf="
+                            weightNote.penalties.length > 0 &&
+                            weightNote.penalties[0].value != null
+                        ">
+                            <div class="note-penalties">
+                                <div class="body-note-details-description-data-columns">
+                                    <div class="body-penalties">
+                                        <p class="font-ssb">
+                                            {{ "features" | i18n }}
+                                        </p>
+                                    </div>
+                                    <div class="body-penalties">
+                                        <p class="font-ssb">
+                                            {{ "selection" | i18n }}
+                                        </p>
+                                    </div>
+                                    <div class="body-penalties">
+                                        <p class="font-ssb">
+                                            {{ "value" | i18n | titlecase }}
+                                        </p>
+                                    </div>
+                                    <div class="body-penalties">
+                                        <p class="font-ssb">
+                                            {{ "total" | i18n }} ({{
+                                            "lb" | i18n
+                                            }})
+                                        </p>
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="weightNote.penalties.length > 0">
+                                    <div class="body-note-details-description-data-columns-penalties" *ngFor="
+                                            let penalty of weightNote.penalties
+                                        ">
+                                        <div class="body-penalties">
+                                            <p class="subtitle-note">
+                                                {{ penalty.characteristic?.deduction?.name | titlecase}}:
+                                            </p>
+                                        </div>
+                                        <div class="body-penalties">
+                                            <p class="subtitle-note">
+                                                {{
+                                                penalty.characteristic?.deduction?.type ==
+                                                CONSTANTS.DEDUCTION_TYPE.CHOICE
+                                                ? (penalty.value | titlecase)
+                                                : ("not-apply" | i18n)
+                                                }}
+                                            </p>
+                                        </div>
+                                        <div class="body-penalties">
+                                            <p class="subtitle-note">
+                                                <span *ngIf="
+                                                        penalty.characteristic?.deduction?.type == CONSTANTS.DEDUCTION_TYPE.TABLE ||
+                                                        penalty.characteristic?.deduction?.type == CONSTANTS.DEDUCTION_TYPE.INPUT
+                                                    ">
+                                                    {{
+                                                    penalty.value | number : "1." + CHARACTERISTICS_DECIMAL + "-" +
+                                                    CHARACTERISTICS_DECIMAL : "en"
+                                                    }}
+                                                    {{ getDeductionsAllowAction(penalty.characteristic) ===
+                                                    DEDUCTIONS_ALLOW_ACTIONS.NOT_ACTION ? '' : '%'}}
+                                                </span>
+                                                <span
+                                                    *ngIf="penalty.characteristic?.deduction?.type == CONSTANTS.DEDUCTION_TYPE.CHOICE">
+                                                    {{
+                                                    100 - penalty.choiceDeduction?.coefficient
+                                                    | number : "1." + CHARACTERISTICS_DECIMAL + "-" +
+                                                    CHARACTERISTICS_DECIMAL : "en"
+                                                    }} %
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="body-penalties">
+                                            <p class="subtitle-note" appSignedValue [value]="penalty.total"
+                                                [valueType]="penalty.sign"></p>
+                                        </div>
+                                    </div>
+                                    <div class="body-note-details-description-data-columns-penalties">
+                                        <div class="body-penalties"></div>
+                                        <div class="body-penalties">
+                                            <p class="font-ssb">
+                                                {{ "total" | i18n | uppercase }}:
+                                            </p>
+                                        </div>
+                                        <div class="body-penalties">
+                                            <p class="subtitle-note total__p font-ssb">
+                                                {{
+                                                weightNote.totalPercentCharacteristics
+                                                | number : "1." + CHARACTERISTICS_DECIMAL + "-" +
+                                                CHARACTERISTICS_DECIMAL : "en"
+                                                }} %
+                                            </p>
+                                        </div>
+                                        <div class="body-penalties">
+                                            <p class="subtitle-note total__p" appSignedValue
+                                                [value]="weightNote.totalCharacteristics">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- COMMENTS Y TOTALS -->
+                    <div class="body-note-details-comments">
+                        <div>
+                            <p class="font-ssb">{{ "note" | i18n }}</p>
+                            <p>
+                                {{
+                                weightNote.textNote
+                                ? weightNote.textNote
+                                : ("not-apply" | i18n)
+                                }}
+                            </p>
+                        </div>
+                        <div class="body-note-details-description-data-columns">
+                            <!-- TOTALS LABELS -->
+                            <div>
+                                <p class="font-ssb">
+                                    {{ "gross-weight" | i18n }} ({{config?.measurementUnitAbbreviation}}):
+                                </p>
+                                <p class="font-ssb">
+                                    {{ "total-tares" | i18n }} ({{config?.measurementUnitAbbreviation}}):
+                                </p>
+                                <p class="font-ssb">
+                                    {{ "featured-weight" | i18n }} ({{config?.measurementUnitAbbreviation}}):
+                                </p>
+                                <p class="subtitle-note">
+                                    {{ "discount" | i18n }} ({{config?.measurementUnitAbbreviation}}):
+                                </p>
+                                <p class="subtitle-note">
+                                    {{ "addition" | i18n }} ({{config?.measurementUnitAbbreviation}}):
+                                </p>
+                                <p class="font-ssb total__net_p">
+                                    {{ "net-weight" | i18n }} ({{config?.conversionMeasurementUnitAbbreviation}}):
+                                </p>
+                            </div>
+                            <!-- TOTALS QUANTITIES -->
+                            <div class="value-align-end">
+                                <p class="font-ssb">
+                                    {{
+                                    weightNote.totalGross
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                                <p class="subtitle-note" appSignedValue [valueType]="
+                                    CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                                " [value]="weightNote.totalSumTares"></p>
+                                <p class="font-ssb">
+                                    {{
+                                    weightNote.totalNet
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                                <p class="subtitle-note" appSignedValue [valueType]="
+                                    CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                                " [value]="weightNote.totalDiscount"></p>
+                                <p class="subtitle-note" appSignedValue [valueType]="
+                                    CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT
+                                " [value]="weightNote.totalAddition"></p>
+                                <p class="font-ssb total__net_p">
+                                    {{
+                                    weightNote.totalNetDryWtQQ
+                                    | number
+                                    : "1." +
+                                    DECIMAL_DIGITS +
+                                    "-" +
+                                    DECIMAL_DIGITS
+                                    : "en"
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DELETE REASON -->
+                    <p *ngIf="weightNote.status == WEIGHT_NOTE_STATUS.DELETED"
+                        class="body-note-details-comments__delete">
+                        <span>{{"void-weight-note-reason" |i18n}}</span>
+                        <br />
+                        {{weightNote.deletionReason}}
+                    </p>
+                </ng-container>
+                <!-- TOTAL RECEPTION NOTE -->
+                <div class="body-note-details-comments body-note-details-total-note"
+                    *ngIf="note.description.length > 1">
+                    <div class="body-note-details-description-data-columns">
+                        <div>
+                            <p class="font-ssb">
+                                {{ "gross-weight" | i18n }} ({{ "qq" | i18n }}):
+                            </p>
+                            <p class="font-ssb">
+                                {{ "total-tares" | i18n }} ({{ "qq" | i18n }}):
+                            </p>
+                            <p class="font-ssb">
+                                {{ "featured-weight" | i18n }} ({{
+                                "qq" | i18n
+                                }}):
+                            </p>
+                            <p class="subtitle-note">
+                                {{ "discount" | i18n }} ({{ "qq" | i18n }}):
+                            </p>
+                            <p class="subtitle-note">
+                                {{ "addition" | i18n }} ({{ "qq" | i18n }}):
+                            </p>
+                            <p class="font-ssb total__net_p">
+                                {{ "net-weight" | i18n }} ({{ "qq" | i18n }}):
+                            </p>
+                        </div>
+                        <div class="value-align-end">
+                            <p class="font-ssb">
+                                {{
+                                note.information.totalGrossWeightQQ
+                                | number
+                                : "1." +
+                                DECIMAL_DIGITS +
+                                "-" +
+                                DECIMAL_DIGITS
+                                : "en"
+                                }}
+                            </p>
+                            <p class="subtitle-note" appSignedValue [valueType]="
+                                CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                            " [value]="note.information.totalTareQQ"></p>
+                            <p class="subtitle-note">
+                                {{
+                                note.information.totalNetWeightQQ
+                                | number
+                                : "1." +
+                                DECIMAL_DIGITS +
+                                "-" +
+                                DECIMAL_DIGITS
+                                : "en"
+                                }}
+                            </p>
+                            <p class="subtitle-note" appSignedValue [valueType]="
+                                CONSTANTS.SIGNED_VALUE_TYPES.DISCCOUNT
+                            " [value]="note.information.totalDiscountQQ"></p>
+                            <p class="subtitle-note" appSignedValue [valueType]="
+                                CONSTANTS.SIGNED_VALUE_TYPES.EXCEDENT
+                            " [value]="note.information.totalAdditionQQ"></p>
+                            <p class="font-ssb total__net_p">
+                                {{
+                                note.information.totalNetDryWeightQQ
+                                | number
+                                : "1." +
+                                DECIMAL_DIGITS +
+                                "-" +
+                                DECIMAL_DIGITS
+                                : "en"
+                                }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a id="dowloadPDF" href="" download></a>
+</div>

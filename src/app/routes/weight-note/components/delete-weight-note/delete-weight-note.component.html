@@ -1,0 +1,24 @@
+<div class="delete-weight-note">
+    <div class="delete-weight-note__title">
+        {{'void-weight-note-title' | i18n | stringReplace : '[value]' : data}}
+    </div>
+    <p class="delete-weight-note__subtitle">{{'void-weight-note-comment' |i18n}}</p>
+    <div class="delete-weight-note__reason">
+        <p>{{'void-weight-note-reason' | i18n}}</p>
+        <textarea
+            rows="4"
+            [formControl]="reasonDelete"
+            [placeholder]="'write-description' | i18n"
+        ></textarea>
+    </div>
+    <div class="delete-weight-note__buttons">
+        <button class="delete-weight-note__buttons--cancel" (click)="cancel()">
+            {{ 'cancel' | i18n }}
+        </button>
+        <button class="delete-weight-note__buttons--accept"
+            [disabled]="reasonDelete.invalid"
+            (click)="deleteWeightNote()">
+            {{'void' | i18n}}
+        </button>
+    </div>
+</div>

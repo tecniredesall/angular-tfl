@@ -1,0 +1,569 @@
+@import "src/scss/breakpoints.scss";
+@at-root {
+    :not(.dark) :host {
+        --panel-background-color: #f7f9fc;
+        --row-background-color: #ffffff;
+        --font-color: #344057;
+        --toggle-icon-color: #78bcef;
+        --add-type-background-color: #ffffff;
+        --add-type-border-color: #0068d1;
+        --action-font-color: #0068d1;
+        --commodity-type-background-color: #ffffff;
+        --icon-commodity-type-color: #8798ad;
+        --icon-action-commodity-type-color: #8798ad;
+    }
+
+    .dark :host {
+        --panel-background-color: #2e384d;
+        --row-background-color: #3e4e6c;
+        --font-color: #ffffff;
+        --toggle-icon-color: #00a4fa;
+        --add-type-background-color: #2e384d;
+        --add-type-border-color: #00aaff;
+        --action-font-color: #00aaff;
+        --commodity-type-background-color: #2f3b52;
+        --icon-commodity-type-color: #f4f6fc;
+        --icon-action-commodity-type-color: #70889e;
+    }
+}
+
+.t-commodity {
+    position: relative;
+    top: -70px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 70px 0 0 0;
+
+    &__wrapper {
+        display: block;
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+
+        &__container {
+            display: block;
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 15px;
+            max-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+
+            .t-commodity__list-view {
+                min-height: 100%;
+                display: grid;
+                grid-template-columns: 100%;
+                grid-template-rows: max-content auto;
+                grid-template-areas:
+                    "mainHeader"
+                    "dataGrid";
+
+                &__header {
+                    grid-area: mainHeader;
+                    padding-bottom: 30px;
+                }
+
+                &__body {
+                    grid-area: dataGrid;
+
+                    ::ng-deep .mat-expansion-panel-spacing {
+                        margin: 0;
+                    }
+
+                    mat-expansion-panel {
+                        overflow: visible;
+                        margin-bottom: 10px;
+                        border-radius: 0;
+                        background-color: var(--panel-background-color);
+                        box-shadow: 0px 0px 0px -0px rgba(0, 0, 0, 0.2),
+                            0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+                            0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+
+                        ::ng-deep .mat-expansion-panel-body {
+                            padding: 15px;
+                        }
+
+                        mat-expansion-panel-header {
+                            padding: 10px 5px 10px 0;
+                            cursor: auto;
+                            background-color: var(
+                                --row-background-color
+                            ) !important;
+
+                            ::ng-deep .mat-content {
+                                min-height: 100%;
+                                overflow: visible;
+                            }
+
+                            .t-commodity__panel__header {
+                                display: grid;
+                                column-gap: 16px;
+                                row-gap: 12px;
+                                width: 100%;
+                                grid-template-rows: auto auto;
+                                grid-template-columns: 30px 1fr max-content max-content max-content;
+                                grid-template-areas:
+                                    "toggle commodity types add-type options"
+                                    " units units units units units";
+
+                                &__title {
+                                    font-size: 12px;
+                                    font-weight: normal;
+                                    font-stretch: normal;
+                                    font-style: normal;
+                                    line-height: 1.83;
+                                    letter-spacing: normal;
+                                    color: var(--font-color);
+                                }
+
+                                &__value {
+                                    font-size: 16px;
+                                    font-weight: 600;
+                                    font-stretch: normal;
+                                    font-style: normal;
+                                    line-height: 1.38;
+                                    letter-spacing: normal;
+                                    color: var(--font-color);
+                                    display: flex;
+                                    &__units{
+                                        display: flex;
+                                        width: 100%;
+                                        &--in{
+                                            display: flex;
+                                            width: 50%;
+                                            &__icon-in{
+                                                transform: rotate(270deg);
+                                                color: var( --tr-base-color-green);
+                                            }
+                                            span{
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                }
+                                        }
+
+                                        &--out{
+                                            display: flex;
+                                            width: 50%;
+                                            &__icon-out{
+                                                transform: rotate(90deg);
+                                                color: var(--tr-base-color-blue);
+                                            }
+                                            span{
+                                                white-space: nowrap;
+                                                text-overflow: ellipsis;
+                                                overflow: hidden;
+                                                }
+                                        }
+                                    }
+                                }
+
+                                &__toggle {
+                                    grid-area: toggle;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: flex-start;
+                                    height: 100%;
+                                    width: 34px;
+                                    cursor: pointer;
+                                    padding-left: 10px;
+                                    grid-row: 1/-1 !important;
+                                    &--disabled {
+                                        cursor: not-allowed;
+                                        opacity: 0.4;
+                                    }
+
+                                    &__icon {
+                                        height: auto;
+                                        width: auto;
+                                        color: var(--toggle-icon-color);
+                                        font-size: 18px;
+                                        transition: all 200ms ease-out !important;
+
+                                        &.rotated {
+                                            transform: rotate(90deg);
+                                        }
+                                    }
+                                }
+
+                                &__commodity {
+                                    grid-area: commodity;
+                                    display: grid;
+                                    grid-template-columns: auto;
+                                    grid-template-rows: auto auto;
+                                    row-gap: 1px;
+                                    overflow: hidden;
+
+                                    &__data {
+                                        display: grid;
+                                        grid-template-rows: 22px;
+                                        grid-template-columns:
+                                            minmax(30px, max-content)
+                                            max-content;
+                                        column-gap: 4px;
+
+                                        &__name {
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+
+                                        &__alias {
+                                            font-size: 12px;
+                                            font-weight: normal;
+                                            font-stretch: normal;
+                                            font-style: normal;
+                                            line-height: 1.83;
+                                            letter-spacing: normal;
+                                            color: var(--font-color);
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    }
+                                }
+
+                                &__variety {
+                                    grid-area: variety;
+                                }
+
+                                &__types {
+                                    grid-area: types;
+                                    &--short {
+                                        display: block ;
+                                    }
+
+                                    &--large {
+                                        display: none ;
+                                    }
+                                }
+
+                                &__add-type {
+                                    grid-area: add-type;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    border-radius: 5px;
+                                    border: solid 1px
+                                        var(--add-type-border-color);
+                                    background-color: var(
+                                        --add-type-background-color
+                                    );
+                                    font-size: 15px;
+                                    font-weight: 500;
+                                    font-stretch: normal;
+                                    font-style: normal;
+                                    line-height: 1.4;
+                                    letter-spacing: normal;
+                                    text-align: center;
+                                    color: var(--action-font-color);
+                                    cursor: pointer;
+                                    &__icon {
+                                        display: none;
+                                    }
+
+                                    &__text{
+                                        padding: 5px;
+                                    }
+                                }
+
+                                &__units {
+                                    grid-area: units;
+                                    grid-column: 2/-1;
+                                }
+
+                            }
+                        }
+
+                        .t-commodity__panel__body {
+                            &__spinner {
+                                position: relative;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 80px;
+                                margin: 0;
+                            }
+
+                            &__no-types {
+                                width: 100%;
+                                height: auto;
+                                padding: 24px;
+                                color: var(--font-color);
+                                text-align: center;
+                                font-size: 16px;
+                                font-weight: 500;
+                            }
+
+                            &__commodity-type {
+                                display: grid;
+                                column-gap: 15px;
+                                min-height: 60px;
+                                width: 100%;
+                                padding: 10px 15px;
+                                margin-bottom: 5px;
+                                background-color: var(--commodity-type-background-color);
+                                grid-template-rows: auto;
+                                grid-template-columns:
+                                    max-content minmax(70px, 1fr)
+                                    max-content;
+                                grid-template-areas: "icon name options";
+
+                                &__icon-container {
+                                    grid-area: icon;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    height: 100%;
+                                    width: 20px;
+
+                                    & i {
+                                        height: auto;
+                                        width: auto;
+                                        color: var(
+                                            --icon-commodity-type-color
+                                        );
+                                        font-size: 24px;
+                                    }
+                                }
+
+                                &__name {
+                                    grid-area: name;
+                                    display: flex;
+                                    justify-content: left;
+                                    align-items: center;
+                                    height: 100%;
+                                    font-size: 14px;
+                                    font-weight: 500;
+                                    font-stretch: normal;
+                                    font-style: normal;
+                                    line-height: 1.57;
+                                    letter-spacing: normal;
+                                    color: var(--font-color);
+                                }
+
+                                &__edit {
+                                    grid-area: edit;
+                                    height: 100%;
+                                    width: 30px;
+                                    cursor: pointer;
+                                    display: none;
+                                    & i {
+                                        height: auto;
+                                        width: auto;
+                                        color: var(
+                                            --icon-action-commodity-type-color
+                                        );
+                                        font-size: 24px;
+                                    }
+                                }
+
+                                &__delete {
+                                    grid-area: delete;
+                                    height: 100%;
+                                    width: 30px;
+                                    cursor: pointer;
+                                    display: none;
+                                    & i {
+                                        height: auto;
+                                        width: auto;
+                                        color: var(
+                                            --icon-action-commodity-type-color
+                                        );
+                                        font-size: 24px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &__options {
+        grid-area: options;
+        width: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        cursor: pointer;
+        position: relative;
+
+        &__dropdown {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &__icon {
+                height: auto;
+                width: auto;
+                color: var(--action-font-color);
+                font-size: 18px;
+            }
+        }
+
+        .dropdown-menu {
+            width: auto;
+            min-width: auto;
+        }
+
+        .dropdown-menu a {
+            padding: 8px 16px;
+        }
+    }
+
+    // TABLET
+    @media (min-width:  $screen-sm-min) {
+        .t-commodity {
+            &__wrapper {
+                &__container {
+                    .t-commodity__list-view{
+                        mat-expansion-panel {
+                            mat-expansion-panel-header {
+
+                                    .t-commodity__panel__header {
+                                        grid-template-rows: auto auto;
+                                        grid-template-columns: max-content 1fr 1fr max-content max-content;
+                                        grid-template-areas: "toggle commodity types add-type options"
+                                                            "units units units units units";
+                                        &__toggle{
+                                            grid-row: 1/-1 ;
+                                            align-items: flex-start ;
+                                        }
+
+
+                                        &__types {
+                                            &--short {
+                                                display: none;
+                                            }
+
+                                            &--large {
+                                                display: block ;
+                                            }
+                                        }
+
+                                        &__add-type {
+                                            width: 90px;
+                                            height: 40px;
+
+                                            &__text {
+                                                display: block;
+                                            }
+
+                                            &__icon {
+                                                display: none;
+                                            }
+                                            grid-row: 1/-1 ;
+                                            align-self: center;
+                                        }
+                                        &__value {
+                                            &__units{
+                                                width: 70%;
+                                            }
+                                        }
+                                    }
+                                    &__options {
+                                        grid-row: 1/-1 !important;
+                                        align-self: center;
+                                    }
+                            }
+                            .t-commodity__panel__body{
+                                &__commodity-type {
+                                    grid-template-rows: auto;
+                                    grid-template-columns:
+                                        max-content minmax(70px, 1fr)
+                                        max-content max-content;
+                                    grid-template-areas: "icon name edit delete";
+
+                                    &__edit,
+                                    &__delete {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                    }
+
+                                    &__options {
+                                        display: none;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // DESKTOP , DESKTOP L & DESKTOP 4k
+    @media (min-width:  $screen-md-min){
+        .t-commodity {
+            &__wrapper {
+                &__container {
+                    .t-commodity__list-view{
+                        mat-expansion-panel {
+                            mat-expansion-panel-header {
+
+                                    .t-commodity__panel__header {
+                                        grid-template-rows: auto;
+                                        grid-template-columns: max-content 1fr 20% 1fr min-content min-content  ;
+                                        grid-template-areas: "toggle commodity types units add-type options";
+                                        &__toggle{
+                                            align-items: center ;
+                                        }
+
+                                        &__types {
+                                            &--short {
+                                                display: none;
+                                            }
+
+                                            &--large {
+                                                display: block ;
+                                            }
+                                        }
+
+                                        &__add-type {
+                                            width: 90px;
+                                            height: 40px;
+
+                                            &__text {
+                                                display: block;
+                                            }
+
+                                            &__icon {
+                                                display: none;
+                                            }
+
+                                            align-self: center;
+                                        }
+                                        &__units {
+                                            grid-area: units;
+                                        }
+                                    }
+                                    &__options {
+
+                                        align-self: center;
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    }
+

@@ -1,0 +1,148 @@
+<form
+    class="sil-form"
+    [formGroup]="form"
+    [ngClass]="{ profile: action === ACTIONS.READ, 'columns--two': action === ACTIONS.CREATE }"
+    *ngIf="form"
+>
+    <!-- COUNTRY -->
+    <section class="sil-form__section producer-edit-form__country">
+        <label>
+            {{ "country" | i18n }}
+            <span class="sil-form__label-star">*</span>
+        </label>
+        <ng-select
+            formControlName="country"
+            [placeholder]="'select-country' | i18n"
+            appearance="outline"
+            [searchable]="false"
+            [clearable]="true"
+            class="sil-form__select"
+            [bindLabel]="countryPropName"
+            bindValue="id"
+            [items]="countries"
+            [loading]="loadingState.countries"
+            loadingText="{{ 'loading' | i18n }}"
+            [notFoundText]="'not-items-found' | i18n"
+            (change)="setCountry($event)"
+            (clear)="resetDynamicForm()"
+        >
+            <ng-template let-item="item">
+                {{item[countryPropName]}}
+            </ng-template>
+        </ng-select>
+        <p class="sil-form__profile-text" *ngIf="!loadingState.countries">
+            {{
+                form.get("country").value
+                    | mapFromArray: countries:"id":countryPropName
+            }}
+        </p>
+        <ng-container  *ngIf="form.get('country').dirty || form.get('country').touched">
+            <span
+                class="sil-form__section__error-message"
+                *ngIf="form.get('country').hasError('required')"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+        </ng-container>
+    </section>
+    <section *ngFor="let field of addressFields" class="sil-form__section">
+        <label>
+            {{ field.labels[currentLanguage] }}
+            <span class="sil-form__label-star" *ngIf="field.required">*</span>
+        </label>
+        <ng-select
+            *ngIf="field.type === 'select'"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholders[currentLanguage]"
+            appearance="outline"
+            [searchable]="true"
+            [clearable]="true"
+            class="sil-form__select"
+            bindLabel="name"
+            bindValue="id"
+            [items]="lookups[field.extras.catalog]"
+            [loading]="loadingState[field.name]"
+            loadingText="{{ 'loading' | i18n }}"
+            [notFoundText]="'not-items-found' | i18n"
+            (scrollToEnd)="onDropdownReachedEnd(field)"
+            (search)="onDropdownSearch($event, field)"
+            (close)="onDropdownSearch(null, field)"
+            (clear)="onDropdownSearch(null, field)"
+            (change)="setDynamicControl(field)"
+        >
+            <ng-template let-item="item">{{ item.name }}</ng-template>
+        </ng-select>
+        <input
+            *ngIf="field.type === 'number'"
+            [placeholder]="field.placeholders[currentLanguage]"
+            class="sil-form__input"
+            autocomplete="off"
+            [formControlName]="field.name"
+            type="text"
+            [textMask]="{
+                mask: CONSTANTS.ZIP_CODE_MASK,
+                guide: false
+            }"
+        />
+        <ng-container *ngIf="form.get(field.name)?.dirty || form.get(field.name)?.touched">
+            <ng-container *ngFor="let rule of field.rules">
+                <span
+                    class="sil-form__section__error-message"
+                    *ngIf="getFormError(field, rule)"
+                >
+                    {{ rule.errors[globalLanguage] }}
+                </span>
+            </ng-container>
+        </ng-container>
+        <p class="sil-form__profile-text" *ngIf="!loadingState[field.name]">
+            {{
+                form.get(field.name).value
+                    | mapFromArray: lookups[field.extras?.catalog] : 'id' : 'name'
+            }}
+        </p>
+    </section>
+    <!-- ADDRESS -->
+    <section class="sil-form__section producer-edit-form__address">
+        <label
+            >{{ "address" | i18n }}
+            <span class="sil-form__label-star">*</span></label
+        >
+        <input
+            type="text"
+            [placeholder]="'insert-address' | i18n"
+            class="sil-form__input"
+            autocomplete="off"
+            formControlName="address"
+        />
+        <p class="sil-form__profile-text">
+            {{ form.get("address").value }}
+        </p>
+        <ng-container
+            *ngIf="form.get('address').dirty || form.get('address').touched"
+        >
+            <span
+                class="sil-form__section__error-message"
+                *ngIf="form.get('address').hasError('required')"
+            >
+                {{ "is-required-msg" | i18n }}
+            </span>
+            <span
+                class="sil-form__section__error-message"
+                *ngIf="form.get('address').hasError('maxlength')"
+            >
+                {{ "max-length-value-error"
+                | i18n
+                | stringReplace
+                : "[value]"
+                : CONSTANTS.MAX_LENGTH_PRODUCER_ADDRESS
+                }}
+            </span>
+            <span
+                class="sil-form__section__error-message"
+                *ngIf="form.get('address').hasError('pattern')"
+            >
+                {{ "producer-address-pattern-error" | i18n }}
+            </span>
+        </ng-container>
+    </section>
+</form>

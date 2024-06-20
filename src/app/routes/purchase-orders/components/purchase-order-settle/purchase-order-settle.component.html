@@ -1,0 +1,101 @@
+<div class="purchase-order-settle" *blockUI="'purchase-order-settled'; template: templateBlockModalUiComponent">
+    <section class="purchase-order-settle__header">
+        {{'price-unit-summary' | i18n}}
+    </section>
+    <section class="purchase-order-settle__subtitle">
+        {{'purchase-order-contain' | i18n}} {{notes.length}} {{'weight-notes' | i18n |lowercase}}:
+    </section>
+    <ng-container *ngIf="notesPriceOfContract.length > 0">
+        <section class="purchase-order-settle__description">
+            {{'weight-notes-quantity' | i18n }} {{'of-the' |i18n}} <span>{{'contract' | i18n | lowercase}}:</span>
+        </section>
+        <div class="purchase-order-settle__notes-info title-data">
+            <div class="purchase-order-settle__notes-info__total">{{'num-notes' | i18n | uppercase}}</div>
+            <div class="purchase-order-settle__notes-info__price">
+                {{'price' | i18n | uppercase}} / {{'unit' | i18n | uppercase}}</div>
+            <div></div>
+            <div class="purchase-order-settle__notes-info__payment">{{'total-to-pay' | i18n | uppercase}}</div>
+        </div>
+        <div class="purchase-order-settle__notes-info">
+            <div>
+                <span class="title-color-data">
+                    {{'num-notes' | i18n |uppercase}}
+                </span>
+                <section class="purchase-order-settle__notes-info__total">
+                    <span> {{notesPriceOfContract.length}} {{'note'|i18n}}(s)</span>
+                </section>
+            </div>
+            <div>
+                <span class="title-color-data">
+                    {{'price' | i18n |uppercase}} / {{'unit' | i18n | uppercase}}
+                </span>
+                <section class="purchase-order-settle__notes-info__price">
+                    <span>{{_currency.symbol}} {{contract ?( contract.pricing.priceUnit| number
+                        : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                        : "en") : 0}} / {{configuration?.conversionMeasurementUnitAbbreviation}}</span>
+                </section>
+            </div>
+            <div class="purchase-order-settle__notes-info__equals">
+                <div> = </div>
+            </div>
+            <div>
+                <span class="title-color-data">
+                    {{'total-to-pay' | i18n |uppercase}}
+                </span>
+                <section class="purchase-order-settle__notes-info__payment">
+                    <span>{{_currency.symbol}} {{contractPrice | number
+                        : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                        : "en"}} {{_currency.isoCode}}</span>
+                </section>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="notesByPrice.length > 0">
+        <section class="purchase-order-settle__description">
+            {{'weight-notes-quantity' | i18n }} <span>{{'personalized' | i18n}}:</span>
+        </section>
+        <div class="purchase-order-settle__notes-info title-data">
+            <div class="purchase-order-settle__notes-info__total">{{'num-notes' | i18n | uppercase}}</div>
+            <div class="purchase-order-settle__notes-info__price">
+                {{'price' | i18n | uppercase}} / {{'unit' | i18n | uppercase}}</div>
+            <div></div>
+            <div class="purchase-order-settle__notes-info__payment">{{'total-to-pay' | i18n | uppercase}}</div>
+        </div>
+        <div class="purchase-order-settle__notes-info" *ngFor="let notePrice of notesByPrice">
+            <div>
+                <span class="title-color-data">
+                    {{'num-notes' | i18n |uppercase}}
+                </span>
+                <section class="purchase-order-settle__notes-info__total">
+                    <span> {{notePrice.notes.length}} {{'note'|i18n}}(s)</span>
+                </section>
+            </div>
+            <div>
+                <span class="title-color-data">
+                    {{'price' | i18n |uppercase}} / {{'unit' | i18n | uppercase}}
+                </span>
+                <section class="purchase-order-settle__notes-info__price">
+                    <span>{{_currency.symbol}} {{notePrice.generalPrice | number
+                        : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                        : "en"}} / {{configuration?.conversionMeasurementUnitAbbreviation}}</span>
+                </section>
+            </div>
+            <div class="purchase-order-settle__notes-info__equals"> = </div>
+            <div>
+                <span class="title-color-data">
+                    {{'total-to-pay' | i18n |uppercase}}
+                </span>
+                <section class="purchase-order-settle__notes-info__payment">
+                    <span>{{_currency.symbol}} {{notePrice.totalPrice | number
+                        : "1." + DECIMAL_DIGITS + "-" + DECIMAL_DIGITS
+                        : "en"}}</span>
+                </section>
+            </div>
+        </div>
+    </ng-container>
+
+    <section class="purchase-order-settle__footer">
+        <app-action-footer (onActionSelected)="onEventSettlePurchseOrder($event)" [buttonSubmitText]="'accept'">
+        </app-action-footer>
+    </section>
+</div>

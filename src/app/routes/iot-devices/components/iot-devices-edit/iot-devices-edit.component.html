@@ -1,0 +1,60 @@
+<div class="sil-overflow-container--padded sil-overflow-container">
+    <div class="sil-container sil-container--filled">
+        <header class="sil-form__header">
+            <h1 class="sil-form__title">
+                <ng-container *ngIf="action === ACTIONS.UPDATE; else create">
+                    {{ "iot-devices-edit-iot-device" | i18n }}
+                </ng-container>
+                <ng-template #create>
+                    {{ "iot-devices-new-iot-device" | i18n }}
+                </ng-template>
+            </h1>
+        </header>
+        <ng-container *ngIf="action === ACTIONS.UPDATE">
+            <ng-container *ngTemplateOutlet="generalInformation">
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="action === ACTIONS.CREATE">
+            <mat-tab-group class="sil-tab-group" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex">
+                <mat-tab label="01 {{ 'device' | i18n }}">
+                    <app-iot-available-devices (selectedDeviceChanged)="
+                            onSelectedDeviceChanged($event)
+                        " (createNewDevice)="onCreateNewDevice()"></app-iot-available-devices>
+                </mat-tab>
+                <mat-tab label="02 {{ 'general-information' | i18n }}">
+                    <ng-container *ngTemplateOutlet="generalInformation">
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </ng-container>
+    </div>
+</div>
+<div class="footer-buttons">
+    <button class="btn btn-transparent-delete" (click)="deleteIotDevices(iotDevice.id)"
+        *ngIf="action !== ACTIONS.CREATE">
+        <i class="icon-trash-gray"></i>{{ "delete" | i18n }}
+    </button>
+    <button class="btn btn-resize gray-btn button-lg" (click)="onCancel()">
+        {{ "cancel" | i18n }}
+    </button>
+    <button class="btn btn-resize blue-btn button-lg" [disabled]="!selectedAvailableDevice"
+        (click)="selectedTabIndex = TABS.GRAL_INFO" *ngIf="
+            selectedTabIndex === TABS.AVAILABLE_DEVICES &&
+            action === ACTIONS.CREATE
+        ">
+        {{ "next" | i18n }}
+    </button>
+    <button class="btn btn-resize blue-btn button-lg" [disabled]="!formIsValid || !usersChanged || !formIsTouched"
+        (click)="onSaveIotDevices()" *ngIf="selectedTabIndex === TABS.GRAL_INFO || action === ACTIONS.UPDATE">
+        {{ "save" | i18n }}
+    </button>
+</div>
+<ng-template #generalInformation>
+    <ng-container *ngIf="iotDevice">
+        <app-iot-devices-data-form (formIsValid)="formIsValid = $event" (formChanged)="onFormChanged($event)"
+            [iotDevice]="iotDevice" [isCreate]="action === ACTIONS.CREATE"></app-iot-devices-data-form>
+        <app-iot-devices-related-users (selectedUsersChanged)="onLinkedUserChanged($event)"
+            [selectedUsersID]="selectedIotDevicesUsersId" *ngIf="selectedIotDevicesUsersId">
+        </app-iot-devices-related-users>
+    </ng-container>
+</ng-template>
